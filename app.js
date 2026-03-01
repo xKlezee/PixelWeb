@@ -4,8 +4,8 @@
    ============================================= */
 
 // ─── SUPABASE INIT ───────────────────────────────────────────────────────────
-const _SB_URL = 'https://ivvewndntdoyclpksxtt.supabase.co';
-const _SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml2dmV3bmRudGRveWNscGtzeHR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA4NTgwMTAsImV4cCI6MjA1NjQzNDAxMH0.u2GgR6O_5NclQ_p48i_rKkXf-P65fE8_O0L7_pE5_Uo';
+const _SB_URL = 'https://hlcptvdkwmaeiazybenl.supabase.co';
+const _SB_KEY = 'sb_publishable_L78nHl65t4LxyLvEXJw34Q_iMqXcGzU';
 const sb = window.supabase.createClient(_SB_URL, _SB_KEY);
 
 // ─── SMALL CAPS FONT MAP ──────────────────────────────────────────────────────
