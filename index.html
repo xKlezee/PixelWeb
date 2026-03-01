@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PixelBoxxx — BoxPvP Minecraft Server</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/SplitText.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #060608;
+      --surface: #0d0d12;
+      --surface2: #13131a;
+      --border: rgba(255,255,255,0.07);
+      --accent: #7c5cfc;
+      --accent2: #fc5c7d;
+      --accent3: #f7c59f;
+      --text: #f0f0f5;
+      --muted: #7a7a8c;
+      --online: #3ddc97;
+      --offline: #fc5c5c;
+      --font-display: 'Syne', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── CURSOR ── */
+    #cursor {
+      position: fixed; top: 0; left: 0; z-index: 9999;
+      pointer-events: none;
+      mix-blend-mode: difference;
+    }
+    #cursor-dot {
+      width: 8px; height: 8px;
+      background: #fff;
+      border-radius: 50%;
+      position: absolute;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s ease;
+    }
+    #cursor-ring {
+      width: 40px; height: 40px;
+      border: 1.5px solid rgba(255,255,255,0.6);
+      border-radius: 50%;
+      position: absolute;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+    }
+    body.cursor-hover #cursor-ring {
+      width: 60px; height: 60px;
+      opacity: 0.4;
+    }
+
+    /* ── INTRO / LOADER ── */
+    #intro {
+      position: fixed; inset: 0; z-index: 1000;
+      background: #000;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column;
+    }
+    #intro video {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      position: absolute; inset: 0;
+    }
+    #intro-skip {
+      position: absolute; bottom: 40px; right: 40px;
+      font-family: var(--font-display);
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.08em;
+      cursor: none;
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 10px 20px;
+      border-radius: 100px;
+      backdrop-filter: blur(10px);
+      transition: color 0.2s, border-color 0.2s;
+      z-index: 10;
+    }
+    #intro-skip:hover { color: #fff; border-color: rgba(255,255,255,0.4); }
+    #intro-progress {
+      position: absolute; bottom: 0; left: 0;
+      height: 2px; background: var(--accent);
+      width: 0%;
+      transition: width linear;
+      z-index: 10;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 48px;
+      backdrop-filter: blur(20px) saturate(1.5);
+      background: rgba(6,6,8,0.7);
+      border-bottom: 1px solid var(--border);
+      transition: padding 0.3s ease;
+    }
+    nav.scrolled { padding: 14px 48px; }
+    .nav-logo {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none;
+    }
+    .nav-logo img { width: 36px; height: 36px; border-radius: 8px; }
+    .nav-logo span {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 18px;
+      background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .nav-links {
+      display: flex; align-items: center; gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .btn {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 22px;
+      border-radius: 100px;
+      text-decoration: none;
+      cursor: none;
+      transition: all 0.25s ease;
+      letter-spacing: 0.02em;
+    }
+    .btn-ghost {
+      color: var(--text);
+      border: 1px solid var(--border);
+      background: transparent;
+    }
+    .btn-ghost:hover { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.05); }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+    }
+    .btn-primary:hover { background: #6b4ee8; transform: translateY(-1px); box-shadow: 0 8px 30px rgba(124,92,252,0.35); }
+
+    /* ── STATUS BADGE ── */
+    #server-status {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 13px;
+    }
+    .status-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--online);
+      box-shadow: 0 0 8px var(--online);
+      animation: pulse-dot 2s ease infinite;
+    }
+    .status-dot.offline { background: var(--offline); box-shadow: 0 0 8px var(--offline); animation: none; }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.3); }
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; pointer-events: none;
+    }
+    .hero-bg canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .hero-glow {
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(124,92,252,0.18) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 900px; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 28px;
+    }
+    .hero-eyebrow::before, .hero-eyebrow::after {
+      content: '';
+      height: 1px; width: 30px;
+      background: var(--accent);
+      opacity: 0.5;
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(54px, 8vw, 110px);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+    }
+    .hero-title .line { display: block; overflow: hidden; }
+    .hero-title .word {
+      display: inline-block;
+    }
+    .grad-text {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--accent3) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: 18px;
+      color: var(--muted);
+      max-width: 560px;
+      margin: 0 auto 48px;
+      line-height: 1.65;
+      font-weight: 300;
+    }
+    .hero-actions {
+      display: flex; align-items: center; justify-content: center;
+      gap: 16px; flex-wrap: wrap;
+      margin-bottom: 56px;
+    }
+    .ip-block {
+      display: flex; align-items: center; gap: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      font-family: 'Courier New', monospace;
+    }
+    .ip-label {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: rgba(255,255,255,0.02);
+      border-right: 1px solid var(--border);
+    }
+    .ip-value {
+      padding: 12px 16px;
+      font-size: 14px;
+      color: var(--text);
+      letter-spacing: 0.02em;
+    }
+    .ip-copy {
+      padding: 12px 16px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      cursor: none;
+      transition: color 0.2s;
+      font-size: 16px;
+    }
+    .ip-copy:hover { color: var(--accent); }
+    .hero-meta {
+      display: flex; align-items: center; justify-content: center;
+      gap: 32px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .hero-meta span { display: flex; align-items: center; gap: 6px; }
+
+    /* ── SCROLL INDICATOR ── */
+    .scroll-indicator {
+      position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+    }
+    .scroll-line {
+      width: 1px; height: 50px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scroll-anim 2s ease infinite;
+    }
+    @keyframes scroll-anim {
+      0% { transform: scaleY(0); transform-origin: top; opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: scaleY(1); transform-origin: top; opacity: 0; }
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      padding: 120px 24px;
+      position: relative;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 5vw, 62px);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+    .section-sub {
+      font-size: 17px;
+      color: var(--muted);
+      max-width: 540px;
+      line-height: 1.6;
+    }
+
+    /* ── FEATURES GRID ── */
+    #features { background: var(--surface); }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 72px;
+    }
+    @media(max-width:900px) { .features-grid { grid-template-columns: 1fr; } }
+    .feature-card {
+      background: var(--bg);
+      padding: 48px 40px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+    .feature-card:hover { background: var(--surface2); }
+    .feature-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(124,92,252,0.2), rgba(252,92,125,0.1));
+      border: 1px solid rgba(124,92,252,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      margin-bottom: 24px;
+    }
+    .feature-card h3 {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .feature-card p {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ── STORE ── */
+    #store { }
+    .store-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      margin-top: 72px;
+    }
+    @media(max-width:900px) { .store-wrapper { grid-template-columns: 1fr; } }
+    .store-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .store-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      cursor: none;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: var(--text);
+      display: block;
+    }
+    .store-item:hover {
+      border-color: rgba(124,92,252,0.4);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+    .store-item-icon { font-size: 28px; margin-bottom: 12px; }
+    .store-item h4 {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .store-item p { font-size: 13px; color: var(--muted); }
+    .store-big {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, rgba(124,92,252,0.15), rgba(252,92,125,0.08));
+      border: 1px solid rgba(124,92,252,0.3);
+    }
+    .btn-store {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 15px;
+      padding: 14px 28px;
+      border-radius: 100px;
+      text-decoration: none;
+      cursor: none;
+      margin-top: 24px;
+      transition: all 0.3s;
+      box-shadow: 0 8px 30px rgba(124,92,252,0.3);
+    }
+    .btn-store:hover { transform: translateY(-2px); box-shadow: 0 14px 40px rgba(124,92,252,0.45); }
+
+    /* ── CHANGELOG / NEWS ── */
+    #changelog { background: var(--surface); }
+    .changelog-list {
+      margin-top: 72px;
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .changelog-item {
+      background: var(--bg);
+      border-left: 2px solid transparent;
+      padding: 36px 40px;
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 40px;
+      align-items: start;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .changelog-item:hover {
+      border-left-color: var(--accent);
+      background: var(--surface2);
+    }
+    .changelog-date {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+      padding-top: 4px;
+    }
+    .changelog-content h3 {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .changelog-content p {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 16px;
+    }
+    .changelog-tags {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .tag {
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 100px;
+    }
+    .tag-new { background: rgba(61,220,151,0.12); color: var(--online); border: 1px solid rgba(61,220,151,0.25); }
+    .tag-fix { background: rgba(252,92,125,0.12); color: var(--accent2); border: 1px solid rgba(252,92,125,0.25); }
+    .tag-imp { background: rgba(124,92,252,0.12); color: var(--accent); border: 1px solid rgba(124,92,252,0.25); }
+
+    /* ── ROADMAP ── */
+    #roadmap { }
+    .roadmap-timeline {
+      margin-top: 72px;
+      position: relative;
+      padding-left: 40px;
+    }
+    .roadmap-timeline::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+    }
+    .roadmap-item {
+      position: relative;
+      padding: 36px 0 36px 48px;
+      border-bottom: 1px solid var(--border);
+    }
+    .roadmap-item:last-child { border-bottom: none; }
+    .roadmap-dot {
+      position: absolute; left: -40px; top: 40px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      transform: translateX(-6px);
+    }
+    .roadmap-item.active .roadmap-dot {
+      background: var(--accent);
+      border-color: var(--accent);
+      box-shadow: 0 0 16px rgba(124,92,252,0.5);
+    }
+    .roadmap-item.done .roadmap-dot {
+      background: var(--online);
+      border-color: var(--online);
+    }
+    .roadmap-phase {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .roadmap-item.active .roadmap-phase { color: var(--accent); }
+    .roadmap-item.done .roadmap-phase { color: var(--online); }
+    .roadmap-item.upcoming .roadmap-phase { color: var(--muted); }
+    .roadmap-item h3 {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .roadmap-item p {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.65;
+      max-width: 600px;
+      margin-bottom: 16px;
+    }
+    .roadmap-features {
+      display: flex; gap: 10px; flex-wrap: wrap;
+    }
+    .roadmap-feature {
+      font-size: 13px;
+      color: var(--text);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 100px;
+    }
+
+    /* ── DOCS ── */
+    #docs { background: var(--surface); }
+    .docs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 72px;
+    }
+    @media(max-width:900px) { .docs-grid { grid-template-columns: 1fr; } }
+    .doc-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px;
+      text-decoration: none;
+      color: var(--text);
+      cursor: none;
+      transition: all 0.3s ease;
+      display: block;
+    }
+    .doc-card:hover {
+      border-color: rgba(124,92,252,0.4);
+      transform: translateY(-6px);
+      box-shadow: 0 24px 48px rgba(0,0,0,0.4);
+    }
+    .doc-card-icon { font-size: 32px; margin-bottom: 20px; }
+    .doc-card h3 {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .doc-card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+    .doc-card-arrow {
+      margin-top: 20px;
+      color: var(--accent);
+      font-size: 20px;
+      transition: transform 0.2s;
+    }
+    .doc-card:hover .doc-card-arrow { transform: translateX(4px); }
+
+    /* ── TEAM ── */
+    #team { }
+    .team-grid {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      padding-bottom: 20px;
+      margin-top: 72px;
+      scrollbar-width: none;
+    }
+    .team-grid::-webkit-scrollbar { display: none; }
+    .team-card {
+      min-width: 260px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      cursor: none;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+    .team-card:hover {
+      border-color: rgba(124,92,252,0.35);
+      transform: translateY(-8px);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+    }
+    .team-avatar {
+      width: 64px; height: 64px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .team-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; }
+    .team-role {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(124,92,252,0.12);
+      border: 1px solid rgba(124,92,252,0.25);
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 100px;
+      margin-bottom: 10px;
+    }
+    .team-card h3 {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .team-card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    /* ── DISCORD CTA ── */
+    #discord-cta {
+      background: var(--surface);
+      padding: 120px 24px;
+      text-align: center;
+    }
+    .discord-box {
+      max-width: 700px;
+      margin: 0 auto;
+      background: linear-gradient(135deg, rgba(88,101,242,0.15), rgba(124,92,252,0.08));
+      border: 1px solid rgba(88,101,242,0.3);
+      border-radius: 24px;
+      padding: 72px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    .discord-box::before {
+      content: '';
+      position: absolute; inset: -1px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(88,101,242,0.4), transparent, rgba(124,92,252,0.4));
+      z-index: -1;
+    }
+    .discord-icon { font-size: 56px; margin-bottom: 24px; }
+    .discord-box h2 {
+      font-family: var(--font-display);
+      font-size: clamp(30px, 4vw, 48px);
+      font-weight: 800;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+    .discord-box p { font-size: 17px; color: var(--muted); margin-bottom: 36px; }
+    .btn-discord {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: #5865F2;
+      color: #fff;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 16px;
+      padding: 16px 36px;
+      border-radius: 100px;
+      text-decoration: none;
+      cursor: none;
+      transition: all 0.3s;
+      box-shadow: 0 8px 30px rgba(88,101,242,0.4);
+    }
+    .btn-discord:hover { transform: translateY(-2px); box-shadow: 0 14px 40px rgba(88,101,242,0.55); }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 60px 48px 40px;
+      border-top: 1px solid var(--border);
+    }
+    .footer-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 24px;
+    }
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 16px; font-weight: 800;
+      background: linear-gradient(135deg, #fff, var(--accent));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .footer-links {
+      display: flex; gap: 32px; list-style: none;
+    }
+    .footer-links a {
+      font-size: 14px; color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy { font-size: 13px; color: var(--muted); }
+
+    /* ── REVEAL CLASSES ── */
+    .reveal { opacity: 0; transform: translateY(40px); }
+    .reveal-left { opacity: 0; transform: translateX(-40px); }
+    .reveal-right { opacity: 0; transform: translateX(40px); }
+    .reveal-scale { opacity: 0; transform: scale(0.92); }
+
+    /* ── NOISE TEXTURE ── */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      pointer-events: none;
+      z-index: 9998;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+
+    /* ── MOBILE NAV ── */
+    @media(max-width:768px) {
+      nav { padding: 16px 20px; }
+      .nav-links { display: none; }
+      #hero { padding: 100px 20px 60px; }
+      .store-wrapper { grid-template-columns: 1fr; }
+      .changelog-item { grid-template-columns: 1fr; gap: 8px; }
+      footer { padding: 40px 20px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+
+    /* Horizontal scroll hint */
+    .scroll-hint {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 16px;
+      display: flex; align-items: center; gap: 6px;
+    }
+
+    /* Stats bar */
+    .stats-bar {
+      display: flex; justify-content: center; gap: 64px;
+      margin-top: 80px;
+      flex-wrap: wrap;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 42px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .stat-label {
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      margin-top: 4px;
+    }
+
+    /* Horizontal rule */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CUSTOM CURSOR -->
+  <div id="cursor">
+    <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
+  </div>
+
+  <!-- INTRO / LOADER -->
+  <div id="intro">
+    <video id="intro-video" autoplay muted playsinline>
+      <source src="Video_Perfecto_Con_Fondo_Negro.mp4" type="video/mp4" />
+    </video>
+    <div id="intro-progress"></div>
+    <div id="intro-skip">Skip intro ↓</div>
+  </div>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="#" class="nav-logo">
+      <img src="LOGO_OFICIAL.png" alt="PixelBoxxx Logo" />
+      <span>PixelBoxxx</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">Gameplay</a></li>
+      <li><a href="#store">Store</a></li>
+      <li><a href="#changelog">News</a></li>
+      <li><a href="#roadmap">Roadmap</a></li>
+      <li><a href="#docs">Docs</a></li>
+      <li><a href="#team">Team</a></li>
+    </ul>
+    <div class="nav-cta">
+      <div id="server-status">
+        <span class="status-dot" id="status-dot"></span>
+        <span id="status-text">Checking...</span>
+      </div>
+      <a href="https://discord.gg/khRCRhR9d4" target="_blank" class="btn btn-ghost">Discord</a>
+      <a href="https://pixelboxx.tebex.io/" target="_blank" class="btn btn-primary">Store</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg">
+      <div class="hero-glow"></div>
+      <canvas id="particles-canvas"></canvas>
+    </div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Java Edition · BoxPvP · Custom Systems</div>
+      <h1 class="hero-title">
+        <span class="line"><span class="word">The Next Level</span></span>
+        <span class="line"><span class="word grad-text">BoxPvP</span> <span class="word">Experience</span></span>
+      </h1>
+      <p class="hero-sub">Custom worlds, pixel-powered economy, prestige systems, and relentless PvP combat. Pixel Network redefines what a BoxPvP server can be.</p>
+      <div class="hero-actions">
+        <div class="ip-block">
+          <span class="ip-label">Java IP</span>
+          <span class="ip-value" id="server-ip">pixelboxxx.minehut.gg</span>
+          <button class="ip-copy" onclick="copyIP()" title="Copy IP">⎘</button>
+        </div>
+        <a href="https://pixel-network-1.gitbook.io/home/documentation/" target="_blank" class="btn btn-ghost">Read Docs →</a>
+      </div>
+      <div class="hero-meta">
+        <span>🌐 <strong id="player-count">—</strong> players online</span>
+        <span>⚔️ BoxPvP Gamemode</span>
+        <span>⚡ Constant Updates</span>
+      </div>
+    </div>
+    <div class="scroll-indicator"><div class="scroll-line"></div></div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- STATS -->
+  <section id="stats" style="padding: 80px 24px;">
+    <div class="container">
+      <div class="stats-bar">
+        <div class="stat reveal"><div class="stat-num">14+</div><div class="stat-label">Custom Systems</div></div>
+        <div class="stat reveal"><div class="stat-num">4</div><div class="stat-label">Themed Worlds</div></div>
+        <div class="stat reveal"><div class="stat-num">∞</div><div class="stat-label">Prestige Levels</div></div>
+        <div class="stat reveal"><div class="stat-num">100%</div><div class="stat-label">Custom Built</div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="container">
+      <div class="reveal">
+        <p class="section-label">Core Gameplay</p>
+        <h2 class="section-title">Engineered for <span class="grad-text">Depth</span></h2>
+        <p class="section-sub">Every system on Pixel Network is custom-built to create an experience unlike anything you've played before.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card reveal">
+          <div class="feature-icon">⚔️</div>
+          <h3>BoxPvP Combat</h3>
+          <p>Custom duel systems, ranked combat, unique arena designs and mechanics that push BoxPvP to its limits with exclusive tools and weapons.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon">🌍</div>
+          <h3>Multiple Worlds</h3>
+          <p>Explore the Overworld, Pirate Kingdom, Nether, and Winter — each with unique mining systems, enemies, and progression opportunities.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon">📈</div>
+          <h3>Prestige & Leveling</h3>
+          <p>Long-term progression through ranks from VIP to Pixel+. Each prestige tier unlocks exclusive perks, cosmetics, and gameplay advantages.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon">💰</div>
+          <h3>Pixel Economy</h3>
+          <p>Pixels are the backbone of everything. Earn, trade, and spend in an economy built around scarcity, progression, and player interaction.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon">🗝️</div>
+          <h3>Crates & Drops</h3>
+          <p>Multiple crate rarities with ultra-rare drops, talismans, elixirs, boosters, and collectible items with StatTrack per item.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon">🧪</div>
+          <h3>Custom Nexus</h3>
+          <p>The Nexus system ties every world together. Smart mechanics, NPC interactions, and an evolving storyline built for long-term gameplay.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- STORE -->
+  <section id="store">
+    <div class="container">
+      <div class="store-wrapper">
+        <div class="reveal-left">
+          <p class="section-label">Official Tebex Store</p>
+          <h2 class="section-title">Upgrade Your <span class="grad-text">Journey</span></h2>
+          <p class="section-sub">Unlock exclusive outfits, custom tools, rare skins, keys, and premium perks. Every purchase supports the server and your in-game progression.</p>
+          <a href="https://pixelboxx.tebex.io/" target="_blank" class="btn-store">
+            Visit Store →
+          </a>
+        </div>
+        <div class="store-cards reveal-right">
+          <a href="https://pixelboxx.tebex.io/" target="_blank" class="store-item store-big">
+            <div class="store-item-icon">💎</div>
+            <h4>Pixel Ranks</h4>
+            <p>Unlock VIP, VIP+ and Pixel+ with exclusive rank perks and chat cosmetics</p>
+          </a>
+          <a href="https://pixelboxx.tebex.io/" target="_blank" class="store-item">
+            <div class="store-item-icon">🎨</div>
+            <h4>Custom Skins</h4>
+            <p>Exclusive cosmetic outfits designed for Pixel Network</p>
+          </a>
+          <a href="https://pixelboxx.tebex.io/" target="_blank" class="store-item">
+            <div class="store-item-icon">🗝️</div>
+            <h4>Crate Keys</h4>
+            <p>Open rare and legendary crates for high-value drops</p>
+          </a>
+          <a href="https://pixelboxx.tebex.io/" target="_blank" class="store-item">
+            <div class="store-item-icon">⚡</div>
+            <h4>Boosters</h4>
+            <p>Pixel, XP, and loot boosters for accelerated progress</p>
+          </a>
+          <a href="https://pixelboxx.tebex.io/" target="_blank" class="store-item">
+            <div class="store-item-icon">🪄</div>
+            <h4>Elixirs</h4>
+            <p>Special consumables with unique gameplay effects</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CHANGELOG / NEWS -->
+  <section id="changelog">
+    <div class="container">
+      <div class="reveal">
+        <p class="section-label">News & Updates</p>
+        <h2 class="section-title">Latest <span class="grad-text">Changelog</span></h2>
+        <p class="section-sub">Stay up to date with everything happening on Pixel Network. Every update, fix and new feature — documented here.</p>
+      </div>
+      <div class="changelog-list">
+        <div class="changelog-item reveal">
+          <div class="changelog-date">December 19, 2025</div>
+          <div class="changelog-content">
+            <h3>Alpha Foundation Build</h3>
+            <p>The first official overview of Pixel Network, showcasing all custom systems implemented during active development. Custom progression, multiple worlds, and the complete BoxPvP foundation are live.</p>
+            <div class="changelog-tags">
+              <span class="tag tag-new">New</span>
+              <span class="tag tag-new">Alpha</span>
+              <span class="tag tag-imp">Foundation</span>
+            </div>
+          </div>
+        </div>
+        <div class="changelog-item reveal">
+          <div class="changelog-date">December 2025</div>
+          <div class="changelog-content">
+            <h3>Core Systems Integration</h3>
+            <p>Economy centered on Pixels, rank-based progression (VIP → Pixel+), custom Playtime rewards, StatTrack system, and multi-world structure all interconnected and functional.</p>
+            <div class="changelog-tags">
+              <span class="tag tag-imp">Improved</span>
+              <span class="tag tag-fix">Stability</span>
+            </div>
+          </div>
+        </div>
+        <div class="changelog-item reveal">
+          <div class="changelog-date">November 2025</div>
+          <div class="changelog-content">
+            <h3>Custom Visual Systems</h3>
+            <p>Custom chat visuals, prestige tags, legacy mode, NPC characters, custom models, and immersive world design elements deployed across all active worlds.</p>
+            <div class="changelog-tags">
+              <span class="tag tag-new">New</span>
+              <span class="tag tag-imp">Visual</span>
+            </div>
+          </div>
+        </div>
+        <div class="changelog-item reveal">
+          <div class="changelog-date">Ongoing</div>
+          <div class="changelog-content">
+            <h3>Active Development</h3>
+            <p>Continuous balance adjustments across economy and progression. Performance and stability improvements. UX enhancements across all game systems.</p>
+            <div class="changelog-tags">
+              <span class="tag tag-fix">Fixed</span>
+              <span class="tag tag-imp">Ongoing</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top: 32px;">
+        <a href="https://pixel-network-1.gitbook.io/home/changelog" target="_blank" class="btn btn-ghost">View Full Changelog →</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ROADMAP -->
+  <section id="roadmap">
+    <div class="container">
+      <div class="reveal">
+        <p class="section-label">Development Roadmap</p>
+        <h2 class="section-title">What's <span class="grad-text">Coming Next</span></h2>
+        <p class="section-sub">A transparent look at what our team is building. The future of Pixel Network, laid out.</p>
+      </div>
+      <div class="roadmap-timeline">
+        <div class="roadmap-item done reveal">
+          <div class="roadmap-dot"></div>
+          <p class="roadmap-phase">✓ Completed — Alpha</p>
+          <h3>Alpha Foundation Build</h3>
+          <p>Core systems deployed: BoxPvP combat, pixel economy, prestige, multi-world structure, crates, talismans, and custom chat visuals.</p>
+          <div class="roadmap-features">
+            <span class="roadmap-feature">BoxPvP Core</span>
+            <span class="roadmap-feature">Pixel Economy</span>
+            <span class="roadmap-feature">Prestige System</span>
+            <span class="roadmap-feature">Crates</span>
+            <span class="roadmap-feature">4 Worlds</span>
+          </div>
+        </div>
+        <div class="roadmap-item active reveal">
+          <div class="roadmap-dot"></div>
+          <p class="roadmap-phase">🔥 In Progress — Beta</p>
+          <h3>Beta Launch & Polish</h3>
+          <p>Refining all existing systems, fixing edge cases, expanding economy, adding more cosmetics, and preparing for a wider public beta release.</p>
+          <div class="roadmap-features">
+            <span class="roadmap-feature">Economy Expansion</span>
+            <span class="roadmap-feature">New Cosmetics</span>
+            <span class="roadmap-feature">Performance Fixes</span>
+            <span class="roadmap-feature">Balance Pass</span>
+          </div>
+        </div>
+        <div class="roadmap-item upcoming reveal">
+          <div class="roadmap-dot"></div>
+          <p class="roadmap-phase">⬡ Upcoming — Season 1</p>
+          <h3>Season 1: Official Launch</h3>
+          <p>Full public launch with a new seasonal wipe, leaderboards, PvP tournaments, new themed world, and season-exclusive cosmetics and rewards.</p>
+          <div class="roadmap-features">
+            <span class="roadmap-feature">Season Wipe</span>
+            <span class="roadmap-feature">Leaderboards</span>
+            <span class="roadmap-feature">Tournaments</span>
+            <span class="roadmap-feature">New World</span>
+            <span class="roadmap-feature">Season Pass</span>
+          </div>
+        </div>
+        <div class="roadmap-item upcoming reveal">
+          <div class="roadmap-dot"></div>
+          <p class="roadmap-phase">⬡ Future — Season 2+</p>
+          <h3>Continuous Content</h3>
+          <p>Boss events, guild systems, expanded Nexus storyline, cross-world mechanics, and a full competitive PvP ranking system with rewards.</p>
+          <div class="roadmap-features">
+            <span class="roadmap-feature">Boss Events</span>
+            <span class="roadmap-feature">Guilds</span>
+            <span class="roadmap-feature">Nexus Story</span>
+            <span class="roadmap-feature">Ranked PvP</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- DOCS -->
+  <section id="docs">
+    <div class="container">
+      <div class="reveal">
+        <p class="section-label">Knowledge Base</p>
+        <h2 class="section-title">Learn the <span class="grad-text">Mechanics</span></h2>
+        <p class="section-sub">Full documentation covering weapons, bosses, zones, Nexus systems, and key game mechanics so you can progress efficiently.</p>
+      </div>
+      <div class="docs-grid">
+        <a href="https://pixel-network-1.gitbook.io/home/documentation/" target="_blank" class="doc-card reveal">
+          <div class="doc-card-icon">📖</div>
+          <h3>Getting Started</h3>
+          <p>Connect for the first time, understand the basics, and learn how to progress through the early game.</p>
+          <div class="doc-card-arrow">→</div>
+        </a>
+        <a href="https://pixel-network-1.gitbook.io/home/documentation/" target="_blank" class="doc-card reveal">
+          <div class="doc-card-icon">⚔️</div>
+          <h3>Combat & PvP</h3>
+          <p>Master BoxPvP mechanics, custom weapons, dueling systems, and arena strategies.</p>
+          <div class="doc-card-arrow">→</div>
+        </a>
+        <a href="https://pixel-network-1.gitbook.io/home/documentation/" target="_blank" class="doc-card reveal">
+          <div class="doc-card-icon">🌍</div>
+          <h3>World Exploration</h3>
+          <p>Discover all worlds, mining zones, special areas, and hidden secrets across the Pixel Network universe.</p>
+          <div class="doc-card-arrow">→</div>
+        </a>
+        <a href="https://pixel-network-1.gitbook.io/home/documentation/" target="_blank" class="doc-card reveal">
+          <div class="doc-card-icon">💰</div>
+          <h3>Economy Guide</h3>
+          <p>Understand Pixels as currency, trading, the market system, and how to optimize your income.</p>
+          <div class="doc-card-arrow">→</div>
+        </a>
+        <a href="https://pixel-network-1.gitbook.io/home/documentation/" target="_blank" class="doc-card reveal">
+          <div class="doc-card-icon">🏆</div>
+          <h3>Prestige & Ranks</h3>
+          <p>VIP through Pixel+ — every tier explained with all benefits, requirements, and perks listed.</p>
+          <div class="doc-card-arrow">→</div>
+        </a>
+        <a href="https://pixel-network-1.gitbook.io/home/changelog" target="_blank" class="doc-card reveal">
+          <div class="doc-card-icon">📋</div>
+          <h3>Full Changelog</h3>
+          <p>Every update, patch, and addition to the server — fully documented and searchable.</p>
+          <div class="doc-card-arrow">→</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- TEAM -->
+  <section id="team">
+    <div class="container">
+      <div class="reveal">
+        <p class="section-label">The People Behind PixelBoxxx</p>
+        <h2 class="section-title">Meet the <span class="grad-text">Team</span></h2>
+        <p class="section-sub">The dedicated builders, engineers, and designers that make Pixel Network possible.</p>
+        <p class="scroll-hint">← Scroll to see more →</p>
+      </div>
+      <div class="team-grid" id="team-grid">
+        <div class="team-card reveal">
+          <div class="team-avatar">👑</div>
+          <span class="team-role">Owner</span>
+          <h3>PixelOwner</h3>
+          <p>The visionary behind Pixel Network. Leads the direction, design, and long-term roadmap of the entire project.</p>
+        </div>
+        <div class="team-card reveal">
+          <div class="team-avatar">⚙️</div>
+          <span class="team-role">Lead Dev</span>
+          <h3>DevPaul</h3>
+          <p>jack of all trades. Builds the core systems, custom mechanics, NPCs, and turns ideas into reality on the server every day.</p>
+        </div>
+        <div class="team-card reveal">
+          <div class="team-avatar">🎨</div>
+          <span class="team-role">Builder</span>
+          <h3>WorldCrafter</h3>
+          <p>Designs the themed worlds, arenas, and structures that make each zone of Pixel Network visually unique and immersive.</p>
+        </div>
+        <div class="team-card reveal">
+          <div class="team-avatar">🛡️</div>
+          <span class="team-role">Admin</span>
+          <h3>GuardianX</h3>
+          <p>Keeps the server safe, manages the community, enforces rules, and makes sure every player has a great experience.</p>
+        </div>
+        <div class="team-card reveal">
+          <div class="team-avatar">🎮</div>
+          <span class="team-role">Mod</span>
+          <h3>PixelMod</h3>
+          <p>Active in-game and on Discord, helping new players, resolving issues, and keeping the community welcoming.</p>
+        </div>
+        <div class="team-card reveal">
+          <div class="team-avatar">📣</div>
+          <span class="team-role">Community</span>
+          <h3>SocialPix</h3>
+          <p>Runs announcements, events, giveaways and Discord activities. The voice of Pixel Network to the community.</p>
+        </div>
+        <div class="team-card" style="border-style: dashed; opacity: 0.5; cursor: default;">
+          <div class="team-avatar" style="background: var(--surface2);">➕</div>
+          <span class="team-role" style="color: var(--muted); background: rgba(255,255,255,0.04); border-color: var(--border);">Open Role</span>
+          <h3>Join the Team</h3>
+          <p>We're growing! Apply in Discord if you're passionate about Minecraft server development or community management.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- DISCORD CTA -->
+  <div id="discord-cta">
+    <div class="discord-box reveal-scale">
+      <div class="discord-icon">💬</div>
+      <h2>Join the Community</h2>
+      <p>Get support, stay updated on patches and events, connect with other players, and talk directly with our team.</p>
+      <a href="https://discord.gg/khRCRhR9d4" target="_blank" class="btn-discord">
+        Join Discord →
+      </a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-logo">PixelBoxxx</span>
+      <ul class="footer-links">
+        <li><a href="https://pixel-network-1.gitbook.io/home" target="_blank">Docs</a></li>
+        <li><a href="https://pixelboxx.tebex.io/" target="_blank">Store</a></li>
+        <li><a href="https://discord.gg/khRCRhR9d4" target="_blank">Discord</a></li>
+        <li><a href="https://pixel-network-1.gitbook.io/home/changelog" target="_blank">Changelog</a></li>
+      </ul>
+      <span class="footer-copy">© 2025 Pixel Network. Java IP: pixelboxxx.minehut.gg</span>
+    </div>
+  </footer>
+
+<script>
+// ── CURSOR ──
+const cursorDot = document.getElementById('cursor-dot');
+const cursorRing = document.getElementById('cursor-ring');
+let cx = 0, cy = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  cx = e.clientX; cy = e.clientY;
+  gsap.to(cursorDot, { x: cx, y: cy, duration: 0.1, ease: 'power2.out' });
+});
+
+function animRing() {
+  rx += (cx - rx) * 0.12;
+  ry += (cy - ry) * 0.12;
+  gsap.set(cursorRing, { x: rx, y: ry });
+  requestAnimationFrame(animRing);
+}
+animRing();
+
+document.querySelectorAll('a, button, .feature-card, .store-item, .doc-card, .team-card, .changelog-item').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+});
+
+// ── PARTICLES ──
+const canvas = document.getElementById('particles-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.vx = (Math.random() - 0.5) * 0.3;
+    this.vy = (Math.random() - 0.5) * 0.3;
+    this.alpha = Math.random() * 0.4 + 0.05;
+    this.size = Math.random() * 1.5 + 0.5;
+    this.color = Math.random() > 0.5 ? '124,92,252' : '252,92,125';
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${this.color},${this.alpha})`;
+    ctx.fill();
+  }
+}
+
+for (let i = 0; i < 80; i++) particles.push(new Particle());
+
+function animParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => { p.update(); p.draw(); });
+  // draw connections
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 120) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(124,92,252,${0.08 * (1 - dist/120)})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(animParticles);
+}
+animParticles();
+
+// ── INTRO / LOADER ──
+const intro = document.getElementById('intro');
+const introVideo = document.getElementById('intro-video');
+const introSkip = document.getElementById('intro-skip');
+const introProgress = document.getElementById('intro-progress');
+
+function hideIntro() {
+  gsap.to(intro, {
+    opacity: 0, duration: 0.8, ease: 'power2.inOut',
+    onComplete: () => { intro.style.display = 'none'; document.body.style.overflow = 'auto'; startPageAnimations(); }
+  });
+}
+
+introVideo.addEventListener('timeupdate', () => {
+  if (introVideo.duration) {
+    const pct = (introVideo.currentTime / introVideo.duration) * 100;
+    introProgress.style.width = pct + '%';
+  }
+});
+
+introVideo.addEventListener('ended', hideIntro);
+introSkip.addEventListener('click', hideIntro);
+
+// If video fails to load, skip after 3s
+setTimeout(() => {
+  if (intro.style.display !== 'none') hideIntro();
+}, 8000);
+
+document.body.style.overflow = 'hidden';
+
+// ── GSAP REGISTER ──
+gsap.registerPlugin(ScrollTrigger);
+
+function startPageAnimations() {
+  // NAV entrance
+  gsap.from('#navbar', { y: -60, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 0.2 });
+
+  // HERO animations
+  gsap.from('.hero-eyebrow', { y: 20, opacity: 0, duration: 0.6, delay: 0.4, ease: 'power3.out' });
+  gsap.from('.hero-title .word', {
+    y: 80, opacity: 0, duration: 0.9, stagger: 0.12, delay: 0.6, ease: 'power4.out'
+  });
+  gsap.from('.hero-sub', { y: 30, opacity: 0, duration: 0.7, delay: 1.1, ease: 'power3.out' });
+  gsap.from('.hero-actions', { y: 20, opacity: 0, duration: 0.7, delay: 1.3, ease: 'power3.out' });
+  gsap.from('.hero-meta', { y: 20, opacity: 0, duration: 0.7, delay: 1.5, ease: 'power3.out' });
+
+  // Scroll-triggered reveals
+  gsap.utils.toArray('.reveal').forEach(el => {
+    gsap.fromTo(el,
+      { y: 50, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
+      }
+    );
+  });
+
+  gsap.utils.toArray('.reveal-left').forEach(el => {
+    gsap.fromTo(el,
+      { x: -60, opacity: 0 },
+      { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
+      }
+    );
+  });
+
+  gsap.utils.toArray('.reveal-right').forEach(el => {
+    gsap.fromTo(el,
+      { x: 60, opacity: 0 },
+      { x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
+      }
+    );
+  });
+
+  gsap.utils.toArray('.reveal-scale').forEach(el => {
+    gsap.fromTo(el,
+      { scale: 0.88, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 1, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
+      }
+    );
+  });
+
+  // Feature cards stagger
+  gsap.utils.toArray('.feature-card').forEach((el, i) => {
+    gsap.fromTo(el,
+      { y: 60, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.7, delay: i * 0.08, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 90%', toggleActions: 'play none none none' }
+      }
+    );
+  });
+
+  // Parallax on hero glow
+  gsap.to('.hero-glow', {
+    y: -80,
+    scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1 }
+  });
+
+  // Roadmap items
+  gsap.utils.toArray('.roadmap-item').forEach((el, i) => {
+    gsap.fromTo(el,
+      { x: -40, opacity: 0 },
+      { x: 0, opacity: 1, duration: 0.7, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 90%', toggleActions: 'play none none none' }
+      }
+    );
+  });
+}
+
+// ── NAV SCROLL ──
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('navbar');
+  if (window.scrollY > 60) nav.classList.add('scrolled');
+  else nav.classList.remove('scrolled');
+});
+
+// ── SERVER STATUS (Minetools API) ──
+async function checkStatus() {
+  try {
+    const res = await fetch('https://api.minetools.eu/ping/pixelboxxx.minehut.gg/25565');
+    const data = await res.json();
+    const dot = document.getElementById('status-dot');
+    const text = document.getElementById('status-text');
+    const count = document.getElementById('player-count');
+    if (data && data.players) {
+      dot.classList.remove('offline');
+      text.textContent = `Online · ${data.players.online}/${data.players.max}`;
+      count.textContent = data.players.online;
+    } else {
+      dot.classList.add('offline');
+      text.textContent = 'Offline';
+      count.textContent = '0';
+    }
+  } catch(e) {
+    // Try mcapi.us as fallback
+    try {
+      const res2 = await fetch('https://mcapi.us/server/status?ip=pixelboxxx.minehut.gg');
+      const d2 = await res2.json();
+      const dot = document.getElementById('status-dot');
+      const text = document.getElementById('status-text');
+      const count = document.getElementById('player-count');
+      if (d2 && d2.status === 'online') {
+        dot.classList.remove('offline');
+        text.textContent = `Online · ${d2.players.now}/${d2.players.max}`;
+        count.textContent = d2.players.now;
+      } else {
+        dot.classList.add('offline');
+        text.textContent = 'Offline';
+        count.textContent = '0';
+      }
+    } catch(e2) {
+      document.getElementById('status-text').textContent = 'Unknown';
+    }
+  }
+}
+checkStatus();
+setInterval(checkStatus, 60000);
+
+// ── COPY IP ──
+function copyIP() {
+  navigator.clipboard.writeText('pixelboxxx.minehut.gg').then(() => {
+    const btn = document.querySelector('.ip-copy');
+    const orig = btn.textContent;
+    btn.textContent = '✓';
+    btn.style.color = 'var(--online)';
+    setTimeout(() => { btn.textContent = orig; btn.style.color = ''; }, 1500);
+  });
+}
+
+// ── MOUSE PARALLAX on hero ──
+document.addEventListener('mousemove', e => {
+  const mx = (e.clientX / window.innerWidth - 0.5) * 20;
+  const my = (e.clientY / window.innerHeight - 0.5) * 20;
+  gsap.to('.hero-glow', { x: mx * 2, y: my * 2, duration: 1, ease: 'power2.out' });
+  gsap.to('.hero-content', { x: mx * 0.3, y: my * 0.3, duration: 1.2, ease: 'power2.out' });
+});
+</script>
+</body>
+</html>
