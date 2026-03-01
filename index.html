@@ -641,6 +641,39 @@ body::after {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
+
+/* ── SECTION DEPTH BGs ── */
+#FEATURES { position: relative; }
+#FEATURES::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 80% 30%, rgba(255,190,14,0.028) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 60% at 10% 70%, rgba(255,160,12,0.02) 0%, transparent 60%);
+}
+#FEATURES > * { position: relative; z-index: 1; }
+#WORLDS { position: relative; }
+#WORLDS::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(ellipse 80% 60% at 20% 50%, rgba(126,184,255,0.025) 0%, transparent 70%);
+}
+#WORLDS > * { position: relative; z-index: 1; }
+#ITEMS { position: relative; }
+#ITEMS::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(ellipse 70% 50% at 70% 40%, rgba(192,132,252,0.025) 0%, transparent 65%);
+}
+#ITEMS > * { position: relative; z-index: 1; }
+#CHANGELOG { position: relative; }
+#CHANGELOG::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(ellipse 50% 60% at 85% 20%, rgba(255,190,14,0.02) 0%, transparent 60%);
+}
+#CHANGELOG > * { position: relative; z-index: 1; }
+/* Stats section texture */
+#STATS::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(ellipse 100% 100% at 50% -20%, rgba(255,190,14,0.04) 0%, transparent 60%);
+}
 /* ── RESPONSIVE ── */
 @media(max-width:900px) {
   .nav-links { display: none; }
@@ -678,6 +711,7 @@ body::after {
     <li><a href="#CHANGELOG">News</a></li>
     <li><a href="#ROADMAP">Roadmap</a></li>
     <li><a href="#TEAM">Team</a></li>
+    <li><a href="forum.html">Forum</a></li>
   </ul>
   <div class="nav-right">
     <div class="status-pill">
@@ -705,6 +739,7 @@ body::after {
     <li><a href="#CHANGELOG">News</a></li>
     <li><a href="#ROADMAP">Roadmap</a></li>
     <li><a href="#TEAM">Team</a></li>
+    <li><a href="forum.html">Forum</a></li>
   </ul>
   <div class="mob-btns">
     <a href="https://discord.gg/khRCRhR9d4" target="_blank" class="btn btn-ghost" style="cursor:pointer">Discord</a>
@@ -752,7 +787,7 @@ body::after {
     <div class="hero-stats" data-reveal="up">
       <div class="hstat">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
-        <strong id="PCNT">—</strong>&nbsp;online
+        <strong id="PCNT">—</strong>&nbsp;players online
       </div>
       <div class="hstat-sep"></div>
       <div class="hstat">
@@ -765,12 +800,6 @@ body::after {
         Constant Updates
       </div>
     </div>
-    <!-- Hero MC screenshot -->
-    <div class="hero-img-wrap" data-reveal="up" style="margin-top:68px">
-      <img src="https://pixel-network-1.gitbook.io/home/~gitbook/image?url=https%3A%2F%2F712597880-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252Fn7xotQKtgeq6qSw4VBXF%252Fuploads%252FCWS5kaCSJ6IXtzUvodgQ%252F01J7F44T3NQT394885EBGG7XAP.png%3Falt%3Dmedia%26token%3Df87d4c6d-91d2-422e-aa0b-e7f6529cdb02&width=768&dpr=2&quality=100&sign=82178497&sv=2" alt="Pixel Network Server"/>
-      <div class="hero-img-overlay"></div>
-      <span class="hero-img-label">Pixel Network — BoxPvP Arena</span>
-    </div>
   </div>
   <div class="hero-scroll-hint">
     <span>Scroll</span>
@@ -781,7 +810,7 @@ body::after {
 <div class="div-line"></div>
 
 <!-- STATS -->
-<section id="STATS">
+<section id="STATS" style="position:relative;overflow:hidden">
   <div class="wrap">
     <div class="stats-grid">
       <div class="stat-item" data-reveal="up">
@@ -1476,7 +1505,6 @@ heroTL
   .fromTo('.hero-sub',{y:28,opacity:0},{y:0,opacity:1,duration:.8,ease:'power3.out'},'-=.6')
   .fromTo('.hero-actions',{y:20,opacity:0},{y:0,opacity:1,duration:.7,ease:'power3.out'},'-=.5')
   .fromTo('.hero-stats',{y:16,opacity:0},{y:0,opacity:1,duration:.7,ease:'power3.out'},'-=.5')
-  .fromTo('.hero-img-wrap',{y:48,opacity:0,scale:.97},{y:0,opacity:1,scale:1,duration:1.1,ease:'power3.out'},'-=.4')
   .fromTo('.hero-scroll-hint',{opacity:0},{opacity:1,duration:.8},'-=.2');
 gsap.from('#NAV', {y:-60,opacity:0,duration:.8,delay:.05,ease:'power3.out'});
 
@@ -1547,14 +1575,28 @@ gsap.utils.toArray('.team-card').forEach((el,i) => {
   });
 });
 
-// Stat number counters
-document.querySelectorAll('[data-count]').forEach(el => {
-  const target = parseInt(el.dataset.count), suffix = el.dataset.suffix || '';
-  gsap.fromTo({v:0}, {v:target, duration:2.2, ease:'power2.out',
-    onUpdate: function() { el.textContent = Math.floor(this.targets()[0].v) + suffix; },
-    scrollTrigger:{trigger:el,start:'top 85%',once:true}
+// Stat number counters — IntersectionObserver approach
+const _cntIO = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const el = entry.target;
+    const target = parseInt(el.dataset.count);
+    const suffix = el.dataset.suffix || '';
+    const dur = 2200, fps = 60;
+    const frames = Math.round(dur / (1000 / fps));
+    let frame = 0;
+    const ease = t => t < .5 ? 2*t*t : -1+(4-2*t)*t;
+    const tick = () => {
+      frame++;
+      const progress = ease(Math.min(frame / frames, 1));
+      el.textContent = Math.round(progress * target) + suffix;
+      if (frame < frames) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+    _cntIO.unobserve(el);
   });
-});
+}, { threshold: 0.2 });
+document.querySelectorAll('[data-count]').forEach(el => _cntIO.observe(el));
 
 // Parallax on hero sections
 gsap.to('.hero-glow', { y:-100, scrollTrigger:{trigger:'#HERO',start:'top top',end:'bottom top',scrub:1.5} });
@@ -1566,21 +1608,44 @@ gsap.utils.toArray('.split-img img').forEach(img => {
 });
 
 /* ── WORLDS TABS ── */
-document.querySelectorAll('.world-tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.world-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.world-panel').forEach(p => p.classList.remove('active'));
-    tab.classList.add('active');
-    const panel = document.getElementById('tab-' + tab.dataset.tab);
-    if(panel) {
-      panel.classList.add('active');
-      // Re-animate panel elements
-      gsap.fromTo(panel.querySelectorAll('.world-panel-img,[data-reveal]'), {opacity:0,y:20}, {opacity:1,y:0,duration:.6,stagger:.08,ease:'power3.out'});
-    }
-  });
-});
+(function initWorldTabs() {
+  const tabs   = document.querySelectorAll('.world-tab');
+  const panels = document.querySelectorAll('.world-panel');
 
-/* ── SERVER STATUS ── */
+  // Pre-set all panel children so they're visible until tab switch
+  panels.forEach(p => {
+    p.querySelectorAll('.world-panel-img, .world-panel-info').forEach(el => {
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+    });
+  });
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      // Update active tab
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      // Hide all panels
+      panels.forEach(p => { p.style.display = 'none'; p.classList.remove('active'); });
+
+      // Show + animate target panel
+      const target = document.getElementById('tab-' + tab.dataset.tab);
+      if (!target) return;
+
+      target.classList.add('active');
+      target.style.display = '';
+
+      const img  = target.querySelector('.world-panel-img');
+      const info = target.querySelector('.world-panel-info');
+
+      gsap.fromTo(img,  { opacity: 0, x: -36 }, { opacity: 1, x: 0, duration: .65, ease: 'power3.out' });
+      gsap.fromTo(info, { opacity: 0, x:  36 }, { opacity: 1, x: 0, duration: .65, delay: .1, ease: 'power3.out' });
+    });
+  });
+})();
+
+/* ── SERVER STATUS — multi-API with CORS ── */
 function updateStatus(online, curr, max) {
   ['SDOT','SDOT2'].forEach(id => {
     const d = document.getElementById(id);
@@ -1591,22 +1656,56 @@ function updateStatus(online, curr, max) {
     if(t) t.textContent = online ? `Online — ${curr}/${max} players` : 'Server Offline';
   });
   const pc = document.getElementById('PCNT');
-  if(pc) pc.textContent = online ? curr : '0';
+  if(pc) pc.textContent = online ? curr : '—';
 }
+
 async function checkServer() {
+  // Try Minehut API directly
   try {
-    const r = await fetch('https://api.minetools.eu/ping/pixelboxxx.minehut.gg/25565');
+    const r = await fetch('https://api.minehut.com/server/pixelboxxx?byName=true');
     const d = await r.json();
-    if(d?.players) { updateStatus(true, d.players.online, d.players.max); return; }
-  } catch(e) {}
+    if (d && d.server) {
+      const srv = d.server;
+      const online = srv.online === true;
+      const curr = srv.playerData ? (srv.playerData.playerCount || 0) : 0;
+      const max  = srv.maxPlayers || 20;
+      updateStatus(online, curr, max);
+      return;
+    }
+  } catch(e) { /* fall through */ }
+  // API 1 — mcsrvstat.us v3 (best CORS support)
   try {
-    const r = await fetch('https://mcapi.us/server/status?ip=pixelboxxx.minehut.gg');
-    const d = await r.json();
-    if(d?.status === 'online') { updateStatus(true, d.players.now, d.players.max); return; }
+    const r = await fetch('https://api.mcsrvstat.us/3/pixelboxxx.minehut.gg', { signal: AbortSignal.timeout(8000) });
+    if(r.ok) {
+      const d = await r.json();
+      if(d?.online) { updateStatus(true, d.players?.online ?? 0, d.players?.max ?? 0); return; }
+      if(d?.ip) { updateStatus(false, 0, 0); return; }
+    }
   } catch(e) {}
+
+  // API 2 — minetools.eu (fallback)
+  try {
+    const r = await fetch('https://api.minetools.eu/ping/pixelboxxx.minehut.gg/25565', { signal: AbortSignal.timeout(7000) });
+    if(r.ok) {
+      const d = await r.json();
+      if(d?.players) { updateStatus(true, d.players.online, d.players.max); return; }
+    }
+  } catch(e) {}
+
+  // API 3 — mcstatus.io (second fallback)
+  try {
+    const r = await fetch('https://api.mcstatus.io/v2/status/java/pixelboxxx.minehut.gg', { signal: AbortSignal.timeout(7000) });
+    if(r.ok) {
+      const d = await r.json();
+      if(d?.online) { updateStatus(true, d.players?.online ?? 0, d.players?.max ?? 0); return; }
+    }
+  } catch(e) {}
+
   updateStatus(false, 0, 0);
 }
-checkServer(); setInterval(checkServer, 60000);
+
+checkServer();
+setInterval(checkServer, 90000);
 
 /* ── COPY IP ── */
 document.getElementById('IP_COPY').addEventListener('click', () => {

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Pixel Skyblock — Community Forum</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- TOAST NOTIFICATION -->
+<div id="toast" class="toast"></div>
+
+<!-- AUTH OVERLAY -->
+<div id="auth-overlay" class="auth-overlay">
+  <div class="auth-modal">
+    <div class="auth-logo">
+      <div class="auth-logo-dot"></div>
+      <span class="font-special">ᴘɪxᴇʟ ꜱᴋʏʙʟᴏᴄᴋ</span>
+    </div>
+    <p class="auth-tagline font-special">ᴄᴏᴍᴍᴜɴɪᴛʏ ꜰᴏʀᴜᴍ</p>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">
+        <span class="font-special">ʟᴏɢ ɪɴ</span>
+      </button>
+      <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">
+        <span class="font-special">ꜱɪɢɴ ᴜᴘ</span>
+      </button>
+    </div>
+
+    <div id="panel-login" class="auth-panel active">
+      <div class="field-group">
+        <label class="field-lbl font-special">ᴇᴍᴀɪʟ</label>
+        <input type="email" id="login-email" class="field-input font-special" placeholder="your@email.com"/>
+      </div>
+      <div class="field-group">
+        <label class="field-lbl font-special">ᴘᴀꜱꜱᴡᴏʀᴅ</label>
+        <input type="password" id="login-pw" class="field-input font-special" placeholder="••••••••"/>
+      </div>
+      <button class="btn-primary font-special" onclick="doLogin()">ꜱɪɢɴ ɪɴ</button>
+    </div>
+
+    <div id="panel-signup" class="auth-panel">
+      <div class="field-group">
+        <label class="field-lbl font-special">ᴜꜱᴇʀɴᴀᴍᴇ</label>
+        <input type="text" id="su-username" class="field-input font-special" placeholder="YourName"/>
+      </div>
+      <div class="field-group">
+        <label class="field-lbl font-special">ᴇᴍᴀɪʟ</label>
+        <input type="email" id="su-email" class="field-input font-special" placeholder="your@email.com"/>
+      </div>
+      <div class="field-group">
+        <label class="field-lbl font-special">ᴘᴀꜱꜱᴡᴏʀᴅ</label>
+        <input type="password" id="su-pw" class="field-input font-special" placeholder="min 6 characters"/>
+      </div>
+      <button class="btn-primary font-special" onclick="doSignup()">ᴄʀᴇᴀᴛᴇ ᴀᴄᴄᴏᴜɴᴛ</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" class="app" style="display:none">
+
+  <!-- TOP NAV -->
+  <header class="topnav">
+    <div class="topnav-inner">
+      <a href="index.html" class="topnav-brand">
+        <div class="brand-dot"></div>
+        <span class="font-special brand-name">ᴘɪxᴇʟ ꜱᴋʏʙʟᴏᴄᴋ</span>
+        <span class="brand-tag font-special">ꜰᴏʀᴜᴍ</span>
+      </a>
+      <div class="topnav-right">
+        <a href="index.html" class="nav-link font-special">← ᴍᴀɪɴ ꜱɪᴛᴇ</a>
+        <div class="nav-user" id="nav-user">
+          <div class="nav-avatar" id="nav-avatar-border">
+            <div class="nav-avatar-inner font-special" id="nav-avatar-char">?</div>
+          </div>
+          <span class="font-special" id="nav-username">...</span>
+        </div>
+        <button class="btn-ghost font-special" onclick="doLogout()">ʟᴏɢ ᴏᴜᴛ</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content-wrap">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="profile-card" id="profile-card">
+        <div class="profile-avatar-wrap" id="profile-avatar-wrap">
+          <div class="profile-avatar font-special" id="profile-avatar-char">?</div>
+        </div>
+        <div class="profile-rank-badge font-special" id="profile-rank-badge">ᴍᴇᴍʙᴇʀ</div>
+        <div class="profile-username font-special" id="profile-username">ʟᴏᴀᴅɪɴɢ...</div>
+
+        <div class="profile-actions">
+          <button class="btn-link-mc font-special" id="btn-link-mc" onclick="generateLinkCode()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+            ʟɪɴᴋ ᴍɪɴᴇᴄʀᴀꜰᴛ
+          </button>
+          <div class="link-code-box" id="link-code-box" style="display:none">
+            <p class="link-code-label font-special">ᴛʏᴘᴇ ɪɴ ꜱᴇʀᴠᴇʀ:</p>
+            <div class="link-code-cmd font-special">/link web <span id="link-code-val">——</span></div>
+            <p class="link-code-sub font-special" style="margin-top:6px;color:#555">ᴄᴏᴅᴇ ᴇxᴘɪʀᴇꜱ ᴀꜰᴛᴇʀ ᴜꜱᴇ</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-nav">
+        <div class="sidebar-nav-item active font-special">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          ᴀʟʟ ᴘᴏꜱᴛꜱ
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN FORUM -->
+    <main class="forum-main">
+
+      <!-- CREATE POST -->
+      <div class="create-post-box" id="create-post-box">
+        <div class="create-post-header">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFD856" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span class="font-special">ɴᴇᴡ ᴘᴏꜱᴛ</span>
+        </div>
+        <input type="text" id="post-title" class="create-input font-special" placeholder="ᴘᴏꜱᴛ ᴛɪᴛʟᴇ..."/>
+        <textarea id="post-body" class="create-textarea font-special" placeholder="ᴡʜᴀᴛ'ꜱ ᴏɴ ʏᴏᴜʀ ᴍɪɴᴅ?"></textarea>
+        <div class="create-footer">
+          <span class="cooldown-info font-special" id="cooldown-info"></span>
+          <button class="btn-submit font-special" id="btn-submit" onclick="submitPost()">ᴘᴜʙʟɪꜱʜ ᴘᴏꜱᴛ</button>
+        </div>
+      </div>
+
+      <!-- POSTS FEED -->
+      <div class="posts-header">
+        <span class="posts-count font-special" id="posts-count">ʟᴏᴀᴅɪɴɢ...</span>
+        <button class="btn-refresh font-special" onclick="loadPosts()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+          ʀᴇꜰʀᴇꜱʜ
+        </button>
+      </div>
+
+      <div id="posts-feed" class="posts-feed">
+        <div class="loading-posts">
+          <div class="loading-spinner"></div>
+          <span class="font-special">ʟᴏᴀᴅɪɴɢ ᴘᴏꜱᴛꜱ...</span>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Supabase v2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
