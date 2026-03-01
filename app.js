@@ -1,6 +1,6 @@
 /* =============================================
    PIXEL SKYBLOCK COMMUNITY FORUM
-   app.js — Supabase + Full Forum Logic
+   app.js — Supabase + Full Forum Logic (HOTFIXED)
    ============================================= */
 
 // ─── SUPABASE INIT ───────────────────────────────────────────────────────────
@@ -195,10 +195,11 @@ async function loadPosts() {
     <span class="font-special">${toSmallCaps('loading posts...')}</span>
   </div>`;
 
+  // HOTFIX: Modificado user_id por author_id para coincidir con el Schema SQL de PixelCore.
   const { data, error } = await sb
     .from('posts')
     .select(`
-      id, title, content, created_at, user_id,
+      id, title, content, created_at, author_id,
       profiles ( username, rank )
     `)
     .order('created_at', { ascending: false })
@@ -270,10 +271,11 @@ async function loadPosts() {
     <span class="font-special">${toSmallCaps('loading posts...')}</span>
   </div>`;
 
+  // HOTFIX: Modificado user_id por author_id
   const { data, error } = await sb
     .from('posts')
     .select(`
-      id, title, content, created_at, user_id,
+      id, title, content, created_at, author_id,
       profiles ( username, rank )
     `)
     .order('created_at', { ascending: false })
@@ -388,8 +390,9 @@ async function submitPost() {
 
   document.getElementById('btn-submit').disabled = true;
 
+  // HOTFIX: Modificado user_id por author_id
   const { error } = await sb.from('posts').insert({
-    user_id: _user.id,
+    author_id: _user.id,
     title:   title,
     content: content
   });
