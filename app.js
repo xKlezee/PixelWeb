@@ -3,10 +3,13 @@
    app.js — Supabase + Full Forum Logic (HOTFIXED)
    ============================================= */
 
-// ─── SUPABASE INIT ───────────────────────────────────────────────────────────
+// ─── SUPABASE & DISCORD INIT ─────────────────────────────────────────────────
 const _SB_URL = 'https://hlcptvdkwmaeiazybenl.supabase.co';
 const _SB_KEY = 'sb_publishable_L78nHl65t4LxyLvEXJw34Q_iMqXcGzU';
 const sb = window.supabase.createClient(_SB_URL, _SB_KEY);
+
+// IMPORTANTE: Reemplaza esto con la URL del Webhook de tu canal Foro en Discord
+const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1478024586967777455/Viu99gOXNrOYDKPB9vfq0lNpiCNZbcOmkQYIz191KtSQycxv1i076TlGmyvZdbfOL4Od'; 
 
 // ─── SMALL CAPS FONT MAP ──────────────────────────────────────────────────────
 const SC_MAP = {
@@ -187,6 +190,32 @@ async function generateLinkCode() {
   TOAST.success(toSmallCaps('link code generated'));
 }
 
+// ─── DISCORD WEBHOOK INTEGRATION ──────────────────────────────────────────────
+async function syncPostToDiscord(title, content, authorName) {
+  if (!DISCORD_WEBHOOK_URL || DISCORD_WEBHOOK_URL === 'TU_WEBHOOK_URL_AQUI') return null;
+
+  const discordPayload = {
+      thread_name: title.toUpperCase(),
+      content: `📝 **ɴᴇᴡ ꜰᴏʀᴜᴍ ᴘᴏꜱᴛ**\n\n**ᴀᴜᴛʜᴏʀ:** ${authorName}\n\n${content}`,
+  };
+
+  try {
+      const response = await fetch(`${DISCORD_WEBHOOK_URL}?wait=true`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(discordPayload)
+      });
+
+      if (!response.ok) throw new Error('Failed to reach Discord Webhook');
+      
+      const data = await response.json();
+      return data.channel_id; // Retorna el ID del hilo para Supabase
+  } catch (err) {
+      console.error("Error syncing to Discord:", err);
+      return null;
+  }
+}
+
 // ─── POSTS ────────────────────────────────────────────────────────────────────
 async function loadPosts() {
   const feed = document.getElementById('posts-feed');
@@ -195,11 +224,11 @@ async function loadPosts() {
     <span class="font-special">${toSmallCaps('loading posts...')}</span>
   </div>`;
 
-  // HOTFIX: Modificado user_id por author_id para coincidir con el Schema SQL de PixelCore.
+  // HOTFIX: Modificado user_id por author_id y añadido discord_thread_id
   const { data, error } = await sb
     .from('posts')
     .select(`
-      id, title, content, created_at, author_id,
+      id, title, content, created_at, author_id, discord_thread_id,
       profiles ( username, rank )
     `)
     .order('created_at', { ascending: false })
@@ -236,6 +265,9 @@ function renderPost(post) {
   const bodySafe   = escapeHtml(post.content || '');
   const postId     = escapeHtml(String(post.id));
 
+  // Opcional: Badge de Discord si existe el thread ID
+  const discordBadge = post.discord_thread_id ? `<span style="margin-left:8px;color:#5865F2;">[Discord Sync]</span>` : '';
+
   return `
 <div class="post-card ${rankClass}" onclick="openPost('${postId}')">
   <div class="post-header">
@@ -245,7 +277,7 @@ function renderPost(post) {
         ${username}
         <span class="post-rank-chip font-special ${chipClass}">${rankDisplay}</span>
       </div>
-      <div class="post-time font-special">${toSmallCaps(dateStr)}</div>
+      <div class="post-time font-special">${toSmallCaps(dateStr)} ${discordBadge}</div>
     </div>
   </div>
   <div class="post-title">${titleSafe}</div>
@@ -271,11 +303,11 @@ async function loadPosts() {
     <span class="font-special">${toSmallCaps('loading posts...')}</span>
   </div>`;
 
-  // HOTFIX: Modificado user_id por author_id
+  // HOTFIX: Modificado user_id por author_id y añadido discord_thread_id
   const { data, error } = await sb
     .from('posts')
     .select(`
-      id, title, content, created_at, author_id,
+      id, title, content, created_at, author_id, discord_thread_id,
       profiles ( username, rank )
     `)
     .order('created_at', { ascending: false })
@@ -390,11 +422,15 @@ async function submitPost() {
 
   document.getElementById('btn-submit').disabled = true;
 
-  // HOTFIX: Modificado user_id por author_id
+  // 1. Sincronizar con el Foro de Discord para obtener el ID del hilo
+  const threadId = await syncPostToDiscord(title, content, _profile?.username || 'user');
+
+  // 2. Insertar en Supabase guardando el vínculo con Discord
   const { error } = await sb.from('posts').insert({
     author_id: _user.id,
     title:   title,
-    content: content
+    content: content,
+    discord_thread_id: threadId
   });
 
   if (error) {
@@ -423,32 +459,45 @@ function escapeHtml(str) {
 
 // ─── BOOT ─────────────────────────────────────────────────────────────────────
 sb.auth.onAuthStateChange(async (event, session) => {
+  const authOverlay = document.getElementById('auth-overlay');
+  const appContainer = document.getElementById('app');
+
   if (session?.user) {
     _user = session.user;
 
-    // Load / create profile
-    _profile = await loadProfile(_user.id);
-    if (!_profile) {
-      // Create minimal profile if doesn't exist
-      const { data } = await sb.from('profiles').upsert({
-        id:       _user.id,
-        username: _user.email?.split('@')[0] || 'user',
-        rank:     'member'
-      }).select().single();
-      _profile = data;
+    try {
+      // Load / create profile
+      _profile = await loadProfile(_user.id);
+      if (!_profile) {
+        // Create minimal profile if doesn't exist
+        const { data, error: upsertError } = await sb.from('profiles').upsert({
+          id:       _user.id,
+          username: _user.email?.split('@')[0] || 'user',
+          rank:     'member'
+        }).select().single();
+        
+        if (upsertError) throw upsertError;
+        _profile = data;
+      }
+
+      if (_profile) applyProfileToUI(_profile);
+
+      // Show app, hide auth overlay safely
+      if (authOverlay) authOverlay.style.display = 'none';
+      if (appContainer) appContainer.style.display = 'block';
+
+      await loadPosts();
+    } catch (err) {
+      console.error("Critical Auth Sync Error:", err);
+      // Fallback: Mostrar UI de todas formas para evitar freeze
+      if (authOverlay) authOverlay.style.display = 'none';
+      if (appContainer) appContainer.style.display = 'block';
+      await loadPosts();
     }
-
-    if (_profile) applyProfileToUI(_profile);
-
-    // Show app, hide auth overlay
-    document.getElementById('auth-overlay').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-
-    await loadPosts();
   } else {
     _user = null; _profile = null;
-    document.getElementById('auth-overlay').style.display = 'flex';
-    document.getElementById('app').style.display = 'none';
+    if (authOverlay) authOverlay.style.display = 'flex';
+    if (appContainer) appContainer.style.display = 'none';
   }
 });
 
