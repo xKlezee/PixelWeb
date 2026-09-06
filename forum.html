@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="robots" content="noindex,nofollow,noarchive"/>
+<title>Pixel Network — Community Forum Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<div id="toast" class="toast"></div>
+
+<div id="auth-overlay" class="auth-overlay">
+  <div class="auth-modal">
+    <div class="auth-logo">
+      <div class="auth-logo-dot"></div>
+      <span class="font-special">ᴘɪxᴇʟ ɴᴇᴛᴡᴏʀᴋ</span>
+    </div>
+    <p class="auth-tagline font-special">ᴄᴏᴍᴍᴜɴɪᴛʏ ꜰᴏʀᴜᴍ · ᴘᴜʙʟɪᴄ ᴅᴇᴍᴏ</p>
+    <p class="font-special" style="font-size:11px;line-height:1.7;color:#777;text-align:center;margin:14px 0 18px;max-width:430px">ᴅᴇᴍᴏ ᴏɴʟʏ · ᴅᴏ ɴᴏᴛ ᴇɴᴛᴇʀ ʀᴇᴀʟ ᴄʀᴇᴅᴇɴᴛɪᴀʟꜱ · ɴᴏ ᴅᴀᴛᴀ ɪꜱ ꜱᴇɴᴛ ᴏʀ ꜱᴛᴏʀᴇᴅ</p>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">
+        <span class="font-special">ᴏᴘᴇɴ ᴅᴇᴍᴏ</span>
+      </button>
+      <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">
+        <span class="font-special">ᴄʀᴇᴀᴛᴇ ᴅᴇᴍᴏ ᴘʀᴏꜰɪʟᴇ</span>
+      </button>
+    </div>
+
+    <div id="panel-login" class="auth-panel active">
+      <div class="field-group">
+        <label class="field-lbl font-special">ᴅɪꜱᴘʟᴀʏ ɴᴀᴍᴇ</label>
+        <input type="text" id="login-email" class="field-input font-special" placeholder="Guest" autocomplete="off"/>
+      </div>
+      <button class="btn-primary font-special" onclick="doLogin()">ᴇɴᴛᴇʀ ᴅᴇᴍᴏ</button>
+    </div>
+
+    <div id="panel-signup" class="auth-panel">
+      <div class="field-group">
+        <label class="field-lbl font-special">ᴅᴇᴍᴏ ᴜꜱᴇʀɴᴀᴍᴇ</label>
+        <input type="text" id="su-username" class="field-input font-special" placeholder="YourName" autocomplete="off"/>
+      </div>
+      <button class="btn-primary font-special" onclick="doSignup()">ᴏᴘᴇɴ ᴅᴇᴍᴏ ᴘʀᴏꜰɪʟᴇ</button>
+    </div>
+  </div>
+</div>
+
+<div id="app" class="app" style="display:none">
+  <header class="topnav">
+    <div class="topnav-inner">
+      <a href="index.html" class="topnav-brand">
+        <div class="brand-dot"></div>
+        <span class="font-special brand-name">ᴘɪxᴇʟ ɴᴇᴛᴡᴏʀᴋ</span>
+        <span class="brand-tag font-special">ꜰᴏʀᴜᴍ</span>
+      </a>
+      <div class="topnav-right">
+        <a href="index.html" class="nav-link font-special">← ᴍᴀɪɴ ꜱɪᴛᴇ</a>
+        <div class="nav-user" id="nav-user">
+          <div class="nav-avatar" id="nav-avatar-border">
+            <div class="nav-avatar-inner font-special" id="nav-avatar-char">?</div>
+          </div>
+          <span class="font-special" id="nav-username">...</span>
+        </div>
+        <button class="btn-ghost font-special" onclick="doLogout()">ᴇxɪᴛ ᴅᴇᴍᴏ</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="content-wrap">
+    <aside class="sidebar">
+      <div class="profile-card" id="profile-card">
+        <div class="profile-avatar-wrap" id="profile-avatar-wrap">
+          <div class="profile-avatar font-special" id="profile-avatar-char">?</div>
+        </div>
+        <div class="profile-rank-badge font-special" id="profile-rank-badge">ᴍᴇᴍʙᴇʀ</div>
+        <div class="profile-username font-special" id="profile-username">ʟᴏᴀᴅɪɴɢ...</div>
+        <div class="profile-actions">
+          <button class="btn-link-mc font-special" id="btn-link-mc" onclick="generateLinkCode()">
+            ᴀᴄᴄᴏᴜɴᴛ ʟɪɴᴋɪɴɢ ᴘʀᴇᴠɪᴇᴡ
+          </button>
+          <div class="link-code-box" id="link-code-box" style="display:none"></div>
+        </div>
+      </div>
+
+      <div class="sidebar-nav">
+        <div class="sidebar-nav-item active font-special">ᴀʟʟ ᴘᴏꜱᴛꜱ</div>
+      </div>
+    </aside>
+
+    <main class="forum-main">
+      <div class="create-post-box" id="create-post-box">
+        <div class="create-post-header">
+          <span class="font-special">ɴᴇᴡ ᴅᴇᴍᴏ ᴘᴏꜱᴛ</span>
+        </div>
+        <input type="text" id="post-title" class="create-input font-special" placeholder="ᴘᴏꜱᴛ ᴛɪᴛʟᴇ..." autocomplete="off"/>
+        <textarea id="post-body" class="create-textarea font-special" placeholder="ᴡʜᴀᴛ'ꜱ ᴏɴ ʏᴏᴜʀ ᴍɪɴᴅ?"></textarea>
+        <div class="create-footer">
+          <span class="cooldown-info font-special" id="cooldown-info"></span>
+          <button class="btn-submit font-special" id="btn-submit" onclick="submitPost()">ᴘᴜʙʟɪꜱʜ ʟᴏᴄᴀʟ ᴅᴇᴍᴏ ᴘᴏꜱᴛ</button>
+        </div>
+      </div>
+
+      <div class="posts-header">
+        <span class="posts-count font-special" id="posts-count">ʟᴏᴀᴅɪɴɢ...</span>
+        <button class="btn-refresh font-special" onclick="loadPosts()">ʀᴇꜰʀᴇꜱʜ</button>
+      </div>
+
+      <div id="posts-feed" class="posts-feed">
+        <div class="loading-posts">
+          <div class="loading-spinner"></div>
+          <span class="font-special">ʟᴏᴀᴅɪɴɢ ᴅᴇᴍᴏ ᴘᴏꜱᴛꜱ...</span>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
