@@ -40,7 +40,6 @@
   border-color:rgba(255,255,255,.09);
   box-shadow:15px 18px 40px rgba(0,0,0,.38),-7px -7px 24px rgba(38,41,48,.16);
 }
-.owner-profile.visual { --owner-accent:#9ba4b4; }
 .owner-profile.visual .owner-portrait { order:2; }
 .owner-profile.visual .owner-copy { order:1; }
 
@@ -94,6 +93,14 @@
 .owner-profile:hover .owner-skin {
   transform:translateY(2px) scale(1.065);
   filter:drop-shadow(0 22px 24px rgba(0,0,0,.44));
+}
+
+/* PxlMads is mirrored so the skin faces inward toward the profile copy. */
+.owner-profile.visual .owner-skin {
+  transform:translateY(8px) scaleX(-1) scale(1.04);
+}
+.owner-profile.visual:hover .owner-skin {
+  transform:translateY(2px) scaleX(-1) scale(1.065);
 }
 
 .owner-copy {
@@ -206,5 +213,7 @@
 
 @media (prefers-reduced-motion:reduce) {
   .owner-profile,.owner-skin { transition:none!important; }
-  .owner-profile:hover,.owner-profile:hover .owner-skin { transform:none; }
+  .owner-profile:hover { transform:none; }
+  .owner-profile:hover .owner-skin { transform:translateY(8px) scale(1.04); }
+  .owner-profile.visual:hover .owner-skin { transform:translateY(8px) scaleX(-1) scale(1.04); }
 }
