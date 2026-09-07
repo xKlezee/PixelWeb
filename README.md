@@ -1,7 +1,7 @@
 # Pixel Network Web
 
-Public demonstration of the Pixel Network website and community forum interface.
+Official web experience for Pixel Network.
 
-This repository contains the presentation layer only. Production credentials, private integrations, administrative infrastructure, internal documentation, and server-side configuration are intentionally excluded.
+The site presents the network's gameplay model, progression worlds, development direction, team and community surfaces through a lightweight static frontend deployed with GitHub Pages.
 
-The forum included here runs in demonstration mode and does not connect to production services or persist account data.
+Sensitive infrastructure, credentials, administrative tooling and private operational documentation are not part of this repository. The community forum currently runs as a non-persistent preview until live account services are introduced.
