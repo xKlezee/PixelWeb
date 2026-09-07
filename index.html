@@ -4,13 +4,15 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <meta name="theme-color" content="#0b0c0e"/>
-  <meta name="description" content="Pixel Network — custom Minecraft progression, PvP, worlds and systems built as one connected experience."/>
-  <title>Pixel Network — Minecraft, built our way</title>
+  <meta name="description" content="Pixel Network — progression-driven Minecraft with connected PvP, economy, worlds and endgame systems."/>
+  <title>Pixel Network — Progression-Driven Minecraft</title>
   <link rel="icon" href="LOGO%20OFICIAL.png"/>
   <link rel="stylesheet" href="site.css"/>
   <link rel="stylesheet" href="immersive.css"/>
+  <link rel="stylesheet" href="polish.css"/>
   <script src="site.js" defer></script>
   <script src="immersive.js" defer></script>
+  <script src="polish.js" defer></script>
 </head>
 <body>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
@@ -41,9 +43,9 @@
     <section class="hero">
       <div class="shell hero-grid">
         <div>
-          <div class="kicker">Pixel Network / BoxPvP</div>
-          <h1>Minecraft built like a <em>game</em>, not a preset.</h1>
-          <p class="hero-lead">Custom progression, four worlds, a player economy and PvP systems designed together from the start. Pixel Network is built around one connected journey rather than a collection of unrelated features.</p>
+          <div class="kicker">Pixel Network · Java Edition</div>
+          <h1>Progression, combat and economy — <em>designed together.</em></h1>
+          <p class="hero-lead">Pixel Network is a progression-driven Minecraft experience where access, equipment, risk and rewards evolve together across four distinct worlds.</p>
           <div class="hero-actions">
             <button class="copy-ip" id="copyIp" type="button" data-ip="pixelboxxx.minehut.gg" aria-label="Copy server IP"><span class="label">Java IP</span><span class="ip">pixelboxxx.minehut.gg</span><span class="copy-mark" aria-hidden="true">⌘</span></button>
             <a class="button secondary" href="gameplay.html">Explore Gameplay</a>
@@ -52,13 +54,13 @@
           <div class="hero-meta">
             <span><i class="status-dot" id="serverStatusDot"></i><strong id="serverStatusText">Checking server…</strong></span>
             <span><strong id="playerCount">—</strong> players online</span>
-            <span>Java Edition</span>
+            <span>BoxPvP</span>
             <span>Active development</span>
           </div>
         </div>
         <div class="hero-object" aria-hidden="true">
           <div class="hero-logo-card"><img src="LOGO%20OFICIAL.png" width="330" height="330" alt="" fetchpriority="high"/></div>
-          <div class="hero-note"><strong>One connected design</strong>Progression, worlds, combat and economy are developed as parts of the same experience.</div>
+          <div class="hero-note"><strong>Built as one system</strong>World progression, PvP, equipment and economy follow the same player journey.</div>
         </div>
       </div>
     </section>
@@ -67,9 +69,9 @@
       <div class="shell">
         <div class="stat-rail reveal">
           <div class="stat"><b>14+</b><span>Custom systems</span></div>
-          <div class="stat"><b>4</b><span>Themed worlds</span></div>
-          <div class="stat"><b>∞</b><span>Prestige depth</span></div>
-          <div class="stat"><b>1</b><span>Connected design</span></div>
+          <div class="stat"><b>4</b><span>Progression worlds</span></div>
+          <div class="stat"><b>Bosses</b><span>World milestones</span></div>
+          <div class="stat"><b>Nexus</b><span>Endgame layer</span></div>
         </div>
       </div>
     </section>
@@ -80,8 +82,8 @@
         <div class="immersive-ui">
           <div class="immersive-copy">
             <div class="immersive-kicker" id="storyKicker">01 / Progression</div>
-            <h2 id="storyTitle">Every system points somewhere.</h2>
-            <p id="storyBody">Progression is the spine of Pixel Network. Worlds, economy, items and combat are meant to move the same journey forward instead of existing as disconnected features.</p>
+            <h2 id="storyTitle">Progression gives every action context.</h2>
+            <p id="storyBody">Mining, trading, equipment and combat all contribute to the same journey. Advancement changes what the player can access, what they can risk and what they can build toward.</p>
           </div>
           <div class="immersive-tabs" aria-label="Story chapters">
             <button class="immersive-tab active" type="button">Progression</button>
@@ -98,16 +100,16 @@
     <section class="content-section">
       <div class="shell">
         <div class="content-head reveal">
-          <div><div class="content-eyebrow">Explore the project</div><h2>The homepage is the entrance, not the whole site.</h2></div>
-          <p>Each major part of Pixel Network now has room to explain itself properly. That keeps the homepage fast and makes the project easier to understand for players, collaborators and external reviewers.</p>
+          <div><div class="content-eyebrow">Explore Pixel Network</div><h2>Go deeper into the parts that shape the experience.</h2></div>
+          <p>Start with the player journey, explore the worlds, or follow the project from a development perspective. Each section is focused enough to stay clear without flattening the depth behind the network.</p>
         </div>
         <div class="detail-grid">
-          <a class="detail-card reveal" href="gameplay.html" style="text-decoration:none"><small>Gameplay</small><h3>How the systems connect</h3><p>Progression, combat, economy, items and the Nexus explained as one player journey.</p></a>
-          <a class="detail-card reveal" href="worlds.html" style="text-decoration:none"><small>Worlds</small><h3>Four environments, four roles</h3><p>A visual tour of Overworld, Pirate Kingdom, Nether and Winter, with their place in progression.</p></a>
-          <a class="detail-card reveal" href="development.html" style="text-decoration:none"><small>Development</small><h3>What is actually custom</h3><p>Design principles, roadmap and public-facing development history without exposing private infrastructure.</p></a>
-          <a class="detail-card reveal" href="team.html" style="text-decoration:none"><small>Team</small><h3>The people behind it</h3><p>A smaller, real team page rather than a wall of invented roles and generic profiles.</p></a>
-          <a class="detail-card reveal" href="forum.html" style="text-decoration:none"><small>Community</small><h3>Forum demo</h3><p>The public forum interface remains isolated from production services and credentials.</p></a>
-          <a class="detail-card reveal" href="https://pixel-network-1.gitbook.io/home/documentation/" target="_blank" rel="noopener" style="text-decoration:none"><small>Documentation</small><h3>Deep reference</h3><p>The GitBook remains the place for detailed guides while this site focuses on the experience and project story.</p></a>
+          <a class="detail-card reveal" href="gameplay.html" style="text-decoration:none"><small>Gameplay</small><h3>The player journey</h3><p>How progression, combat, economy, equipment and endgame reinforce one another from the first world onward.</p></a>
+          <a class="detail-card reveal" href="worlds.html" style="text-decoration:none"><small>Worlds</small><h3>Four progression environments</h3><p>Each world introduces a different level of pressure, access and reward while moving the same journey forward.</p></a>
+          <a class="detail-card reveal" href="development.html" style="text-decoration:none"><small>Development</small><h3>Design and direction</h3><p>The principles, milestones and product decisions guiding Pixel Network as the experience continues to evolve.</p></a>
+          <a class="detail-card reveal" href="team.html" style="text-decoration:none"><small>Team</small><h3>The people behind Pixel</h3><p>The roles responsible for product direction and engineering, presented without artificial scale or filler.</p></a>
+          <a class="detail-card reveal" href="forum.html" style="text-decoration:none"><small>Community</small><h3>Forum</h3><p>A dedicated place for discussion, updates and the community layer around the network.</p></a>
+          <a class="detail-card reveal" href="https://pixel-network-1.gitbook.io/home/documentation/" target="_blank" rel="noopener" style="text-decoration:none"><small>Documentation</small><h3>Detailed reference</h3><p>Guides and deeper system documentation for players who want the mechanics behind the experience.</p></a>
         </div>
       </div>
     </section>
@@ -115,19 +117,19 @@
     <section class="content-section">
       <div class="shell">
         <div class="content-head reveal">
-          <div><div class="content-eyebrow">Design principle</div><h2>Less spectacle everywhere. More impact where it matters.</h2></div>
-          <p>The site now uses one cinematic interaction as the visual centerpiece, while navigation, cards and controls stay tactile, compact and predictable.</p>
+          <div><div class="content-eyebrow">Progression model</div><h2>A clear path with room for mastery.</h2></div>
+          <p>The player always has a next objective, but the route is not reduced to a single number. Equipment, economy, combat decisions and world access all contribute to advancement.</p>
         </div>
         <div class="flow-line reveal">
-          <div class="flow-step"><b>Enter</b><span>Understand the identity and current server status immediately.</span></div>
-          <div class="flow-step"><b>Explore</b><span>Use the scroll-linked film to understand the overall journey.</span></div>
-          <div class="flow-step"><b>Choose</b><span>Open a dedicated page for the part you actually care about.</span></div>
-          <div class="flow-step"><b>Learn</b><span>Go deeper through gameplay, worlds or development context.</span></div>
-          <div class="flow-step"><b>Join</b><span>Move naturally to Discord, the forum, documentation or store.</span></div>
+          <div class="flow-step"><b>Learn</b><span>Understand the first economy, mining and combat decisions.</span></div>
+          <div class="flow-step"><b>Build</b><span>Improve equipment, resources and long-term player value.</span></div>
+          <div class="flow-step"><b>Advance</b><span>Earn access to worlds with greater pressure and stronger rewards.</span></div>
+          <div class="flow-step"><b>Specialize</b><span>Refine equipment choices and the way you approach risk.</span></div>
+          <div class="flow-step"><b>Nexus</b><span>Bring the full progression model into the endgame.</span></div>
         </div>
 
         <div class="page-cta reveal">
-          <div><h3>Start with the player experience.</h3><p>See how progression, PvP, economy and endgame fit together.</p></div>
+          <div><h3>See the progression model in detail.</h3><p>Gameplay explains how the core systems connect from first entry to the Nexus.</p></div>
           <div class="page-cta-actions"><a class="button primary" href="gameplay.html">Open Gameplay</a><a class="button secondary" href="worlds.html">Explore Worlds</a></div>
         </div>
       </div>
