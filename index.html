@@ -4,37 +4,35 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <meta name="theme-color" content="#0b0c0e"/>
-  <meta name="description" content="Pixel Network — a custom Minecraft network focused on progression, PvP, handcrafted worlds and long-term systems."/>
+  <meta name="description" content="Pixel Network — custom Minecraft progression, PvP, worlds and systems built as one connected experience."/>
   <title>Pixel Network — Minecraft, built our way</title>
   <link rel="icon" href="LOGO%20OFICIAL.png"/>
   <link rel="stylesheet" href="site.css"/>
+  <link rel="stylesheet" href="immersive.css"/>
   <script src="site.js" defer></script>
+  <script src="immersive.js" defer></script>
 </head>
 <body>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <nav class="site-nav" aria-label="Main navigation">
     <div class="shell nav-inner">
-      <a class="brand" href="#top" aria-label="Pixel Network home">
+      <a class="brand" href="index.html" aria-label="Pixel Network home">
         <img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/>
         <span class="brand-wordmark">Pixel Network<small>Java Edition</small></span>
       </a>
-
       <div class="nav-links" id="navLinks">
-        <a href="#gameplay">Gameplay</a>
-        <a href="#systems">Systems</a>
-        <a href="#worlds">Worlds</a>
-        <a href="#roadmap">Roadmap</a>
-        <a href="#team">Team</a>
+        <a href="index.html" aria-current="page">Home</a>
+        <a href="gameplay.html">Gameplay</a>
+        <a href="worlds.html">Worlds</a>
+        <a href="development.html">Development</a>
+        <a href="team.html">Team</a>
         <a href="forum.html">Forum</a>
       </div>
-
       <div class="nav-actions">
         <a class="button quiet" href="https://discord.gg/khRCRhR9d4" target="_blank" rel="noopener">Discord</a>
         <a class="button primary" href="https://pixelboxx.tebex.io/" target="_blank" rel="noopener">Store</a>
-        <button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
+        <button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
       </div>
     </div>
   </nav>
@@ -45,18 +43,12 @@
         <div>
           <div class="kicker">Pixel Network / BoxPvP</div>
           <h1>Minecraft built like a <em>game</em>, not a preset.</h1>
-          <p class="hero-lead">Four themed worlds, custom progression, a Pixel economy and PvP systems designed together from the start. The goal is simple: every system should have a reason to exist.</p>
-
+          <p class="hero-lead">Custom progression, four worlds, a player economy and PvP systems designed together from the start. Pixel Network is built around one connected journey rather than a collection of unrelated features.</p>
           <div class="hero-actions">
-            <button class="copy-ip" id="copyIp" type="button" data-ip="pixelboxxx.minehut.gg" aria-label="Copy server IP">
-              <span class="label">Java IP</span>
-              <span class="ip">pixelboxxx.minehut.gg</span>
-              <span class="copy-mark" aria-hidden="true">⌘</span>
-            </button>
-            <a class="button secondary" href="https://pixel-network-1.gitbook.io/home/documentation/" target="_blank" rel="noopener">Documentation</a>
+            <button class="copy-ip" id="copyIp" type="button" data-ip="pixelboxxx.minehut.gg" aria-label="Copy server IP"><span class="label">Java IP</span><span class="ip">pixelboxxx.minehut.gg</span><span class="copy-mark" aria-hidden="true">⌘</span></button>
+            <a class="button secondary" href="gameplay.html">Explore Gameplay</a>
             <a class="button primary" href="https://pixelboxx.tebex.io/" target="_blank" rel="noopener">Open Store</a>
           </div>
-
           <div class="hero-meta">
             <span><i class="status-dot" id="serverStatusDot"></i><strong id="serverStatusText">Checking server…</strong></span>
             <span><strong id="playerCount">—</strong> players online</span>
@@ -64,12 +56,9 @@
             <span>Active development</span>
           </div>
         </div>
-
         <div class="hero-object" aria-hidden="true">
-          <div class="hero-logo-card">
-            <img src="LOGO%20OFICIAL.png" width="330" height="330" alt="" fetchpriority="high"/>
-          </div>
-          <div class="hero-note"><strong>Built in-house</strong>Progression, combat, economy and world design are developed as one connected experience.</div>
+          <div class="hero-logo-card"><img src="LOGO%20OFICIAL.png" width="330" height="330" alt="" fetchpriority="high"/></div>
+          <div class="hero-note"><strong>One connected design</strong>Progression, worlds, combat and economy are developed as parts of the same experience.</div>
         </div>
       </div>
     </section>
@@ -85,181 +74,70 @@
       </div>
     </section>
 
-    <div class="section-rule"></div>
-
-    <section class="section" id="gameplay">
-      <div class="shell">
-        <header class="section-head reveal">
-          <div>
-            <div class="eyebrow">Core experience</div>
-            <h2>Progression with an actual destination.</h2>
+    <section class="immersive-story" id="immersiveStory" aria-label="Interactive Pixel Network story">
+      <div class="immersive-sticky">
+        <video id="storyVideo" muted playsinline preload="metadata" src="Video_Perfecto_Con_Fondo_Negro.mp4" aria-hidden="true"></video>
+        <div class="immersive-ui">
+          <div class="immersive-copy">
+            <div class="immersive-kicker" id="storyKicker">01 / Progression</div>
+            <h2 id="storyTitle">Every system points somewhere.</h2>
+            <p id="storyBody">Progression is the spine of Pixel Network. Worlds, economy, items and combat are meant to move the same journey forward instead of existing as disconnected features.</p>
           </div>
-          <p>Instead of stacking unrelated plugins, Pixel Network is built around a progression path that changes what you can do, where you can go and what you can build toward.</p>
-        </header>
+          <div class="immersive-tabs" aria-label="Story chapters">
+            <button class="immersive-tab active" type="button">Progression</button>
+            <button class="immersive-tab" type="button">Worlds</button>
+            <button class="immersive-tab" type="button">Combat</button>
+            <button class="immersive-tab" type="button">Nexus</button>
+          </div>
+        </div>
+        <div class="immersive-hint">Scroll to explore</div>
+        <div class="immersive-progress"><span id="storyProgress"></span></div>
+      </div>
+    </section>
 
-        <div class="editorial-grid">
-          <article class="feature-story reveal">
-            <div class="feature-media">
-              <img loading="lazy" decoding="async" src="https://pixel-network-1.gitbook.io/home/~gitbook/image?url=https%3A%2F%2F712597880-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252Fn7xotQKtgeq6qSw4VBXF%252Fuploads%252FcM6U6scoO7zIWwspvAtG%252FImage_fx%2520%282%29.png%3Falt%3Dmedia%26token%3D18257f5f-0495-4295-92a0-133c0d7cf7a0&width=768&dpr=2&quality=100&sign=23e9769c&sv=2" alt="Pixel Network progression environment"/>
-            </div>
-            <div class="feature-copy">
-              <span class="label">Progression</span>
-              <h3>Long-term play without empty grind.</h3>
-              <p>Prestige, world progression, economy and item systems are intended to reinforce each other rather than live in separate menus.</p>
-              <ul class="feature-list">
-                <li>World-based progression and boss gates</li>
-                <li>Pixel economy tied to actual player activity</li>
-                <li>Item statistics and long-term ownership systems</li>
-                <li>Rewards that scale with time and progression</li>
-              </ul>
-            </div>
-          </article>
-
-          <article class="feature-story reveal">
-            <div class="feature-media">
-              <img loading="lazy" decoding="async" src="https://pixel-network-1.gitbook.io/home/~gitbook/image?url=https%3A%2F%2F712597880-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252Fn7xotQKtgeq6qSw4VBXF%252Fuploads%252FrIPQvVWXnpjGswXqk3mE%252Fasdasd.png%3Falt%3Dmedia%26token%3D92178e7f-13a9-4efa-87e5-74f6096c7343&width=768&dpr=2&quality=100&sign=604b01f1&sv=2" alt="The Nexus in Pixel Network"/>
-            </div>
-            <div class="feature-copy">
-              <span class="label">Endgame</span>
-              <h3>The Nexus is where the systems meet.</h3>
-              <p>The endgame is designed as a convergence point for combat, progression and build choices — not just a room with stronger mobs.</p>
-              <ul class="feature-list">
-                <li>Endgame access earned through progression</li>
-                <li>Build decisions with visible consequences</li>
-                <li>Exclusive rewards connected to mastery</li>
-                <li>Expandable foundation for future seasons</li>
-              </ul>
-            </div>
-          </article>
+    <section class="content-section">
+      <div class="shell">
+        <div class="content-head reveal">
+          <div><div class="content-eyebrow">Explore the project</div><h2>The homepage is the entrance, not the whole site.</h2></div>
+          <p>Each major part of Pixel Network now has room to explain itself properly. That keeps the homepage fast and makes the project easier to understand for players, collaborators and external reviewers.</p>
+        </div>
+        <div class="detail-grid">
+          <a class="detail-card reveal" href="gameplay.html" style="text-decoration:none"><small>Gameplay</small><h3>How the systems connect</h3><p>Progression, combat, economy, items and the Nexus explained as one player journey.</p></a>
+          <a class="detail-card reveal" href="worlds.html" style="text-decoration:none"><small>Worlds</small><h3>Four environments, four roles</h3><p>A visual tour of Overworld, Pirate Kingdom, Nether and Winter, with their place in progression.</p></a>
+          <a class="detail-card reveal" href="development.html" style="text-decoration:none"><small>Development</small><h3>What is actually custom</h3><p>Design principles, roadmap and public-facing development history without exposing private infrastructure.</p></a>
+          <a class="detail-card reveal" href="team.html" style="text-decoration:none"><small>Team</small><h3>The people behind it</h3><p>A smaller, real team page rather than a wall of invented roles and generic profiles.</p></a>
+          <a class="detail-card reveal" href="forum.html" style="text-decoration:none"><small>Community</small><h3>Forum demo</h3><p>The public forum interface remains isolated from production services and credentials.</p></a>
+          <a class="detail-card reveal" href="https://pixel-network-1.gitbook.io/home/documentation/" target="_blank" rel="noopener" style="text-decoration:none"><small>Documentation</small><h3>Deep reference</h3><p>The GitBook remains the place for detailed guides while this site focuses on the experience and project story.</p></a>
         </div>
       </div>
     </section>
 
-    <section class="section compact" id="systems">
+    <section class="content-section">
       <div class="shell">
-        <header class="section-head reveal">
-          <div>
-            <div class="eyebrow">Systems</div>
-            <h2>The parts that make Pixel feel like Pixel.</h2>
-          </div>
-          <p>A smaller set of systems, connected deliberately. The site now shows the important ones instead of trying to sell every feature as a headline.</p>
-        </header>
-
-        <div class="systems-grid">
-          <article class="system-card reveal"><span class="system-index">01 / COMBAT</span><h3>BoxPvP</h3><p>Custom duel flow, PvP arenas and weapon behavior built around competitive play rather than vanilla defaults.</p></article>
-          <article class="system-card reveal"><span class="system-index">02 / ECONOMY</span><h3>Pixels</h3><p>A network currency designed to connect progression, trading, rewards and long-term goals.</p></article>
-          <article class="system-card reveal"><span class="system-index">03 / ITEMS</span><h3>StatTrack</h3><p>Weapons and tools can carry their own history and statistics instead of being disposable copies.</p></article>
-          <article class="system-card reveal"><span class="system-index">04 / PROGRESSION</span><h3>Prestige</h3><p>Progression tiers unlock meaningful changes and extend the game beyond a single linear level cap.</p></article>
-          <article class="system-card reveal"><span class="system-index">05 / WORLD</span><h3>Custom NPCs</h3><p>Characters, models and interactions are used to make progression readable inside the world itself.</p></article>
-          <article class="system-card reveal"><span class="system-index">06 / NETWORK</span><h3>Connected modes</h3><p>BoxPvP, Skyblock and future systems share a broader identity rather than feeling like separate servers in a menu.</p></article>
+        <div class="content-head reveal">
+          <div><div class="content-eyebrow">Design principle</div><h2>Less spectacle everywhere. More impact where it matters.</h2></div>
+          <p>The site now uses one cinematic interaction as the visual centerpiece, while navigation, cards and controls stay tactile, compact and predictable.</p>
         </div>
-      </div>
-    </section>
-
-    <div class="section-rule"></div>
-
-    <section class="section" id="worlds">
-      <div class="shell">
-        <header class="section-head reveal">
-          <div>
-            <div class="eyebrow">World progression</div>
-            <h2>Four places, four different jobs.</h2>
-          </div>
-          <p>Each world has a progression role and a different risk profile. Images for inactive worlds are not downloaded until you ask for them.</p>
-        </header>
-
-        <div class="world-shell reveal">
-          <div class="world-tabs" role="tablist" aria-label="Pixel Network worlds">
-            <button class="world-tab" type="button" role="tab" data-world="overworld" aria-selected="true">Overworld</button>
-            <button class="world-tab" type="button" role="tab" data-world="pirate" aria-selected="false">Pirate Kingdom</button>
-            <button class="world-tab" type="button" role="tab" data-world="nether" aria-selected="false">Nether</button>
-            <button class="world-tab" type="button" role="tab" data-world="winter" aria-selected="false">Winter</button>
-          </div>
-
-          <article class="world-panel active" data-world-panel="overworld" role="tabpanel">
-            <figure><img loading="lazy" decoding="async" src="https://pixel-network-1.gitbook.io/home/~gitbook/image?url=https%3A%2F%2F712597880-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252Fn7xotQKtgeq6qSw4VBXF%252Fuploads%252Fi2tm3Y1jcEiOxK2PaII4%252FImage_fx%2520%2817%29.png%3Falt%3Dmedia%26token%3D2b1dfa01-3645-4ea0-9608-57d90114ac12&width=768&dpr=2&quality=100&sign=4d2c7e27&sv=2" alt="Pixel Network Overworld"/></figure>
-            <div class="world-copy"><span class="world-tag">Starting zone</span><h3>The Overworld</h3><p>The first layer of the progression path: core mining, early PvP and the systems that teach players how Pixel Network works.</p><div class="world-points"><div class="world-point"><i></i>Scalable mining progression</div><div class="world-point"><i></i>Starter combat and economy</div><div class="world-point"><i></i>Handcrafted terrain and structures</div></div></div>
-          </article>
-
-          <article class="world-panel" data-world-panel="pirate" role="tabpanel" hidden>
-            <figure><img loading="lazy" decoding="async" data-src="https://pixel-network-1.gitbook.io/home/~gitbook/image?url=https%3A%2F%2F712597880-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252Fn7xotQKtgeq6qSw4VBXF%252Fuploads%252FCCUBM7YeamDndDjhkrjD%252F01K55740KGP2VJ0ZF14MFM3WJP.png%3Falt%3Dmedia%26token%3Da2859a65-78ca-4f37-ba39-d48464f6e726&width=768&dpr=2&quality=100&sign=4fa83723&sv=2" alt="Pixel Network Pirate Kingdom"/></figure>
-            <div class="world-copy"><span class="world-tag">Mid tier</span><h3>Pirate Kingdom</h3><p>A higher-risk step in the progression path with its own equipment, encounters and visual identity.</p><div class="world-points"><div class="world-point"><i></i>Pirate-themed equipment and drops</div><div class="world-point"><i></i>Higher-risk PvP areas</div><div class="world-point"><i></i>Custom events and NPCs</div></div></div>
-          </article>
-
-          <article class="world-panel" data-world-panel="nether" role="tabpanel" hidden>
-            <figure><img loading="lazy" decoding="async" data-src="https://pixel-network-1.gitbook.io/home/~gitbook/image?url=https%3A%2F%2F712597880-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252Fn7xotQKtgeq6qSw4VBXF%252Fuploads%252FTeslxzxtfv637Q0qUwd7%252FImage_fx%2520%287%29.png%3Falt%3Dmedia%26token%3D5ef48e3f-0c6b-4ee6-b257-3d8166ed6f57&width=768&dpr=2&quality=100&sign=5939d3aa&sv=2" alt="Pixel Network Nether"/></figure>
-            <div class="world-copy"><span class="world-tag">Danger zone</span><h3>The Nether</h3><p>A late-game environment focused on rare rewards and much less forgiving PvP.</p><div class="world-points"><div class="world-point"><i></i>Rare talisman and elixir drops</div><div class="world-point"><i></i>Elite hostile encounters</div><div class="world-point"><i></i>Open-PvP pressure</div></div></div>
-          </article>
-
-          <article class="world-panel" data-world-panel="winter" role="tabpanel" hidden>
-            <figure><img loading="lazy" decoding="async" data-src="https://pixel-network-1.gitbook.io/home/~gitbook/image?url=https%3A%2F%2F712597880-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252Fn7xotQKtgeq6qSw4VBXF%252Fuploads%252FyIhbKmsLNws7h50DFutx%252Fconsumables.png%3Falt%3Dmedia%26token%3D165c7aa4-9dba-4fdd-a79e-3753df117989&width=768&dpr=2&quality=100&sign=7dddb313&sv=2" alt="Pixel Network Winter world"/></figure>
-            <div class="world-copy"><span class="world-tag">Advanced zone</span><h3>Winter</h3><p>A colder progression layer with different encounters, rewards and environmental language.</p><div class="world-points"><div class="world-point"><i></i>Distinct visual progression</div><div class="world-point"><i></i>Advanced rewards and encounters</div><div class="world-point"><i></i>Designed as a late-path destination</div></div></div>
-          </article>
+        <div class="flow-line reveal">
+          <div class="flow-step"><b>Enter</b><span>Understand the identity and current server status immediately.</span></div>
+          <div class="flow-step"><b>Explore</b><span>Use the scroll-linked film to understand the overall journey.</span></div>
+          <div class="flow-step"><b>Choose</b><span>Open a dedicated page for the part you actually care about.</span></div>
+          <div class="flow-step"><b>Learn</b><span>Go deeper through gameplay, worlds or development context.</span></div>
+          <div class="flow-step"><b>Join</b><span>Move naturally to Discord, the forum, documentation or store.</span></div>
         </div>
-      </div>
-    </section>
 
-    <section class="section compact" id="roadmap">
-      <div class="shell">
-        <header class="section-head reveal">
-          <div>
-            <div class="eyebrow">Development</div>
-            <h2>What exists, what is being polished, what comes after.</h2>
-          </div>
-          <p>A roadmap is useful when it distinguishes shipped work from plans. This one intentionally stays short.</p>
-        </header>
-
-        <div class="roadmap">
-          <article class="road-item done reveal"><span class="road-state">Shipped / Alpha</span><h3>Foundation</h3><p>BoxPvP core, Pixel economy, world structure, prestige, crates, talismans and visual systems are established.</p><div class="chips"><span class="chip">Combat</span><span class="chip">Economy</span><span class="chip">Prestige</span><span class="chip">4 worlds</span></div></article>
-          <article class="road-item active reveal"><span class="road-state">In progress / Beta</span><h3>Polish and balance</h3><p>Performance, economy tuning, edge-case fixes, cosmetics and broader public-readiness are the current focus.</p><div class="chips"><span class="chip">Performance</span><span class="chip">Balance</span><span class="chip">UX</span><span class="chip">Content</span></div></article>
-          <article class="road-item reveal"><span class="road-state">Next / Seasons</span><h3>Competitive layer</h3><p>Seasonal progression, leaderboards, tournaments, new world content and additional endgame systems can build on the current foundation.</p><div class="chips"><span class="chip">Seasons</span><span class="chip">Leaderboards</span><span class="chip">Events</span><span class="chip">Nexus</span></div></article>
-        </div>
-      </div>
-    </section>
-
-    <div class="section-rule"></div>
-
-    <section class="section compact" id="team">
-      <div class="shell">
-        <header class="section-head reveal">
-          <div>
-            <div class="eyebrow">Team</div>
-            <h2>Small team. Clear ownership.</h2>
-          </div>
-          <p>No placeholder staff roster here. The public page only names the people we can actually identify from the project.</p>
-        </header>
-
-        <div class="team-grid">
-          <article class="person reveal"><div class="person-mark">K</div><div><span class="role">Owner / Direction</span><h3>Klezee</h3><p>Project direction, product decisions, world vision and overall Pixel Network design.</p></div></article>
-          <article class="person reveal"><div class="person-mark">P</div><div><span class="role">Engineering</span><h3>Pau101</h3><p>Core systems, custom mechanics and the implementation work that turns design into playable features.</p></div></article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="shell">
-        <div class="cta-box reveal">
-          <h2>See the project where it is actually being built.</h2>
-          <p>Discord is where development updates, support and community discussion happen. The documentation goes deeper into the systems shown here.</p>
-          <div class="cta-actions">
-            <a class="button primary" href="https://discord.gg/khRCRhR9d4" target="_blank" rel="noopener">Join Discord</a>
-            <a class="button secondary" href="https://pixel-network-1.gitbook.io/home/documentation/" target="_blank" rel="noopener">Read Documentation</a>
-            <a class="button secondary" href="forum.html">Forum Demo</a>
-          </div>
+        <div class="page-cta reveal">
+          <div><h3>Start with the player experience.</h3><p>See how progression, PvP, economy and endgame fit together.</p></div>
+          <div class="page-cta-actions"><a class="button primary" href="gameplay.html">Open Gameplay</a><a class="button secondary" href="worlds.html">Explore Worlds</a></div>
         </div>
       </div>
     </section>
   </main>
 
-  <footer>
-    <div class="shell footer-row">
-      <span>© 2026 Pixel Network · Java IP: pixelboxxx.minehut.gg</span>
-      <div class="footer-links">
-        <a href="https://discord.gg/khRCRhR9d4" target="_blank" rel="noopener">Discord</a>
-        <a href="https://pixelboxx.tebex.io/" target="_blank" rel="noopener">Store</a>
-        <a href="https://pixel-network-1.gitbook.io/home/documentation/" target="_blank" rel="noopener">Docs</a>
-        <a href="forum.html">Forum</a>
-      </div>
+  <footer style="padding:34px 0 48px;border-top:1px solid rgba(255,255,255,.075)">
+    <div class="shell" style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:#777b83;font-size:12px">
+      <span>Pixel Network · Java Edition</span>
+      <span><a href="https://discord.gg/khRCRhR9d4" target="_blank" rel="noopener">Discord</a> · <a href="https://pixel-network-1.gitbook.io/home/documentation/" target="_blank" rel="noopener">Documentation</a> · <a href="forum.html">Forum</a></span>
     </div>
   </footer>
 </body>
