@@ -40,6 +40,11 @@
   border-color:rgba(255,255,255,.09);
   box-shadow:15px 18px 40px rgba(0,0,0,.38),-7px -7px 24px rgba(38,41,48,.16);
 }
+
+/* Mirrored layout keeps the exact same 38/62 portrait-to-copy relationship. */
+.owner-profile.visual {
+  grid-template-columns:minmax(0,1.24fr) minmax(300px,.76fr);
+}
 .owner-profile.visual .owner-portrait { order:2; }
 .owner-profile.visual .owner-copy { order:1; }
 
