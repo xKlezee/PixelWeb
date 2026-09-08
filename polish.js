@@ -4,28 +4,52 @@
   const navToggle = document.getElementById('navToggle');
   const mobileNav = matchMedia('(max-width: 980px)');
 
-  /* Reading progress and compact navigation state. */
+  /* Reading progress only. Scroll handlers must not mutate page geometry. */
   const progress = document.createElement('div');
   progress.className = 'scroll-progress';
   progress.setAttribute('aria-hidden', 'true');
   document.body.prepend(progress);
 
+  const root = document.documentElement;
+  let maxScroll = 1;
   let scheduled = false;
-  const updateScrollState = () => {
-    scheduled = false;
-    const y = window.scrollY || document.documentElement.scrollTop || 0;
-    const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-    progress.style.transform = `scaleX(${Math.min(1, Math.max(0, y / max))})`;
-    nav?.classList.toggle('is-scrolled', y > 18);
+
+  const measureScrollRange = () => {
+    maxScroll = Math.max(1, root.scrollHeight - window.innerHeight);
   };
+
+  const updateScrollProgress = () => {
+    scheduled = false;
+    const y = window.scrollY || root.scrollTop || 0;
+    progress.style.transform = `scaleX(${Math.min(1, Math.max(0, y / maxScroll))})`;
+  };
+
   const requestUpdate = () => {
     if (scheduled) return;
     scheduled = true;
-    requestAnimationFrame(updateScrollState);
+    requestAnimationFrame(updateScrollProgress);
   };
+
   addEventListener('scroll', requestUpdate, { passive: true });
-  addEventListener('resize', requestUpdate, { passive: true });
-  updateScrollState();
+  addEventListener('resize', () => {
+    measureScrollRange();
+    requestUpdate();
+  }, { passive: true });
+  addEventListener('load', () => {
+    measureScrollRange();
+    requestUpdate();
+  }, { once: true });
+
+  if ('ResizeObserver' in window && document.body) {
+    const resizeObserver = new ResizeObserver(() => {
+      measureScrollRange();
+      requestUpdate();
+    });
+    resizeObserver.observe(document.body);
+  }
+
+  measureScrollRange();
+  updateScrollProgress();
 
   /* Navigation groups: hover is convenient on desktop, click/keyboard is authoritative. */
   const groups = [...document.querySelectorAll('.nav-group')];
