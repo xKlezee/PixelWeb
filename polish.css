@@ -3,6 +3,7 @@
 @view-transition { navigation: auto; }
 
 :root {
+  --muted-2: #7c7f88;
   --motion-fast: 150ms;
   --motion-base: 260ms;
   --motion-slow: 460ms;
@@ -271,6 +272,7 @@ footer a:hover { color: var(--text); }
 
 .immersive-tab,
 .world-tab {
+  min-height: 44px;
   transition:
     transform var(--motion-fast) var(--ease-premium),
     background var(--motion-base) ease,
