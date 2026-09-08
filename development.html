@@ -4,75 +4,69 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <meta name="theme-color" content="#0b0c0e"/>
-  <meta name="description" content="The design principles, development priorities and roadmap behind Pixel Network."/>
+  <meta name="description" content="Track Pixel Network's public development status, current content scale and planned gameplay expansion."/>
   <title>Development — Pixel Network</title>
   <link rel="icon" href="LOGO%20OFICIAL.png"/>
   <link rel="stylesheet" href="site.css"/>
-  <link rel="stylesheet" href="immersive.css"/>
   <link rel="stylesheet" href="polish.css"/>
+  <link rel="stylesheet" href="phase1.css"/>
+  <script src="data/network.js" defer></script>
   <script src="site.js" defer></script>
   <script src="polish.js" defer></script>
 </head>
 <body>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <nav class="site-nav" aria-label="Main navigation">
-    <div class="shell nav-inner">
-      <a class="brand" href="index.html"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a>
-      <div class="nav-links" id="navLinks"><a href="index.html">Home</a><a href="gameplay.html">Gameplay</a><a href="worlds.html">Worlds</a><a href="development.html" aria-current="page">Development</a><a href="team.html">Team</a><a href="forum.html">Forum</a></div>
-      <div class="nav-actions"><a class="button quiet" href="https://discord.gg/khRCRhR9d4" target="_blank" rel="noopener">Discord</a><a class="button primary" href="https://pixelboxx.tebex.io/" target="_blank" rel="noopener">Store</a><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
-    </div>
-  </nav>
+  <nav class="site-nav" aria-label="Main navigation"><div class="shell nav-inner">
+    <a class="brand" href="index.html"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a>
+    <div class="nav-links" id="navLinks"><div class="nav-group"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal and collaborative island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div><a href="development.html" aria-current="page">Development</a><div class="nav-group"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="community.html"><strong>Community</strong><span>Discord, Forum, docs and changelog.</span></a><a href="forum.html"><strong>Forum</strong><span>Long-form discussion.</span></a></div></div><a href="team.html">About</a></div>
+    <div class="nav-actions"><a class="button quiet nav-store" href="https://pixelboxx.tebex.io/" target="_blank" rel="noopener">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
+  </div></nav>
 
   <main>
-    <section class="page-hero">
-      <div class="shell">
-        <div class="breadcrumbs"><a href="index.html">Pixel Network</a><span>/</span><span>Development</span></div>
-        <div class="page-hero-grid">
-          <div><div class="eyebrow">Development</div><h1>Build the system. Test the experience. Refine both.</h1></div>
-          <p>Pixel Network is developed as a connected product rather than a collection of isolated features. Gameplay, technical constraints and presentation are evaluated against the same player journey.</p>
-        </div>
-      </div>
-    </section>
+    <section class="page-hero"><div class="shell"><div class="breadcrumbs"><a href="index.html">Pixel Network</a><span>/</span><span>Development</span></div><div class="page-hero-grid"><div><div class="eyebrow">Development</div><h1>A public view of the game, not the infrastructure behind it.</h1></div><p>This page tracks the playable product: content scale, current direction and planned expansion. Internal architecture, plugins and server infrastructure remain outside the public website.</p></div></div></section>
 
-    <section class="content-section">
-      <div class="shell">
-        <div class="content-head reveal"><div><div class="content-eyebrow">Design principles</div><h2>Complexity belongs underneath the experience.</h2></div><p>The project can support deep systems without asking players to carry that complexity on every screen or in every interaction.</p></div>
-        <div class="detail-grid">
-          <article class="detail-card reveal"><small>01 / Cohesion</small><h3>Systems must reinforce one another</h3><p>New mechanics are measured by how well they support progression, combat, economy, ownership or player understanding.</p></article>
-          <article class="detail-card reveal"><small>02 / Clarity</small><h3>Make the next step readable</h3><p>Worlds, encounters and interfaces should communicate direction without forcing players to memorize commands or hidden navigation.</p></article>
-          <article class="detail-card reveal"><small>03 / Performance</small><h3>Performance is part of the design</h3><p>Effects, animation and technical systems are expected to justify their cost. Visual quality matters, but responsiveness comes first.</p></article>
-          <article class="detail-card reveal"><small>04 / Ownership</small><h3>Progress should accumulate meaning</h3><p>Equipment, statistics and long-term choices are designed to retain context so advancement feels personal rather than disposable.</p></article>
-          <article class="detail-card reveal"><small>05 / Iteration</small><h3>Working is not the finish line</h3><p>Systems are revisited when balance, usability or performance no longer support the intended experience.</p></article>
-          <article class="detail-card reveal"><small>06 / Restraint</small><h3>Not every idea needs another system</h3><p>Depth comes from interaction between strong mechanics, not from increasing the number of menus, currencies or exceptions.</p></article>
-        </div>
-      </div>
-    </section>
+    <section class="content-section"><div class="shell">
+      <div class="dev-progress reveal"><div><b><span data-network="development.completion">87</span>%</b><small>Current completion estimate</small></div><div><div class="progress-track" data-network-progress="development.completion"><span></span></div><div class="progress-copy">Updated manually by Pixel Network · <span data-network="development.updatedLabel">September 2026</span>. This is a product estimate, not an automated build metric.</div></div></div>
+    </div></section>
 
-    <section class="content-section">
-      <div class="shell">
-        <div class="content-head reveal"><div><div class="content-eyebrow">Project evolution</div><h2>The same model, developed in layers.</h2></div><p>The roadmap is focused on strengthening the progression model before expanding it. New content is valuable when it extends the structure players already understand.</p></div>
-        <div class="timeline">
-          <article class="timeline-item reveal"><div class="when">Foundation</div><div><h3>Define the network identity</h3><p>Establish the visual language, BoxPvP direction, economy foundation and the first progression rules shared across the project.</p></div></article>
-          <article class="timeline-item reveal"><div class="when">Progression</div><div><h3>Turn worlds into milestones</h3><p>Shape advancement around world access, bosses, equipment value and increasingly meaningful player decisions.</p></div></article>
-          <article class="timeline-item reveal"><div class="when">Endgame</div><div><h3>Connect the systems through the Nexus</h3><p>Build an endgame layer that depends on the progression choices and mastery developed before it.</p></div></article>
-          <article class="timeline-item reveal"><div class="when">Current</div><div><h3>Polish, clarity and performance</h3><p>Refine existing systems, reduce friction and improve consistency before adding unnecessary surface area.</p></div></article>
-          <article class="timeline-item reveal"><div class="when">Next</div><div><h3>Extend without fragmenting</h3><p>Add content that deepens the existing journey while preserving the relationships between worlds, economy, combat and progression.</p></div></article>
-        </div>
+    <section class="content-section"><div class="shell">
+      <div class="content-head reveal"><div><div class="content-eyebrow">Public status</div><h2>What exists, what is being refined, what comes later.</h2></div><p>Only gameplay-facing work belongs here. Planned systems are intentionally separated from content players can already build around.</p></div>
+      <div class="status-grid">
+        <article class="status-column reveal"><h3>Available</h3><ul><li>4-world progression structure</li><li>27 mines across the current worlds</li><li>300 levels, Prestige and Legacy progression</li><li>Talisman Codex and mine talisman collections</li><li>27 custom enchantments</li><li>World Boss progression</li><li>Nexus access and instance difficulty structure</li><li>Skyblock island foundation and Skyblock quests</li></ul></article>
+        <article class="status-column reveal"><h3>In development</h3><ul><li>Ongoing balance across existing progression</li><li>Polish and clarity across player-facing systems</li><li>Further content work around the current endgame structure</li><li>Continued iteration as the network approaches the current completion target</li></ul></article>
+        <article class="status-column reveal"><h3>Planned</h3><ul><li>General quest progression outside Skyblock</li><li>Progressive raids</li><li>Progressive dungeons</li><li>The Crucible of Legends</li><li>Additional worlds</li><li>Further Nexus content</li></ul></article>
       </div>
-    </section>
+    </div></section>
 
-    <section class="content-section">
-      <div class="shell">
-        <div class="content-head reveal"><div><div class="content-eyebrow">Development standard</div><h2>Product decisions are evaluated from both sides.</h2></div><p>A system has to make sense technically and improve the player experience. Neither implementation quality nor presentation is treated as a substitute for the other.</p></div>
-        <div class="editorial-grid">
-          <article class="feature-story reveal"><div class="feature-copy"><span class="label">Player side</span><h3>Readable, responsive and worth learning.</h3><ul class="feature-list"><li>Clear progression landmarks</li><li>Consistent interaction patterns</li><li>Useful feedback at the right moment</li><li>Meaningful risk and reward</li><li>Depth that remains understandable</li></ul></div></article>
-          <article class="feature-story reveal"><div class="feature-copy"><span class="label">System side</span><h3>Maintainable, measurable and deliberate.</h3><ul class="feature-list"><li>Defined responsibility for each system</li><li>Performance-aware implementation</li><li>Auditable progression behavior</li><li>Room for balance and iteration</li><li>Clear boundaries between features</li></ul></div></article>
-        </div>
-        <div class="page-cta reveal"><div><h3>Meet the people directing the work.</h3><p>Pixel Network stays intentionally close between product direction and engineering.</p></div><div class="page-cta-actions"><a class="button primary" href="team.html">Meet the Team</a><a class="button secondary" href="https://pixel-network-1.gitbook.io/home/changelog" target="_blank" rel="noopener">Changelog</a></div></div>
+    <section class="content-section"><div class="shell">
+      <div class="content-head reveal"><div><div class="content-eyebrow">Network index</div><h2>The current product in numbers.</h2></div><p>Public figures are pulled from one shared data source so the website does not quietly disagree with itself from page to page.</p></div>
+      <div class="index-list">
+        <div class="index-row reveal"><span>Player level cap</span><strong data-network="progression.maxLevel">300</strong></div>
+        <div class="index-row reveal"><span>Prestige tiers</span><strong data-network="progression.maxPrestige">10</strong></div>
+        <div class="index-row reveal"><span>Legacy tiers</span><strong data-network="progression.maxLegacy">4</strong></div>
+        <div class="index-row reveal"><span>Current progression worlds</span><strong>4</strong></div>
+        <div class="index-row reveal"><span>Mines</span><strong data-network="content.mines">27</strong></div>
+        <div class="index-row reveal"><span>Custom enchantments</span><strong data-network="content.enchantments">27</strong></div>
+        <div class="index-row reveal"><span>World progression talismans</span><strong data-network="content.worldProgressionTalismans">36</strong></div>
+        <div class="index-row reveal"><span>Mine talismans</span><strong data-network="content.mineTalismans">81</strong></div>
+        <div class="index-row reveal"><span>World Boss encounters listed</span><strong data-network="content.worldBossEncounters">5</strong></div>
+        <div class="index-row reveal"><span>Nexus instance encounters</span><strong data-network="content.instanceEncounters">3</strong></div>
+        <div class="index-row reveal"><span>Instance bosses</span><strong data-network="content.instanceBosses">4</strong></div>
+        <div class="index-row reveal"><span>Instance difficulty tiers</span><strong data-network="content.instanceDifficulties">3</strong></div>
       </div>
-    </section>
+    </div></section>
+
+    <section class="content-section"><div class="shell">
+      <div class="content-head reveal"><div><div class="content-eyebrow">Publishing standard</div><h2>The website explains what players experience.</h2></div><p>Detailed formulas, item references and guides belong in Documentation. Infrastructure and internal implementation do not belong in either marketing copy or the public development narrative.</p></div>
+      <div class="editorial-grid">
+        <article class="feature-story reveal"><div class="feature-copy"><span class="label">Website</span><h3>Understand and decide.</h3><ul class="feature-list"><li>What the system changes for the player</li><li>Verified progression numbers</li><li>Current access requirements</li><li>Clear distinction between current and planned content</li></ul></div></article>
+        <article class="feature-story reveal"><div class="feature-copy"><span class="label">Documentation</span><h3>Learn and reference.</h3><ul class="feature-list"><li>Exact mechanics and formulas</li><li>Detailed item information</li><li>Guides and system reference</li><li>Changelog history</li></ul></div></article>
+      </div>
+
+      <div class="next-destination reveal"><div><small>Community</small><h3>Follow changes where they belong.</h3><p>Discord, Forum, Documentation and Changelog are grouped into one community layer.</p></div><a class="button primary" href="community.html">Community</a></div>
+    </div></section>
   </main>
 
-  <footer style="padding:34px 0 48px;border-top:1px solid rgba(255,255,255,.075)"><div class="shell" style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:#777b83;font-size:12px"><span>Pixel Network · Development</span><span><a href="index.html">Home</a> · <a href="team.html">Team</a> · <a href="forum.html">Forum</a></span></div></footer>
+  <footer style="padding:34px 0 48px;border-top:1px solid rgba(255,255,255,.075)"><div class="shell" style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:#777b83;font-size:12px"><span>Pixel Network · Development</span><span><a href="nexus.html">Nexus</a> · <a href="community.html">Community</a> · <a href="team.html">About</a></span></div></footer>
 </body>
 </html>
