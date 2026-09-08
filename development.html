@@ -12,14 +12,15 @@
   <link rel="stylesheet" href="phase1.css"/>
   <script src="data/network.js" defer></script>
   <script src="site.js" defer></script>
+  <script src="development.js" defer></script>
   <script src="polish.js" defer></script>
 </head>
 <body>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <nav class="site-nav" aria-label="Main navigation"><div class="shell nav-inner">
     <a class="brand" href="index.html"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a>
-    <div class="nav-links" id="navLinks"><div class="nav-group"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal and collaborative island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div><a href="development.html" aria-current="page">Development</a><div class="nav-group"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="community.html"><strong>Community</strong><span>Discord, Forum, docs and changelog.</span></a><a href="forum.html"><strong>Forum</strong><span>Long-form discussion.</span></a></div></div><a href="team.html">About</a></div>
-    <div class="nav-actions"><a class="button quiet nav-store" href="https://pixelboxx.tebex.io/" target="_blank" rel="noopener">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
+    <div class="nav-links" id="navLinks"><div class="nav-group"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal and collaborative island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div><a href="development.html" aria-current="page">Development</a><div class="nav-group"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="community.html"><strong>Community</strong><span>Discord, Forum, docs and changelog.</span></a><a href="forum.html"><strong>Forum</strong><span>Long-form discussion.</span></a><a href="changelog.html"><strong>Changelog</strong><span>Player-facing release notes.</span></a></div></div><a href="team.html">About</a></div>
+    <div class="nav-actions"><a class="button quiet nav-store" href="store.html">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
   </div></nav>
 
   <main>
@@ -32,10 +33,18 @@
     <section class="content-section"><div class="shell">
       <div class="content-head reveal"><div><div class="content-eyebrow">Public status</div><h2>What exists, what is being refined, what comes later.</h2></div><p>Only gameplay-facing work belongs here. Planned systems are intentionally separated from content players can already build around.</p></div>
       <div class="status-grid">
-        <article class="status-column reveal"><h3>Available</h3><ul><li>4-world progression structure</li><li>27 mines across the current worlds</li><li>300 levels, Prestige and Legacy progression</li><li>Talisman Codex and mine talisman collections</li><li>27 custom enchantments</li><li>World Boss progression</li><li>Nexus access and instance difficulty structure</li><li>Skyblock island progression and Skyblock quests</li><li>BattlePass progression with BattlePass quests</li></ul></article>
-        <article class="status-column reveal"><h3>In development</h3><ul><li>Ongoing balance across existing progression</li><li>Polish and clarity across player-facing systems</li><li>Further content work around the current endgame structure</li><li>Continued iteration as the network approaches the current completion target</li></ul></article>
-        <article class="status-column reveal"><h3>Planned</h3><ul><li>Progressive raids</li><li>Progressive dungeons</li><li>The Crucible of Legends</li><li>Additional worlds</li><li>Further Nexus content</li></ul></article>
+        <article class="status-column reveal"><h3>Available</h3><ul data-network-list="development.status.available"><li>4-world progression structure</li><li>27 mines across the current worlds</li><li>300 levels, Prestige and Legacy progression</li><li>Talisman Codex and mine talisman collections</li><li>27 custom enchantments</li><li>World Boss progression</li><li>Nexus access and instance difficulty structure</li><li>Skyblock island progression and Skyblock quests</li><li>BattlePass progression with BattlePass quests</li></ul></article>
+        <article class="status-column reveal"><h3>In development</h3><ul data-network-list="development.status.inDevelopment"><li>Ongoing balance across existing progression</li><li>Player-facing clarity and system polish</li><li>Further content work around the current endgame structure</li><li>Continued iteration as the network approaches the current completion target</li></ul></article>
+        <article class="status-column reveal"><h3>Planned</h3><ul data-network-list="development.status.planned"><li>Progressive raids</li><li>Progressive dungeons</li><li>The Crucible of Legends</li><li>Additional worlds</li><li>Further Nexus content</li></ul></article>
       </div>
+    </div></section>
+
+    <section class="content-section"><div class="shell">
+      <div class="content-head reveal"><div><div class="content-eyebrow">Changelog</div><h2>Status is a snapshot. Release notes explain what changed.</h2></div><p>Short, player-facing release notes can now be published directly from the same public data source. Detailed historical notes remain available in the existing GitBook.</p></div>
+      <div class="timeline" data-changelog-feed>
+        <article class="timeline-item reveal"><div class="when">Release notes</div><div><h3>No local release notes published yet.</h3><p>PixelWeb will show concise public updates here once they are added to the changelog data.</p></div></article>
+      </div>
+      <div class="page-cta reveal"><div><h3>One place for current status, another for history.</h3><p>Development shows where Pixel stands now. Changelog records concrete player-facing changes over time.</p></div><div class="page-cta-actions"><a class="button primary" href="changelog.html">Open Changelog</a><a class="button secondary" href="https://pixel-network-1.gitbook.io/home/changelog" target="_blank" rel="noopener" data-changelog-external>Full History</a></div></div>
     </div></section>
 
     <section class="content-section"><div class="shell">
@@ -44,7 +53,7 @@
         <div class="index-row reveal"><span>Player level cap</span><strong data-network="progression.maxLevel">300</strong></div>
         <div class="index-row reveal"><span>Prestige tiers</span><strong data-network="progression.maxPrestige">10</strong></div>
         <div class="index-row reveal"><span>Legacy tiers</span><strong data-network="progression.maxLegacy">4</strong></div>
-        <div class="index-row reveal"><span>Current progression worlds</span><strong>4</strong></div>
+        <div class="index-row reveal"><span>Current progression worlds</span><strong data-network="content.currentWorlds">4</strong></div>
         <div class="index-row reveal"><span>Mines</span><strong data-network="content.mines">27</strong></div>
         <div class="index-row reveal"><span>Custom enchantments</span><strong data-network="content.enchantments">27</strong></div>
         <div class="index-row reveal"><span>World progression talismans</span><strong data-network="content.worldProgressionTalismans">36</strong></div>
@@ -60,13 +69,13 @@
       <div class="content-head reveal"><div><div class="content-eyebrow">Publishing standard</div><h2>The website explains what players experience.</h2></div><p>Detailed formulas, item references and guides belong in Documentation. Infrastructure and internal implementation do not belong in either marketing copy or the public development narrative.</p></div>
       <div class="editorial-grid">
         <article class="feature-story reveal"><div class="feature-copy"><span class="label">Website</span><h3>Understand and decide.</h3><ul class="feature-list"><li>What the system changes for the player</li><li>Verified progression numbers</li><li>Current access requirements</li><li>Clear distinction between current and planned content</li></ul></div></article>
-        <article class="feature-story reveal"><div class="feature-copy"><span class="label">Documentation</span><h3>Learn and reference.</h3><ul class="feature-list"><li>Exact mechanics and formulas</li><li>Detailed item information</li><li>Guides and system reference</li><li>Changelog history</li></ul></div></article>
+        <article class="feature-story reveal"><div class="feature-copy"><span class="label">Documentation</span><h3>Learn and reference.</h3><ul class="feature-list"><li>Exact mechanics and formulas</li><li>Detailed item information</li><li>Guides and system reference</li><li>Detailed historical notes</li></ul></div></article>
       </div>
 
       <div class="next-destination reveal"><div><small>Community</small><h3>Follow changes where they belong.</h3><p>Discord, Forum, Documentation and Changelog are grouped into one community layer.</p></div><a class="button primary" href="community.html">Community</a></div>
     </div></section>
   </main>
 
-  <footer style="padding:34px 0 48px;border-top:1px solid rgba(255,255,255,.075)"><div class="shell" style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:#777b83;font-size:12px"><span>Pixel Network · Development</span><span><a href="nexus.html">Nexus</a> · <a href="community.html">Community</a> · <a href="team.html">About</a></span></div></footer>
+  <footer style="padding:34px 0 48px;border-top:1px solid rgba(255,255,255,.075)"><div class="shell" style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:#777b83;font-size:12px"><span>Pixel Network · Development</span><span><a href="nexus.html">Nexus</a> · <a href="changelog.html">Changelog</a> · <a href="community.html">Community</a></span></div></footer>
 </body>
 </html>
