@@ -136,11 +136,11 @@
 
   if (progress) {
     const steps = [
-      ['Start', 'Overworld'],
-      ['Prestige I', '+ Beholder'],
-      ['Prestige II', '+ HollowKeeper'],
-      ['Prestige III', '+ Eldric'],
-      ['Prestige IV', '+ Viking → Nexus']
+      ['Overworld', 'World 1 · Beholder'],
+      ['Prestige I', 'World 2 · Pirate Kingdom · HollowKeeper'],
+      ['Prestige II', 'World 3 · Nether · Eldric'],
+      ['Prestige III', 'World 4 · Winter · Viking'],
+      ['Prestige IV', 'Nexus']
     ];
     progress.innerHTML = `<div class="worlds-progress-line" aria-hidden="true"></div><div class="worlds-progress-grid">${steps.map(([title, sub]) => `<div class="worlds-progress-step"><div class="worlds-progress-dot" aria-hidden="true"></div><div><b>${title}</b><span>${sub}</span></div></div>`).join('')}</div>`;
   }
