@@ -9,7 +9,7 @@ function escapeHtml(value) {
     .replace(/'/g, '&#39;');
 }
 
-const RANK_PREMIUM = ['vip', 'pixel'];
+const RANK_PREMIUM = ['vip', 'mvp', 'ultra', 'pixel', 'pixel+'];
 const RANK_MEDIA = ['media'];
 const RANK_STAFF = ['staff'];
 
@@ -73,11 +73,24 @@ let currentProfile = null;
 let allPosts = [...SAMPLE_POSTS];
 let lastPostAt = 0;
 let cooldownTimer = null;
+let lastDialogTrigger = null;
 
 function switchTab(tab) {
-  document.querySelectorAll('.auth-tab, .auth-panel').forEach(element => element.classList.remove('active'));
-  document.getElementById(`tab-${tab}`)?.classList.add('active');
-  document.getElementById(`panel-${tab}`)?.classList.add('active');
+  const tabs = [...document.querySelectorAll('.auth-tab')];
+  const panels = [...document.querySelectorAll('.auth-panel')];
+
+  tabs.forEach(button => {
+    const active = button.id === `tab-${tab}`;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-selected', String(active));
+    button.tabIndex = active ? 0 : -1;
+  });
+
+  panels.forEach(panel => {
+    const active = panel.id === `panel-${tab}`;
+    panel.classList.toggle('active', active);
+    panel.hidden = !active;
+  });
 }
 
 function enterPreview(username) {
@@ -91,6 +104,7 @@ function enterPreview(username) {
   if (appContainer) appContainer.style.display = 'block';
 
   loadPosts();
+  document.getElementById('post-title')?.focus();
   TOAST.info('Preview session started. Changes remain local to this visit.');
 }
 
@@ -107,8 +121,12 @@ function doSignup() {
 function doLogout() {
   currentUser = null;
   currentProfile = null;
-  document.getElementById('auth-overlay').style.display = 'flex';
-  document.getElementById('app').style.display = 'none';
+  closePost(false);
+  const overlay = document.getElementById('auth-overlay');
+  const app = document.getElementById('app');
+  if (overlay) overlay.style.display = 'flex';
+  if (app) app.style.display = 'none';
+  requestAnimationFrame(() => document.getElementById('login-email')?.focus());
   TOAST.info('Preview session closed.');
 }
 
@@ -158,11 +176,12 @@ function renderPost(post) {
   const initial = username.charAt(0).toUpperCase();
   const date = formatDate(post.created_at);
   const postId = escapeHtml(String(post.id));
+  const title = escapeHtml(post.title || 'Untitled post');
 
   return `
-<div class="post-card ${rankClass}" onclick="openPost('${postId}')">
+<div class="post-card ${rankClass}" role="button" tabindex="0" aria-label="Open post: ${title}" onclick="openPost('${postId}')" onkeydown="handlePostKey(event, '${postId}')">
   <div class="post-header">
-    <div class="post-author-avatar">${escapeHtml(initial)}</div>
+    <div class="post-author-avatar" aria-hidden="true">${escapeHtml(initial)}</div>
     <div class="post-author-info">
       <div class="post-author-name font-special">
         ${escapeHtml(username)}
@@ -171,7 +190,7 @@ function renderPost(post) {
       <div class="post-time font-special">${escapeHtml(date)}</div>
     </div>
   </div>
-  <div class="post-title">${escapeHtml(post.title || '')}</div>
+  <div class="post-title">${title}</div>
   <div class="post-body font-special">${escapeHtml(post.content || '')}</div>
   <div class="post-footer">
     <span class="post-footer-meta font-special">${escapeHtml(date)}</span>
@@ -179,9 +198,17 @@ function renderPost(post) {
 </div>`;
 }
 
+function handlePostKey(event, id) {
+  if (event.key !== 'Enter' && event.key !== ' ') return;
+  event.preventDefault();
+  openPost(id);
+}
+
 function openPost(id) {
   const post = allPosts.find(item => String(item.id) === String(id));
   if (!post) return;
+
+  lastDialogTrigger = document.activeElement instanceof HTMLElement ? document.activeElement : null;
 
   const profile = post.profiles || {};
   const username = profile.username || 'Unknown';
@@ -196,17 +223,20 @@ function openPost(id) {
     overlay = document.createElement('div');
     overlay.id = 'post-modal-overlay';
     overlay.className = 'post-modal-overlay';
-    overlay.innerHTML = '<div class="post-modal" id="post-modal-inner" style="position:relative"></div>';
+    overlay.setAttribute('aria-hidden', 'true');
+    overlay.style.display = 'none';
+    overlay.innerHTML = '<div class="post-modal" id="post-modal-inner" role="dialog" aria-modal="true" aria-labelledby="post-modal-title" tabindex="-1" style="position:relative"></div>';
     overlay.addEventListener('click', event => {
       if (event.target === overlay) closePost();
     });
     document.body.appendChild(overlay);
   }
 
-  document.getElementById('post-modal-inner').innerHTML = `
-    <button class="post-modal-close font-special" onclick="closePost()">CLOSE ×</button>
+  const modal = document.getElementById('post-modal-inner');
+  modal.innerHTML = `
+    <button class="post-modal-close font-special" type="button" onclick="closePost()" aria-label="Close post">CLOSE ×</button>
     <div class="post-header" style="margin-bottom:18px">
-      <div class="post-author-avatar ${rankClass}">${escapeHtml(initial)}</div>
+      <div class="post-author-avatar ${rankClass}" aria-hidden="true">${escapeHtml(initial)}</div>
       <div class="post-author-info">
         <div class="post-author-name font-special">
           ${escapeHtml(username)}
@@ -215,19 +245,29 @@ function openPost(id) {
         <div class="post-time font-special">${escapeHtml(date)}</div>
       </div>
     </div>
-    <div class="post-title" style="font-size:19px;margin-bottom:16px">${escapeHtml(post.title || '')}</div>
+    <div class="post-title" id="post-modal-title" style="font-size:19px;margin-bottom:16px">${escapeHtml(post.title || '')}</div>
     <div class="post-modal-body font-special">${escapeHtml(post.content || '')}</div>
   `;
 
   overlay.style.display = '';
-  requestAnimationFrame(() => overlay.classList.add('open'));
+  overlay.setAttribute('aria-hidden', 'false');
+  requestAnimationFrame(() => {
+    overlay.classList.add('open');
+    modal.querySelector('.post-modal-close')?.focus();
+  });
 }
 
-function closePost() {
+function closePost(restoreFocus = true) {
   const overlay = document.getElementById('post-modal-overlay');
-  if (!overlay) return;
+  if (!overlay || overlay.getAttribute('aria-hidden') === 'true') return;
   overlay.classList.remove('open');
-  setTimeout(() => { overlay.style.display = 'none'; }, 300);
+  overlay.setAttribute('aria-hidden', 'true');
+  const delay = matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 220;
+  setTimeout(() => {
+    overlay.style.display = 'none';
+    if (restoreFocus && lastDialogTrigger?.isConnected) lastDialogTrigger.focus();
+    lastDialogTrigger = null;
+  }, delay);
 }
 
 function updateCooldownUI() {
@@ -281,13 +321,54 @@ function submitPost() {
   TOAST.success('Post added to this preview session.');
   updateCooldownUI();
   loadPosts();
+  document.querySelector('.post-card')?.focus();
+}
+
+function trapDialogFocus(event) {
+  if (event.key !== 'Tab') return;
+  const overlay = document.getElementById('post-modal-overlay');
+  if (!overlay || overlay.getAttribute('aria-hidden') === 'true') return;
+  const modal = document.getElementById('post-modal-inner');
+  const focusable = [...modal.querySelectorAll('button,[href],input,textarea,[tabindex]:not([tabindex="-1"])')]
+    .filter(element => !element.disabled && element.offsetParent !== null);
+  if (!focusable.length) {
+    event.preventDefault();
+    modal.focus();
+    return;
+  }
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
 }
 
 document.addEventListener('keydown', event => {
   if (event.key === 'Escape') closePost();
+  trapDialogFocus(event);
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+  const authTabs = [...document.querySelectorAll('.auth-tab')];
+  authTabs.forEach((tab, index) => {
+    tab.addEventListener('keydown', event => {
+      let next = null;
+      if (event.key === 'ArrowRight') next = (index + 1) % authTabs.length;
+      if (event.key === 'ArrowLeft') next = (index - 1 + authTabs.length) % authTabs.length;
+      if (event.key === 'Home') next = 0;
+      if (event.key === 'End') next = authTabs.length - 1;
+      if (next === null) return;
+      event.preventDefault();
+      const target = authTabs[next];
+      switchTab(target.id.replace('tab-', ''));
+      target.focus();
+    });
+  });
+
   document.getElementById('post-title')?.addEventListener('keydown', event => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
