@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta name="theme-color" content="#0b0c0e"/>
+  <meta name="description" content="Explore the systems that define progression, collection, equipment and encounters across Pixel Network."/>
+  <title>Systems — Pixel Network</title>
+  <link rel="icon" href="LOGO%20OFICIAL.png"/>
+  <link rel="stylesheet" href="site.css"/>
+  <link rel="stylesheet" href="polish.css"/>
+  <link rel="stylesheet" href="phase1.css"/>
+  <script src="data/network.js" defer></script>
+  <script src="site.js" defer></script>
+  <script src="polish.js" defer></script>
+</head>
+<body>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="shell nav-inner">
+      <a class="brand" href="index.html"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a>
+      <div class="nav-links" id="navLinks">
+        <div class="nav-group"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html" aria-current="page"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal and collaborative island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div>
+        <a href="development.html">Development</a>
+        <div class="nav-group"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="community.html"><strong>Community</strong><span>Discord, Forum, docs and changelog.</span></a><a href="forum.html"><strong>Forum</strong><span>Long-form discussion.</span></a></div></div>
+        <a href="team.html">About</a>
+      </div>
+      <div class="nav-actions"><a class="button quiet nav-store" href="https://pixelboxx.tebex.io/" target="_blank" rel="noopener">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="page-hero">
+      <div class="shell">
+        <div class="breadcrumbs"><a href="index.html">Pixel Network</a><span>/</span><span>Systems</span></div>
+        <div class="page-hero-grid">
+          <div><div class="eyebrow">Systems</div><h1>The mechanics that carry progression forward.</h1></div>
+          <p>Pixel Network does not treat every feature as equally important. A small set of systems defines the long-term journey; the rest exists to support those decisions, collections and milestones.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="shell">
+        <div class="content-head reveal"><div><div class="content-eyebrow">Signature systems</div><h2>The systems players build around.</h2></div><p>These are the parts of Pixel that most directly shape advancement, equipment value and access to later content.</p></div>
+        <div class="signature-grid">
+          <article class="signature-card reveal"><span class="sig-index">01 / PROGRESSION</span><b data-network="progression.maxLevel">300</b><h3>Levels, Prestige and Legacy</h3><p>Progression expands from levels into Prestige and Legacy, carrying the player from the first worlds into endgame difficulty tiers.</p><span class="arrow">300 levels · 10 Prestige · 4 Legacy</span></article>
+          <article class="signature-card reveal"><span class="sig-index">02 / TALISMAN CODEX</span><b data-network="content.worldProgressionTalismans">36</b><h3>World progression talismans</h3><p>The Codex follows the world journey with a defined collection tied to long-term progression rather than a disconnected checklist.</p><span class="arrow">Explore through progression →</span></article>
+          <article class="signature-card reveal"><span class="sig-index">03 / ENCHANTMENTS</span><b data-network="content.enchantments">27</b><h3>Custom enchantments</h3><p>Custom enchantments extend the decisions behind combat, mining and equipment specialization without replacing the core Minecraft language.</p><span class="arrow">Combat · Mining · Utility</span></article>
+          <a class="signature-card reveal" href="worlds.html"><span class="sig-index">04 / WORLD BOSSES</span><b data-network="content.worldBossEncounters">5</b><h3>World encounters</h3><p>Progression worlds use named bosses as visible milestones, with optional encounters able to add depth without blocking advancement.</p><span class="arrow">See world gates →</span></a>
+          <a class="signature-card reveal" href="nexus.html"><span class="sig-index">05 / INSTANCES</span><b data-network="content.instanceEncounters">3</b><h3>Nexus instance encounters</h3><p>Three endgame encounters scale through Easy, Medium and Hard as Prestige gives way to Legacy progression.</p><span class="arrow">Enter Nexus →</span></a>
+          <article class="signature-card reveal"><span class="sig-index">06 / MINES</span><b data-network="content.mines">27</b><h3>Mining across four worlds</h3><p>Nine mines establish the Overworld foundation, followed by six in each later world as the progression structure expands.</p><span class="arrow">9 + 6 + 6 + 6</span></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="shell">
+        <div class="content-head reveal"><div><div class="content-eyebrow">Collection</div><h2>Progress has things worth keeping.</h2></div><p>Collections are separated by purpose. World progression talismans and mine talismans are shown as distinct bodies of content rather than collapsed into an inflated total.</p></div>
+        <div class="metric-grid">
+          <div class="metric-card reveal"><b data-network="content.worldProgressionTalismans">36</b><span>World progression talismans</span><small>Tied to the world progression Codex.</small></div>
+          <div class="metric-card reveal"><b data-network="content.mineTalismans">81</b><span>Mine talismans</span><small>Legacy collection distributed through mining progression.</small></div>
+          <div class="metric-card reveal"><b>More</b><span>Rotating collections</span><small>Secret, World Boss, Mob Hunt and seasonal categories can expand independently.</small></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="shell">
+        <div class="content-head reveal"><div><div class="content-eyebrow">Supporting systems</div><h2>Depth around the core, not beside it.</h2></div><p>Supporting systems are useful because they reinforce equipment, activity, collection or social play. They are not presented as separate headline features when they do not need to be.</p></div>
+        <div class="detail-grid">
+          <article class="detail-card reveal"><small>Equipment</small><h3>Blacksmith & Forge</h3><p>Equipment progression gains a dedicated place for improvement and preparation outside the immediate combat loop.</p></article>
+          <article class="detail-card reveal"><small>Item history</small><h3>StatTrack</h3><p>Selected equipment can retain performance history, giving individual items context beyond their base statistics.</p></article>
+          <article class="detail-card reveal"><small>World activity</small><h3>Bestiary</h3><p>Creature-focused progression gives repeated encounters a clearer place within long-term play.</p></article>
+          <article class="detail-card reveal"><small>Seasonal progression</small><h3>BattlePass</h3><p>A secondary progression track can reward continued activity without replacing the permanent account journey.</p></article>
+          <article class="detail-card reveal"><small>Social play</small><h3>Parties</h3><p>Players can organize around shared activity and encounters without turning the network into isolated queues.</p></article>
+          <article class="detail-card reveal"><small>Rewards</small><h3>Crates & Keys</h3><p>Reward containers sit beside the core progression rather than defining it.</p></article>
+        </div>
+
+        <div class="next-destination reveal"><div><small>Next</small><h3>Worlds turn those systems into milestones.</h3><p>See the exact progression from the Overworld to Winter, including bosses and gates.</p></div><a class="button primary" href="worlds.html">Explore Worlds</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer style="padding:34px 0 48px;border-top:1px solid rgba(255,255,255,.075)"><div class="shell" style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:#777b83;font-size:12px"><span>Pixel Network · Systems</span><span><a href="gameplay.html">Gameplay</a> · <a href="worlds.html">Worlds</a> · <a href="community.html">Community</a></span></div></footer>
+</body>
+</html>
