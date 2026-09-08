@@ -130,16 +130,18 @@
         role: 'Late progression',
         mines: 6,
         boss: 'Viking',
-        bossRole: 'World Boss',
+        bossRole: 'Progression World Boss',
         unlock: 'Prestige III + defeat Eldric',
-        nextGate: 'Prestige IV Nexus access',
+        nextGate: 'Prestige IV + defeat Viking → Nexus',
         verified: true
       }
     ],
     nexus: {
-      unlock: 'Prestige IV',
+      unlock: 'Prestige IV + defeat Viking',
+      unlockMilestone: 'Prestige IV',
+      requiredBoss: 'Viking',
       accessPersists: true,
-      vikingRequired: false,
+      vikingRequired: true,
       accessModel: 'Permanent once unlocked',
       combatLayer: 'Instance progression',
       verified: true,
@@ -148,7 +150,7 @@
           name: 'Raphael',
           format: 'Single-boss encounter',
           difficulties: [
-            { name: 'Easy', unlock: 'Prestige IV' },
+            { name: 'Easy', unlock: 'Prestige IV + defeat Viking' },
             { name: 'Medium', unlock: 'Prestige VII' },
             { name: 'Hard', unlock: 'Legacy I' }
           ]
@@ -157,7 +159,7 @@
           name: 'Azazel',
           format: 'Single-boss encounter',
           difficulties: [
-            { name: 'Easy', unlock: 'Prestige IV' },
+            { name: 'Easy', unlock: 'Prestige IV + defeat Viking' },
             { name: 'Medium', unlock: 'Prestige VII' },
             { name: 'Hard', unlock: 'Legacy I' }
           ]
