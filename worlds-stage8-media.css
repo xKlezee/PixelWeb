@@ -1,0 +1,85 @@
+/* Stage 8 media extension — local boss art and Nexus asset */
+
+.worlds-card-boss-stack {
+  display: grid;
+  gap: 8px;
+  margin-top: 17px;
+}
+.worlds-card-boss {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 72px minmax(0,1fr);
+  gap: 11px;
+  align-items: center;
+  margin: 0;
+  padding: 7px;
+  border-radius: 13px;
+  border: 1px solid rgba(var(--accent), .14);
+  background: rgba(var(--accent), .04);
+}
+.worlds-card-boss.is-optional {
+  border-color: rgba(255,255,255,.055);
+  background: rgba(255,255,255,.018);
+}
+.worlds-card-boss img {
+  width: 72px;
+  height: 58px;
+  display: block;
+  object-fit: cover;
+  border-radius: 9px;
+  background: #090b0e;
+}
+.worlds-card-boss figcaption { min-width: 0; }
+.worlds-card-boss small {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--muted-2);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  font-size: 7px;
+  font-weight: 820;
+}
+.worlds-card-boss strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: rgb(var(--accent));
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.worlds-card--nexus .worlds-card-media::before { display: none; }
+.worlds-card--nexus .worlds-card-media img { object-fit: cover; }
+
+.worlds-boss-item {
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.worlds-boss-art {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  display: block;
+  object-fit: cover;
+  background: #090b0e;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+}
+.worlds-boss-copy { padding: 15px 16px 17px; }
+.worlds-boss-copy small {
+  display: block;
+  color: var(--muted-2);
+  text-transform: uppercase;
+  letter-spacing: .11em;
+  font-size: 8px;
+  font-weight: 800;
+}
+.worlds-boss-copy h3 { margin: 9px 0 6px; font-size: 18px; }
+.worlds-boss-copy p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.55; }
+
+@media (max-width: 700px) {
+  .worlds-card-boss { grid-template-columns: 82px minmax(0,1fr); }
+  .worlds-card-boss img { width: 82px; height: 64px; }
+  .worlds-boss-art { aspect-ratio: 16 / 8; }
+}
