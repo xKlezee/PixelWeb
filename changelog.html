@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta name="theme-color" content="#0b0c0e"/>
+  <meta name="description" content="Read concise, player-facing Pixel Network release notes and open the full changelog history."/>
+  <title>Changelog — Pixel Network</title>
+  <link rel="icon" href="LOGO%20OFICIAL.png"/>
+  <link rel="stylesheet" href="site.css"/>
+  <link rel="stylesheet" href="polish.css"/>
+  <link rel="stylesheet" href="phase1.css"/>
+  <script src="data/network.js" defer></script>
+  <script src="site.js" defer></script>
+  <script src="development.js" defer></script>
+  <script src="polish.js" defer></script>
+</head>
+<body>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <nav class="site-nav" aria-label="Main navigation"><div class="shell nav-inner">
+    <a class="brand" href="index.html"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a>
+    <div class="nav-links" id="navLinks"><div class="nav-group"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal and collaborative island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div><a href="development.html">Development</a><div class="nav-group"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="community.html"><strong>Community</strong><span>Discord, Forum, docs and changelog.</span></a><a href="forum.html"><strong>Forum</strong><span>Long-form discussion.</span></a><a href="changelog.html" aria-current="page"><strong>Changelog</strong><span>Player-facing release notes.</span></a></div></div><a href="team.html">About</a></div>
+    <div class="nav-actions"><a class="button quiet nav-store" href="store.html">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
+  </div></nav>
+
+  <main>
+    <section class="page-hero"><div class="shell"><div class="breadcrumbs"><a href="index.html">Pixel Network</a><span>/</span><a href="community.html">Community</a><span>/</span><span>Changelog</span></div><div class="page-hero-grid"><div><div class="eyebrow">Changelog</div><h1>What changed for players.</h1></div><p>Release notes stay focused on gameplay, content, balance and player-facing systems. Internal implementation details remain outside the public changelog.</p></div></div></section>
+
+    <section class="content-section"><div class="shell">
+      <div class="content-head reveal"><div><div class="content-eyebrow">Latest notes</div><h2>Concise updates first. Full history when you need it.</h2></div><p>New public entries can be added to the shared Pixel Network data source and will appear here automatically.</p></div>
+      <div class="timeline" data-changelog-feed>
+        <article class="timeline-item reveal"><div class="when">Release notes</div><div><h3>No local release notes published yet.</h3><p>PixelWeb will show concise public updates here once they are added to the changelog data.</p></div></article>
+      </div>
+    </div></section>
+
+    <section class="content-section"><div class="shell">
+      <div class="path-grid">
+        <article class="path-card reveal"><span class="path-label">Current state</span><h3>See where the network stands now.</h3><p>Development separates content that is available, being refined and planned, alongside the manually maintained completion estimate.</p><div class="path-list"><span>87% estimate</span><span>Available</span><span>In development</span><span>Planned</span></div><a class="button primary" href="development.html">Development</a></article>
+        <article class="path-card reveal"><span class="path-label">Full history</span><h3>Open the existing detailed changelog.</h3><p>The GitBook remains the long-form historical reference while PixelWeb presents concise, player-facing notes.</p><div class="path-list"><span>Detailed history</span><span>Reference</span><span>External GitBook</span></div><a class="button secondary" href="https://pixel-network-1.gitbook.io/home/changelog" target="_blank" rel="noopener" data-changelog-external>Open Full Changelog</a></article>
+      </div>
+
+      <div class="next-destination reveal"><div><small>Community</small><h3>Stay close to the project.</h3><p>Discord, Forum and Documentation cover conversation, discussion and detailed system reference.</p></div><a class="button primary" href="community.html">Community</a></div>
+    </div></section>
+  </main>
+
+  <footer style="padding:34px 0 48px;border-top:1px solid rgba(255,255,255,.075)"><div class="shell" style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:#777b83;font-size:12px"><span>Pixel Network · Changelog</span><span><a href="development.html">Development</a> · <a href="community.html">Community</a> · <a href="index.html">Home</a></span></div></footer>
+</body>
+</html>
