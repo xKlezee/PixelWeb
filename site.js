@@ -14,6 +14,9 @@
     const value = Number(readPath(el.dataset.networkProgress));
     if (Number.isFinite(value)) el.style.setProperty('--progress', `${Math.max(0, Math.min(100, value))}%`);
   });
+  $$('[data-store-url]').forEach(link => {
+    if (network?.store?.url) link.href = network.store.url;
+  });
 
   const toast = $('#toast');
   let toastTimer;
