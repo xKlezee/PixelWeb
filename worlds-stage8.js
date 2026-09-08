@@ -16,6 +16,7 @@
 
   const imageUrl = (source, width) => {
     if (!source) return '';
+    if (/^(?:assets\/|\.\/|\.\.\/)/.test(source)) return source;
     try {
       const url = new URL(source, location.href);
       url.searchParams.set('width', String(width));
@@ -30,6 +31,14 @@
   const statRow = (label, value, accent = false) => `
     <div class="worlds-stat"><span>${label}</span><strong${accent ? ' class="accent"' : ''}>${value}</strong></div>`;
 
+  const bossVisual = (name, bossMedia, label, optional = false) => {
+    if (!name || !bossMedia?.source) return '';
+    return `<figure class="worlds-card-boss${optional ? ' is-optional' : ''}">
+      <img src="${bossMedia.source}" alt="${bossMedia.alt || `${name} concept visual`}" width="160" height="120" loading="lazy" decoding="async">
+      <figcaption><small>${label}</small><strong>${name}</strong></figcaption>
+    </figure>`;
+  };
+
   const worldCard = (world, index) => {
     const visual = media[world.id] || {};
     const optional = world.optionalEncounter
@@ -42,6 +51,11 @@
       ? `<img alt="${visual.alt || `${world.name} landscape`}" width="960" height="540" decoding="async"
           ${index === 0 ? `src="${imageUrl(visual.source, 960)}" srcset="${imageUrl(visual.source, 640)} 640w, ${imageUrl(visual.source, 960)} 960w, ${imageUrl(visual.source, 1280)} 1280w" sizes="(max-width:700px) 82vw, (max-width:1459px) 300px, 20vw" fetchpriority="high"` : `data-src="${imageUrl(visual.source, 960)}" data-srcset="${imageUrl(visual.source, 640)} 640w, ${imageUrl(visual.source, 960)} 960w, ${imageUrl(visual.source, 1280)} 1280w" data-sizes="(max-width:700px) 82vw, (max-width:1459px) 300px, 20vw" loading="lazy"`} />`
       : '';
+    const bossLabel = world.id === 'winter' ? 'World Boss' : 'Required World Boss';
+    const bossBlock = `<div class="worlds-card-boss-stack">
+      ${bossVisual(world.boss, visual.boss, bossLabel)}
+      ${world.optionalEncounter ? bossVisual(world.optionalEncounter, visual.optionalBoss, 'Optional encounter', true) : ''}
+    </div>`;
 
     return `<article class="worlds-card" data-accent="${visual.accent || 'green'}">
       <div class="worlds-card-media${visual.source ? '' : ' is-fallback'}">
@@ -51,6 +65,7 @@
         <span class="worlds-card-kicker">${visual.label || world.role}</span>
         <h3>${world.name}</h3>
         <p class="worlds-card-summary">${descriptions[world.id] || ''}</p>
+        ${bossBlock}
         <div class="worlds-card-stats">
           ${statRow('Role', world.role)}
           ${statRow('Mines', world.mines)}
@@ -64,8 +79,11 @@
   };
 
   const nexusVisual = media.nexus || {};
+  const nexusPicture = nexusVisual.source
+    ? `<img src="${imageUrl(nexusVisual.source, 960)}" alt="${nexusVisual.alt || 'Nexus endgame visual'}" width="960" height="540" loading="lazy" decoding="async">`
+    : '';
   const nexusCard = `<article class="worlds-card worlds-card--nexus" data-accent="${nexusVisual.accent || 'violet'}">
-    <div class="worlds-card-media is-fallback"><span class="worlds-card-index">05</span></div>
+    <div class="worlds-card-media${nexusVisual.source ? '' : ' is-fallback'}"><span class="worlds-card-index">05</span>${nexusPicture}</div>
     <div class="worlds-card-body">
       <span class="worlds-card-kicker">${nexusVisual.label || 'The next chapter'}</span>
       <h3>Nexus</h3>
@@ -83,14 +101,14 @@
 
   rail.innerHTML = network.worlds.map(worldCard).join('') + nexusCard;
 
-  const firstImage = rail.querySelector('img[src]');
-  if (firstImage) {
-    if (firstImage.complete) firstImage.classList.add('is-loaded');
-    else firstImage.addEventListener('load', () => firstImage.classList.add('is-loaded'), { once: true });
-    firstImage.addEventListener('error', () => firstImage.closest('.worlds-card-media')?.classList.add('is-fallback'), { once: true });
-  }
+  const immediateImages = [...rail.querySelectorAll('.worlds-card-media img[src]')];
+  immediateImages.forEach(img => {
+    if (img.complete && img.naturalWidth) img.classList.add('is-loaded');
+    else img.addEventListener('load', () => img.classList.add('is-loaded'), { once: true });
+    img.addEventListener('error', () => img.closest('.worlds-card-media')?.classList.add('is-fallback'), { once: true });
+  });
 
-  const deferredImages = [...rail.querySelectorAll('img[data-src]')];
+  const deferredImages = [...rail.querySelectorAll('.worlds-card-media img[data-src]')];
   const hydrateImage = img => {
     if (!img?.dataset.src) return;
     img.src = img.dataset.src;
@@ -128,13 +146,21 @@
   }
 
   if (bossStrip) {
+    const byId = id => network.worlds.find(world => world.id === id) || {};
+    const overworld = byId('overworld');
+    const pirate = byId('pirate');
+    const nether = byId('nether');
+    const winter = byId('winter');
     const bosses = [
-      ['Overworld · Required', 'Beholder', 'Paired with Prestige I to open Pirate Kingdom.'],
-      ['Pirate · Required', 'HollowKeeper', 'Paired with Prestige II to open Nether.'],
-      ['Pirate · Optional', 'Kraken', 'A thematic encounter that gates nothing.'],
-      ['Nether · Required', 'Eldric', 'Paired with Prestige III to open Winter.'],
-      ['Winter · World Boss', 'Viking', 'Important encounter, but not a Nexus requirement.']
+      { label: 'Overworld · Required', name: overworld.boss, copy: 'Paired with Prestige I to open Pirate Kingdom.', media: media.overworld?.boss },
+      { label: 'Pirate · Required', name: pirate.boss, copy: 'Paired with Prestige II to open Nether.', media: media.pirate?.boss },
+      { label: 'Pirate · Optional', name: pirate.optionalEncounter, copy: 'A thematic encounter that gates nothing.', media: media.pirate?.optionalBoss },
+      { label: 'Nether · Required', name: nether.boss, copy: 'Paired with Prestige III to open Winter.', media: media.nether?.boss },
+      { label: 'Winter · World Boss', name: winter.boss, copy: 'Important encounter, but not a Nexus requirement.', media: media.winter?.boss }
     ];
-    bossStrip.innerHTML = bosses.map(([label, name, copy]) => `<article class="worlds-boss-item reveal"><small>${label}</small><h3>${name}</h3><p>${copy}</p></article>`).join('');
+    bossStrip.innerHTML = bosses.map(entry => `<article class="worlds-boss-item reveal">
+      ${entry.media?.source ? `<img class="worlds-boss-art" src="${entry.media.source}" alt="${entry.media.alt || `${entry.name} concept visual`}" width="320" height="240" loading="lazy" decoding="async">` : ''}
+      <div class="worlds-boss-copy"><small>${entry.label}</small><h3>${entry.name}</h3><p>${entry.copy}</p></div>
+    </article>`).join('');
   }
 })();
