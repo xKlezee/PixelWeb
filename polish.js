@@ -3,6 +3,8 @@
   const navLinks = document.getElementById('navLinks');
   const navToggle = document.getElementById('navToggle');
   const mobileNav = matchMedia('(max-width: 980px)');
+  const network = window.PIXEL_NETWORK_PUBLIC || {};
+  const currentPage = location.pathname.split('/').pop() || 'index.html';
 
   /* Reading progress only. Scroll handlers must not mutate page geometry. */
   const progress = document.createElement('div');
@@ -51,22 +53,60 @@
   measureScrollRange();
   updateScrollProgress();
 
-  /* Keep the Community dropdown identical across legacy page markup. */
-  const changelogLanding = window.PIXEL_NETWORK_PUBLIC?.changelog?.landing || 'changelog.html';
-  document.querySelectorAll('.nav-group').forEach(group => {
-    const button = group.querySelector(':scope > button');
-    const menu = group.querySelector(':scope > .nav-dropdown');
-    if (!button || !menu || button.textContent.trim() !== 'Community') return;
-    if (menu.querySelector(`a[href="${changelogLanding}"]`)) return;
+  /*
+   * Global navigation normalization.
+   * Changelog belongs to Development; Community stays focused on social/reference destinations.
+   * This is generated once here so older static page markup cannot drift apart.
+   */
+  const changelogLanding = network?.changelog?.landing || 'changelog.html';
+  const developmentLanding = 'development.html';
 
-    const link = document.createElement('a');
-    link.href = changelogLanding;
-    link.innerHTML = '<strong>Changelog</strong><span>Player-facing release notes.</span>';
-    if (location.pathname.endsWith('/changelog.html') || location.pathname.endsWith('changelog.html')) {
-      link.setAttribute('aria-current', 'page');
+  const existingDevelopmentGroup = Array.from(document.querySelectorAll('.nav-group')).find(group =>
+    group.querySelector(':scope > button')?.textContent.trim() === 'Development'
+  );
+
+  if (!existingDevelopmentGroup && navLinks) {
+    const directDevelopment = Array.from(navLinks.children).find(child =>
+      child.matches?.('a') && child.getAttribute('href')?.endsWith(developmentLanding)
+    );
+
+    if (directDevelopment) {
+      const group = document.createElement('div');
+      group.className = 'nav-group nav-development';
+
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.setAttribute('aria-haspopup', 'true');
+      button.textContent = 'Development';
+
+      const menu = document.createElement('div');
+      menu.className = 'nav-dropdown';
+
+      const developmentLink = document.createElement('a');
+      developmentLink.href = developmentLanding;
+      developmentLink.innerHTML = '<strong>Development</strong><span>Current status, roadmap and product scale.</span>';
+      if (currentPage === developmentLanding) developmentLink.setAttribute('aria-current', 'page');
+
+      const changelogLink = document.createElement('a');
+      changelogLink.href = changelogLanding;
+      changelogLink.innerHTML = '<strong>Changelog</strong><span>Player-facing release notes.</span>';
+      if (currentPage === changelogLanding) changelogLink.setAttribute('aria-current', 'page');
+
+      menu.append(developmentLink, changelogLink);
+      group.append(button, menu);
+      directDevelopment.replaceWith(group);
     }
-    menu.appendChild(link);
-  });
+  }
+
+  const communityGroup = Array.from(document.querySelectorAll('.nav-group')).find(group =>
+    group.querySelector(':scope > button')?.textContent.trim() === 'Community'
+  );
+  if (communityGroup) {
+    const menu = communityGroup.querySelector(':scope > .nav-dropdown');
+    menu?.querySelectorAll(`a[href$="${changelogLanding}"]`).forEach(link => link.remove());
+    const communityDescription = menu?.querySelector('a[href$="community.html"] span');
+    if (communityDescription) communityDescription.textContent = 'Discord, Forum and documentation.';
+  }
 
   /* Navigation groups: hover is convenient on desktop, click/keyboard is authoritative. */
   const groups = [...document.querySelectorAll('.nav-group')];
@@ -149,18 +189,41 @@
   });
 
   /* PixelWeb explains the commercial model before handing off to the official Store. */
-  const desktopStore = nav?.querySelector('.nav-store');
-  const storeLanding = window.PIXEL_NETWORK_PUBLIC?.store?.landing || 'store.html';
+  const navActions = nav?.querySelector('.nav-actions');
+  const desktopStore = navActions?.querySelector('.nav-store');
+  const storeLanding = network?.store?.landing || 'store.html';
   if (desktopStore && !desktopStore.hasAttribute('data-store-direct')) {
     desktopStore.href = storeLanding;
     desktopStore.removeAttribute('target');
     desktopStore.removeAttribute('rel');
-    if (location.pathname.endsWith('/store.html') || location.pathname.endsWith('store.html')) {
-      desktopStore.setAttribute('aria-current', 'page');
-    }
+    if (currentPage === storeLanding) desktopStore.setAttribute('aria-current', 'page');
   }
 
-  /* Store remains available inside the mobile menu while Play stays in the header. */
+  /* Discord is a permanent direct-access action beside Store and Play on desktop. */
+  const discordUrl = network?.community?.discordUrl || 'https://discord.gg/khRCRhR9d4';
+  let desktopDiscord = navActions?.querySelector('.nav-discord');
+  if (navActions && !desktopDiscord) {
+    desktopDiscord = document.createElement('a');
+    desktopDiscord.className = 'button quiet nav-discord';
+    desktopDiscord.href = discordUrl;
+    desktopDiscord.target = '_blank';
+    desktopDiscord.rel = 'noopener';
+    desktopDiscord.textContent = 'Discord';
+    desktopDiscord.setAttribute('aria-label', 'Join Pixel Network on Discord');
+    navActions.insertBefore(desktopDiscord, desktopStore || navToggle || null);
+  }
+
+  /* Store and Discord remain available inside the mobile menu while Play stays in the header. */
+  if (navLinks && !navLinks.querySelector('.nav-mobile-discord')) {
+    const mobileDiscord = document.createElement('a');
+    mobileDiscord.className = 'nav-mobile-discord';
+    mobileDiscord.href = discordUrl;
+    mobileDiscord.target = '_blank';
+    mobileDiscord.rel = 'noopener';
+    mobileDiscord.textContent = 'Discord';
+    navLinks.appendChild(mobileDiscord);
+  }
+
   if (navLinks && desktopStore && !navLinks.querySelector('.nav-mobile-store')) {
     const mobileStore = document.createElement('a');
     mobileStore.className = 'nav-mobile-store';
@@ -170,6 +233,15 @@
     if (desktopStore.getAttribute('aria-current') === 'page') mobileStore.setAttribute('aria-current', 'page');
     mobileStore.textContent = 'Store';
     navLinks.appendChild(mobileStore);
+  }
+
+  /* Keep public destination links synchronized with data/network.js. */
+  document.querySelectorAll('[data-discord-url]').forEach(link => {
+    link.href = discordUrl;
+  });
+  const docsUrl = network?.community?.documentationUrl;
+  if (docsUrl) {
+    document.querySelectorAll('[data-docs-url]').forEach(link => { link.href = docsUrl; });
   }
 
   const closeMobileNav = () => {
