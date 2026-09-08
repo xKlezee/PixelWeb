@@ -50,6 +50,18 @@
       latest: [],
       verified: true
     },
+    community: {
+      discordUrl: 'https://discord.gg/khRCRhR9d4',
+      forumLanding: 'forum.html',
+      documentationUrl: 'https://pixel-network-1.gitbook.io/home/documentation/',
+      forum: {
+        mode: 'preview',
+        persistent: false,
+        accountSystemAvailable: false
+      },
+      testimonials: [],
+      verified: true
+    },
     progression: {
       maxLevel: 300,
       maxPrestige: 10,
