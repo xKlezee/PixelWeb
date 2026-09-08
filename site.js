@@ -171,10 +171,17 @@
   }
 
   // Legacy data-copy-ip hooks are now Play triggers. Actual clipboard actions live inside the guide.
-  $$('[data-copy-ip]').forEach(button => button.addEventListener('click', event => {
-    event.preventDefault();
-    openPlayModal(button);
-  }));
+  $$('[data-copy-ip]').forEach(button => {
+    button.setAttribute('aria-haspopup', 'dialog');
+    button.setAttribute('aria-controls', 'playModal');
+    if (!button.getAttribute('aria-label') || /copy/i.test(button.getAttribute('aria-label'))) {
+      button.setAttribute('aria-label', 'Open Pixel Network join guide');
+    }
+    button.addEventListener('click', event => {
+      event.preventDefault();
+      openPlayModal(button);
+    });
+  });
 
   $$('[data-copy-server-ip]', playModal).forEach(button => button.addEventListener('click', () => copyServerIp(button)));
   $$('[data-play-close]', playModal).forEach(control => control.addEventListener('click', closePlayModal));
