@@ -134,8 +134,7 @@
 
   navLinks?.addEventListener('click', event => {
     if (!mobileNav.matches || !event.target.closest('a')) return;
-    document.body.classList.remove('nav-open');
-    closeGroups();
+    closeMobileNav();
   });
 
   document.addEventListener('pointerdown', event => {
