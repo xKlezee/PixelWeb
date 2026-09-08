@@ -6,37 +6,75 @@
     winter: 'https://pixel-network-1.gitbook.io/home/~gitbook/image?url=https%3A%2F%2F712597880-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252Fn7xotQKtgeq6qSw4VBXF%252Fuploads%252FyIhbKmsLNws7h50DFutx%252Fconsumables.png%3Falt%3Dmedia%26token%3D165c7aa4-9dba-4fdd-a79e-3753df117989&width=768&dpr=2&quality=90'
   };
 
+  const boss = (source, alt, referenceStatus, referenceLabel) => ({
+    source,
+    alt,
+    referenceStatus,
+    referenceLabel
+  });
+
   window.PIXEL_WORLDS_MEDIA = Object.freeze({
     overworld: {
       source: gitbook.overworld,
       alt: 'Pixel Network Overworld landscape',
       accent: 'green',
-      label: 'The beginning'
+      label: 'The beginning',
+      boss: boss(
+        'assets/worlds/boss-beholder.svg',
+        'Stylized Beholder concept visual',
+        'archetype-confirmed',
+        'Public ModelEngine/MythicMobs references confirm the floating-eye Beholder archetype; exact Pixel server model is not asserted.'
+      )
     },
     pirate: {
       source: gitbook.pirate,
       alt: 'Pixel Network Pirate Kingdom landscape',
       accent: 'cyan',
-      label: 'New horizons'
+      label: 'New horizons',
+      boss: boss(
+        'assets/worlds/boss-hollowkeeper.svg',
+        'Stylized HollowKeeper concept visual',
+        'exact-unconfirmed',
+        'No unique public marketplace match was found for HollowKeeper, so PixelWeb uses an original undead-pirate concept visual.'
+      ),
+      optionalBoss: boss(
+        'assets/worlds/boss-kraken.svg',
+        'Stylized Kraken concept visual',
+        'archetype-confirmed',
+        'Public ModelEngine/MythicMobs Kraken boss products confirm the ocean-tentacle boss archetype; PixelWeb does not copy their commercial artwork.'
+      )
     },
     nether: {
       source: gitbook.nether,
       alt: 'Pixel Network Nether landscape',
       accent: 'red',
-      label: 'A hotter path'
+      label: 'A hotter path',
+      boss: boss(
+        'assets/worlds/boss-eldric.svg',
+        'Stylized Eldric concept visual',
+        'exact-unconfirmed',
+        'No unique public marketplace match was found for Eldric, so PixelWeb uses an original infernal armored concept visual.'
+      )
     },
     winter: {
       source: gitbook.winter,
       alt: 'Pixel Network Winter landscape',
       accent: 'ice',
-      label: 'The final current world'
+      label: 'The final current world',
+      boss: boss(
+        'assets/worlds/boss-viking.svg',
+        'Stylized Viking concept visual',
+        'archetype-confirmed',
+        'Multiple public ModelEngine/MythicMobs Viking boss packs confirm the armored Viking archetype; exact Pixel server model is not asserted.'
+      )
     },
     nexus: {
-      source: null,
-      alt: 'Nexus endgame visual',
+      source: 'assets/worlds/nexus-portal.svg',
+      alt: 'Stylized Nexus endgame portal',
       accent: 'violet',
       label: 'The next chapter',
-      procedural: true
+      procedural: false,
+      local: true
     }
   });
 })();
