@@ -216,7 +216,7 @@
   /* Store and Discord remain available inside the mobile menu while Play stays in the header. */
   if (navLinks && !navLinks.querySelector('.nav-mobile-discord')) {
     const mobileDiscord = document.createElement('a');
-    mobileDiscord.className = 'nav-mobile-discord';
+    mobileDiscord.className = 'nav-mobile-store nav-mobile-discord';
     mobileDiscord.href = discordUrl;
     mobileDiscord.target = '_blank';
     mobileDiscord.rel = 'noopener';
@@ -224,9 +224,9 @@
     navLinks.appendChild(mobileDiscord);
   }
 
-  if (navLinks && desktopStore && !navLinks.querySelector('.nav-mobile-store')) {
+  if (navLinks && desktopStore && !navLinks.querySelector('.nav-mobile-store-link')) {
     const mobileStore = document.createElement('a');
-    mobileStore.className = 'nav-mobile-store';
+    mobileStore.className = 'nav-mobile-store nav-mobile-store-link';
     mobileStore.href = desktopStore.href;
     if (desktopStore.target) mobileStore.target = desktopStore.target;
     if (desktopStore.rel) mobileStore.rel = desktopStore.rel;
