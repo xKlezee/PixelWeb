@@ -3,6 +3,14 @@
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
   const network = window.PIXEL_NETWORK_PUBLIC || {};
 
+  if (!document.querySelector('link[data-play-modal-styles]')) {
+    const modalStyles = document.createElement('link');
+    modalStyles.rel = 'stylesheet';
+    modalStyles.href = 'play-modal.css';
+    modalStyles.dataset.playModalStyles = '';
+    document.head.appendChild(modalStyles);
+  }
+
   const readPath = (path) => path.split('.').reduce((value, key) => value?.[key], network);
 
   // Public product data is rendered from data/network.js so repeated figures stay consistent.
