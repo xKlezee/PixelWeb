@@ -140,10 +140,18 @@
       ]
     },
     store: {
+      landing: 'store.html',
+      url: 'https://pixelboxx.tebex.io/',
       model: 'Lifetime support progression',
       ranks: ['VIP', 'MVP', 'Ultra', 'Pixel', 'Pixel+'],
+      purchaseCategories: ['Cosmetics', 'Keys', 'Decoration'],
+      purchasesCountTowardSupport: true,
+      rankUpgradesAutomatic: true,
+      purchasesCanAccelerateProgression: true,
+      progressionAvailableThroughPlay: true,
       thresholdsVerified: false,
-      thresholds: null
+      thresholds: null,
+      verified: true
     },
     planned: [
       'Progressive raids',
