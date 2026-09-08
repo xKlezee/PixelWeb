@@ -6,45 +6,42 @@
 <meta name="robots" content="noindex,nofollow,noarchive"/>
 <meta name="theme-color" content="#0b0c0e"/>
 <title>Community Forum — Pixel Network</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="style.css"/>
-<link rel="stylesheet" href="polish.css"/>
+<link rel="stylesheet" href="forum-stage2.css"/>
 </head>
 <body>
 
-<div id="toast" class="toast"></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <div id="auth-overlay" class="auth-overlay">
-  <div class="auth-modal">
+  <div class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="forum-preview-title">
     <div class="auth-logo">
-      <div class="auth-logo-dot"></div>
-      <span class="font-special">PIXEL NETWORK</span>
+      <div class="auth-logo-dot" aria-hidden="true"></div>
+      <span class="font-special" id="forum-preview-title">PIXEL NETWORK</span>
     </div>
     <p class="auth-tagline font-special">COMMUNITY FORUM · PREVIEW</p>
     <p class="font-special" style="font-size:11px;line-height:1.7;color:#777;text-align:center;margin:14px 0 18px;max-width:430px">Preview sessions are local and temporary. No account credentials are required or stored.</p>
 
-    <div class="auth-tabs">
-      <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">
+    <div class="auth-tabs" role="tablist" aria-label="Forum preview entry">
+      <button class="auth-tab active" id="tab-login" role="tab" aria-selected="true" aria-controls="panel-login" tabindex="0" onclick="switchTab('login')">
         <span class="font-special">ENTER</span>
       </button>
-      <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">
+      <button class="auth-tab" id="tab-signup" role="tab" aria-selected="false" aria-controls="panel-signup" tabindex="-1" onclick="switchTab('signup')">
         <span class="font-special">NEW PROFILE</span>
       </button>
     </div>
 
-    <div id="panel-login" class="auth-panel active">
+    <div id="panel-login" class="auth-panel active" role="tabpanel" aria-labelledby="tab-login">
       <div class="field-group">
-        <label class="field-lbl font-special">DISPLAY NAME</label>
+        <label class="field-lbl font-special" for="login-email">DISPLAY NAME</label>
         <input type="text" id="login-email" class="field-input font-special" placeholder="Guest" autocomplete="off"/>
       </div>
       <button class="btn-primary font-special" onclick="doLogin()">ENTER FORUM</button>
     </div>
 
-    <div id="panel-signup" class="auth-panel">
+    <div id="panel-signup" class="auth-panel" role="tabpanel" aria-labelledby="tab-signup" hidden>
       <div class="field-group">
-        <label class="field-lbl font-special">DISPLAY NAME</label>
+        <label class="field-lbl font-special" for="su-username">DISPLAY NAME</label>
         <input type="text" id="su-username" class="field-input font-special" placeholder="YourName" autocomplete="off"/>
       </div>
       <button class="btn-primary font-special" onclick="doSignup()">CREATE PROFILE</button>
@@ -55,15 +52,15 @@
 <div id="app" class="app" style="display:none">
   <header class="topnav">
     <div class="topnav-inner">
-      <a href="index.html" class="topnav-brand">
-        <div class="brand-dot"></div>
+      <a href="index.html" class="topnav-brand" aria-label="Back to Pixel Network">
+        <div class="brand-dot" aria-hidden="true"></div>
         <span class="font-special brand-name">PIXEL NETWORK</span>
         <span class="brand-tag font-special">FORUM</span>
       </a>
       <div class="topnav-right">
-        <a href="index.html" class="nav-link font-special">← MAIN SITE</a>
+        <a href="index.html" class="nav-link font-special" aria-label="Back to main site">← MAIN SITE</a>
         <div class="nav-user" id="nav-user">
-          <div class="nav-avatar" id="nav-avatar-border">
+          <div class="nav-avatar" id="nav-avatar-border" aria-hidden="true">
             <div class="nav-avatar-inner font-special" id="nav-avatar-char">?</div>
           </div>
           <span class="font-special" id="nav-username">...</span>
@@ -76,7 +73,7 @@
   <div class="content-wrap">
     <aside class="sidebar">
       <div class="profile-card" id="profile-card">
-        <div class="profile-avatar-wrap" id="profile-avatar-wrap">
+        <div class="profile-avatar-wrap" id="profile-avatar-wrap" aria-hidden="true">
           <div class="profile-avatar font-special" id="profile-avatar-char">?</div>
         </div>
         <div class="profile-rank-badge font-special" id="profile-rank-badge">MEMBER</div>
@@ -87,18 +84,20 @@
         </div>
       </div>
 
-      <div class="sidebar-nav">
-        <div class="sidebar-nav-item active font-special">ALL POSTS</div>
+      <div class="sidebar-nav" aria-label="Forum view">
+        <div class="sidebar-nav-item active font-special" aria-current="page">ALL POSTS</div>
       </div>
     </aside>
 
     <main class="forum-main">
       <div class="create-post-box" id="create-post-box">
         <div class="create-post-header"><span class="font-special">NEW POST</span></div>
+        <label class="field-lbl font-special" for="post-title">TITLE</label>
         <input type="text" id="post-title" class="create-input font-special" placeholder="Post title" autocomplete="off"/>
+        <label class="field-lbl font-special" for="post-body">MESSAGE</label>
         <textarea id="post-body" class="create-textarea font-special" placeholder="Write something for the community..."></textarea>
         <div class="create-footer">
-          <span class="cooldown-info font-special" id="cooldown-info"></span>
+          <span class="cooldown-info font-special" id="cooldown-info" aria-live="polite"></span>
           <button class="btn-submit font-special" id="btn-submit" onclick="submitPost()">PUBLISH</button>
         </div>
       </div>
@@ -108,9 +107,9 @@
         <button class="btn-refresh font-special" onclick="loadPosts()">REFRESH</button>
       </div>
 
-      <div id="posts-feed" class="posts-feed">
+      <div id="posts-feed" class="posts-feed" aria-live="polite">
         <div class="loading-posts">
-          <div class="loading-spinner"></div>
+          <div class="loading-spinner" aria-hidden="true"></div>
           <span class="font-special">LOADING POSTS...</span>
         </div>
       </div>
@@ -119,6 +118,5 @@
 </div>
 
 <script src="app.js"></script>
-<script src="polish.js"></script>
 </body>
 </html>
