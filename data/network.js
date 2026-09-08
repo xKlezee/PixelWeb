@@ -21,6 +21,7 @@
       verified: true
     },
     content: {
+      currentWorlds: 4,
       mines: 27,
       enchantments: 27,
       worldProgressionTalismans: 36,
@@ -44,7 +45,9 @@
         role: 'Foundation',
         mines: 9,
         boss: 'Beholder',
+        bossRole: 'Progression World Boss',
         unlock: 'Starting world',
+        nextGate: 'Prestige I + defeat Beholder',
         verified: true
       },
       {
@@ -54,8 +57,10 @@
         role: 'Expansion',
         mines: 6,
         boss: 'HollowKeeper',
+        bossRole: 'Progression World Boss',
         optionalEncounter: 'Kraken',
         unlock: 'Prestige I + defeat Beholder',
+        nextGate: 'Prestige II + defeat HollowKeeper',
         verified: true
       },
       {
@@ -65,7 +70,9 @@
         role: 'Pressure',
         mines: 6,
         boss: 'Eldric',
+        bossRole: 'Progression World Boss',
         unlock: 'Prestige II + defeat HollowKeeper',
+        nextGate: 'Prestige III + defeat Eldric',
         verified: true
       },
       {
@@ -75,13 +82,18 @@
         role: 'Late progression',
         mines: 6,
         boss: 'Viking',
+        bossRole: 'World Boss',
         unlock: 'Prestige III + defeat Eldric',
+        nextGate: 'Prestige IV Nexus access',
         verified: true
       }
     ],
     nexus: {
       unlock: 'Prestige IV',
       accessPersists: true,
+      vikingRequired: false,
+      accessModel: 'Permanent once unlocked',
+      combatLayer: 'Instance progression',
       verified: true,
       instances: [
         {
