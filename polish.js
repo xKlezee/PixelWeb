@@ -131,14 +131,26 @@
     });
   });
 
-  /* Store remains available inside the mobile menu while Play stays in the header. */
+  /* PixelWeb explains the commercial model before handing off to the official Store. */
   const desktopStore = nav?.querySelector('.nav-store');
+  const storeLanding = window.PIXEL_NETWORK_PUBLIC?.store?.landing || 'store.html';
+  if (desktopStore && !desktopStore.hasAttribute('data-store-direct')) {
+    desktopStore.href = storeLanding;
+    desktopStore.removeAttribute('target');
+    desktopStore.removeAttribute('rel');
+    if (location.pathname.endsWith('/store.html') || location.pathname.endsWith('store.html')) {
+      desktopStore.setAttribute('aria-current', 'page');
+    }
+  }
+
+  /* Store remains available inside the mobile menu while Play stays in the header. */
   if (navLinks && desktopStore && !navLinks.querySelector('.nav-mobile-store')) {
     const mobileStore = document.createElement('a');
     mobileStore.className = 'nav-mobile-store';
     mobileStore.href = desktopStore.href;
-    mobileStore.target = desktopStore.target || '_blank';
-    mobileStore.rel = desktopStore.rel || 'noopener';
+    if (desktopStore.target) mobileStore.target = desktopStore.target;
+    if (desktopStore.rel) mobileStore.rel = desktopStore.rel;
+    if (desktopStore.getAttribute('aria-current') === 'page') mobileStore.setAttribute('aria-current', 'page');
     mobileStore.textContent = 'Store';
     navLinks.appendChild(mobileStore);
   }
