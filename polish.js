@@ -51,6 +51,23 @@
   measureScrollRange();
   updateScrollProgress();
 
+  /* Keep the Community dropdown identical across legacy page markup. */
+  const changelogLanding = window.PIXEL_NETWORK_PUBLIC?.changelog?.landing || 'changelog.html';
+  document.querySelectorAll('.nav-group').forEach(group => {
+    const button = group.querySelector(':scope > button');
+    const menu = group.querySelector(':scope > .nav-dropdown');
+    if (!button || !menu || button.textContent.trim() !== 'Community') return;
+    if (menu.querySelector(`a[href="${changelogLanding}"]`)) return;
+
+    const link = document.createElement('a');
+    link.href = changelogLanding;
+    link.innerHTML = '<strong>Changelog</strong><span>Player-facing release notes.</span>';
+    if (location.pathname.endsWith('/changelog.html') || location.pathname.endsWith('changelog.html')) {
+      link.setAttribute('aria-current', 'page');
+    }
+    menu.appendChild(link);
+  });
+
   /* Navigation groups: hover is convenient on desktop, click/keyboard is authoritative. */
   const groups = [...document.querySelectorAll('.nav-group')];
 
