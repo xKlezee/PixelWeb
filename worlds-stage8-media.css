@@ -1,5 +1,17 @@
 /* Stage 8 media extension — local boss art and Nexus asset */
 
+.worlds-card[data-accent='brown'] { --accent: 184,128,72; }
+
+.worlds-progress-line {
+  background: linear-gradient(90deg,
+    rgba(105,214,120,.62),
+    rgba(184,128,72,.62),
+    rgba(244,94,76,.62),
+    rgba(111,190,255,.62),
+    rgba(157,100,255,.62));
+}
+.worlds-progress-step:nth-child(2) .worlds-progress-dot { background: rgb(184,128,72); }
+
 .worlds-card-boss-stack {
   display: grid;
   gap: 8px;
@@ -79,6 +91,14 @@
 .worlds-boss-copy p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.55; }
 
 @media (max-width: 700px) {
+  .worlds-progress-line {
+    background: linear-gradient(180deg,
+      rgba(105,214,120,.62),
+      rgba(184,128,72,.62),
+      rgba(244,94,76,.62),
+      rgba(111,190,255,.62),
+      rgba(157,100,255,.62));
+  }
   .worlds-card-boss { grid-template-columns: 82px minmax(0,1fr); }
   .worlds-card-boss img { width: 82px; height: 64px; }
   .worlds-boss-art { aspect-ratio: 16 / 8; }
