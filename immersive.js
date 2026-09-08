@@ -35,7 +35,7 @@
       at: 1,
       kicker: '04 / Nexus',
       title: 'The Nexus opens the endgame curve.',
-      body: 'Prestige IV unlocks permanent Nexus access, where later Prestige and Legacy milestones continue through progressively harder instance encounters.'
+      body: 'Prestige IV + defeating Viking permanently unlocks Nexus, where later Prestige and Legacy milestones continue through progressively harder instance encounters.'
     }
   ];
 
