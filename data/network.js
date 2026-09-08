@@ -1,4 +1,33 @@
 (() => {
+  const planned = [
+    'Progressive raids',
+    'Progressive dungeons',
+    'The Crucible of Legends',
+    'Additional worlds',
+    'Further Nexus content'
+  ];
+
+  const developmentStatus = {
+    available: [
+      '4-world progression structure',
+      '27 mines across the current worlds',
+      '300 levels, Prestige and Legacy progression',
+      'Talisman Codex and mine talisman collections',
+      '27 custom enchantments',
+      'World Boss progression',
+      'Nexus access and instance difficulty structure',
+      'Skyblock island progression and Skyblock quests',
+      'BattlePass progression with BattlePass quests'
+    ],
+    inDevelopment: [
+      'Ongoing balance across existing progression',
+      'Player-facing clarity and system polish',
+      'Further content work around the current endgame structure',
+      'Continued iteration as the network approaches the current completion target'
+    ],
+    planned
+  };
+
   const data = {
     meta: {
       brand: 'Pixel Network',
@@ -12,6 +41,13 @@
     development: {
       completion: 87,
       updatedLabel: 'September 2026',
+      status: developmentStatus,
+      verified: true
+    },
+    changelog: {
+      landing: 'changelog.html',
+      externalUrl: 'https://pixel-network-1.gitbook.io/home/changelog',
+      latest: [],
       verified: true
     },
     progression: {
@@ -153,13 +189,7 @@
       thresholds: null,
       verified: true
     },
-    planned: [
-      'Progressive raids',
-      'Progressive dungeons',
-      'The Crucible of Legends',
-      'Additional worlds',
-      'Further Nexus content'
-    ]
+    planned
   };
 
   window.PIXEL_NETWORK_PUBLIC = Object.freeze(data);
