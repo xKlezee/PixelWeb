@@ -58,7 +58,7 @@
     }
   }));
 
-  // Small reveal effect using a single IntersectionObserver.
+  // Reveal work starts before content reaches the viewport so scrolling never pays the first paint cost.
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
     const revealObserver = new IntersectionObserver(entries => {
       for (const entry of entries) {
@@ -66,7 +66,7 @@
         entry.target.classList.add('visible');
         revealObserver.unobserve(entry.target);
       }
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    }, { rootMargin: '240px 0px 180px 0px', threshold: 0.01 });
     $$('.reveal').forEach(el => revealObserver.observe(el));
   } else {
     $$('.reveal').forEach(el => el.classList.add('visible'));
