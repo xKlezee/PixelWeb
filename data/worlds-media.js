@@ -29,7 +29,7 @@
     pirate: {
       source: gitbook.pirate,
       alt: 'Pixel Network Pirate Kingdom landscape',
-      accent: 'cyan',
+      accent: 'brown',
       label: 'New horizons',
       boss: boss(
         'assets/worlds/boss-hollowkeeper.svg',
