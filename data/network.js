@@ -31,6 +31,11 @@
       instanceDifficulties: 3,
       verified: true
     },
+    quests: {
+      verified: true,
+      currentSystems: ['BattlePass', 'Skyblock'],
+      generalProgressionQuestline: false
+    },
     worlds: [
       {
         id: 'overworld',
@@ -129,7 +134,6 @@
       thresholds: null
     },
     planned: [
-      'General quest progression',
       'Progressive raids',
       'Progressive dungeons',
       'The Crucible of Legends',
