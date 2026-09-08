@@ -1,6 +1,19 @@
 (() => {
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
+  const network = window.PIXEL_NETWORK_PUBLIC || {};
+
+  const readPath = (path) => path.split('.').reduce((value, key) => value?.[key], network);
+
+  // Public product data is rendered from data/network.js so repeated figures stay consistent.
+  $$('[data-network]').forEach(el => {
+    const value = readPath(el.dataset.network);
+    if (value !== undefined && value !== null) el.textContent = String(value);
+  });
+  $$('[data-network-progress]').forEach(el => {
+    const value = Number(readPath(el.dataset.networkProgress));
+    if (Number.isFinite(value)) el.style.setProperty('--progress', `${Math.max(0, Math.min(100, value))}%`);
+  });
 
   const toast = $('#toast');
   let toastTimer;
@@ -24,10 +37,10 @@
     navToggle?.setAttribute('aria-expanded', 'false');
   }));
 
-  // Copy IP.
-  const copyButton = $('#copyIp');
-  copyButton?.addEventListener('click', async () => {
-    const ip = copyButton.dataset.ip || 'pixelboxxx.minehut.gg';
+  // Every Play / IP control uses the same public server address.
+  const copyButtons = $$('[data-copy-ip]');
+  copyButtons.forEach(button => button.addEventListener('click', async () => {
+    const ip = button.dataset.ip || network?.server?.ip || 'pixelboxxx.minehut.gg';
     try {
       await navigator.clipboard.writeText(ip);
       showToast('Server IP copied');
@@ -43,7 +56,7 @@
       input.remove();
       showToast('Server IP copied');
     }
-  });
+  }));
 
   // Small reveal effect using a single IntersectionObserver.
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
@@ -70,7 +83,7 @@
       panel.hidden = !active;
       if (active) {
         const img = $('img[data-src]', panel);
-        if (img && !img.src) {
+        if (img?.dataset.src) {
           img.src = img.dataset.src;
           img.removeAttribute('data-src');
         }
@@ -91,10 +104,12 @@
   }
 
   async function fetchStatus() {
+    if (!statusText && !playerCount && !statusDot) return;
     try {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), 5000);
-      const response = await fetch('https://api.mcsrvstat.us/3/pixelboxxx.minehut.gg', {
+      const serverIp = network?.server?.ip || 'pixelboxxx.minehut.gg';
+      const response = await fetch(`https://api.mcsrvstat.us/3/${encodeURIComponent(serverIp)}`, {
         signal: controller.signal,
         cache: 'no-store'
       });
@@ -108,6 +123,7 @@
   }
 
   const scheduleStatus = () => {
+    if (!statusText && !playerCount && !statusDot) return;
     fetchStatus();
     setInterval(fetchStatus, 120000);
   };
