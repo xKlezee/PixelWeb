@@ -33,6 +33,18 @@ html {
 }
 body { min-height: 100vh; }
 
+/*
+ * Scroll performance contract:
+ * - no deferred section layout on first movement;
+ * - no fixed masked decoration that has to be composited while scrolling;
+ * - sticky navigation keeps exactly the same geometry before and after scroll.
+ */
+body::before { display: none; }
+.section {
+  content-visibility: visible;
+  contain-intrinsic-size: none;
+}
+
 .scroll-progress {
   position: fixed;
   inset: 0 0 auto 0;
@@ -43,22 +55,27 @@ body { min-height: 100vh; }
   transform-origin: left;
   background: linear-gradient(90deg, rgba(246,201,69,.40), var(--yellow));
   box-shadow: 0 0 12px rgba(246,201,69,.13);
+  will-change: transform;
+  contain: paint;
 }
 
 .site-nav {
   view-transition-name: pixel-site-nav;
+  background: rgba(11,12,14,.965);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom-color: rgba(255,255,255,.06);
+  box-shadow: 0 8px 24px rgba(0,0,0,.10);
   transition:
-    padding var(--motion-base) var(--ease-premium),
-    background var(--motion-base) ease,
-    border-color var(--motion-base) ease,
-    box-shadow var(--motion-base) ease;
+    background var(--motion-fast) ease,
+    border-color var(--motion-fast) ease;
 }
+
+/* Kept for compatibility with older markup/scripts; it must never change layout. */
 .site-nav.is-scrolled {
-  padding-top: 9px;
-  padding-bottom: 9px;
-  background: rgba(11,12,14,.95);
-  border-bottom-color: rgba(255,255,255,.07);
-  box-shadow: 0 12px 34px rgba(0,0,0,.17);
+  background: rgba(11,12,14,.965);
+  border-bottom-color: rgba(255,255,255,.06);
+  box-shadow: 0 8px 24px rgba(0,0,0,.10);
 }
 
 .brand img,
@@ -284,7 +301,6 @@ footer a:hover { color: var(--text); }
 
 @media (max-width: 980px) {
   .nav-links > a::after { display:none; }
-  .site-nav.is-scrolled { padding-top:8px; padding-bottom:8px; }
 }
 
 @media (max-width: 760px) {
