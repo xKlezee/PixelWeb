@@ -4,63 +4,53 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <meta name="theme-color" content="#0b0c0e"/>
-  <meta name="description" content="Explore the four progression worlds of Pixel Network and the role each one plays in the player journey."/>
+  <meta name="description" content="Follow Pixel Network's current progression from the Overworld through Pirate Kingdom, Nether and Winter, with verified Prestige and boss gates."/>
   <title>Worlds — Pixel Network</title>
   <link rel="icon" href="LOGO%20OFICIAL.png"/>
   <link rel="stylesheet" href="site.css"/>
-  <link rel="stylesheet" href="immersive.css"/>
   <link rel="stylesheet" href="polish.css"/>
+  <link rel="stylesheet" href="phase1.css"/>
+  <script src="data/network.js" defer></script>
   <script src="site.js" defer></script>
   <script src="polish.js" defer></script>
 </head>
 <body>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <nav class="site-nav" aria-label="Main navigation">
-    <div class="shell nav-inner">
-      <a class="brand" href="index.html"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a>
-      <div class="nav-links" id="navLinks"><a href="index.html">Home</a><a href="gameplay.html">Gameplay</a><a href="worlds.html" aria-current="page">Worlds</a><a href="development.html">Development</a><a href="team.html">Team</a><a href="forum.html">Forum</a></div>
-      <div class="nav-actions"><a class="button quiet" href="https://discord.gg/khRCRhR9d4" target="_blank" rel="noopener">Discord</a><a class="button primary" href="https://pixelboxx.tebex.io/" target="_blank" rel="noopener">Store</a><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
-    </div>
-  </nav>
+  <nav class="site-nav" aria-label="Main navigation"><div class="shell nav-inner">
+    <a class="brand" href="index.html"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a>
+    <div class="nav-links" id="navLinks"><div class="nav-group"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html" aria-current="page"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal and collaborative island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div><a href="development.html">Development</a><div class="nav-group"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="community.html"><strong>Community</strong><span>Discord, Forum, docs and changelog.</span></a><a href="forum.html"><strong>Forum</strong><span>Long-form discussion.</span></a></div></div><a href="team.html">About</a></div>
+    <div class="nav-actions"><a class="button quiet nav-store" href="https://pixelboxx.tebex.io/" target="_blank" rel="noopener">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
+  </div></nav>
 
   <main>
-    <section class="page-hero">
-      <div class="shell">
-        <div class="breadcrumbs"><a href="index.html">Pixel Network</a><span>/</span><span>Worlds</span></div>
-        <div class="page-hero-grid">
-          <div><div class="eyebrow">World progression</div><h1>Four environments, each with a different role.</h1></div>
-          <p>Worlds define more than atmosphere. Moving forward changes access, reward quality and the level of risk the player is expected to handle.</p>
-        </div>
+    <section class="page-hero"><div class="shell"><div class="breadcrumbs"><a href="index.html">Pixel Network</a><span>/</span><span>Worlds</span></div><div class="page-hero-grid"><div><div class="eyebrow">World progression</div><h1>The current worlds are stages, not separate modes.</h1></div><p>Overworld, Pirate Kingdom, Nether and Winter form the launch progression. Prestige and boss clears determine access, while the structure remains open to additional worlds as Pixel grows.</p></div></div></section>
+
+    <section class="content-section"><div class="shell">
+      <div class="content-head reveal"><div><div class="content-eyebrow">Current route</div><h2>Four worlds before endgame.</h2></div><p>The route below uses the current verified unlock requirements. Nexus access is a separate Prestige IV milestone and does not require defeating Viking.</p></div>
+      <div class="world-road reveal">
+        <article class="world-stage"><span class="stage-no">01 / FOUNDATION</span><div><h3>Overworld</h3><p>9 mines · World Boss: Beholder</p></div><div class="stage-meta"><span><strong>Access</strong> Starting world</span></div></article>
+        <div class="gate"><strong>Unlock Pirate Kingdom:</strong> Prestige I + defeat Beholder</div>
+        <article class="world-stage"><span class="stage-no">02 / EXPANSION</span><div><h3>Pirate Kingdom</h3><p>6 mines · Main World Boss: HollowKeeper · Optional: Kraken</p></div><div class="stage-meta"><span><strong>Progression boss</strong> HollowKeeper</span><span><strong>Optional encounter</strong> Kraken</span></div></article>
+        <div class="gate"><strong>Unlock Nether:</strong> Prestige II + defeat HollowKeeper</div>
+        <article class="world-stage"><span class="stage-no">03 / PRESSURE</span><div><h3>Nether</h3><p>6 mines · World Boss: Eldric</p></div><div class="stage-meta"><span><strong>Progression boss</strong> Eldric</span></div></article>
+        <div class="gate"><strong>Unlock Winter:</strong> Prestige III + defeat Eldric</div>
+        <article class="world-stage"><span class="stage-no">04 / LATE PROGRESSION</span><div><h3>Winter</h3><p>6 mines · World Boss: Viking</p></div><div class="stage-meta"><span><strong>Nexus access</strong> Prestige IV</span><span><strong>Important</strong> Viking is not required for Nexus</span></div></article>
       </div>
-    </section>
+    </div></section>
 
-    <section class="content-section">
-      <div class="shell world-showcase">
-        <article class="world-row reveal">
-          <div class="world-visual"><img loading="lazy" decoding="async" src="https://pixel-network-1.gitbook.io/home/~gitbook/image?url=https%3A%2F%2F712597880-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252Fn7xotQKtgeq6qSw4VBXF%252Fuploads%252Fi2tm3Y1jcEiOxK2PaII4%252FImage_fx%2520%2817%29.png%3Falt%3Dmedia%26token%3D2b1dfa01-3645-4ea0-9608-57d90114ac12&width=768&dpr=2&quality=90" alt="Pixel Network Overworld"/></div>
-          <div class="world-info"><span class="tag">01 / Foundation</span><h2>The Overworld</h2><p>The first stage establishes the rules of Pixel Network. Players learn how mining, economy and combat connect before higher-risk systems are introduced.</p><ul><li>Starter mining and progression</li><li>Early equipment and PvP decisions</li><li>Handcrafted terrain and structures</li><li>First major progression gate</li></ul></div>
-        </article>
+    <section class="content-section"><div class="shell world-showcase">
+      <article class="world-row reveal"><div class="world-visual"><img loading="lazy" decoding="async" src="https://pixel-network-1.gitbook.io/home/~gitbook/image?url=https%3A%2F%2F712597880-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252Fn7xotQKtgeq6qSw4VBXF%252Fuploads%252Fi2tm3Y1jcEiOxK2PaII4%252FImage_fx%2520%2817%29.png%3Falt%3Dmedia%26token%3D2b1dfa01-3645-4ea0-9608-57d90114ac12&width=768&dpr=2&quality=90" alt="Pixel Network Overworld"/></div><div class="world-info"><span class="tag">01 / Foundation</span><h2>The Overworld</h2><p>The first stage establishes mining, equipment, economy and combat before progression starts asking for boss clears and Prestige.</p><ul><li>9 mines</li><li>World Boss: Beholder</li><li>No entry requirement</li><li>Pirate Kingdom requires Prestige I + Beholder</li></ul></div></article>
 
-        <article class="world-row reveal">
-          <div class="world-visual"><img loading="lazy" decoding="async" src="https://pixel-network-1.gitbook.io/home/~gitbook/image?url=https%3A%2F%2F712597880-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252Fn7xotQKtgeq6qSw4VBXF%252Fuploads%252FCCUBM7YeamDndDjhkrjD%252F01K55740KGP2VJ0ZF14MFM3WJP.png%3Falt%3Dmedia%26token%3Da2859a65-78ca-4f37-ba39-d48464f6e726&width=768&dpr=2&quality=90" alt="Pixel Network Pirate Kingdom"/></div>
-          <div class="world-info"><span class="tag">02 / Expansion</span><h2>Pirate Kingdom</h2><p>The second stage raises the reward ceiling and expects stronger preparation. Familiar systems remain, but the cost of poor decisions becomes more noticeable.</p><ul><li>Pirate-themed equipment and drops</li><li>Higher-risk PvP spaces</li><li>Distinct encounters and NPCs</li><li>Progression toward late-game content</li></ul></div>
-        </article>
+      <article class="world-row reveal"><div class="world-visual"><img loading="lazy" decoding="async" src="https://pixel-network-1.gitbook.io/home/~gitbook/image?url=https%3A%2F%2F712597880-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252Fn7xotQKtgeq6qSw4VBXF%252Fuploads%252FCCUBM7YeamDndDjhkrjD%252F01K55740KGP2VJ0ZF14MFM3WJP.png%3Falt%3Dmedia%26token%3Da2859a65-78ca-4f37-ba39-d48464f6e726&width=768&dpr=2&quality=90" alt="Pixel Network Pirate Kingdom"/></div><div class="world-info"><span class="tag">02 / Expansion</span><h2>Pirate Kingdom</h2><p>Pirate Kingdom introduces the first explicit World Boss gate while keeping room for optional content inside the same stage.</p><ul><li>6 mines</li><li>HollowKeeper gates progression</li><li>Kraken is optional and does not gate content</li><li>Nether requires Prestige II + HollowKeeper</li></ul></div></article>
 
-        <article class="world-row reveal">
-          <div class="world-visual"><img loading="lazy" decoding="async" src="https://pixel-network-1.gitbook.io/home/~gitbook/image?url=https%3A%2F%2F712597880-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252Fn7xotQKtgeq6qSw4VBXF%252Fuploads%252FTeslxzxtfv637Q0qUwd7%252FImage_fx%2520%287%29.png%3Falt%3Dmedia%26token%3D5ef48e3f-0c6b-4ee6-b257-3d8166ed6f57&width=768&dpr=2&quality=90" alt="Pixel Network Nether"/></div>
-          <div class="world-info"><span class="tag">03 / Pressure</span><h2>The Nether</h2><p>Late progression brings greater exposure to PvP and stronger reward pools. The Nether is where preparation, equipment value and risk become harder to separate.</p><ul><li>Rare talisman and elixir opportunities</li><li>Elite hostile encounters</li><li>Late-game reward pools</li><li>Greater open-PvP pressure</li></ul></div>
-        </article>
+      <article class="world-row reveal"><div class="world-visual"><img loading="lazy" decoding="async" src="https://pixel-network-1.gitbook.io/home/~gitbook/image?url=https%3A%2F%2F712597880-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252Fn7xotQKtgeq6qSw4VBXF%252Fuploads%252FTeslxzxtfv637Q0qUwd7%252FImage_fx%2520%287%29.png%3Falt%3Dmedia%26token%3D5ef48e3f-0c6b-4ee6-b257-3d8166ed6f57&width=768&dpr=2&quality=90" alt="Pixel Network Nether"/></div><div class="world-info"><span class="tag">03 / Pressure</span><h2>The Nether</h2><p>The third stage sits deeper in Prestige progression and makes Eldric the clear completion requirement for opening Winter.</p><ul><li>6 mines</li><li>World Boss: Eldric</li><li>Unlocked at Prestige II after HollowKeeper</li><li>Winter requires Prestige III + Eldric</li></ul></div></article>
 
-        <article class="world-row reveal">
-          <div class="world-visual"><img loading="lazy" decoding="async" src="https://pixel-network-1.gitbook.io/home/~gitbook/image?url=https%3A%2F%2F712597880-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252Fn7xotQKtgeq6qSw4VBXF%252Fuploads%252FyIhbKmsLNws7h50DFutx%252Fconsumables.png%3Falt%3Dmedia%26token%3D165c7aa4-9dba-4fdd-a79e-3753df117989&width=768&dpr=2&quality=90" alt="Pixel Network Winter world"/></div>
-          <div class="world-info"><span class="tag">04 / Advanced progression</span><h2>Winter</h2><p>The final world layer before endgame gives experienced players a new environment for systems they already understand, with higher expectations around preparation and execution.</p><ul><li>Advanced resource and combat pressure</li><li>Distinct late-game reward opportunities</li><li>Higher-value progression decisions</li><li>Bridge into endgame systems</li></ul></div>
-        </article>
+      <article class="world-row reveal"><div class="world-visual"><img loading="lazy" decoding="async" src="https://pixel-network-1.gitbook.io/home/~gitbook/image?url=https%3A%2F%2F712597880-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252Fn7xotQKtgeq6qSw4VBXF%252Fuploads%252FyIhbKmsLNws7h50DFutx%252Fconsumables.png%3Falt%3Dmedia%26token%3D165c7aa4-9dba-4fdd-a79e-3753df117989&width=768&dpr=2&quality=90" alt="Pixel Network Winter world"/></div><div class="world-info"><span class="tag">04 / Late progression</span><h2>Winter</h2><p>Winter is the final current world before the Nexus, but it is not designed as the permanent limit of Pixel's world structure.</p><ul><li>6 mines</li><li>World Boss: Viking</li><li>Unlocked at Prestige III after Eldric</li><li>Nexus unlocks at Prestige IV; Viking is not required</li></ul></div></article>
 
-        <div class="page-cta reveal"><div><h3>World access is part of the progression.</h3><p>Gameplay shows how equipment, economy, combat and bosses support each transition.</p></div><div class="page-cta-actions"><a class="button primary" href="gameplay.html">Open Gameplay</a><a class="button secondary" href="development.html">Development</a></div></div>
-      </div>
-    </section>
+      <div class="next-destination reveal"><div><small>Next</small><h3>Prestige IV opens the Nexus.</h3><p>World progression gives way to permanent endgame access and an instance difficulty ladder.</p></div><a class="button primary" href="nexus.html">Enter Nexus</a></div>
+    </div></section>
   </main>
 
-  <footer style="padding:34px 0 48px;border-top:1px solid rgba(255,255,255,.075)"><div class="shell" style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:#777b83;font-size:12px"><span>Pixel Network · Worlds</span><span><a href="index.html">Home</a> · <a href="gameplay.html">Gameplay</a> · <a href="forum.html">Forum</a></span></div></footer>
+  <footer style="padding:34px 0 48px;border-top:1px solid rgba(255,255,255,.075)"><div class="shell" style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:#777b83;font-size:12px"><span>Pixel Network · Worlds</span><span><a href="systems.html">Systems</a> · <a href="nexus.html">Nexus</a> · <a href="community.html">Community</a></span></div></footer>
 </body>
 </html>
