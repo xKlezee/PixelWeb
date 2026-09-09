@@ -4,107 +4,92 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <meta name="theme-color" content="#0b0c0e"/>
-  <meta name="description" content="Explore the progression, talismans, enchantments, world bosses, mining, quests and endgame systems that connect Pixel Network."/>
+  <meta name="description" content="Explore how levels, Prestige, world gates, talismans, enchantments, mining, quests and Nexus progression connect across Pixel Network."/>
   <title>Systems — Pixel Network</title>
   <link rel="icon" href="LOGO%20OFICIAL.png"/>
   <link rel="stylesheet" href="site.css"/>
   <link rel="stylesheet" href="polish.css"/>
   <link rel="stylesheet" href="phase1.css"/>
+  <link rel="stylesheet" href="systems-stage10.css"/>
   <script src="data/network.js" defer></script>
+  <script src="systems-stage10.js" defer></script>
   <script src="site.js" defer></script>
   <script src="polish.js" defer></script>
 </head>
 <body>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <nav class="site-nav" aria-label="Main navigation">
-    <div class="shell nav-inner">
-      <a class="brand" href="index.html"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a>
-      <div class="nav-links" id="navLinks">
-        <div class="nav-group"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html" aria-current="page"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal and collaborative island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div>
-        <a href="development.html">Development</a>
-        <div class="nav-group"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="community.html"><strong>Community</strong><span>Discord, Forum, docs and changelog.</span></a><a href="forum.html"><strong>Forum</strong><span>Long-form discussion.</span></a></div></div>
-        <a href="team.html">About</a>
-      </div>
-      <div class="nav-actions"><a class="button quiet nav-store" href="https://pixelboxx.tebex.io/" target="_blank" rel="noopener">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
+  <nav class="site-nav" aria-label="Main navigation"><div class="shell nav-inner">
+    <a class="brand" href="index.html"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a>
+    <div class="nav-links" id="navLinks">
+      <div class="nav-group"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html" aria-current="page"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal and collaborative island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div>
+      <div class="nav-group"><button type="button" aria-haspopup="true">Development</button><div class="nav-dropdown"><a href="development.html"><strong>Development</strong><span>Current status, roadmap and product scale.</span></a><a href="changelog.html"><strong>Changelog</strong><span>Player-facing release notes.</span></a></div></div>
+      <div class="nav-group"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="community.html"><strong>Community</strong><span>Discord, Forum and documentation.</span></a><a href="forum.html"><strong>Forum</strong><span>Long-form discussion preview.</span></a></div></div>
+      <a href="team.html">About</a>
     </div>
-  </nav>
+    <div class="nav-actions"><a class="button quiet nav-discord" href="https://discord.gg/7KzWpezTNZ" target="_blank" rel="noopener">Discord</a><a class="button quiet nav-store" href="store.html">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
+  </div></nav>
 
   <main>
-    <section class="page-hero">
+    <section class="systems-hero">
       <div class="shell">
         <div class="breadcrumbs"><a href="index.html">Pixel Network</a><span>/</span><span>Systems</span></div>
-        <div class="page-hero-grid">
-          <div><div class="eyebrow">Systems</div><h1>A progression stack, not a feature list.</h1></div>
-          <p>Pixel Network is built around a small set of systems that change access, equipment and long-term goals. Supporting systems add depth around that progression instead of competing with it for attention.</p>
+        <div class="systems-hero-grid">
+          <div>
+            <div class="eyebrow">System architecture</div>
+            <h1>One account.<br><span>Systems that build on it.</span></h1>
+            <p class="systems-hero-copy">Pixel is not a stack of disconnected features. Levels create the base account, Prestige changes access, world gates prove progression, Nexus shifts the model to endgame difficulties, and collections and equipment grow around that same route.</p>
+            <div class="systems-hero-metrics"><span><b data-network="progression.maxLevel">300</b>&nbsp;levels</span><span><b data-network="progression.maxPrestige">10</b>&nbsp;Prestige tiers</span><span><b data-network="progression.maxLegacy">4</b>&nbsp;Legacy tiers</span><span><b data-network="content.mines">27</b>&nbsp;mines</span></div>
+          </div>
+          <aside class="systems-hero-map" data-systems-hero-map aria-label="Pixel Network systems overview"></aside>
         </div>
       </div>
     </section>
 
-    <section class="content-section">
-      <div class="shell">
-        <div class="content-head reveal"><div><div class="content-eyebrow">Signature systems</div><h2>The systems that define the account.</h2></div><p>These are the mechanics that most directly determine what a player can reach, collect and challenge over time.</p></div>
-        <div class="signature-grid">
-          <article class="signature-card reveal"><span class="sig-index">01 / PROGRESSION</span><b data-network="progression.maxLevel">300</b><h3>Levels, Prestige and Legacy</h3><p>The account curve extends through 300 levels, 10 Prestige tiers and 4 Legacy tiers. Prestige opens world and endgame access; Legacy continues the difficulty curve after Prestige.</p><span class="card-meta"><span data-network="progression.maxLevel">300</span> levels · <span data-network="progression.maxPrestige">10</span> Prestige · <span data-network="progression.maxLegacy">4</span> Legacy</span></article>
-          <article class="signature-card reveal"><span class="sig-index">02 / TALISMAN CODEX</span><b data-network="content.worldProgressionTalismans">36</b><h3>World progression talismans</h3><p>The Codex carries a defined collection through the world journey. Mine, Secret, World Boss, Mob Hunt and seasonal talismans remain separate collection bodies instead of being collapsed into one inflated total.</p><span class="card-meta">36 verified world-progression entries</span></article>
-          <article class="signature-card reveal"><span class="sig-index">03 / ENCHANTMENTS</span><b data-network="content.enchantments">27</b><h3>Custom enchantments</h3><p>Twenty-seven custom enchantments extend mining, combat and equipment decisions while staying attached to the wider progression economy.</p><span class="card-meta">27 verified enchantments</span></article>
-          <a class="signature-card reveal" href="worlds.html"><span class="sig-index">04 / WORLD BOSSES</span><b data-network="content.worldBossEncounters">5</b><h3>World progression encounters</h3><p>Beholder, HollowKeeper, Eldric and Viking are progression gates across the four-world route. Kraken remains an optional Pirate Kingdom encounter.</p><span class="arrow">See exact gates →</span></a>
-          <a class="signature-card reveal" href="nexus.html"><span class="sig-index">05 / NEXUS</span><b data-network="content.instanceEncounters">3</b><h3>Endgame instance progression</h3><p>Prestige IV + defeating Viking permanently unlocks the Nexus and the first instance difficulties. Later Prestige and Legacy milestones open harder versions of Raphael, Azazel and Abyss + Astral.</p><span class="arrow">See the difficulty ladder →</span></a>
-          <article class="signature-card reveal"><span class="sig-index">06 / MINING</span><b data-network="content.mines">27</b><h3>Mining across four worlds</h3><p>Nine mines establish the Overworld foundation, followed by six in Pirate Kingdom, Nether and Winter. Mining remains part of progression rather than a detached resource loop.</p><span class="card-meta">9 + 6 + 6 + 6</span></article>
+    <section class="systems-section"><div class="shell">
+      <div class="systems-section-head reveal"><div><div class="content-eyebrow">Progression spine</div><h2>The account changes what the player can reach.</h2></div><p>This is the structural layer underneath Worlds and Nexus. It is milestone-driven rather than a universal quest chain.</p></div>
+      <div class="systems-spine" data-systems-spine></div>
+    </div></section>
+
+    <section class="systems-section"><div class="shell">
+      <div class="systems-section-head reveal"><div><div class="content-eyebrow">Core systems</div><h2>Collection, equipment and resources reinforce the same route.</h2></div><p>The important distinction is purpose: some systems define access, others deepen what the player owns, improves or pursues along the way.</p></div>
+
+      <div class="systems-core-layout">
+        <article class="systems-feature systems-feature--codex reveal" data-systems-codex></article>
+        <div class="systems-feature-side">
+          <article class="systems-feature systems-feature-small reveal" data-systems-enchantments></article>
+          <article class="systems-feature systems-feature-small reveal">
+            <span class="systems-feature-kicker">Endgame handoff</span>
+            <span class="systems-big-number" data-network="content.instanceEncounters">3</span>
+            <h3>Instances inherit account milestones</h3>
+            <p>Nexus does not replace progression. Prestige and Legacy continue deciding which versions of Raphael, Azazel and Abyss + Astral become available.</p>
+            <div class="systems-enchant-index" aria-label="Instance index"><span>R</span><span>A</span><span>A+A</span></div>
+          </article>
         </div>
       </div>
-    </section>
 
-    <section class="content-section">
-      <div class="shell">
-        <div class="content-head reveal"><div><div class="content-eyebrow">System map</div><h2>Progression changes what comes next.</h2></div><p>The main journey is not a scripted quest chain. Account milestones, world access and selected boss clears create the structure naturally.</p></div>
-        <div class="flow-line reveal">
-          <div class="flow-step"><b>Levels</b><span>Build the account toward the current level cap of 300.</span></div>
-          <div class="flow-step"><b>Prestige</b><span>Prestige becomes an access condition for later worlds and endgame milestones.</span></div>
-          <div class="flow-step"><b>World gates</b><span>Beholder, HollowKeeper, Eldric and Viking combine with Prestige to close each progression world.</span></div>
-          <div class="flow-step"><b>Nexus</b><span>Prestige IV + Viking completes the world route and permanently unlocks Nexus access.</span></div>
-          <div class="flow-step"><b>Legacy</b><span>Later endgame difficulties continue through Legacy I and Legacy II.</span></div>
-        </div>
+      <article class="systems-mining reveal" data-systems-mining></article>
+
+      <div class="systems-link-pair">
+        <a class="systems-link-card reveal" href="worlds.html"><div><small>World access</small><h3>Boss clears turn Prestige into visible gates.</h3><p>Beholder, HollowKeeper, Eldric and Viking each close a progression world. Kraken remains optional and does not gate the route.</p></div><span class="arrow">Explore exact world gates →</span></a>
+        <a class="systems-link-card reveal" href="nexus.html"><div><small>Endgame access</small><h3>Prestige IV + Viking opens a permanent threshold.</h3><p>After the Nexus unlock, account milestones stop opening worlds and instead open defined Instance difficulties through Legacy II.</p></div><span class="arrow">Explore Nexus progression →</span></a>
       </div>
-    </section>
+    </div></section>
 
-    <section class="content-section">
-      <div class="shell">
-        <div class="content-head reveal"><div><div class="content-eyebrow">Collection</div><h2>Progress has things worth keeping.</h2></div><p>Pixel separates collections by purpose. That keeps progression collections readable without pretending every collectible belongs to the same system.</p></div>
-        <div class="metric-grid">
-          <div class="metric-card reveal"><b data-network="content.worldProgressionTalismans">36</b><span>World progression talismans</span><small>Tied to the world-progression Codex.</small></div>
-          <div class="metric-card reveal"><b data-network="content.mineTalismans">81</b><span>Mine talismans</span><small>A separate legacy collection distributed through mine progression.</small></div>
-          <div class="metric-card reveal"><b>+</b><span>Additional categories</span><small>Secret, World Boss, Mob Hunt and seasonal talismans expand independently.</small></div>
-        </div>
+    <section class="systems-section"><div class="shell">
+      <div class="systems-section-head reveal"><div><div class="content-eyebrow">Quest tracks</div><h2>Two current contexts. Neither drives the four-world route.</h2></div><p>Questing has a defined place in Pixel without becoming a universal progression script.</p></div>
+      <div class="systems-quest-grid">
+        <article class="systems-quest reveal"><small>BattlePass</small><h3>Seasonal activity track.</h3><p>BattlePass uses its own quests as a secondary progression layer. It rewards continued activity while permanent levels, Prestige, boss gates and Legacy remain separate.</p><div class="systems-quest-tags"><span>Dedicated quests</span><span>Secondary progression</span><span>Seasonal activity</span></div><div class="systems-quest-note">BattlePass quests do not replace the world progression structure.</div></article>
+        <article class="systems-quest reveal"><small>Skyblock</small><h3>Island-specific progression.</h3><p>Skyblock has its own quests tied to the player's island, alongside building, upgrades, collaborative play, visits, personal storage and personal vaults.</p><div class="systems-quest-tags"><span>Island quests</span><span>Own progression</span><span>Co-op compatible</span></div><div class="systems-quest-note">Skyblock is another way to play inside Pixel Network, not a universal questline for the four worlds.</div></article>
       </div>
-    </section>
+    </div></section>
 
-    <section class="content-section">
-      <div class="shell">
-        <div class="content-head reveal"><div><div class="content-eyebrow">Quests</div><h2>Quests exist in two current contexts.</h2></div><p>Pixel does not currently use a universal questline to drive the four-world progression. Quests instead belong to systems where they have a clear purpose.</p></div>
-        <div class="path-grid">
-          <article class="path-card reveal"><span class="path-label">BattlePass</span><h3>Activity-driven seasonal progression.</h3><p>BattlePass uses its own quests as a secondary track. It rewards continued activity without replacing permanent account progression.</p><div class="path-list"><span>Dedicated quests</span><span>Secondary progression</span><span>Separate from world gates</span></div></article>
-          <article class="path-card reveal"><span class="path-label">Skyblock</span><h3>Questing outside the PvP path.</h3><p>Skyblock has quests tied to island progression, giving players who prefer building and cooperation another structured way to advance.</p><div class="path-list"><span>Island-linked quests</span><span>Personal progression</span><span>Co-op compatible</span></div></article>
-        </div>
-      </div>
-    </section>
-
-    <section class="content-section">
-      <div class="shell">
-        <div class="content-head reveal"><div><div class="content-eyebrow">Supporting systems</div><h2>Depth around the core, not beside it.</h2></div><p>These systems reinforce equipment, collection, activity or social play. They matter because of what they add to the main account, not because the website gives each of them equal billing.</p></div>
-        <div class="detail-grid">
-          <article class="detail-card reveal"><small>Equipment</small><h3>Blacksmith & Forge</h3><p>A dedicated place for equipment improvement and preparation outside the immediate combat loop.</p></article>
-          <article class="detail-card reveal"><small>Item history</small><h3>StatTrack</h3><p>Selected equipment can retain performance history, giving individual items context beyond their base statistics.</p></article>
-          <article class="detail-card reveal"><small>Creature progression</small><h3>Bestiary</h3><p>Repeated encounters can contribute to a broader record of what the player has fought and progressed through.</p></article>
-          <article class="detail-card reveal"><small>Seasonal activity</small><h3>BattlePass</h3><p>BattlePass adds a quest-driven progression track without replacing the permanent level, Prestige and Legacy structure.</p></article>
-          <article class="detail-card reveal"><small>Social play</small><h3>Parties</h3><p>Players can organize around shared activity and encounters without turning the network into isolated queues.</p></article>
-          <article class="detail-card reveal"><small>Rewards</small><h3>Crates & Keys</h3><p>Reward containers sit beside the progression model rather than defining who can access its core systems.</p></article>
-        </div>
-
-        <div class="next-destination reveal"><div><small>Next</small><h3>Worlds turn those systems into visible milestones.</h3><p>See exactly which Prestige tiers and boss clears open Pirate Kingdom, Nether, Winter and the Nexus.</p></div><a class="button primary" href="worlds.html">Explore Worlds</a></div>
-      </div>
-    </section>
+    <section class="systems-section"><div class="shell">
+      <div class="systems-section-head reveal"><div><div class="content-eyebrow">Supporting layer</div><h2>Useful depth without equal visual weight.</h2></div><p>These systems matter, but they support equipment, records, social play or rewards rather than defining the primary account route.</p></div>
+      <div class="systems-support" data-systems-support></div>
+      <div class="systems-end-cap reveal"><div><small>Next layer</small><h3>Worlds show where the system architecture becomes geography.</h3><p>See the four current worlds, their mines, bosses and exact progression gates before the Nexus threshold.</p></div><a class="button primary" href="worlds.html">Explore Worlds</a></div>
+    </div></section>
   </main>
 
-  <footer style="padding:34px 0 48px;border-top:1px solid rgba(255,255,255,.075)"><div class="shell" style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:#777b83;font-size:12px"><span>Pixel Network · Systems</span><span><a href="gameplay.html">Gameplay</a> · <a href="worlds.html">Worlds</a> · <a href="community.html">Community</a></span></div></footer>
+  <footer style="padding:34px 0 48px;border-top:1px solid rgba(255,255,255,.075)"><div class="shell" style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:#777b83;font-size:12px"><span>Pixel Network · Systems</span><span><a href="gameplay.html">Gameplay</a> · <a href="worlds.html">Worlds</a> · <a href="nexus.html">Nexus</a></span></div></footer>
 </body>
 </html>
