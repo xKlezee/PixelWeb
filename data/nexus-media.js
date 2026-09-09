@@ -1,5 +1,14 @@
 (() => {
-  const media = (source, alt, accent, referenceStatus, referenceLabel) => ({ source, alt, accent, referenceStatus, referenceLabel });
+  const media = (source, alt, accent, referenceStatus, referenceLabel, sprite = null) => ({
+    source,
+    alt,
+    accent,
+    referenceStatus,
+    referenceLabel,
+    sprite
+  });
+
+  const bossSprite = 'assets/nexus/bosses.avif';
 
   window.PIXEL_NEXUS_MEDIA = Object.freeze({
     hero: media(
@@ -10,32 +19,36 @@
       'Original PixelWeb visual for the permanent Nexus threshold.'
     ),
     raphael: media(
-      'assets/nexus/raphael.svg',
-      'Stylized Raphael instance concept visual',
+      bossSprite,
+      'Raphael in a radiant celestial sanctuary',
       'gold',
-      'exact-unconfirmed',
-      'No unique public marketplace match was found for Raphael, so PixelWeb uses an original celestial-armored concept.'
+      'approved-player-provided',
+      'Boss identity is based on the supplied Raphael model; the website background treatment was approved for PixelWeb.',
+      'raphael'
     ),
     azazel: media(
-      'assets/nexus/azazel.svg',
-      'Stylized Azazel instance concept visual',
+      bossSprite,
+      'Azazel inside an infernal corrupted arena',
       'crimson',
-      'name-match-found',
-      'A public MCModels Azazel boss exists for ModelEngine/MythicMobs with sword, halberd and shield; PixelWeb does not copy its commercial artwork or assert it is Pixel\'s exact model.'
+      'approved-player-provided',
+      'Boss identity is based on the supplied Azazel artwork; the website composition was approved for PixelWeb.',
+      'azazel'
     ),
     abyss: media(
-      'assets/nexus/abyss.svg',
-      'Stylized Abyss instance concept visual',
+      bossSprite,
+      'Abyss inside a violet void sanctum',
       'void',
-      'name-match-found',
-      'A public MCModels Abyss boss exists for ModelEngine/MythicMobs; PixelWeb uses original artwork and does not assert an exact server-model match.'
+      'approved-player-provided',
+      'Boss identity is based on the supplied Abyss model; the website background treatment was approved for PixelWeb.',
+      'abyss'
     ),
     astral: media(
-      'assets/nexus/astral.svg',
-      'Stylized Astral instance concept visual',
+      bossSprite,
+      'Astral inside a luminous cosmic arena',
       'astral',
-      'exact-unconfirmed',
-      'No unique public marketplace match was found for Astral, so PixelWeb uses an original celestial contrast to Abyss.'
+      'approved-player-provided',
+      'Boss identity is based on the supplied Astral model; the website background treatment was approved for PixelWeb.',
+      'astral'
     )
   });
 })();
