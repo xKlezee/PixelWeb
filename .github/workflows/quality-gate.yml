@@ -21,13 +21,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-
       - name: Scan committed files for obvious secrets
-        run: python scripts/security_scan.py
+        run: python3 scripts/security_scan.py
 
-      - name: Validate static site integrity
-        run: python scripts/validate_site.py
+      - name: Validate JavaScript syntax
+        shell: bash
+        run: |
+          while IFS= read -r -d '' file; do
+            node --check "$file"
+          done < <(find . -type f -name '*.js' -not -path './.git/*' -print0)
+
+      - name: Validate static site integrity and CSP readiness
+        run: python3 scripts/validate_site.py
