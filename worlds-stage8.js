@@ -14,70 +14,131 @@
     winter: 'The fourth and final current world. Viking closes Winter\'s World Boss arc, while Prestige IV separately unlocks Nexus.'
   };
 
-  const imageUrl = (source, width) => {
+  const el = (tag, className = '', text = null) => {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== null && text !== undefined) node.textContent = String(text);
+    return node;
+  };
+
+  const safeImageUrl = (source, width = null) => {
     if (!source) return '';
-    if (/^(?:assets\/|\.\/|\.\.\/)/.test(source)) return source;
+    const value = String(source);
+    if (/^(?:assets\/|\.\/|\.\.\/)/.test(value)) return value;
     try {
-      const url = new URL(source, location.href);
-      url.searchParams.set('width', String(width));
-      url.searchParams.set('dpr', '1');
-      url.searchParams.set('quality', width >= 1000 ? '86' : '82');
+      const url = new URL(value, location.href);
+      if (!['http:', 'https:'].includes(url.protocol)) return '';
+      if (width) {
+        url.searchParams.set('width', String(width));
+        url.searchParams.set('dpr', '1');
+        url.searchParams.set('quality', width >= 1000 ? '86' : '82');
+      }
       return url.toString();
     } catch {
-      return source;
+      return '';
     }
   };
 
-  const statRow = (label, value, accent = false) => `
-    <div class="worlds-stat"><span>${label}</span><strong${accent ? ' class="accent"' : ''}>${value}</strong></div>`;
+  const statRow = (label, value, accent = false) => {
+    const row = el('div', 'worlds-stat');
+    row.append(el('span', '', label));
+    const strong = el('strong', accent ? 'accent' : '', value ?? '—');
+    row.append(strong);
+    return row;
+  };
 
   const bossVisual = (name, bossMedia, label, optional = false) => {
-    if (!name || !bossMedia?.source) return '';
-    return `<figure class="worlds-card-boss${optional ? ' is-optional' : ''}">
-      <img src="${bossMedia.source}" alt="${bossMedia.alt || `${name} concept visual`}" width="160" height="120" loading="lazy" decoding="async">
-      <figcaption><small>${label}</small><strong>${name}</strong></figcaption>
-    </figure>`;
+    const source = safeImageUrl(bossMedia?.source);
+    if (!name || !source) return null;
+
+    const figure = el('figure', `worlds-card-boss${optional ? ' is-optional' : ''}`);
+    const img = el('img');
+    img.src = source;
+    img.alt = bossMedia?.alt || `${name} concept visual`;
+    img.width = 160;
+    img.height = 120;
+    img.loading = 'lazy';
+    img.decoding = 'async';
+
+    const caption = el('figcaption');
+    caption.append(el('small', '', label), el('strong', '', name));
+    figure.append(img, caption);
+    return figure;
   };
 
   const worldCard = (world, index) => {
     const visual = media[world.id] || {};
-    const optional = world.optionalEncounter
-      ? statRow('Optional', world.optionalEncounter, true)
-      : '';
-    const note = world.id === 'winter'
-      ? '<div class="worlds-card-note">Winter is the final current world. Viking is its final World Boss; Nexus access is a separate Prestige IV unlock.</div>'
-      : '';
-    const picture = visual.source
-      ? `<img alt="${visual.alt || `${world.name} landscape`}" width="960" height="540" decoding="async"
-          ${index === 0 ? `src="${imageUrl(visual.source, 960)}" srcset="${imageUrl(visual.source, 640)} 640w, ${imageUrl(visual.source, 960)} 960w, ${imageUrl(visual.source, 1280)} 1280w" sizes="(max-width:700px) 82vw, (max-width:1199px) 300px, 25vw" fetchpriority="high"` : `data-src="${imageUrl(visual.source, 960)}" data-srcset="${imageUrl(visual.source, 640)} 640w, ${imageUrl(visual.source, 960)} 960w, ${imageUrl(visual.source, 1280)} 1280w" data-sizes="(max-width:700px) 82vw, (max-width:1199px) 300px, 25vw" loading="lazy"`} />`
-      : '';
-    const bossBlock = `<div class="worlds-card-boss-stack">
-      ${bossVisual(world.boss, visual.boss, 'World Boss')}
-      ${world.optionalEncounter ? bossVisual(world.optionalEncounter, visual.optionalBoss, 'Optional encounter', true) : ''}
-    </div>`;
+    const article = el('article', 'worlds-card');
+    article.dataset.accent = visual.accent || 'green';
 
-    return `<article class="worlds-card" data-accent="${visual.accent || 'green'}">
-      <div class="worlds-card-media${visual.source ? '' : ' is-fallback'}">
-        <span class="worlds-card-index">0${index + 1}</span>${picture}
-      </div>
-      <div class="worlds-card-body">
-        <span class="worlds-card-kicker">${visual.label || world.role}</span>
-        <h3>${world.name}</h3>
-        <p class="worlds-card-summary">${descriptions[world.id] || ''}</p>
-        ${bossBlock}
-        <div class="worlds-card-stats">
-          ${statRow('Role', world.role)}
-          ${statRow('Mines', world.mines)}
-          ${statRow(world.id === 'pirate' ? 'Main boss' : 'World boss', world.boss, true)}
-          ${optional}
-          ${statRow('Next gate', world.nextGate)}
-        </div>
-        ${note}
-      </div>
-    </article>`;
+    const mediaWrap = el('div', `worlds-card-media${visual.source ? '' : ' is-fallback'}`);
+    mediaWrap.appendChild(el('span', 'worlds-card-index', `0${index + 1}`));
+
+    const visualSource = safeImageUrl(visual.source, 960);
+    if (visualSource) {
+      const img = el('img');
+      img.alt = visual.alt || `${world.name} landscape`;
+      img.width = 960;
+      img.height = 540;
+      img.decoding = 'async';
+      const src640 = safeImageUrl(visual.source, 640);
+      const src960 = safeImageUrl(visual.source, 960);
+      const src1280 = safeImageUrl(visual.source, 1280);
+      const srcset = [[src640, '640w'], [src960, '960w'], [src1280, '1280w']]
+        .filter(([src]) => src)
+        .map(([src, size]) => `${src} ${size}`)
+        .join(', ');
+      const sizes = '(max-width:700px) 82vw, (max-width:1199px) 300px, 25vw';
+
+      if (index === 0) {
+        img.src = src960;
+        if (srcset) img.srcset = srcset;
+        img.sizes = sizes;
+        img.fetchPriority = 'high';
+      } else {
+        img.dataset.src = src960;
+        if (srcset) img.dataset.srcset = srcset;
+        img.dataset.sizes = sizes;
+        img.loading = 'lazy';
+      }
+      mediaWrap.appendChild(img);
+    }
+
+    const body = el('div', 'worlds-card-body');
+    body.append(
+      el('span', 'worlds-card-kicker', visual.label || world.role),
+      el('h3', '', world.name),
+      el('p', 'worlds-card-summary', descriptions[world.id] || '')
+    );
+
+    const bossStack = el('div', 'worlds-card-boss-stack');
+    const mainBoss = bossVisual(world.boss, visual.boss, 'World Boss');
+    if (mainBoss) bossStack.appendChild(mainBoss);
+    if (world.optionalEncounter) {
+      const optionalBoss = bossVisual(world.optionalEncounter, visual.optionalBoss, 'Optional encounter', true);
+      if (optionalBoss) bossStack.appendChild(optionalBoss);
+    }
+    body.appendChild(bossStack);
+
+    const stats = el('div', 'worlds-card-stats');
+    stats.append(
+      statRow('Role', world.role),
+      statRow('Mines', world.mines),
+      statRow(world.id === 'pirate' ? 'Main boss' : 'World boss', world.boss, true)
+    );
+    if (world.optionalEncounter) stats.appendChild(statRow('Optional', world.optionalEncounter, true));
+    stats.appendChild(statRow('Next gate', world.nextGate));
+    body.appendChild(stats);
+
+    if (world.id === 'winter') {
+      body.appendChild(el('div', 'worlds-card-note', 'Winter is the final current world. Viking is its final World Boss; Nexus access is a separate Prestige IV unlock.'));
+    }
+
+    article.append(mediaWrap, body);
+    return article;
   };
 
-  rail.innerHTML = network.worlds.map(worldCard).join('');
+  rail.replaceChildren(...network.worlds.map(worldCard));
 
   const immediateImages = [...rail.querySelectorAll('.worlds-card-media img[src]')];
   immediateImages.forEach(img => {
@@ -119,7 +180,19 @@
       ['Prestige II', 'World 3 · Nether · Eldric'],
       ['Prestige III', 'World 4 · Winter · Viking']
     ];
-    progress.innerHTML = `<div class="worlds-progress-line" aria-hidden="true"></div><div class="worlds-progress-grid">${steps.map(([title, sub]) => `<div class="worlds-progress-step"><div class="worlds-progress-dot" aria-hidden="true"></div><div><b>${title}</b><span>${sub}</span></div></div>`).join('')}</div>`;
+    const line = el('div', 'worlds-progress-line');
+    line.setAttribute('aria-hidden', 'true');
+    const grid = el('div', 'worlds-progress-grid');
+    steps.forEach(([title, sub]) => {
+      const step = el('div', 'worlds-progress-step');
+      const dot = el('div', 'worlds-progress-dot');
+      dot.setAttribute('aria-hidden', 'true');
+      const copy = el('div');
+      copy.append(el('b', '', title), el('span', '', sub));
+      step.append(dot, copy);
+      grid.appendChild(step);
+    });
+    progress.replaceChildren(line, grid);
   }
 
   if (bossStrip) {
@@ -135,9 +208,25 @@
       { label: 'Nether · Required', name: nether.boss, copy: 'Paired with Prestige III to open Winter.', media: media.nether?.boss },
       { label: 'Winter · Final boss', name: winter.boss, copy: 'Winter\'s final World Boss. Nexus access is not tied to this clear.', media: media.winter?.boss }
     ];
-    bossStrip.innerHTML = bosses.map(entry => `<article class="worlds-boss-item reveal">
-      ${entry.media?.source ? `<img class="worlds-boss-art" src="${entry.media.source}" alt="${entry.media.alt || `${entry.name} concept visual`}" width="320" height="240" loading="lazy" decoding="async">` : ''}
-      <div class="worlds-boss-copy"><small>${entry.label}</small><h3>${entry.name}</h3><p>${entry.copy}</p></div>
-    </article>`).join('');
+
+    const items = bosses.map(entry => {
+      const item = el('article', 'worlds-boss-item reveal');
+      const source = safeImageUrl(entry.media?.source);
+      if (source) {
+        const img = el('img', 'worlds-boss-art');
+        img.src = source;
+        img.alt = entry.media?.alt || `${entry.name} concept visual`;
+        img.width = 320;
+        img.height = 240;
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        item.appendChild(img);
+      }
+      const copy = el('div', 'worlds-boss-copy');
+      copy.append(el('small', '', entry.label), el('h3', '', entry.name || ''), el('p', '', entry.copy));
+      item.appendChild(copy);
+      return item;
+    });
+    bossStrip.replaceChildren(...items);
   }
 })();
