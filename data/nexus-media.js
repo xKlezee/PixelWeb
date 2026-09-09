@@ -1,14 +1,11 @@
 (() => {
-  const media = (source, alt, accent, referenceStatus, referenceLabel, sprite = null) => ({
+  const media = (source, alt, accent, referenceStatus, referenceLabel) => ({
     source,
     alt,
     accent,
     referenceStatus,
-    referenceLabel,
-    sprite
+    referenceLabel
   });
-
-  const bossSprite = 'assets/nexus/bosses.avif';
 
   window.PIXEL_NEXUS_MEDIA = Object.freeze({
     hero: media(
@@ -19,36 +16,32 @@
       'Original PixelWeb visual for the permanent Nexus threshold.'
     ),
     raphael: media(
-      bossSprite,
+      'assets/nexus/raphael.png',
       'Raphael in a radiant celestial sanctuary',
       'gold',
       'approved-player-provided',
-      'Boss identity is based on the supplied Raphael model; the website background treatment was approved for PixelWeb.',
-      'raphael'
+      'Approved original 1448×1086 PNG. PixelWeb displays the file without conversion or sprite cropping.'
     ),
     azazel: media(
-      bossSprite,
+      'assets/nexus/azazel.png',
       'Azazel inside an infernal corrupted arena',
       'crimson',
       'approved-player-provided',
-      'Boss identity is based on the supplied Azazel artwork; the website composition was approved for PixelWeb.',
-      'azazel'
+      'Approved original 1448×1086 PNG. PixelWeb displays the file without conversion or sprite cropping.'
     ),
     abyss: media(
-      bossSprite,
+      'assets/nexus/abyss.png',
       'Abyss inside a violet void sanctum',
       'void',
       'approved-player-provided',
-      'Boss identity is based on the supplied Abyss model; the website background treatment was approved for PixelWeb.',
-      'abyss'
+      'Approved original 1448×1086 PNG. PixelWeb displays the file independently inside the dual encounter.'
     ),
     astral: media(
-      bossSprite,
+      'assets/nexus/astral.png',
       'Astral inside a luminous cosmic arena',
       'astral',
       'approved-player-provided',
-      'Boss identity is based on the supplied Astral model; the website background treatment was approved for PixelWeb.',
-      'astral'
+      'Approved original 1448×1086 PNG. PixelWeb displays the file independently inside the dual encounter.'
     )
   });
 })();
