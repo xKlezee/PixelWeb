@@ -1,16 +1,22 @@
-/* Stage 8 media extension — local boss art and Nexus asset */
+/* Stage 8 media extension — local world and boss art */
 
 .worlds-card[data-accent='brown'] { --accent: 184,128,72; }
 
+/* The world route contains four stages only. Nexus is a separate endgame destination. */
+.worlds-progress-grid { grid-template-columns: repeat(4,minmax(0,1fr)); }
 .worlds-progress-line {
+  left: 10%;
+  right: 10%;
   background: linear-gradient(90deg,
     rgba(105,214,120,.62),
     rgba(184,128,72,.62),
     rgba(244,94,76,.62),
-    rgba(111,190,255,.62),
-    rgba(157,100,255,.62));
+    rgba(111,190,255,.62));
 }
+.worlds-progress-step:nth-child(1) .worlds-progress-dot { background: rgb(105,214,120); }
 .worlds-progress-step:nth-child(2) .worlds-progress-dot { background: rgb(184,128,72); }
+.worlds-progress-step:nth-child(3) .worlds-progress-dot { background: rgb(244,94,76); }
+.worlds-progress-step:nth-child(4) .worlds-progress-dot { background: rgb(111,190,255); }
 
 .worlds-card-boss-stack {
   display: grid;
@@ -60,9 +66,6 @@
   line-height: 1.25;
 }
 
-.worlds-card--nexus .worlds-card-media::before { display: none; }
-.worlds-card--nexus .worlds-card-media img { object-fit: cover; }
-
 .worlds-boss-item {
   min-height: 0;
   padding: 0;
@@ -90,14 +93,25 @@
 .worlds-boss-copy h3 { margin: 9px 0 6px; font-size: 18px; }
 .worlds-boss-copy p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.55; }
 
+@media (min-width: 1200px) {
+  .worlds-card-rail {
+    grid-auto-flow: row;
+    grid-auto-columns: auto;
+    grid-template-columns: repeat(4,minmax(0,1fr));
+    overflow: visible;
+  }
+}
+
 @media (max-width: 700px) {
+  .worlds-progress-grid { grid-template-columns: 1fr; }
   .worlds-progress-line {
+    left: 14px;
+    right: auto;
     background: linear-gradient(180deg,
       rgba(105,214,120,.62),
       rgba(184,128,72,.62),
       rgba(244,94,76,.62),
-      rgba(111,190,255,.62),
-      rgba(157,100,255,.62));
+      rgba(111,190,255,.62));
   }
   .worlds-card-boss { grid-template-columns: 82px minmax(0,1fr); }
   .worlds-card-boss img { width: 82px; height: 64px; }
