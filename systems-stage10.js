@@ -2,8 +2,6 @@
   const network = window.PIXEL_NETWORK_PUBLIC || {};
   const progression = network.progression || {};
   const content = network.content || {};
-  const worlds = Array.isArray(network.worlds) ? network.worlds : [];
-  const nexus = network.nexus || {};
 
   const spineHost = document.querySelector('[data-systems-spine]');
   const codexHost = document.querySelector('[data-systems-codex]');
@@ -17,35 +15,35 @@
       eyebrow: 'Account growth',
       value: String(progression.maxLevel ?? 300),
       title: 'Levels',
-      copy: 'The permanent account curve builds toward the current level cap before Prestige becomes the larger access layer.'
+      copy: 'The permanent account curve establishes the base layer before Prestige becomes the larger access system.'
     },
     {
       code: '02',
       eyebrow: 'Access layer',
       value: `${progression.maxPrestige ?? 10} tiers`,
       title: 'Prestige',
-      copy: 'Prestige milestones combine with progression boss clears to open later worlds and the current endgame threshold.'
+      copy: 'Prestige turns long-term account progress into access milestones for later content.'
     },
     {
       code: '03',
       eyebrow: 'World route',
-      value: String(content.currentWorlds ?? worlds.length ?? 4),
+      value: 'Route',
       title: 'World gates',
-      copy: 'Overworld, Pirate Kingdom, Nether and Winter form one route. Each closes with its own progression boss.'
+      copy: 'Selected progression milestones and clears determine when the next world becomes available.'
     },
     {
       code: '04',
       eyebrow: 'Endgame threshold',
-      value: nexus.unlockMilestone || 'Prestige IV',
+      value: 'Endgame',
       title: 'Nexus',
-      copy: `${nexus.requiredBoss || 'Viking'} completes the final world gate. Once cleared, Nexus access remains permanent.`
+      copy: 'Nexus changes the progression model from opening worlds to expanding endgame difficulty.'
     },
     {
       code: '05',
       eyebrow: 'Late endgame',
       value: `${progression.maxLegacy ?? 4} tiers`,
       title: 'Legacy',
-      copy: 'Legacy continues the account after Prestige and becomes part of the later Instance difficulty unlock structure.'
+      copy: 'Legacy continues the account after Prestige and participates in later endgame unlocks.'
     }
   ];
 
@@ -66,11 +64,11 @@
     codexHost.innerHTML = `
       <span class="systems-feature-kicker">Talisman Codex</span>
       <h3>Collections with distinct jobs.</h3>
-      <p>The World Progression Codex stays separate from mine and special-purpose talisman collections, so completion remains readable.</p>
+      <p>The World Progression Codex stays separate from mine and special-purpose talisman collections, keeping completion readable.</p>
       <div class="systems-codex-metrics">
-        <div class="systems-codex-metric"><b>${content.worldProgressionTalismans ?? 36}</b><span>World progression</span><small>Defined Codex entries carried through the main world journey.</small></div>
-        <div class="systems-codex-metric"><b>${content.mineTalismans ?? 81}</b><span>Mine talismans</span><small>A separate collection distributed through mine progression.</small></div>
-        <div class="systems-codex-metric"><b>+</b><span>Special categories</span><small>Secret, World Boss, Mob Hunt and seasonal talismans expand independently.</small></div>
+        <div class="systems-codex-metric"><b>${content.worldProgressionTalismans ?? 36}</b><span>World progression</span><small>The defined Codex collection.</small></div>
+        <div class="systems-codex-metric"><b>${content.mineTalismans ?? 81}</b><span>Mine talismans</span><small>A separate collection tied to mine progression.</small></div>
+        <div class="systems-codex-metric"><b>+</b><span>Special categories</span><small>Secret, World Boss, Mob Hunt and seasonal collections expand independently.</small></div>
       </div>`;
   }
 
@@ -78,30 +76,24 @@
     enchantHost.innerHTML = `
       <span class="systems-feature-kicker">Equipment decisions</span>
       <span class="systems-big-number">${content.enchantments ?? 27}</span>
-      <h3>Custom enchantments</h3>
-      <p>Combat, mining and equipment choices gain another layer without becoming a separate progression path.</p>
-      <span class="systems-feature-note">${content.enchantments ?? 27} verified enchantments</span>`;
+      <h3>Enchantments</h3>
+      <p>Custom enchantments add another decision layer to combat, mining and equipment without becoming a separate progression path.</p>`;
   }
 
   if (miningHost) {
-    const maxMines = Math.max(1, ...worlds.map(world => Number(world.mines) || 0));
     miningHost.innerHTML = `
       <span class="systems-feature-kicker">Mining backbone</span>
-      <div class="systems-mining-title"><span class="systems-big-number">${content.mines ?? 27}</span><div><h3>Mines follow the world route.</h3><p>Resources move with progression instead of living in a detached loop.</p></div></div>
-      <div class="systems-mine-bars">${worlds.map(world => `
-        <div class="systems-mine-world" data-world="${world.id}">
-          <div><b>${world.mines}</b><span>${world.name}</span></div>
-          <div class="systems-mine-track" aria-hidden="true"><i style="--share:${Math.round((Number(world.mines) / maxMines) * 100)}%"></i></div>
-        </div>`).join('')}</div>`;
+      <h3>Mining follows progression.</h3>
+      <p>Resources and mine progression move with the world structure instead of living in a detached loop.</p>`;
   }
 
   if (supportHost) {
     const supporting = [
-      ['Equipment', 'Blacksmith & Forge', 'Equipment improvement and preparation feed the same account progression without becoming a separate route.'],
+      ['Equipment', 'Blacksmith & Forge', 'Equipment improvement and preparation support the main account without creating a separate progression route.'],
       ['Item history', 'StatTrack', 'Selected equipment can retain performance history, giving individual items context beyond their base statistics.'],
-      ['Creature record', 'Bestiary', 'Repeated encounters contribute to a broader record of what the player has fought and progressed through.'],
+      ['Creature record', 'Bestiary', 'Repeated encounters contribute to a broader record of what the player has fought.'],
       ['Social play', 'Parties', 'Players can organize around shared activity and encounters without turning the network into disconnected queues.'],
-      ['Rewards', 'Crates & Keys', 'Reward containers sit beside the progression model rather than defining access to its core systems.']
+      ['Rewards', 'Crates & Keys', 'Reward containers sit beside progression rather than defining access to its core systems.']
     ];
 
     supportHost.innerHTML = supporting.map(([category, title, copy]) => `
