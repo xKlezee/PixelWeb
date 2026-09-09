@@ -24,7 +24,8 @@ Browser-render status remains pending until the hardening branch can be opened i
 - mobile navigation takes over at 980 px and below;
 - mobile menu uses viewport-bounded height with its own vertical scrolling;
 - the brand and action area have explicit compact rules at 560 px and below;
-- a single canonical runtime navigation model now owns Explore, Development, Community and About destinations;
+- a single canonical runtime navigation model now owns Explore, Development, Community, Guides and About destinations;
+- detailed `guide-*.html` pages keep Guides selected in the canonical navigation;
 - Store and Discord are available in the mobile menu while Play remains directly accessible in the header;
 - keyboard Escape closes open navigation groups/mobile navigation;
 - dropdown controls expose `aria-expanded` and `aria-controls`.
@@ -69,6 +70,18 @@ Browser-render status remains pending until the hardening branch can be opened i
 - supporting rows collapse from three-column editorial rows to one column below 700 px;
 - full-width mobile route controls are applied below 430 px.
 
+### Guides / documentation
+
+- desktop Guides uses a documentation-specific two-column layout with a sticky 250 px sidebar and shrink-safe article column;
+- at 1040 px the sidebar narrows and guide tables remain intentionally horizontally scrollable rather than forcing unreadable cell wrapping;
+- at 820 px and below, the sidebar stops being sticky and becomes a horizontal section-navigation rail above the document;
+- at 620 px and below, guide facts, detailed route stages and result rows collapse to one column;
+- at 390 px the guide shell uses tighter side gutters without removing focus or touch-target space;
+- reference tables have an explicit overflow container and minimum readable table width;
+- Guide pages do not load heavy Nexus boss artwork when the page's purpose is mechanical reference;
+- Guides search filters existing entries only; hidden results are removed from layout with the native `hidden` state;
+- exact gameplay values in detailed guides are rendered from canonical public data where a shared canonical value already exists.
+
 ### About / Owners
 
 - the owner intro collapses below 900 px;
@@ -109,11 +122,15 @@ When a browser preview of this exact branch is available, every required viewpor
 11. 4-world progress geometry is aligned with four rendered steps;
 12. owner portraits keep equal visual footprint and PxlMads faces inward;
 13. Home immersive video does not cause layout shifts;
-14. reduced-motion produces a stable, usable page;
-15. browser console has zero uncaught errors and zero CSP violations caused by first-party code;
-16. Network panel shows no insecure HTTP subresources;
-17. images marked lazy are not fetched eagerly without reason;
-18. page remains usable at 200% browser zoom.
+14. Guides sidebar stays usable at desktop heights and the horizontal guide navigation remains touch-scrollable on tablet/mobile;
+15. Guide tables can be horizontally inspected without producing page-level horizontal overflow;
+16. Guides search remains usable at 390/430 px and at 200% browser zoom;
+17. reduced-motion produces a stable, usable page;
+18. browser console has zero uncaught errors and zero CSP violations caused by first-party code;
+19. Network panel shows no insecure HTTP subresources;
+20. Guide pages make no unexpected external `connect-src` requests;
+21. images marked lazy are not fetched eagerly without reason;
+22. page remains usable at 200% browser zoom.
 
 ## Release rule
 
