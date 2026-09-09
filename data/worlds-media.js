@@ -67,14 +67,6 @@
         'archetype-confirmed',
         'Multiple public ModelEngine/MythicMobs Viking boss packs confirm the armored Viking archetype; exact Pixel server model is not asserted.'
       )
-    },
-    nexus: {
-      source: 'assets/worlds/nexus-portal.svg',
-      alt: 'Stylized Nexus endgame portal',
-      accent: 'violet',
-      label: 'The next chapter',
-      procedural: false,
-      local: true
     }
   });
 })();
