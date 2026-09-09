@@ -121,6 +121,7 @@
       label: 'Community',
       items: [
         ['community.html', 'Community', 'Discord, Forum and documentation.'],
+        ['guides.html', 'Guides', 'Detailed player reference and mechanics.'],
         [forumLanding, 'Forum', 'Long-form discussion preview.']
       ]
     }
@@ -299,6 +300,7 @@
     const destinations = document.createElement('span');
     [
       ['store.html', 'Store'],
+      ['guides.html', 'Guides'],
       ['community.html', 'Community'],
       ['development.html', 'Development'],
       ['team.html', 'About']
