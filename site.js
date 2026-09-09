@@ -3,6 +3,13 @@
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
   const network = window.PIXEL_NETWORK_PUBLIC || {};
 
+  const el = (tag, className = '', text = null) => {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== null && text !== undefined) node.textContent = String(text);
+    return node;
+  };
+
   const safeHttpUrl = value => {
     if (!value) return null;
     try {
@@ -24,21 +31,21 @@
   const readPath = path => path.split('.').reduce((value, key) => value?.[key], network);
 
   // Public product data is rendered from data/network.js so repeated figures stay consistent.
-  $$('[data-network]').forEach(el => {
-    const value = readPath(el.dataset.network);
-    if (value !== undefined && value !== null) el.textContent = String(value);
+  $$('[data-network]').forEach(node => {
+    const value = readPath(node.dataset.network);
+    if (value !== undefined && value !== null) node.textContent = String(value);
   });
-  $$('[data-network-progress]').forEach(el => {
-    const value = Number(readPath(el.dataset.networkProgress));
+  $$('[data-network-progress]').forEach(node => {
+    const value = Number(readPath(node.dataset.networkProgress));
     if (!Number.isFinite(value)) return;
     const bounded = Math.max(0, Math.min(100, value));
-    if (el instanceof HTMLProgressElement) {
-      el.max = 100;
-      el.value = bounded;
+    if (node instanceof HTMLProgressElement) {
+      node.max = 100;
+      node.value = bounded;
     }
-    el.setAttribute('aria-valuemin', '0');
-    el.setAttribute('aria-valuemax', '100');
-    el.setAttribute('aria-valuenow', String(bounded));
+    node.setAttribute('aria-valuemin', '0');
+    node.setAttribute('aria-valuemax', '100');
+    node.setAttribute('aria-valuenow', String(bounded));
   });
   $$('[data-store-url]').forEach(link => {
     const storeUrl = safeHttpUrl(network?.store?.url);
@@ -94,72 +101,123 @@
     }
   }
 
-  // Play is an onboarding action, not a blind clipboard action. The modal is generated once
-  // so every Play control across PixelWeb follows the same join flow without duplicating markup.
-  const playModal = document.createElement('div');
-  playModal.className = 'play-modal';
+  const appendRichText = (parent, parts) => {
+    parts.forEach(part => {
+      if (typeof part === 'string') {
+        parent.appendChild(document.createTextNode(part));
+        return;
+      }
+      const strong = el('strong', '', part.strong || '');
+      parent.appendChild(strong);
+    });
+    return parent;
+  };
+
+  const createStep = (number, title, parts) => {
+    const article = el('article', 'play-step');
+    article.appendChild(el('span', 'play-step-number', number));
+    const body = el('div');
+    body.appendChild(el('h3', '', title));
+    body.appendChild(appendRichText(el('p'), parts));
+    article.appendChild(body);
+    return { article, body };
+  };
+
+  // Play is an onboarding action, not a blind clipboard action. Build the dialog through DOM
+  // primitives only: no HTML parsing sink is needed anywhere in the shared runtime.
+  const playModal = el('div', 'play-modal');
   playModal.id = 'playModal';
   playModal.hidden = true;
   playModal.setAttribute('aria-hidden', 'true');
-  playModal.innerHTML = `
-    <div class="play-modal-backdrop" data-play-close aria-hidden="true"></div>
-    <section class="play-dialog" role="dialog" aria-modal="true" aria-labelledby="playModalTitle" aria-describedby="playModalDescription" tabindex="-1">
-      <header class="play-dialog-header">
-        <div>
-          <span class="play-dialog-kicker">Java Edition · Join guide</span>
-          <h2 id="playModalTitle">Play Pixel Network</h2>
-        </div>
-        <button class="play-dialog-close" type="button" data-play-close aria-label="Close join guide">×</button>
-      </header>
 
-      <p class="play-dialog-intro" id="playModalDescription">Add Pixel Network once and it will stay in your Multiplayer server list for future sessions.</p>
+  const backdrop = el('div', 'play-modal-backdrop');
+  backdrop.dataset.playClose = '';
+  backdrop.setAttribute('aria-hidden', 'true');
 
-      <div class="play-steps" aria-label="Steps to join Pixel Network">
-        <article class="play-step">
-          <span class="play-step-number">1</span>
-          <div><h3>Open Minecraft</h3><p>Launch <strong>Minecraft: Java Edition</strong> and wait for the main menu.</p></div>
-        </article>
-        <article class="play-step">
-          <span class="play-step-number">2</span>
-          <div><h3>Open Multiplayer</h3><p>Choose <strong>Multiplayer</strong> from the Minecraft main menu.</p></div>
-        </article>
-        <article class="play-step">
-          <span class="play-step-number">3</span>
-          <div><h3>Add the server</h3><p>In your server list, select <strong>Add Server</strong>.</p></div>
-        </article>
-        <article class="play-step play-step-ip">
-          <span class="play-step-number">4</span>
-          <div>
-            <h3>Paste the server address</h3>
-            <p>You can name it <strong>Pixel Network</strong>. Paste this address into <strong>Server Address</strong>.</p>
-            <button class="play-ip-control" type="button" data-copy-server-ip aria-label="Copy Pixel Network server address">
-              <code data-play-ip></code><span data-copy-label>Copy IP</span>
-            </button>
-          </div>
-        </article>
-        <article class="play-step">
-          <span class="play-step-number">5</span>
-          <div><h3>Save and join</h3><p>Press <strong>Done</strong>, select Pixel Network from the list, then click <strong>Join Server</strong>.</p></div>
-        </article>
-      </div>
+  const playDialog = el('section', 'play-dialog');
+  playDialog.setAttribute('role', 'dialog');
+  playDialog.setAttribute('aria-modal', 'true');
+  playDialog.setAttribute('aria-labelledby', 'playModalTitle');
+  playDialog.setAttribute('aria-describedby', 'playModalDescription');
+  playDialog.tabIndex = -1;
 
-      <footer class="play-dialog-footer">
-        <div class="play-dialog-address"><span>Server address</span><code data-play-ip></code></div>
-        <div class="play-dialog-actions">
-          <button class="button secondary" type="button" data-play-close>Close</button>
-          <button class="button primary" type="button" data-copy-server-ip><span data-copy-label>Copy Server IP</span></button>
-        </div>
-      </footer>
-    </section>`;
+  const dialogHeader = el('header', 'play-dialog-header');
+  const headerCopy = el('div');
+  headerCopy.append(el('span', 'play-dialog-kicker', 'Java Edition · Join guide'));
+  const modalTitle = el('h2', '', 'Play Pixel Network');
+  modalTitle.id = 'playModalTitle';
+  headerCopy.appendChild(modalTitle);
+  const closeButton = el('button', 'play-dialog-close', '×');
+  closeButton.type = 'button';
+  closeButton.dataset.playClose = '';
+  closeButton.setAttribute('aria-label', 'Close join guide');
+  dialogHeader.append(headerCopy, closeButton);
+
+  const intro = el('p', 'play-dialog-intro', 'Add Pixel Network once and it will stay in your Multiplayer server list for future sessions.');
+  intro.id = 'playModalDescription';
+
+  const steps = el('div', 'play-steps');
+  steps.setAttribute('aria-label', 'Steps to join Pixel Network');
+  steps.appendChild(createStep('1', 'Open Minecraft', [
+    'Launch ', { strong: 'Minecraft: Java Edition' }, ' and wait for the main menu.'
+  ]).article);
+  steps.appendChild(createStep('2', 'Open Multiplayer', [
+    'Choose ', { strong: 'Multiplayer' }, ' from the Minecraft main menu.'
+  ]).article);
+  steps.appendChild(createStep('3', 'Add the server', [
+    'In your server list, select ', { strong: 'Add Server' }, '.'
+  ]).article);
+
+  const ipStep = createStep('4', 'Paste the server address', [
+    'You can name it ', { strong: 'Pixel Network' }, '. Paste this address into ', { strong: 'Server Address' }, '.'
+  ]);
+  ipStep.article.classList.add('play-step-ip');
+  const ipControl = el('button', 'play-ip-control');
+  ipControl.type = 'button';
+  ipControl.dataset.copyServerIp = '';
+  ipControl.setAttribute('aria-label', 'Copy Pixel Network server address');
+  const ipCode = el('code');
+  ipCode.dataset.playIp = '';
+  const ipLabel = el('span', '', 'Copy IP');
+  ipLabel.dataset.copyLabel = '';
+  ipControl.append(ipCode, ipLabel);
+  ipStep.body.appendChild(ipControl);
+  steps.appendChild(ipStep.article);
+
+  steps.appendChild(createStep('5', 'Save and join', [
+    'Press ', { strong: 'Done' }, ', select Pixel Network from the list, then click ', { strong: 'Join Server' }, '.'
+  ]).article);
+
+  const dialogFooter = el('footer', 'play-dialog-footer');
+  const address = el('div', 'play-dialog-address');
+  address.appendChild(el('span', '', 'Server address'));
+  const footerCode = el('code');
+  footerCode.dataset.playIp = '';
+  address.appendChild(footerCode);
+
+  const dialogActions = el('div', 'play-dialog-actions');
+  const footerClose = el('button', 'button secondary', 'Close');
+  footerClose.type = 'button';
+  footerClose.dataset.playClose = '';
+  const footerCopy = el('button', 'button primary');
+  footerCopy.type = 'button';
+  footerCopy.dataset.copyServerIp = '';
+  const footerCopyLabel = el('span', '', 'Copy Server IP');
+  footerCopyLabel.dataset.copyLabel = '';
+  footerCopy.appendChild(footerCopyLabel);
+  dialogActions.append(footerClose, footerCopy);
+  dialogFooter.append(address, dialogActions);
+
+  playDialog.append(dialogHeader, intro, steps, dialogFooter);
+  playModal.append(backdrop, playDialog);
   document.body.appendChild(playModal);
-  $$('[data-play-ip]', playModal).forEach(el => { el.textContent = serverIp; });
+  $$('[data-play-ip]', playModal).forEach(node => { node.textContent = serverIp; });
 
-  const playDialog = $('.play-dialog', playModal);
   let lastPlayTrigger = null;
   let closeModalTimer = null;
 
   const modalFocusable = () => $$('button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])', playDialog)
-    .filter(el => !el.hidden && el.offsetParent !== null);
+    .filter(node => !node.hidden && node.offsetParent !== null);
 
   function openPlayModal(trigger) {
     clearTimeout(closeModalTimer);
@@ -173,7 +231,7 @@
     document.body.classList.add('play-modal-open');
     requestAnimationFrame(() => {
       playModal.classList.add('is-open');
-      $('.play-dialog-close', playModal)?.focus();
+      closeButton.focus();
     });
   }
 
@@ -216,7 +274,7 @@
     const focusable = modalFocusable();
     if (!focusable.length) {
       event.preventDefault();
-      playDialog?.focus();
+      playDialog.focus();
       return;
     }
     const first = focusable[0];
@@ -239,9 +297,9 @@
         revealObserver.unobserve(entry.target);
       }
     }, { rootMargin: '240px 0px 180px 0px', threshold: 0.01 });
-    $$('.reveal').forEach(el => revealObserver.observe(el));
+    $$('.reveal').forEach(node => revealObserver.observe(node));
   } else {
-    $$('.reveal').forEach(el => el.classList.add('visible'));
+    $$('.reveal').forEach(node => node.classList.add('visible'));
   }
 
   // Worlds: hidden panels keep their remote images unloaded until selected.
