@@ -17,25 +17,25 @@
       at: 0,
       kicker: '01 / Progression',
       title: 'Progression gives every action context.',
-      body: 'Levels, equipment, mining, combat and collections feed the same long-term account journey rather than ending as isolated activities.'
+      body: 'Equipment, mining, combat and collections feed the same long-term account journey rather than ending as isolated activities.'
     },
     {
       at: .33,
       kicker: '02 / Worlds',
       title: 'Each world marks a change in pressure.',
-      body: 'Moving forward introduces new resources, encounters and requirements. The environment is part of progression, not a backdrop placed around it.'
+      body: 'Moving forward changes resources, encounters and atmosphere. The environment is part of progression, not a backdrop placed around it.'
     },
     {
       at: .66,
       kicker: '03 / Combat',
       title: 'Combat has progression context.',
-      body: 'Equipment value, preparation and PvP sit inside the wider account progression, so combat decisions matter beyond a single encounter.'
+      body: 'Equipment value, preparation and PvP sit inside the wider account journey, so combat decisions matter beyond a single encounter.'
     },
     {
       at: 1,
       kicker: '04 / Nexus',
-      title: 'The Nexus opens the endgame curve.',
-      body: 'Prestige IV + defeating Viking permanently unlocks Nexus, where later Prestige and Legacy milestones continue through progressively harder instance encounters.'
+      title: 'Nexus changes the rhythm of endgame.',
+      body: 'Once the world route is complete, permanent endgame access leads into a separate difficulty ladder. Nexus owns the exact unlocks and encounter structure.'
     }
   ];
 
