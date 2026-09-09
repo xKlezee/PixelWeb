@@ -102,6 +102,34 @@
   }
 }
 
+/* Five encounters should never collapse into a visually awkward 2 + 2 + 1 card grid. */
+@media (max-width: 980px) {
+  .worlds-boss-strip {
+    grid-template-columns: 1fr;
+    max-width: 760px;
+    margin-inline: auto;
+  }
+  .worlds-boss-item {
+    display: grid;
+    grid-template-columns: 180px minmax(0,1fr);
+    align-items: stretch;
+  }
+  .worlds-boss-art {
+    width: 180px;
+    height: 100%;
+    min-height: 132px;
+    aspect-ratio: auto;
+    border-right: 1px solid rgba(255,255,255,.05);
+    border-bottom: 0;
+  }
+  .worlds-boss-copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 18px 20px;
+  }
+}
+
 @media (max-width: 700px) {
   .worlds-progress-grid { grid-template-columns: 1fr; }
   .worlds-progress-line {
@@ -115,5 +143,14 @@
   }
   .worlds-card-boss { grid-template-columns: 82px minmax(0,1fr); }
   .worlds-card-boss img { width: 82px; height: 64px; }
-  .worlds-boss-art { aspect-ratio: 16 / 8; }
+  .worlds-boss-item { grid-template-columns: 1fr; }
+  .worlds-boss-art {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 16 / 8;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255,255,255,.05);
+  }
+  .worlds-boss-copy { padding: 15px 16px 17px; }
 }
