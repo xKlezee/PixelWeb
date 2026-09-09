@@ -6,6 +6,38 @@
   const network = window.PIXEL_NETWORK_PUBLIC || {};
   const currentPage = location.pathname.split('/').pop() || 'index.html';
 
+  const safeHttpUrl = (value, fallback = null) => {
+    if (!value) return fallback;
+    try {
+      const url = new URL(String(value), location.href);
+      return ['http:', 'https:'].includes(url.protocol) ? url.href : fallback;
+    } catch {
+      return fallback;
+    }
+  };
+
+  const safeLocalPage = (value, fallback) => {
+    if (!value) return fallback;
+    const candidate = String(value).trim();
+    if (/^[A-Za-z0-9._-]+\.html$/.test(candidate)) return candidate;
+    try {
+      const url = new URL(candidate, location.href);
+      if (url.origin !== location.origin || !url.pathname.endsWith('.html')) return fallback;
+      const file = url.pathname.split('/').pop();
+      return /^[A-Za-z0-9._-]+\.html$/.test(file || '') ? file : fallback;
+    } catch {
+      return fallback;
+    }
+  };
+
+  const appendNavCopy = (link, title, description) => {
+    const strong = document.createElement('strong');
+    strong.textContent = title;
+    const span = document.createElement('span');
+    span.textContent = description;
+    link.replaceChildren(strong, span);
+  };
+
   /* Reading progress only. Scroll handlers must not mutate page geometry. */
   const progress = document.createElement('div');
   progress.className = 'scroll-progress';
@@ -58,7 +90,7 @@
    * Changelog belongs to Development; Community stays focused on social/reference destinations.
    * This is generated once here so older static page markup cannot drift apart.
    */
-  const changelogLanding = network?.changelog?.landing || 'changelog.html';
+  const changelogLanding = safeLocalPage(network?.changelog?.landing, 'changelog.html');
   const developmentLanding = 'development.html';
 
   const existingDevelopmentGroup = Array.from(document.querySelectorAll('.nav-group')).find(group =>
@@ -84,12 +116,12 @@
 
       const developmentLink = document.createElement('a');
       developmentLink.href = developmentLanding;
-      developmentLink.innerHTML = '<strong>Development</strong><span>Current status, roadmap and product scale.</span>';
+      appendNavCopy(developmentLink, 'Development', 'Current status, roadmap and product scale.');
       if (currentPage === developmentLanding) developmentLink.setAttribute('aria-current', 'page');
 
       const changelogLink = document.createElement('a');
       changelogLink.href = changelogLanding;
-      changelogLink.innerHTML = '<strong>Changelog</strong><span>Player-facing release notes.</span>';
+      appendNavCopy(changelogLink, 'Changelog', 'Player-facing release notes.');
       if (currentPage === changelogLanding) changelogLink.setAttribute('aria-current', 'page');
 
       menu.append(developmentLink, changelogLink);
@@ -191,7 +223,7 @@
   /* PixelWeb explains the commercial model before handing off to the official Store. */
   const navActions = nav?.querySelector('.nav-actions');
   const desktopStore = navActions?.querySelector('.nav-store');
-  const storeLanding = network?.store?.landing || 'store.html';
+  const storeLanding = safeLocalPage(network?.store?.landing, 'store.html');
   if (desktopStore && !desktopStore.hasAttribute('data-store-direct')) {
     desktopStore.href = storeLanding;
     desktopStore.removeAttribute('target');
@@ -200,7 +232,8 @@
   }
 
   /* Discord is a permanent direct-access action beside Store and Play on desktop. */
-  const discordUrl = network?.community?.discordUrl || 'https://discord.gg/7KzWpezTNZ';
+  const discordFallback = 'https://discord.gg/7KzWpezTNZ';
+  const discordUrl = safeHttpUrl(network?.community?.discordUrl, discordFallback);
   let desktopDiscord = navActions?.querySelector('.nav-discord');
   if (navActions && !desktopDiscord) {
     desktopDiscord = document.createElement('a');
@@ -241,7 +274,7 @@
   document.querySelectorAll('[data-discord-url]').forEach(link => {
     link.href = discordUrl;
   });
-  const docsUrl = network?.community?.documentationUrl;
+  const docsUrl = safeHttpUrl(network?.community?.documentationUrl);
   if (docsUrl) {
     document.querySelectorAll('[data-docs-url]').forEach(link => { link.href = docsUrl; });
   }
@@ -298,13 +331,17 @@
   const prefetched = new Set();
   const prefetch = href => {
     if (!href || prefetched.has(href)) return;
-    const url = new URL(href, location.href);
-    if (url.origin !== location.origin || !url.pathname.endsWith('.html')) return;
-    prefetched.add(href);
-    const link = document.createElement('link');
-    link.rel = 'prefetch';
-    link.href = url.href;
-    document.head.appendChild(link);
+    try {
+      const url = new URL(href, location.href);
+      if (url.origin !== location.origin || !url.pathname.endsWith('.html')) return;
+      prefetched.add(href);
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.href = url.href;
+      document.head.appendChild(link);
+    } catch {
+      // Invalid destinations are ignored instead of being prefetched.
+    }
   };
 
   document.querySelectorAll('a[href]').forEach(link => {
