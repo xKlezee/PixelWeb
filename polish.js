@@ -99,6 +99,7 @@
      no-JS fallback, but runtime navigation never depends on legacy page-specific markup. */
   const changelogLanding = safeLocalPage(network?.changelog?.landing, 'changelog.html');
   const forumLanding = safeLocalPage(network?.community?.forumLanding, 'forum.html');
+  const guidesLanding = safeLocalPage(network?.community?.guidesLanding, 'guides.html');
   const canonicalNavigation = [
     {
       label: 'Explore',
@@ -120,8 +121,8 @@
     {
       label: 'Community',
       items: [
-        ['community.html', 'Community', 'Discord, Forum and documentation.'],
-        ['guides.html', 'Guides', 'Detailed player reference and mechanics.'],
+        ['community.html', 'Community', 'Discord, Guides and Forum.'],
+        [guidesLanding, 'Guides', 'Detailed player reference and mechanics.'],
         [forumLanding, 'Forum', 'Long-form discussion preview.']
       ]
     }
@@ -300,7 +301,7 @@
     const destinations = document.createElement('span');
     [
       ['store.html', 'Store'],
-      ['guides.html', 'Guides'],
+      [guidesLanding, 'Guides'],
       ['community.html', 'Community'],
       ['development.html', 'Development'],
       ['team.html', 'About']
@@ -312,14 +313,10 @@
     footerInner.replaceChildren(brand, destinations);
   }
 
-  /* Keep public destination links synchronized with data/network.js. */
+  /* Keep the public Discord destination synchronized with data/network.js. */
   document.querySelectorAll('[data-discord-url]').forEach(link => {
     link.href = discordUrl;
   });
-  const docsUrl = safeHttpUrl(network?.community?.documentationUrl);
-  if (docsUrl) {
-    document.querySelectorAll('[data-docs-url]').forEach(link => { link.href = docsUrl; });
-  }
 
   const closeMobileNav = () => {
     navLinks?.classList.remove('open');
