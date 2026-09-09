@@ -27,9 +27,12 @@
     return path || 'Difficulty path defined by account milestones.';
   };
 
-  const renderVisual = visual => {
-    if (!visual?.sprite) return '';
-    return `<div class="nexus-boss-art nexus-boss-art--${visual.sprite}" role="img" aria-label="${visual.alt}"></div>`;
+  const renderVisual = (visual, label = '') => {
+    if (!visual?.source) return '';
+    return `<figure class="nexus-boss-art">
+      <img src="${visual.source}" alt="${visual.alt}" width="1448" height="1086" loading="lazy" decoding="async">
+      ${label ? `<figcaption>${label}</figcaption>` : ''}
+    </figure>`;
   };
 
   const renderMedia = instance => {
@@ -38,7 +41,10 @@
     if (visuals.length === 1) {
       return `<div class="nexus-instance-media">${renderVisual(visuals[0])}</div>`;
     }
-    return '<div class="nexus-instance-media nexus-instance-media--dual"><div class="nexus-boss-art nexus-boss-art--abyss-astral" role="img" aria-label="Abyss and Astral instance key art"></div></div>';
+    return `<div class="nexus-instance-media nexus-instance-media--dual">
+      ${renderVisual(visuals[0], 'Abyss')}
+      ${renderVisual(visuals[1], 'Astral')}
+    </div>`;
   };
 
   if (encounterHost) {
