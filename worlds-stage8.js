@@ -10,8 +10,8 @@
   const descriptions = {
     overworld: 'The foundation of the shared route: mining, equipment, economy and combat establish the language used by every later stage.',
     pirate: 'The first expansion stage, where the required HollowKeeper and optional Kraken deliberately serve different progression roles.',
-    nether: 'Pressure rises without resetting the account. Eldric becomes the third required boss clear in the current four-world route.',
-    winter: 'The final current world before endgame access. Prestige IV and a Viking clear complete the world route and permanently unlock Nexus.'
+    nether: 'Pressure rises without resetting the account. Eldric closes the third world stage before Winter begins.',
+    winter: 'The fourth and final current world. Viking closes the world route before progression moves into endgame content.'
   };
 
   const imageUrl = (source, width) => {
@@ -45,15 +45,14 @@
       ? statRow('Optional', world.optionalEncounter, true)
       : '';
     const note = world.id === 'winter'
-      ? '<div class="worlds-card-note">Prestige IV + defeating Viking permanently unlocks Nexus.</div>'
+      ? '<div class="worlds-card-note">Winter is the final current world. Its completion leads into the separate Nexus endgame layer.</div>'
       : '';
     const picture = visual.source
       ? `<img alt="${visual.alt || `${world.name} landscape`}" width="960" height="540" decoding="async"
-          ${index === 0 ? `src="${imageUrl(visual.source, 960)}" srcset="${imageUrl(visual.source, 640)} 640w, ${imageUrl(visual.source, 960)} 960w, ${imageUrl(visual.source, 1280)} 1280w" sizes="(max-width:700px) 82vw, (max-width:1459px) 300px, 20vw" fetchpriority="high"` : `data-src="${imageUrl(visual.source, 960)}" data-srcset="${imageUrl(visual.source, 640)} 640w, ${imageUrl(visual.source, 960)} 960w, ${imageUrl(visual.source, 1280)} 1280w" data-sizes="(max-width:700px) 82vw, (max-width:1459px) 300px, 20vw" loading="lazy"`} />`
+          ${index === 0 ? `src="${imageUrl(visual.source, 960)}" srcset="${imageUrl(visual.source, 640)} 640w, ${imageUrl(visual.source, 960)} 960w, ${imageUrl(visual.source, 1280)} 1280w" sizes="(max-width:700px) 82vw, (max-width:1199px) 300px, 25vw" fetchpriority="high"` : `data-src="${imageUrl(visual.source, 960)}" data-srcset="${imageUrl(visual.source, 640)} 640w, ${imageUrl(visual.source, 960)} 960w, ${imageUrl(visual.source, 1280)} 1280w" data-sizes="(max-width:700px) 82vw, (max-width:1199px) 300px, 25vw" loading="lazy"`} />`
       : '';
-    const bossLabel = 'Required World Boss';
     const bossBlock = `<div class="worlds-card-boss-stack">
-      ${bossVisual(world.boss, visual.boss, bossLabel)}
+      ${bossVisual(world.boss, visual.boss, 'Required World Boss')}
       ${world.optionalEncounter ? bossVisual(world.optionalEncounter, visual.optionalBoss, 'Optional encounter', true) : ''}
     </div>`;
 
@@ -78,28 +77,7 @@
     </article>`;
   };
 
-  const nexusVisual = media.nexus || {};
-  const nexusPicture = nexusVisual.source
-    ? `<img src="${imageUrl(nexusVisual.source, 960)}" alt="${nexusVisual.alt || 'Nexus endgame visual'}" width="960" height="540" loading="lazy" decoding="async">`
-    : '';
-  const nexusCard = `<article class="worlds-card worlds-card--nexus" data-accent="${nexusVisual.accent || 'violet'}">
-    <div class="worlds-card-media${nexusVisual.source ? '' : ' is-fallback'}"><span class="worlds-card-index">05</span>${nexusPicture}</div>
-    <div class="worlds-card-body">
-      <span class="worlds-card-kicker">${nexusVisual.label || 'The next chapter'}</span>
-      <h3>Nexus</h3>
-      <p class="worlds-card-summary">Permanent endgame access begins after the final world gate. The progression model then changes from world clears to an Instance difficulty ladder.</p>
-      <div class="worlds-card-stats">
-        ${statRow('Access', network?.nexus?.unlock || 'Prestige IV + defeat Viking', true)}
-        ${statRow('Model', network?.nexus?.accessModel || 'Permanent once unlocked')}
-        ${statRow('Combat', network?.nexus?.combatLayer || 'Instance progression')}
-        ${statRow('Encounters', `${network?.content?.instanceEncounters ?? 3} / ${network?.content?.instanceBosses ?? 4} bosses`)}
-      </div>
-      <div class="worlds-card-note">Prestige IV + the first Viking clear unlocks Nexus permanently.</div>
-      <div class="worlds-card-action"><a class="button primary" href="nexus.html">Explore Nexus</a></div>
-    </div>
-  </article>`;
-
-  rail.innerHTML = network.worlds.map(worldCard).join('') + nexusCard;
+  rail.innerHTML = network.worlds.map(worldCard).join('');
 
   const immediateImages = [...rail.querySelectorAll('.worlds-card-media img[src]')];
   immediateImages.forEach(img => {
@@ -139,8 +117,7 @@
       ['Overworld', 'World 1 · Beholder'],
       ['Prestige I', 'World 2 · Pirate Kingdom · HollowKeeper'],
       ['Prestige II', 'World 3 · Nether · Eldric'],
-      ['Prestige III', 'World 4 · Winter · Viking'],
-      ['Prestige IV', 'Nexus']
+      ['Prestige III', 'World 4 · Winter · Viking']
     ];
     progress.innerHTML = `<div class="worlds-progress-line" aria-hidden="true"></div><div class="worlds-progress-grid">${steps.map(([title, sub]) => `<div class="worlds-progress-step"><div class="worlds-progress-dot" aria-hidden="true"></div><div><b>${title}</b><span>${sub}</span></div></div>`).join('')}</div>`;
   }
@@ -156,7 +133,7 @@
       { label: 'Pirate · Required', name: pirate.boss, copy: 'Paired with Prestige II to open Nether.', media: media.pirate?.boss },
       { label: 'Pirate · Optional', name: pirate.optionalEncounter, copy: 'A thematic encounter that gates nothing.', media: media.pirate?.optionalBoss },
       { label: 'Nether · Required', name: nether.boss, copy: 'Paired with Prestige III to open Winter.', media: media.nether?.boss },
-      { label: 'Winter · Required', name: winter.boss, copy: 'Paired with Prestige IV to permanently unlock Nexus.', media: media.winter?.boss }
+      { label: 'Winter · Required', name: winter.boss, copy: 'The final required World Boss before the separate endgame layer.', media: media.winter?.boss }
     ];
     bossStrip.innerHTML = bosses.map(entry => `<article class="worlds-boss-item reveal">
       ${entry.media?.source ? `<img class="worlds-boss-art" src="${entry.media.source}" alt="${entry.media.alt || `${entry.name} concept visual`}" width="320" height="240" loading="lazy" decoding="async">` : ''}
