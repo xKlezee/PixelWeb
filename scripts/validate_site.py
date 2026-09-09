@@ -28,17 +28,10 @@ REQUIRED_CSP_DIRECTIVES = {
 }
 FORBIDDEN_CSP_TOKENS = {"'unsafe-inline'", "'unsafe-eval'", "'wasm-unsafe-eval'"}
 
-# Every data-driven renderer must remain free of HTML parsing sinks. site.js has one
-# reviewed, static Play-modal template containing no external/user-controlled data.
-NO_HTML_SINK_FILES = {
-    "app.js",
-    "development.js",
-    "home-stage11.js",
-    "nexus-stage9.js",
-    "systems-stage10.js",
-    "worlds-stage8.js",
-}
+# PixelWeb intentionally avoids string-to-DOM parsing and runtime inline-style mutation.
+# This keeps data rendering safe by construction and makes a strict CSP sustainable.
 HTML_SINK_RE = re.compile(r"\.(?:innerHTML|outerHTML)\s*=|insertAdjacentHTML\s*\(|document\.write\s*\(")
+INLINE_STYLE_JS_RE = re.compile(r"\.style(?:\.|\[)|setAttribute\s*\(\s*['\"]style['\"]")
 DYNAMIC_CODE_RE = re.compile(r"\b(?:eval\s*\(|new\s+Function\s*\(|setTimeout\s*\(\s*['\"]|setInterval\s*\(\s*['\"])")
 
 
@@ -208,12 +201,13 @@ def main() -> int:
 
     for js_file in JS_FILES:
         text = js_file.read_text(encoding="utf-8")
+        relative = js_file.relative_to(ROOT)
         if DYNAMIC_CODE_RE.search(text):
-            failures.append(f"{js_file.relative_to(ROOT)}: dynamic code execution pattern detected")
-        if js_file.name in NO_HTML_SINK_FILES and HTML_SINK_RE.search(text):
-            failures.append(
-                f"{js_file.relative_to(ROOT)}: HTML parsing sink detected in data-driven renderer"
-            )
+            failures.append(f"{relative}: dynamic code execution pattern detected")
+        if HTML_SINK_RE.search(text):
+            failures.append(f"{relative}: HTML parsing sink detected")
+        if INLINE_STYLE_JS_RE.search(text):
+            failures.append(f"{relative}: runtime inline-style mutation detected")
 
     if failures:
         print("Static site validation failed:")
