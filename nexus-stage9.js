@@ -38,7 +38,7 @@
     if (visuals.length === 1) {
       return `<div class="nexus-instance-media">${renderVisual(visuals[0])}</div>`;
     }
-    return `<div class="nexus-instance-media nexus-instance-media--dual">${visuals.map(renderVisual).join('')}</div>`;
+    return '<div class="nexus-instance-media nexus-instance-media--dual"><div class="nexus-boss-art nexus-boss-art--abyss-astral" role="img" aria-label="Abyss and Astral instance key art"></div></div>';
   };
 
   if (encounterHost) {
