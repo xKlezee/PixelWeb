@@ -11,7 +11,7 @@
     overworld: 'The foundation of the shared route: mining, equipment, economy and combat establish the language used by every later stage.',
     pirate: 'The first expansion stage, where the required HollowKeeper and optional Kraken deliberately serve different progression roles.',
     nether: 'Pressure rises without resetting the account. Eldric closes the third world stage before Winter begins.',
-    winter: 'The fourth and final current world. Viking closes the world route before progression moves into endgame content.'
+    winter: 'The fourth and final current world. Viking closes Winter\'s World Boss arc, while Prestige IV separately unlocks Nexus.'
   };
 
   const imageUrl = (source, width) => {
@@ -45,14 +45,14 @@
       ? statRow('Optional', world.optionalEncounter, true)
       : '';
     const note = world.id === 'winter'
-      ? '<div class="worlds-card-note">Winter is the final current world. Its completion leads into the separate Nexus endgame layer.</div>'
+      ? '<div class="worlds-card-note">Winter is the final current world. Viking is its final World Boss; Nexus access is a separate Prestige IV unlock.</div>'
       : '';
     const picture = visual.source
       ? `<img alt="${visual.alt || `${world.name} landscape`}" width="960" height="540" decoding="async"
           ${index === 0 ? `src="${imageUrl(visual.source, 960)}" srcset="${imageUrl(visual.source, 640)} 640w, ${imageUrl(visual.source, 960)} 960w, ${imageUrl(visual.source, 1280)} 1280w" sizes="(max-width:700px) 82vw, (max-width:1199px) 300px, 25vw" fetchpriority="high"` : `data-src="${imageUrl(visual.source, 960)}" data-srcset="${imageUrl(visual.source, 640)} 640w, ${imageUrl(visual.source, 960)} 960w, ${imageUrl(visual.source, 1280)} 1280w" data-sizes="(max-width:700px) 82vw, (max-width:1199px) 300px, 25vw" loading="lazy"`} />`
       : '';
     const bossBlock = `<div class="worlds-card-boss-stack">
-      ${bossVisual(world.boss, visual.boss, 'Required World Boss')}
+      ${bossVisual(world.boss, visual.boss, 'World Boss')}
       ${world.optionalEncounter ? bossVisual(world.optionalEncounter, visual.optionalBoss, 'Optional encounter', true) : ''}
     </div>`;
 
@@ -133,7 +133,7 @@
       { label: 'Pirate · Required', name: pirate.boss, copy: 'Paired with Prestige II to open Nether.', media: media.pirate?.boss },
       { label: 'Pirate · Optional', name: pirate.optionalEncounter, copy: 'A thematic encounter that gates nothing.', media: media.pirate?.optionalBoss },
       { label: 'Nether · Required', name: nether.boss, copy: 'Paired with Prestige III to open Winter.', media: media.nether?.boss },
-      { label: 'Winter · Required', name: winter.boss, copy: 'The final required World Boss before the separate endgame layer.', media: media.winter?.boss }
+      { label: 'Winter · Final boss', name: winter.boss, copy: 'Winter\'s final World Boss. Nexus access is not tied to this clear.', media: media.winter?.boss }
     ];
     bossStrip.innerHTML = bosses.map(entry => `<article class="worlds-boss-item reveal">
       ${entry.media?.source ? `<img class="worlds-boss-art" src="${entry.media.source}" alt="${entry.media.alt || `${entry.name} concept visual`}" width="320" height="240" loading="lazy" decoding="async">` : ''}
