@@ -14,7 +14,7 @@ from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 HTML_FILES = sorted(ROOT.glob("*.html"))
-JS_FILES = sorted(ROOT.glob("*.js")) + sorted((ROOT / "data").glob("*.js"))
+JS_FILES = sorted({*ROOT.glob("*.js"), *(ROOT / "data").rglob("*.js")})
 
 REQUIRED_CSP_DIRECTIVES = {
     "default-src": {"'self'"},
@@ -27,6 +27,7 @@ REQUIRED_CSP_DIRECTIVES = {
     "form-action": {"'self'"},
 }
 FORBIDDEN_CSP_TOKENS = {"'unsafe-inline'", "'unsafe-eval'", "'wasm-unsafe-eval'"}
+GUIDE_CONNECT_SRC = {"'self'"}
 
 # PixelWeb intentionally avoids string-to-DOM parsing and runtime inline-style mutation.
 # This keeps data rendering safe by construction and makes a strict CSP sustainable.
@@ -138,6 +139,10 @@ def local_target(raw: str) -> Path | None:
     return (ROOT / path.lstrip("/")).resolve()
 
 
+def is_guide_page(page: Path) -> bool:
+    return page.name == "guides.html" or page.name.startswith("guide-")
+
+
 def main() -> int:
     failures: list[str] = []
 
@@ -148,6 +153,7 @@ def main() -> int:
         parser = PageParser()
         parser.feed(page.read_text(encoding="utf-8"))
         parser.close()
+        csp: dict[str, set[str]] = {}
 
         if not parser.csp:
             failures.append(f"{page.name}: missing Content-Security-Policy meta")
@@ -170,6 +176,18 @@ def main() -> int:
                         f"{page.name}: CSP {directive} contains forbidden token(s): "
                         f"{', '.join(sorted(forbidden))}"
                     )
+
+        if is_guide_page(page):
+            if csp.get("connect-src") != GUIDE_CONNECT_SRC:
+                failures.append(
+                    f"{page.name}: Guides must use exactly connect-src 'self' unless the "
+                    "documentation network boundary is deliberately revised"
+                )
+            ref_values = {raw for _, raw, _ in parser.refs}
+            if "guides.css" not in ref_values:
+                failures.append(f"{page.name}: Guide page must load guides.css")
+            if "data/network.js" not in ref_values:
+                failures.append(f"{page.name}: Guide page must load canonical data/network.js")
 
         if not parser.has_referrer_policy:
             failures.append(f"{page.name}: missing referrer policy meta")
