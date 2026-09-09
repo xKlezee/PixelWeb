@@ -13,17 +13,13 @@
     }
   };
 
-  const ensureStylesheet = (href, marker) => {
-    if (document.querySelector(`link[${marker}]`)) return;
-    const stylesheet = document.createElement('link');
-    stylesheet.rel = 'stylesheet';
-    stylesheet.href = href;
-    stylesheet.setAttribute(marker, '');
-    document.head.appendChild(stylesheet);
-  };
-
-  ensureStylesheet('security-hardening.css', 'data-security-hardening-styles');
-  ensureStylesheet('play-modal.css', 'data-play-modal-styles');
+  if (!document.querySelector('link[data-play-modal-styles], link[href="play-modal.css"]')) {
+    const modalStyles = document.createElement('link');
+    modalStyles.rel = 'stylesheet';
+    modalStyles.href = 'play-modal.css';
+    modalStyles.dataset.playModalStyles = '';
+    document.head.appendChild(modalStyles);
+  }
 
   const readPath = path => path.split('.').reduce((value, key) => value?.[key], network);
 
