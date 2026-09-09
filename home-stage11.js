@@ -27,6 +27,12 @@
     }
   };
 
+  const markBelowFoldImage = img => {
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.fetchPriority = 'low';
+  };
+
   if (worldHost) {
     const worlds = [
       ['overworld', 'Overworld'],
@@ -43,12 +49,12 @@
       const figure = el('figure', 'home-world-shot');
       figure.dataset.world = id;
       const img = el('img');
+      markBelowFoldImage(img);
+      if (/^https?:\/\//i.test(source)) img.referrerPolicy = 'no-referrer';
       img.src = source;
       img.alt = visual.alt || `${name} landscape`;
       img.width = 720;
       img.height = 405;
-      img.loading = 'lazy';
-      img.decoding = 'async';
       figure.append(img, el('figcaption', '', name));
       return [figure];
     });
@@ -64,12 +70,11 @@
 
     const figure = el('figure', 'home-nexus-shot');
     const img = el('img');
+    markBelowFoldImage(img);
     img.src = source;
     img.alt = nexusMedia.hero?.alt || 'Nexus threshold';
     img.width = 960;
     img.height = 720;
-    img.loading = 'lazy';
-    img.decoding = 'async';
     figure.appendChild(img);
     nexusHost.replaceChildren(figure);
   }
