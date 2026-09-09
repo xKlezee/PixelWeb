@@ -30,6 +30,12 @@
     }
   };
 
+  const changelogLanding = safeLocalPage(network?.changelog?.landing, 'changelog.html');
+  const forumLanding = safeLocalPage(network?.community?.forumLanding, 'forum.html');
+  const guidesLanding = safeLocalPage(network?.community?.guidesLanding, 'guides.html');
+  const isGuideDetailPage = /^guide-[A-Za-z0-9._-]+\.html$/.test(currentPage);
+  const isCurrentLocalDestination = href => currentPage === href || (isGuideDetailPage && href === guidesLanding);
+
   const appendNavCopy = (link, title, description) => {
     const strong = document.createElement('strong');
     strong.textContent = title;
@@ -42,7 +48,7 @@
     const link = document.createElement('a');
     link.href = safeLocalPage(href, 'index.html');
     link.textContent = label;
-    if (currentPage === link.getAttribute('href')) link.setAttribute('aria-current', 'page');
+    if (isCurrentLocalDestination(link.getAttribute('href'))) link.setAttribute('aria-current', 'page');
     return link;
   };
 
@@ -97,9 +103,6 @@
 
   /* One canonical navigation model for every public-site page. Static HTML remains a
      no-JS fallback, but runtime navigation never depends on legacy page-specific markup. */
-  const changelogLanding = safeLocalPage(network?.changelog?.landing, 'changelog.html');
-  const forumLanding = safeLocalPage(network?.community?.forumLanding, 'forum.html');
-  const guidesLanding = safeLocalPage(network?.community?.guidesLanding, 'guides.html');
   const canonicalNavigation = [
     {
       label: 'Explore',
@@ -132,7 +135,7 @@
     const link = document.createElement('a');
     link.href = safeLocalPage(href, 'index.html');
     appendNavCopy(link, title, description);
-    if (currentPage === link.getAttribute('href')) link.setAttribute('aria-current', 'page');
+    if (isCurrentLocalDestination(link.getAttribute('href'))) link.setAttribute('aria-current', 'page');
     return link;
   };
 
