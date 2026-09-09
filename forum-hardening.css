@@ -11,6 +11,18 @@
   text-align: center;
 }
 
+/* Fixed overlays must remain operable on short mobile/landscape viewports. */
+.auth-overlay,
+.post-modal-overlay {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.auth-modal,
+.post-modal {
+  flex: 0 0 auto;
+}
+
 .post-modal-inner {
   position: relative;
 }
@@ -22,4 +34,16 @@
 .post-modal-title {
   margin-bottom: 16px;
   font-size: 19px;
+}
+
+@media (max-height: 700px) {
+  .auth-overlay,
+  .post-modal-overlay {
+    align-items: flex-start;
+  }
+
+  .auth-modal,
+  .post-modal {
+    margin-block: 12px;
+  }
 }
