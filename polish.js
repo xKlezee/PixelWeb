@@ -38,6 +38,14 @@
     link.replaceChildren(strong, span);
   };
 
+  const createLocalTextLink = (href, label) => {
+    const link = document.createElement('a');
+    link.href = safeLocalPage(href, 'index.html');
+    link.textContent = label;
+    if (currentPage === link.getAttribute('href')) link.setAttribute('aria-current', 'page');
+    return link;
+  };
+
   /* Reading progress only. Scroll handlers must not mutate page geometry. */
   const progress = document.createElement('progress');
   progress.className = 'scroll-progress';
@@ -145,10 +153,7 @@
       fragment.appendChild(group);
     });
 
-    const about = document.createElement('a');
-    about.href = 'team.html';
-    about.textContent = 'About';
-    if (currentPage === 'team.html') about.setAttribute('aria-current', 'page');
+    const about = createLocalTextLink('team.html', 'About');
     fragment.appendChild(about);
 
     navLinks.replaceChildren(fragment);
@@ -282,6 +287,27 @@
     mobileStore.textContent = 'Store';
     if (currentPage === storeLanding) mobileStore.setAttribute('aria-current', 'page');
     navLinks.appendChild(mobileStore);
+  }
+
+  /* The global footer follows one model as well. Page-specific static HTML remains a
+     no-JS fallback; with JavaScript enabled every public page exposes the same exits. */
+  const footerInner = document.querySelector('.site-footer .site-footer-inner');
+  if (footerInner) {
+    const brand = document.createElement('span');
+    brand.textContent = 'Pixel Network · Java Edition';
+
+    const destinations = document.createElement('span');
+    [
+      ['store.html', 'Store'],
+      ['community.html', 'Community'],
+      ['development.html', 'Development'],
+      ['team.html', 'About']
+    ].forEach(([href, label], index) => {
+      if (index) destinations.appendChild(document.createTextNode(' · '));
+      destinations.appendChild(createLocalTextLink(href, label));
+    });
+
+    footerInner.replaceChildren(brand, destinations);
   }
 
   /* Keep public destination links synchronized with data/network.js. */
