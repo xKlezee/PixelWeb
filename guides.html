@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta name="theme-color" content="#0b0c0e"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https: data:; media-src 'self' https:; font-src 'self' https: data:; connect-src 'self' https://api.mcsrvstat.us; frame-src 'none'; worker-src 'none'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests"/>
+  <meta name="referrer" content="strict-origin-when-cross-origin"/>
+  <meta name="description" content="Pixel Network Guides is the detailed player reference for progression, worlds, combat, Nexus, Skyblock and supporting systems."/>
+  <title>Guides — Pixel Network</title>
+  <link rel="icon" href="LOGO%20OFICIAL.png"/>
+  <link rel="stylesheet" href="site.css"/>
+  <link rel="stylesheet" href="polish.css"/>
+  <link rel="stylesheet" href="phase1.css"/>
+  <link rel="stylesheet" href="guides.css"/>
+  <link rel="stylesheet" href="security-hardening.css"/>
+  <script src="data/network.js" defer></script>
+  <script src="site.js" defer></script>
+  <script src="polish.js" defer></script>
+</head>
+<body>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <nav class="site-nav" aria-label="Main navigation"><div class="shell nav-inner">
+    <a class="brand" href="index.html"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a>
+    <div class="nav-links" id="navLinks">
+      <div class="nav-group"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal and collaborative island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div>
+      <div class="nav-group"><button type="button" aria-haspopup="true">Development</button><div class="nav-dropdown"><a href="development.html"><strong>Development</strong><span>Current status, roadmap and product scale.</span></a><a href="changelog.html"><strong>Changelog</strong><span>Player-facing release notes.</span></a></div></div>
+      <div class="nav-group contains-current"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="community.html"><strong>Community</strong><span>Discord, Forum and documentation.</span></a><a href="guides.html" aria-current="page"><strong>Guides</strong><span>Detailed player reference and mechanics.</span></a><a href="forum.html"><strong>Forum</strong><span>Long-form discussion preview.</span></a></div></div>
+      <a href="team.html">About</a>
+    </div>
+    <div class="nav-actions"><a class="button quiet nav-discord" href="https://discord.gg/7KzWpezTNZ" target="_blank" rel="noopener">Discord</a><a class="button quiet nav-store" href="store.html">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
+  </div></nav>
+
+  <main>
+    <section class="page-hero">
+      <div class="shell">
+        <div class="breadcrumbs"><a href="index.html">Pixel Network</a><span>/</span><span>Guides</span></div>
+        <div class="page-hero-grid">
+          <div>
+            <div class="eyebrow">Player reference</div>
+            <h1>Learn a system once.<br/>Use it everywhere.</h1>
+          </div>
+          <aside class="guides-hero-note">
+            <small>Documentation model</small>
+            <strong>Detailed mechanics belong here.</strong>
+            <p>Overview pages explain the structure of Pixel Network. Guides are the place for exact instructions, requirements, examples and edge cases as each guide is verified and published.</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section"><div class="shell">
+      <div class="content-head reveal"><div><div class="content-eyebrow">Start here</div><h2>Choose the part of Pixel you want to understand first.</h2></div><p>The landing page routes you to the current authoritative overview without duplicating the exact mechanics those pages already own.</p></div>
+      <div class="guides-entry-grid">
+        <article class="guides-entry reveal"><small>Main experience</small><h3>World progression, systems and endgame.</h3><p>Start with the player journey, then move into Worlds, Systems and Nexus when you need the structure behind each stage.</p><a class="button primary" href="gameplay.html">Open Gameplay</a></article>
+        <article class="guides-entry reveal"><small>Skyblock</small><h3>Island progression on its own terms.</h3><p>Skyblock has a separate play loop and should be learned from its own overview rather than mixed into the main world route.</p><a class="button secondary" href="skyblock.html">Open Skyblock</a></article>
+      </div>
+    </div></section>
+
+    <section class="content-section"><div class="shell">
+      <div class="content-head reveal"><div><div class="content-eyebrow">Guide library</div><h2>Current coverage and the next detailed references.</h2></div><p>A live overview means the subject already has a maintained destination. “Detailed guide next” means the subject is intentionally not being filled with placeholder mechanics before verification.</p></div>
+      <div class="guides-library">
+        <article class="guide-row reveal"><span class="guide-row-meta">Orientation</span><h3>Getting Started</h3><p>How the main Pixel experience is structured and where each kind of player should begin.</p><div class="guide-row-action"><a class="guide-status is-live" href="gameplay.html">Current overview</a></div></article>
+        <article class="guide-row reveal"><span class="guide-row-meta">Progression</span><h3>Levels, Prestige & Legacy</h3><p>The permanent account progression model and how its layers relate to the rest of the network.</p><div class="guide-row-action"><a class="guide-status is-live" href="systems.html">Current overview</a></div></article>
+        <article class="guide-row reveal"><span class="guide-row-meta">World route</span><h3>Worlds & Gates</h3><p>The current world order, boss roles and transition logic between progression stages.</p><div class="guide-row-action"><a class="guide-status is-live" href="worlds.html">Current overview</a></div></article>
+        <article class="guide-row reveal"><span class="guide-row-meta">Endgame</span><h3>Nexus & Instances</h3><p>The endgame destination, encounter structure and the relationship between account progression and difficulty.</p><div class="guide-row-action"><a class="guide-status is-live" href="nexus.html">Current overview</a></div></article>
+        <article class="guide-row reveal"><span class="guide-row-meta">Island play</span><h3>Skyblock</h3><p>Island ownership, collaboration, quests and the systems designed specifically for Skyblock progression.</p><div class="guide-row-action"><a class="guide-status is-live" href="skyblock.html">Current overview</a></div></article>
+        <article class="guide-row reveal"><span class="guide-row-meta">Equipment</span><h3>Stats, equipment & combat</h3><p>Detailed equipment statistics, combat behavior and item roles require a dedicated verified reference instead of being scattered across overview pages.</p><div class="guide-row-action"><span class="guide-status is-next">Detailed guide next</span></div></article>
+        <article class="guide-row reveal"><span class="guide-row-meta">Collection</span><h3>Talisman Codex</h3><p>Effects, categories, affinity behavior, collection structure and special cases belong in one dedicated guide backed by verified system data.</p><div class="guide-row-action"><span class="guide-status is-next">Detailed guide next</span></div></article>
+        <article class="guide-row reveal"><span class="guide-row-meta">Equipment</span><h3>Enchantments</h3><p>Each enchantment needs one reference for compatibility, effect semantics, scaling and interactions before the detailed guide is published.</p><div class="guide-row-action"><span class="guide-status is-next">Detailed guide next</span></div></article>
+      </div>
+    </div></section>
+
+    <section class="content-section"><div class="shell">
+      <div class="content-head reveal"><div><div class="content-eyebrow">How Guides work</div><h2>Overview, reference and history have different jobs.</h2></div><p>Keeping these roles separate prevents contradictory values and makes future balance changes much easier to document.</p></div>
+      <div class="guides-principles reveal">
+        <article class="guides-principle"><small>Overview</small><h3>Understand the system.</h3><p>Gameplay, Worlds, Systems, Nexus and Skyblock explain relationships, intent and the shape of the player journey.</p></article>
+        <article class="guides-principle"><small>Guide</small><h3>Use the system.</h3><p>Detailed guides own instructions, exact mechanics, prerequisites, examples and edge cases once those facts are verified.</p></article>
+        <article class="guides-principle"><small>Changelog</small><h3>Know what changed.</h3><p>Release notes explain the transition between versions without becoming permanent documentation for the final state.</p></article>
+      </div>
+    </div></section>
+
+    <section class="content-section"><div class="shell">
+      <div class="guides-source-note reveal"><h3>No invented mechanics.</h3><p>If a value has not been verified against the current implementation or an approved configuration, Guides will mark the subject as incomplete instead of presenting an estimate as live behavior. That rule applies especially to stats, rewards, balance values, item effects and unlock requirements.</p></div>
+      <div class="next-destination reveal"><div><small>Reference</small><h3>Need to see what changed recently?</h3><p>The Changelog records player-facing changes; Guides describe the resulting system once the current behavior is verified.</p></div><a class="button primary" href="changelog.html">Open Changelog</a></div>
+    </div></section>
+  </main>
+
+  <footer class="site-footer"><div class="shell site-footer-inner"><span>Pixel Network · Java Edition</span><span><a href="store.html">Store</a> · <a href="community.html">Community</a> · <a href="development.html">Development</a> · <a href="team.html">About</a></span></div></footer>
+</body>
+</html>
