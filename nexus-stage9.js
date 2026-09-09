@@ -27,14 +27,18 @@
     return path || 'Difficulty path defined by account milestones.';
   };
 
+  const renderVisual = visual => {
+    if (!visual?.sprite) return '';
+    return `<div class="nexus-boss-art nexus-boss-art--${visual.sprite}" role="img" aria-label="${visual.alt}"></div>`;
+  };
+
   const renderMedia = instance => {
     const visuals = mediaFor(instance.name);
     if (!visuals.length) return '<div class="nexus-instance-media is-fallback" aria-hidden="true"></div>';
     if (visuals.length === 1) {
-      const visual = visuals[0];
-      return `<div class="nexus-instance-media"><img src="${visual.source}" alt="${visual.alt}" width="720" height="560" loading="lazy" decoding="async"></div>`;
+      return `<div class="nexus-instance-media">${renderVisual(visuals[0])}</div>`;
     }
-    return `<div class="nexus-instance-media nexus-instance-media--dual">${visuals.map(visual => `<img src="${visual.source}" alt="${visual.alt}" width="720" height="560" loading="lazy" decoding="async">`).join('')}</div>`;
+    return `<div class="nexus-instance-media nexus-instance-media--dual">${visuals.map(renderVisual).join('')}</div>`;
   };
 
   if (encounterHost) {
