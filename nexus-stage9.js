@@ -51,12 +51,13 @@
     if (!source) return null;
     const figure = el('figure', 'nexus-boss-art');
     const img = el('img');
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.fetchPriority = 'low';
     img.src = source;
     img.alt = visual?.alt || `${label || 'Nexus encounter'} concept visual`;
     img.width = 1448;
     img.height = 1086;
-    img.loading = 'lazy';
-    img.decoding = 'async';
     figure.appendChild(img);
     if (label) figure.appendChild(el('figcaption', '', label));
     return figure;
