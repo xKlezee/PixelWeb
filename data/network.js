@@ -51,7 +51,7 @@
       verified: true
     },
     community: {
-      discordUrl: 'https://discord.gg/khRCRhR9d4',
+      discordUrl: 'https://discord.gg/7KzWpezTNZ',
       forumLanding: 'forum.html',
       documentationUrl: 'https://pixel-network-1.gitbook.io/home/documentation/',
       forum: {
