@@ -39,6 +39,10 @@
     }
   };
 
+  const markExternal = (img, source) => {
+    if (/^https?:\/\//i.test(source)) img.referrerPolicy = 'no-referrer';
+  };
+
   const statRow = (label, value, accent = false) => {
     const row = el('div', 'worlds-stat');
     row.append(el('span', '', label));
@@ -53,12 +57,14 @@
 
     const figure = el('figure', `worlds-card-boss${optional ? ' is-optional' : ''}`);
     const img = el('img');
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.fetchPriority = 'low';
+    markExternal(img, source);
     img.src = source;
     img.alt = bossMedia?.alt || `${name} concept visual`;
     img.width = 160;
     img.height = 120;
-    img.loading = 'lazy';
-    img.decoding = 'async';
 
     const caption = el('figcaption');
     caption.append(el('small', '', label), el('strong', '', name));
@@ -81,6 +87,7 @@
       img.width = 960;
       img.height = 540;
       img.decoding = 'async';
+      markExternal(img, visualSource);
       const src640 = safeImageUrl(visual.source, 640);
       const src960 = safeImageUrl(visual.source, 960);
       const src1280 = safeImageUrl(visual.source, 1280);
@@ -91,11 +98,12 @@
       const sizes = '(max-width:700px) 82vw, (max-width:1199px) 300px, 25vw';
 
       if (index === 0) {
+        img.fetchPriority = 'high';
         img.src = src960;
         if (srcset) img.srcset = srcset;
         img.sizes = sizes;
-        img.fetchPriority = 'high';
       } else {
+        img.fetchPriority = 'low';
         img.dataset.src = src960;
         if (srcset) img.dataset.srcset = srcset;
         img.dataset.sizes = sizes;
@@ -214,12 +222,14 @@
       const source = safeImageUrl(entry.media?.source);
       if (source) {
         const img = el('img', 'worlds-boss-art');
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        img.fetchPriority = 'low';
+        markExternal(img, source);
         img.src = source;
         img.alt = entry.media?.alt || `${entry.name} concept visual`;
         img.width = 320;
         img.height = 240;
-        img.loading = 'lazy';
-        img.decoding = 'async';
         item.appendChild(img);
       }
       const copy = el('div', 'worlds-boss-copy');
