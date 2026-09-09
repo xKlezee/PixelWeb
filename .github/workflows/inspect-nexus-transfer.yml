@@ -1,0 +1,17 @@
+name: Inspect Nexus Transfer
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch share page
+        run: |
+          curl -fL --retry 3 'https://firestorage.ai/ja/f/UNcw5l7vhFgD' -o /tmp/share.html
+          echo "SIZE=$(wc -c < /tmp/share.html)"
+          grep -oE 'bossgen[1-4]\.png' /tmp/share.html | sort -u || true
+          grep -oE 'https?://[^"<> ]+' /tmp/share.html | head -100 || true
+          grep -oE '/[^"<> ]*(download|api|file)[^"<> ]*' /tmp/share.html | head -100 || true
