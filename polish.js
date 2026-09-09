@@ -87,59 +87,71 @@
   measureScrollRange();
   updateScrollProgress();
 
-  /*
-   * Global navigation normalization.
-   * Changelog belongs to Development; Community stays focused on social/reference destinations.
-   * This is generated once here so older static page markup cannot drift apart.
-   */
+  /* One canonical navigation model for every public-site page. Static HTML remains a
+     no-JS fallback, but runtime navigation never depends on legacy page-specific markup. */
   const changelogLanding = safeLocalPage(network?.changelog?.landing, 'changelog.html');
-  const developmentLanding = 'development.html';
+  const forumLanding = safeLocalPage(network?.community?.forumLanding, 'forum.html');
+  const canonicalNavigation = [
+    {
+      label: 'Explore',
+      items: [
+        ['gameplay.html', 'Gameplay', 'The main player journey.'],
+        ['systems.html', 'Systems', 'Progression, collection and equipment.'],
+        ['worlds.html', 'Worlds', 'The current world progression.'],
+        ['skyblock.html', 'Skyblock', 'Personal and collaborative island progression.'],
+        ['nexus.html', 'Nexus', 'Endgame access and instance progression.']
+      ]
+    },
+    {
+      label: 'Development',
+      items: [
+        ['development.html', 'Development', 'Current status, roadmap and product scale.'],
+        [changelogLanding, 'Changelog', 'Player-facing release notes.']
+      ]
+    },
+    {
+      label: 'Community',
+      items: [
+        ['community.html', 'Community', 'Discord, Forum and documentation.'],
+        [forumLanding, 'Forum', 'Long-form discussion preview.']
+      ]
+    }
+  ];
 
-  const existingDevelopmentGroup = Array.from(document.querySelectorAll('.nav-group')).find(group =>
-    group.querySelector(':scope > button')?.textContent.trim() === 'Development'
-  );
+  const createNavLink = ([href, title, description]) => {
+    const link = document.createElement('a');
+    link.href = safeLocalPage(href, 'index.html');
+    appendNavCopy(link, title, description);
+    if (currentPage === link.getAttribute('href')) link.setAttribute('aria-current', 'page');
+    return link;
+  };
 
-  if (!existingDevelopmentGroup && navLinks) {
-    const directDevelopment = Array.from(navLinks.children).find(child =>
-      child.matches?.('a') && child.getAttribute('href')?.endsWith(developmentLanding)
-    );
-
-    if (directDevelopment) {
+  if (navLinks) {
+    const fragment = document.createDocumentFragment();
+    canonicalNavigation.forEach(groupData => {
       const group = document.createElement('div');
-      group.className = 'nav-group nav-development';
+      group.className = 'nav-group';
 
       const button = document.createElement('button');
       button.type = 'button';
       button.setAttribute('aria-haspopup', 'true');
-      button.textContent = 'Development';
+      button.textContent = groupData.label;
 
       const menu = document.createElement('div');
       menu.className = 'nav-dropdown';
+      groupData.items.forEach(item => menu.appendChild(createNavLink(item)));
 
-      const developmentLink = document.createElement('a');
-      developmentLink.href = developmentLanding;
-      appendNavCopy(developmentLink, 'Development', 'Current status, roadmap and product scale.');
-      if (currentPage === developmentLanding) developmentLink.setAttribute('aria-current', 'page');
-
-      const changelogLink = document.createElement('a');
-      changelogLink.href = changelogLanding;
-      appendNavCopy(changelogLink, 'Changelog', 'Player-facing release notes.');
-      if (currentPage === changelogLanding) changelogLink.setAttribute('aria-current', 'page');
-
-      menu.append(developmentLink, changelogLink);
       group.append(button, menu);
-      directDevelopment.replaceWith(group);
-    }
-  }
+      fragment.appendChild(group);
+    });
 
-  const communityGroup = Array.from(document.querySelectorAll('.nav-group')).find(group =>
-    group.querySelector(':scope > button')?.textContent.trim() === 'Community'
-  );
-  if (communityGroup) {
-    const menu = communityGroup.querySelector(':scope > .nav-dropdown');
-    menu?.querySelectorAll(`a[href$="${changelogLanding}"]`).forEach(link => link.remove());
-    const communityDescription = menu?.querySelector('a[href$="community.html"] span');
-    if (communityDescription) communityDescription.textContent = 'Discord, Forum and documentation.';
+    const about = document.createElement('a');
+    about.href = 'team.html';
+    about.textContent = 'About';
+    if (currentPage === 'team.html') about.setAttribute('aria-current', 'page');
+    fragment.appendChild(about);
+
+    navLinks.replaceChildren(fragment);
   }
 
   /* Navigation groups: hover is convenient on desktop, click/keyboard is authoritative. */
@@ -170,7 +182,7 @@
     const menu = group.querySelector(':scope > .nav-dropdown');
     if (!button || !menu) return;
 
-    const menuId = menu.id || `nav-menu-${index + 1}`;
+    const menuId = `nav-menu-${index + 1}`;
     menu.id = menuId;
     button.setAttribute('aria-controls', menuId);
     button.setAttribute('aria-expanded', 'false');
@@ -220,36 +232,42 @@
     });
   });
 
-  /* PixelWeb explains the commercial model before handing off to the official Store. */
+  /* Canonical desktop actions: Discord, Store, Play, menu toggle. */
   const navActions = nav?.querySelector('.nav-actions');
-  const desktopStore = navActions?.querySelector('.nav-store');
   const storeLanding = safeLocalPage(network?.store?.landing, 'store.html');
-  if (desktopStore && !desktopStore.hasAttribute('data-store-direct')) {
-    desktopStore.href = storeLanding;
-    desktopStore.removeAttribute('target');
-    desktopStore.removeAttribute('rel');
-    if (currentPage === storeLanding) desktopStore.setAttribute('aria-current', 'page');
-  }
-
-  /* Discord is a permanent direct-access action beside Store and Play on desktop. */
   const discordFallback = 'https://discord.gg/7KzWpezTNZ';
   const discordUrl = safeHttpUrl(network?.community?.discordUrl, discordFallback);
-  let desktopDiscord = navActions?.querySelector('.nav-discord');
-  if (navActions && !desktopDiscord) {
-    desktopDiscord = document.createElement('a');
-    desktopDiscord.className = 'button quiet nav-discord';
+
+  if (navActions) {
+    let desktopDiscord = navActions.querySelector('.nav-discord');
+    if (!desktopDiscord) {
+      desktopDiscord = document.createElement('a');
+      desktopDiscord.className = 'button quiet nav-discord';
+      navActions.prepend(desktopDiscord);
+    }
     desktopDiscord.textContent = 'Discord';
-    desktopDiscord.setAttribute('aria-label', 'Join Pixel Network on Discord');
-    navActions.insertBefore(desktopDiscord, desktopStore || navToggle || null);
-  }
-  if (desktopDiscord) {
     desktopDiscord.href = discordUrl;
     desktopDiscord.target = '_blank';
     desktopDiscord.rel = 'noopener';
+    desktopDiscord.setAttribute('aria-label', 'Join Pixel Network on Discord');
+
+    let desktopStore = navActions.querySelector('.nav-store');
+    if (!desktopStore) {
+      desktopStore = document.createElement('a');
+      desktopStore.className = 'button quiet nav-store';
+      const playButton = navActions.querySelector('.nav-play');
+      navActions.insertBefore(desktopStore, playButton || navToggle || null);
+    }
+    desktopStore.textContent = 'Store';
+    desktopStore.href = storeLanding;
+    desktopStore.removeAttribute('target');
+    desktopStore.removeAttribute('rel');
+    desktopStore.toggleAttribute('aria-current', currentPage === storeLanding);
+    if (currentPage === storeLanding) desktopStore.setAttribute('aria-current', 'page');
   }
 
   /* Store and Discord remain available inside the mobile menu while Play stays in the header. */
-  if (navLinks && !navLinks.querySelector('.nav-mobile-discord')) {
+  if (navLinks) {
     const mobileDiscord = document.createElement('a');
     mobileDiscord.className = 'nav-mobile-store nav-mobile-discord';
     mobileDiscord.href = discordUrl;
@@ -257,16 +275,12 @@
     mobileDiscord.rel = 'noopener';
     mobileDiscord.textContent = 'Discord';
     navLinks.appendChild(mobileDiscord);
-  }
 
-  if (navLinks && desktopStore && !navLinks.querySelector('.nav-mobile-store-link')) {
     const mobileStore = document.createElement('a');
     mobileStore.className = 'nav-mobile-store nav-mobile-store-link';
-    mobileStore.href = desktopStore.href;
-    if (desktopStore.target) mobileStore.target = desktopStore.target;
-    if (desktopStore.rel) mobileStore.rel = desktopStore.rel;
-    if (desktopStore.getAttribute('aria-current') === 'page') mobileStore.setAttribute('aria-current', 'page');
+    mobileStore.href = storeLanding;
     mobileStore.textContent = 'Store';
+    if (currentPage === storeLanding) mobileStore.setAttribute('aria-current', 'page');
     navLinks.appendChild(mobileStore);
   }
 
