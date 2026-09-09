@@ -9,6 +9,13 @@
   const miningHost = document.querySelector('[data-systems-mining]');
   const supportHost = document.querySelector('[data-systems-support]');
 
+  const el = (tag, className = '', text = null) => {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== null && text !== undefined) node.textContent = String(text);
+    return node;
+  };
+
   const spine = [
     {
       code: '01',
@@ -34,43 +41,57 @@
   ];
 
   if (spineHost) {
-    spineHost.innerHTML = spine.map(stage => `
-      <article class="systems-spine-stage reveal">
-        <div class="systems-spine-marker">${stage.code}</div>
-        <div class="systems-spine-copy">
-          <small>${stage.eyebrow}</small>
-          <b>${stage.value}</b>
-          <h3>${stage.title}</h3>
-          <p>${stage.copy}</p>
-        </div>
-      </article>`).join('');
+    const stages = spine.map(stage => {
+      const article = el('article', 'systems-spine-stage reveal');
+      article.appendChild(el('div', 'systems-spine-marker', stage.code));
+      const copy = el('div', 'systems-spine-copy');
+      copy.append(
+        el('small', '', stage.eyebrow),
+        el('b', '', stage.value),
+        el('h3', '', stage.title),
+        el('p', '', stage.copy)
+      );
+      article.appendChild(copy);
+      return article;
+    });
+    spineHost.replaceChildren(...stages);
   }
 
   if (codexHost) {
-    codexHost.innerHTML = `
-      <span class="systems-feature-kicker">Talisman Codex</span>
-      <h3>Collections with distinct jobs.</h3>
-      <p>The World Progression Codex stays separate from mine and special-purpose talisman collections, keeping completion readable.</p>
-      <div class="systems-codex-metrics">
-        <div class="systems-codex-metric"><b>${content.worldProgressionTalismans ?? 36}</b><span>World progression</span><small>The defined Codex collection.</small></div>
-        <div class="systems-codex-metric"><b>${content.mineTalismans ?? 81}</b><span>Mine talismans</span><small>A separate collection tied to mine progression.</small></div>
-        <div class="systems-codex-metric"><b>+</b><span>Special categories</span><small>Secret, World Boss, Mob Hunt and seasonal collections expand independently.</small></div>
-      </div>`;
+    const metrics = el('div', 'systems-codex-metrics');
+    [
+      [content.worldProgressionTalismans ?? 36, 'World progression', 'The defined Codex collection.'],
+      [content.mineTalismans ?? 81, 'Mine talismans', 'A separate collection tied to mine progression.'],
+      ['+', 'Special categories', 'Secret, World Boss, Mob Hunt and seasonal collections expand independently.']
+    ].forEach(([value, label, note]) => {
+      const metric = el('div', 'systems-codex-metric');
+      metric.append(el('b', '', value), el('span', '', label), el('small', '', note));
+      metrics.appendChild(metric);
+    });
+
+    codexHost.replaceChildren(
+      el('span', 'systems-feature-kicker', 'Talisman Codex'),
+      el('h3', '', 'Collections with distinct jobs.'),
+      el('p', '', 'The World Progression Codex stays separate from mine and special-purpose talisman collections, keeping completion readable.'),
+      metrics
+    );
   }
 
   if (enchantHost) {
-    enchantHost.innerHTML = `
-      <span class="systems-feature-kicker">Equipment decisions</span>
-      <span class="systems-big-number">${content.enchantments ?? 27}</span>
-      <h3>Enchantments</h3>
-      <p>Custom enchantments add another decision layer to combat, mining and equipment without becoming a separate progression path.</p>`;
+    enchantHost.replaceChildren(
+      el('span', 'systems-feature-kicker', 'Equipment decisions'),
+      el('span', 'systems-big-number', content.enchantments ?? 27),
+      el('h3', '', 'Enchantments'),
+      el('p', '', 'Custom enchantments add another decision layer to combat, mining and equipment without becoming a separate progression path.')
+    );
   }
 
   if (miningHost) {
-    miningHost.innerHTML = `
-      <span class="systems-feature-kicker">Mining backbone</span>
-      <h3>Mining follows progression.</h3>
-      <p>Resources and mine progression move with the world structure instead of living in a detached loop.</p>`;
+    miningHost.replaceChildren(
+      el('span', 'systems-feature-kicker', 'Mining backbone'),
+      el('h3', '', 'Mining follows progression.'),
+      el('p', '', 'Resources and mine progression move with the world structure instead of living in a detached loop.')
+    );
   }
 
   if (supportHost) {
@@ -82,11 +103,10 @@
       ['Rewards', 'Crates & Keys', 'Reward containers sit beside progression rather than defining access to its core systems.']
     ];
 
-    supportHost.innerHTML = supporting.map(([category, title, copy]) => `
-      <article class="systems-support-row reveal">
-        <small>${category}</small>
-        <h3>${title}</h3>
-        <p>${copy}</p>
-      </article>`).join('');
+    supportHost.replaceChildren(...supporting.map(([category, title, copy]) => {
+      const article = el('article', 'systems-support-row reveal');
+      article.append(el('small', '', category), el('h3', '', title), el('p', '', copy));
+      return article;
+    }));
   }
 })();
