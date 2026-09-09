@@ -200,17 +200,19 @@
   }
 
   /* Discord is a permanent direct-access action beside Store and Play on desktop. */
-  const discordUrl = network?.community?.discordUrl || 'https://discord.gg/khRCRhR9d4';
+  const discordUrl = network?.community?.discordUrl || 'https://discord.gg/7KzWpezTNZ';
   let desktopDiscord = navActions?.querySelector('.nav-discord');
   if (navActions && !desktopDiscord) {
     desktopDiscord = document.createElement('a');
     desktopDiscord.className = 'button quiet nav-discord';
-    desktopDiscord.href = discordUrl;
-    desktopDiscord.target = '_blank';
-    desktopDiscord.rel = 'noopener';
     desktopDiscord.textContent = 'Discord';
     desktopDiscord.setAttribute('aria-label', 'Join Pixel Network on Discord');
     navActions.insertBefore(desktopDiscord, desktopStore || navToggle || null);
+  }
+  if (desktopDiscord) {
+    desktopDiscord.href = discordUrl;
+    desktopDiscord.target = '_blank';
+    desktopDiscord.rel = 'noopener';
   }
 
   /* Store and Discord remain available inside the mobile menu while Play stays in the header. */
