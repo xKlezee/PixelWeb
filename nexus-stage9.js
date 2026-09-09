@@ -65,7 +65,7 @@
 
   if (ladderHost) {
     const milestoneOrder = [
-      nexus.unlock || 'Prestige IV + defeat Viking',
+      nexus.unlock || 'Prestige IV',
       'Prestige VII',
       'Legacy I',
       'Legacy II'
