@@ -11,7 +11,11 @@
   <link rel="stylesheet" href="immersive.css"/>
   <link rel="stylesheet" href="polish.css"/>
   <link rel="stylesheet" href="phase1.css"/>
+  <link rel="stylesheet" href="home-stage11.css"/>
   <script src="data/network.js" defer></script>
+  <script src="data/worlds-media.js" defer></script>
+  <script src="data/nexus-media.js" defer></script>
+  <script src="home-stage11.js" defer></script>
   <script src="site.js" defer></script>
   <script src="immersive.js" defer></script>
   <script src="polish.js" defer></script>
@@ -23,11 +27,11 @@
     <a class="brand" href="index.html" aria-label="Pixel Network home"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a>
     <div class="nav-links" id="navLinks">
       <div class="nav-group"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal and collaborative island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div>
-      <a href="development.html">Development</a>
-      <div class="nav-group"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="community.html"><strong>Community</strong><span>Discord, Forum, docs and changelog.</span></a><a href="forum.html"><strong>Forum</strong><span>Long-form discussion.</span></a></div></div>
+      <div class="nav-group"><button type="button" aria-haspopup="true">Development</button><div class="nav-dropdown"><a href="development.html"><strong>Development</strong><span>Current status, roadmap and product scale.</span></a><a href="changelog.html"><strong>Changelog</strong><span>Player-facing release notes.</span></a></div></div>
+      <div class="nav-group"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="community.html"><strong>Community</strong><span>Discord, Forum and documentation.</span></a><a href="forum.html"><strong>Forum</strong><span>Long-form discussion preview.</span></a></div></div>
       <a href="team.html">About</a>
     </div>
-    <div class="nav-actions"><a class="button quiet nav-store" href="https://pixelboxx.tebex.io/" target="_blank" rel="noopener">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
+    <div class="nav-actions"><a class="button quiet nav-discord" href="https://discord.gg/7KzWpezTNZ" target="_blank" rel="noopener">Discord</a><a class="button quiet nav-store" href="store.html">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
   </div></nav>
 
   <main id="top">
@@ -37,76 +41,61 @@
         <h1>One progression. <em>Different ways to play.</em></h1>
         <p class="hero-lead">World progression, PvP, bosses, collections, Skyblock and endgame belong to the same network — giving different kinds of Minecraft players a long-term place to progress.</p>
         <div class="hero-actions">
-          <button class="copy-ip" type="button" data-copy-ip aria-label="Copy server IP"><span class="label">Play</span><span class="ip" data-network="server.ip">pixelboxxx.minehut.gg</span><span class="copy-mark" aria-hidden="true">⌘</span></button>
+          <button class="copy-ip" type="button" data-copy-ip aria-label="Open server join guide"><span class="label">Play</span><span class="ip" data-network="server.ip">pixelboxxx.minehut.gg</span><span class="copy-mark" aria-hidden="true">⌘</span></button>
           <a class="button secondary" href="gameplay.html">Explore Pixel</a>
         </div>
-        <div class="hero-meta"><span><i class="status-dot" id="serverStatusDot"></i><strong id="serverStatusText">Checking server…</strong></span><span><strong id="playerCount">—</strong> players online</span><span><strong data-network="development.completion">87</strong>% in development</span></div>
+        <div class="hero-meta"><span><i class="status-dot" id="serverStatusDot"></i><strong id="serverStatusText">Checking server…</strong></span><span><strong id="playerCount">—</strong> players online</span></div>
       </div>
       <div class="hero-object" aria-hidden="true"><div class="hero-logo-card"><img src="LOGO%20OFICIAL.png" width="330" height="330" alt="" fetchpriority="high"/></div><div class="hero-note"><strong>One network</strong>Progress carries across a broader experience than a single game loop.</div></div>
     </div></section>
 
-    <section class="content-section"><div class="shell">
-      <div class="content-head reveal"><div><div class="content-eyebrow">What is Pixel?</div><h2>A network built around the player, not a list of modes.</h2></div><p>PvP, worlds, bosses, collection and island progression serve different interests without forcing Pixel Network into a single label.</p></div>
-      <div class="path-grid">
-        <article class="path-card reveal"><span class="path-label">Main progression</span><h3>Explore. Fight. Collect. Advance.</h3><p>Move through four current worlds, build equipment and collections, Prestige through increasingly demanding milestones and eventually open the Nexus.</p><div class="path-list"><span>Worlds</span><span>PvP</span><span>Mining</span><span>Bosses</span><span>Talismans</span><span>Nexus</span></div><a class="button primary" href="gameplay.html">Explore Gameplay</a></article>
-        <article class="path-card reveal"><span class="path-label">Skyblock</span><h3>Build. Improve. Progress together.</h3><p>Own an island, invite friends, build collaboratively, visit other islands and follow a Skyblock-specific quest path away from the PvP focus.</p><div class="path-list"><span>Own Island</span><span>Co-op Building</span><span>Island Progression</span><span>Skyblock Quests</span></div><a class="button secondary" href="skyblock.html">Explore Skyblock</a></article>
+    <section class="home-intro"><div class="shell">
+      <div class="home-intro-head reveal"><div class="content-eyebrow">Choose your entry point</div><h2>Different interests. The same Pixel account.</h2><p>The main experience and Skyblock serve different playstyles. Home only gives you the direction; each destination explains its own progression in detail.</p></div>
+      <div class="home-paths reveal">
+        <article class="home-path"><small>Main experience</small><h3>Progress through the network.</h3><p>Worlds, combat, mining, collection and bosses form the primary long-term route.</p><a class="button primary" href="gameplay.html">Explore Gameplay</a></article>
+        <article class="home-path"><small>Skyblock</small><h3>Build your own side of Pixel.</h3><p>Own an island, progress it, invite friends and follow the systems designed specifically for island play.</p><a class="button secondary" href="skyblock.html">Explore Skyblock</a></article>
       </div>
     </div></section>
 
     <section class="immersive-story" id="immersiveStory" aria-label="Interactive Pixel Network story">
       <div class="immersive-sticky">
         <video id="storyVideo" muted playsinline preload="metadata" src="Video_Perfecto_Con_Fondo_Negro.mp4" aria-hidden="true"></video>
-        <div class="immersive-ui"><div class="immersive-copy"><div class="immersive-kicker" id="storyKicker">01 / Progression</div><h2 id="storyTitle">Progression gives every action context.</h2><p id="storyBody">Levels, Prestige, worlds, equipment and collections feed the same long-term account journey rather than ending as isolated activities.</p></div><div class="immersive-tabs" aria-label="Story chapters"><button class="immersive-tab active" type="button">Progression</button><button class="immersive-tab" type="button">Worlds</button><button class="immersive-tab" type="button">Combat</button><button class="immersive-tab" type="button">Nexus</button></div></div>
+        <div class="immersive-ui"><div class="immersive-copy"><div class="immersive-kicker" id="storyKicker">01 / Progression</div><h2 id="storyTitle">Progression gives every action context.</h2><p id="storyBody">Equipment, mining, combat and collections feed the same long-term account journey rather than ending as isolated activities.</p></div><div class="immersive-tabs" aria-label="Story chapters"><button class="immersive-tab active" type="button">Progression</button><button class="immersive-tab" type="button">Worlds</button><button class="immersive-tab" type="button">Combat</button><button class="immersive-tab" type="button">Nexus</button></div></div>
         <div class="immersive-hint">Scroll to explore</div><div class="immersive-progress"><span id="storyProgress"></span></div>
       </div>
     </section>
 
-    <section class="content-section"><div class="shell">
-      <div class="content-head reveal"><div><div class="content-eyebrow">Long-term progression</div><h2>Three layers of account growth.</h2></div><p>The numbers are simple to read even when the systems underneath them grow deeper over time.</p></div>
-      <div class="metric-grid">
-        <div class="metric-card reveal"><b data-network="progression.maxLevel">300</b><span>Player levels</span><small>The current level cap.</small></div>
-        <div class="metric-card reveal"><b data-network="progression.maxPrestige">10</b><span>Prestige tiers</span><small>World access and later progression build through Prestige.</small></div>
-        <div class="metric-card reveal"><b data-network="progression.maxLegacy">4</b><span>Legacy tiers</span><small>Legacy extends progression beyond Prestige.</small></div>
+    <section class="home-media-section"><div class="shell">
+      <div class="home-feature">
+        <div class="home-feature-copy reveal"><small>Worlds</small><h2>The route changes the world around you.</h2><p>Pixel's current world progression is easier to understand when the environments are allowed to speak for themselves. The Worlds page contains the actual route, bosses and access conditions.</p><a class="button primary" href="worlds.html">Explore Worlds</a></div>
+        <div class="home-feature-media home-world-media reveal" data-home-world-media aria-label="Pixel Network world gallery"></div>
       </div>
     </div></section>
 
-    <section class="content-section"><div class="shell">
-      <div class="content-head reveal"><div><div class="content-eyebrow">Signature systems</div><h2>Concrete depth, not feature-count marketing.</h2></div><p>Pixel is defined by a few systems with real progression weight. Supporting mechanics exist around them rather than competing for attention.</p></div>
-      <div class="signature-grid">
-        <a class="signature-card reveal" href="systems.html"><span class="sig-index">TALISMAN CODEX</span><b data-network="content.worldProgressionTalismans">36</b><h3>World progression talismans</h3><p>A defined Codex collection connected to the current world journey.</p><span class="arrow">Explore Systems →</span></a>
-        <a class="signature-card reveal" href="systems.html"><span class="sig-index">CUSTOM ENCHANTMENTS</span><b data-network="content.enchantments">27</b><h3>Equipment specialization</h3><p>Custom enchantments extend decisions across combat, mining and utility.</p><span class="arrow">Explore Systems →</span></a>
-        <a class="signature-card reveal" href="nexus.html"><span class="sig-index">INSTANCE ENCOUNTERS</span><b data-network="content.instanceEncounters">3</b><h3>Four bosses across endgame</h3><p>Raphael, Azazel and the dual Abyss/Astral encounter scale through three difficulty tiers.</p><span class="arrow">Enter Nexus →</span></a>
+    <section class="home-media-section"><div class="shell">
+      <div class="home-feature home-feature--reverse">
+        <div class="home-feature-copy reveal"><small>Nexus</small><h2>Endgame should feel like a threshold.</h2><p>Nexus changes the visual and progression language of the network. Its page handles the unlock condition, encounters and difficulty ladder without duplicating them here.</p><a class="button primary" href="nexus.html">Enter Nexus</a></div>
+        <div class="home-feature-media home-nexus-frame reveal" data-home-nexus-media aria-label="Nexus threshold visual"></div>
       </div>
     </div></section>
 
-    <section class="content-section"><div class="shell">
-      <div class="content-head reveal"><div><div class="content-eyebrow">World progression</div><h2>Four current worlds. One escalating route.</h2></div><p>Worlds are progression stages, not isolated maps. Prestige and boss clears determine when the journey moves forward.</p></div>
-      <div class="world-road reveal">
-        <article class="world-stage"><span class="stage-no">01</span><div><h3>Overworld</h3><p>Foundation · 9 mines · World Boss: Beholder</p></div><div class="stage-meta"><span><strong>Access</strong> Starting world</span></div></article>
-        <div class="gate"><strong>Next:</strong> Prestige I + defeat Beholder</div>
-        <article class="world-stage"><span class="stage-no">02</span><div><h3>Pirate Kingdom</h3><p>Expansion · 6 mines · HollowKeeper + optional Kraken encounter</p></div><div class="stage-meta"><span><strong>Gate boss</strong> HollowKeeper</span></div></article>
-        <div class="gate"><strong>Next:</strong> Prestige II + defeat HollowKeeper</div>
-        <article class="world-stage"><span class="stage-no">03</span><div><h3>Nether</h3><p>Pressure · 6 mines · World Boss: Eldric</p></div><div class="stage-meta"><span><strong>Gate boss</strong> Eldric</span></div></article>
-        <div class="gate"><strong>Next:</strong> Prestige III + defeat Eldric</div>
-        <article class="world-stage"><span class="stage-no">04</span><div><h3>Winter</h3><p>Late progression · 6 mines · World Boss: Viking</p></div><div class="stage-meta"><span><strong>Nexus access</strong> Prestige IV + defeat Viking</span></div></article>
+    <section class="home-links-section"><div class="shell">
+      <div class="home-links-head reveal"><div class="content-eyebrow">Go deeper</div><h2>Use the page that owns the information.</h2><p>Systems explains how the mechanics fit together. Community is where discussion, Discord and documentation live.</p></div>
+      <div class="home-link-list">
+        <article class="home-link-row reveal"><small>Systems</small><h3>Understand the structure.</h3><p>Progression, collection, equipment, quests and supporting mechanics are organized by role instead of repeated across the site.</p><a class="button secondary" href="systems.html">Open Systems</a></article>
+        <article class="home-link-row reveal"><small>Community</small><h3>Join the live side of Pixel.</h3><p>Discord is the primary community destination, while the Forum remains a preview and Documentation stays the long-form reference.</p><a class="button secondary" href="community.html">Open Community</a></article>
       </div>
-      <div class="page-cta reveal"><div><h3>Winter closes the current world route.</h3><p>Reach Prestige IV and defeat Viking to unlock Nexus permanently. Viking is the final combat gate before the progression model shifts into endgame Instances.</p></div><div class="page-cta-actions"><a class="button primary" href="worlds.html">Explore Worlds</a><a class="button secondary" href="nexus.html">Enter Nexus</a></div></div>
     </div></section>
 
-    <section class="content-section"><div class="shell">
-      <div class="nexus-access reveal"><div><div class="content-eyebrow">Nexus</div><h2 style="margin:8px 0 10px;font-size:clamp(34px,4.6vw,58px);line-height:1;letter-spacing:-.045em">Endgame begins after Prestige IV + Viking.</h2><p style="margin:0;color:var(--muted);max-width:720px;line-height:1.7">Once both conditions are completed, Nexus access persists permanently. From there, instance difficulties continue through Prestige VII, Legacy I and Legacy II.</p></div><div class="unlock"><b data-network="nexus.unlock">Prestige IV + defeat Viking</b></div></div>
-      <div class="next-destination reveal"><div><small>Endgame</small><h3>See the complete instance difficulty ladder.</h3><p>Raphael, Azazel and Abyss/Astral each enter the progression at different milestones.</p></div><a class="button primary" href="nexus.html">Open Nexus</a></div>
-    </div></section>
-
-    <section class="content-section"><div class="shell">
-      <div class="dev-progress reveal"><div><b><span data-network="development.completion">87</span>%</b><small>Current development estimate</small></div><div><div class="progress-track" data-network-progress="development.completion"><span></span></div><div class="progress-copy">Updated manually · <span data-network="development.updatedLabel">September 2026</span></div></div></div>
-      <div class="page-cta reveal"><div><h3>Pixel Network is still being built in public.</h3><p>Development separates what is available, what is being refined and what remains planned.</p></div><div class="page-cta-actions"><a class="button primary" href="development.html">Development</a><a class="button secondary" href="community.html">Community</a></div></div>
-    </div></section>
-
-    <section class="content-section"><div class="shell">
-      <div class="content-head reveal"><div><div class="content-eyebrow">Store</div><h2>Support that builds with your account.</h2></div><p>Store purchases contribute to a cumulative lifetime support path. Supporting Pixel through different purchases still moves the same account toward automatic rank milestones.</p></div>
-      <div class="flow-line reveal"><div class="flow-step"><b>VIP</b><span>Support milestone</span></div><div class="flow-step"><b>MVP</b><span>Support milestone</span></div><div class="flow-step"><b>Ultra</b><span>Support milestone</span></div><div class="flow-step"><b>Pixel</b><span>Support milestone</span></div><div class="flow-step"><b>Pixel+</b><span>Support milestone</span></div></div>
-      <div class="page-cta reveal"><div><h3>Understand the model before opening the shop.</h3><p>Purchases can accelerate parts of progression, while Pixel's core progression and power systems remain obtainable through play.</p></div><div class="page-cta-actions"><a class="button primary" href="store.html">How the Store Works</a><a class="button secondary" href="https://pixelboxx.tebex.io/" target="_blank" rel="noopener" data-store-url>Open Official Store</a></div></div>
+    <section class="home-closing"><div class="shell">
+      <div class="home-status reveal">
+        <div><small>Development</small><h3>Pixel Network is still being built in public.</h3><p>The Development page separates what is available, what is being refined and what remains planned.</p></div>
+        <div class="home-status-value"><b><span data-network="development.completion">87</span>%</b><span data-network="development.updatedLabel">September 2026</span></div>
+      </div>
+      <div class="home-store-row reveal">
+        <div><h3>Support Pixel without turning Home into a storefront.</h3><p>The Store page explains the cumulative support model before sending visitors to the official shop.</p></div>
+        <div class="home-store-actions"><a class="button primary" href="store.html">How the Store Works</a><a class="button secondary" href="https://pixelboxx.tebex.io/" target="_blank" rel="noopener" data-store-url>Official Store</a></div>
+      </div>
     </div></section>
   </main>
 
