@@ -1,14 +1,8 @@
 #!/usr/bin/env python3
-"""Static integrity checks for PixelWeb.
-
-The checks are deliberately dependency-free so they can run in GitHub Actions
-without installing third-party packages. They validate local navigation/assets
-and basic HTML safety invariants without changing runtime behavior.
-"""
+"""Dependency-free static integrity and browser-safety checks for PixelWeb."""
 from __future__ import annotations
 
 import html.parser
-import sys
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
@@ -23,11 +17,18 @@ class PageParser(html.parser.HTMLParser):
         self.blank_without_noopener: list[tuple[str, int]] = []
         self.inline_handlers: list[tuple[str, str, int]] = []
         self.duplicate_ids: list[tuple[str, int]] = []
+        self.dangerous_urls: list[tuple[str, str, int]] = []
+        self.inline_scripts: list[int] = []
+        self.has_csp = False
+        self.has_referrer_policy = False
         self._ids: set[str] = set()
+        self._inline_script_line: int | None = None
+        self._inline_script_has_content = False
 
     def handle_starttag(self, tag: str, attrs):
         attrs_dict = dict(attrs)
         line, _ = self.getpos()
+        tag = tag.lower()
 
         element_id = attrs_dict.get("id")
         if element_id:
@@ -36,8 +37,21 @@ class PageParser(html.parser.HTMLParser):
             self._ids.add(element_id)
 
         for attr, value in attrs:
-            if attr.lower().startswith("on") and value:
+            attr_lower = attr.lower()
+            if attr_lower.startswith("on") and value:
                 self.inline_handlers.append((tag, attr, line))
+            if attr_lower in {"href", "src", "action", "formaction"} and value:
+                if str(value).strip().lower().startswith("javascript:"):
+                    self.dangerous_urls.append((attr_lower, value, line))
+
+        if tag == "meta":
+            http_equiv = str(attrs_dict.get("http-equiv") or "").lower()
+            name = str(attrs_dict.get("name") or "").lower()
+            content = str(attrs_dict.get("content") or "").lower()
+            if http_equiv == "content-security-policy" and content:
+                self.has_csp = True
+            if name == "referrer" and content:
+                self.has_referrer_policy = True
 
         if tag in {"a", "link"} and attrs_dict.get("href"):
             self.refs.append(("href", attrs_dict["href"], line))
@@ -54,10 +68,25 @@ class PageParser(html.parser.HTMLParser):
             if "noopener" not in rel:
                 self.blank_without_noopener.append((attrs_dict.get("href", ""), line))
 
+        if tag == "script" and not attrs_dict.get("src"):
+            self._inline_script_line = line
+            self._inline_script_has_content = False
+
+    def handle_data(self, data: str):
+        if self._inline_script_line is not None and data.strip():
+            self._inline_script_has_content = True
+
+    def handle_endtag(self, tag: str):
+        if tag.lower() == "script" and self._inline_script_line is not None:
+            if self._inline_script_has_content:
+                self.inline_scripts.append(self._inline_script_line)
+            self._inline_script_line = None
+            self._inline_script_has_content = False
+
 
 def local_target(raw: str) -> Path | None:
     raw = raw.strip()
-    if not raw or raw.startswith(("#", "mailto:", "tel:", "javascript:")):
+    if not raw or raw.startswith(("#", "mailto:", "tel:")):
         return None
     parts = urlsplit(raw)
     if parts.scheme or parts.netloc:
@@ -78,14 +107,21 @@ def main() -> int:
         parser = PageParser()
         parser.feed(page.read_text(encoding="utf-8"))
 
+        if not parser.has_csp:
+            failures.append(f"{page.name}: missing Content-Security-Policy meta")
+        if not parser.has_referrer_policy:
+            failures.append(f"{page.name}: missing referrer policy meta")
+
         for element_id, line in parser.duplicate_ids:
             failures.append(f"{page.name}:{line}: duplicate id '{element_id}'")
-
         for href, line in parser.blank_without_noopener:
             failures.append(f"{page.name}:{line}: target=_blank missing rel=noopener ({href})")
-
         for tag, attr, line in parser.inline_handlers:
             failures.append(f"{page.name}:{line}: inline event handler {tag}[{attr}] is not CSP-ready")
+        for line in parser.inline_scripts:
+            failures.append(f"{page.name}:{line}: inline script is blocked by script-src 'self'")
+        for attr, value, line in parser.dangerous_urls:
+            failures.append(f"{page.name}:{line}: dangerous javascript: URL in {attr} ({value})")
 
         for attr, raw, line in parser.refs:
             target = local_target(raw)
