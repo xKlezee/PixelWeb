@@ -150,23 +150,51 @@
 .nexus-instance-card[data-accent='dual'] { --instance-accent: 126,91,211; }
 .nexus-instance-media {
   position: relative;
-  aspect-ratio: 16/10;
+  aspect-ratio: 4/3;
   overflow: hidden;
   background: #090a0e;
   border-bottom: 1px solid rgba(255,255,255,.05);
 }
-.nexus-instance-media img { width:100%; height:100%; display:block; object-fit:cover; }
-.nexus-instance-media--dual { display:grid; grid-template-columns:1fr 1fr; }
-.nexus-instance-media--dual img:first-child { object-position: 58% center; }
-.nexus-instance-media--dual img:last-child { object-position: 42% center; }
-.nexus-instance-media--dual::after {
+.nexus-instance-media--dual { aspect-ratio: 8/3; }
+.nexus-boss-art {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background-image: url('assets/nexus/bosses.avif');
+  background-repeat: no-repeat;
+  background-color: #090a0e;
+}
+.nexus-boss-art--raphael {
+  background-size: 200% 200%;
+  background-position: 0 0;
+}
+.nexus-boss-art--azazel {
+  background-size: 200% 200%;
+  background-position: 100% 0;
+}
+.nexus-boss-art--abyss {
+  background-size: 200% 200%;
+  background-position: 0 100%;
+}
+.nexus-boss-art--astral {
+  background-size: 200% 200%;
+  background-position: 100% 100%;
+}
+.nexus-boss-art--abyss-astral {
+  background-size: 100% 200%;
+  background-position: 50% 100%;
+}
+.nexus-instance-media::after {
   content:'';
   position:absolute;
-  top:0;
-  bottom:0;
-  left:50%;
-  width:1px;
-  background:rgba(255,255,255,.08);
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(180deg,transparent 66%,rgba(8,9,12,.18));
+}
+.nexus-instance-media--dual::after {
+  background:
+    linear-gradient(90deg,transparent calc(50% - .5px),rgba(255,255,255,.11) 50%,transparent calc(50% + .5px)),
+    linear-gradient(180deg,transparent 62%,rgba(8,9,12,.18));
 }
 .nexus-instance-media.is-fallback {
   background: radial-gradient(circle at 50% 50%,rgba(var(--instance-accent),.18),transparent 55%),#090a0e;
@@ -269,8 +297,9 @@
   .nexus-hero-visual img { min-height:360px; }
   .nexus-threshold { grid-template-columns:1fr; }
   .nexus-instance-grid { grid-template-columns:1fr; }
-  .nexus-instance-card { display:grid; grid-template-columns:minmax(280px,.72fr) minmax(0,1fr); }
-  .nexus-instance-media { aspect-ratio:auto; min-height:100%; }
+  .nexus-instance-card { display:block; }
+  .nexus-instance-media { aspect-ratio:4/3; min-height:0; }
+  .nexus-instance-media--dual { aspect-ratio:8/3; }
   .nexus-instance-card p { min-height:0; }
   .nexus-ladder { grid-template-columns:repeat(2,minmax(0,1fr)); row-gap:26px; }
   .nexus-ladder::before { display:none; }
@@ -280,8 +309,6 @@
   .nexus-hero-visual,
   .nexus-hero-visual img { min-height:300px; }
   .nexus-hero-badge { grid-template-columns:1fr; gap:8px; }
-  .nexus-instance-card { display:block; }
-  .nexus-instance-media { aspect-ratio:16/9; min-height:0; }
   .nexus-ladder { grid-template-columns:1fr; }
   .nexus-ladder-stage { display:grid; grid-template-columns:54px minmax(0,1fr); gap:10px; }
   .nexus-ladder-marker { width:42px; height:42px; margin:6px 0 0; box-shadow:none; }
