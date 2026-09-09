@@ -4,13 +4,16 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <meta name="theme-color" content="#0b0c0e"/>
-  <meta name="description" content="The Nexus is Pixel Network's endgame access layer, permanently unlocked after Prestige IV + defeating Viking, with instance difficulties continuing through Legacy II."/>
+  <meta name="description" content="Explore Pixel Network's Nexus endgame: Prestige IV + Viking access, permanent unlock and the Raphael, Azazel and Abyss + Astral instance ladder through Legacy II."/>
   <title>Nexus — Pixel Network</title>
   <link rel="icon" href="LOGO%20OFICIAL.png"/>
   <link rel="stylesheet" href="site.css"/>
   <link rel="stylesheet" href="polish.css"/>
   <link rel="stylesheet" href="phase1.css"/>
+  <link rel="stylesheet" href="nexus-stage9.css"/>
   <script src="data/network.js" defer></script>
+  <script src="data/nexus-media.js" defer></script>
+  <script src="nexus-stage9.js" defer></script>
   <script src="site.js" defer></script>
   <script src="polish.js" defer></script>
 </head>
@@ -18,67 +21,75 @@
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <nav class="site-nav" aria-label="Main navigation"><div class="shell nav-inner">
     <a class="brand" href="index.html"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a>
-    <div class="nav-links" id="navLinks"><div class="nav-group"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal and collaborative island progression.</span></a><a href="nexus.html" aria-current="page"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div><a href="development.html">Development</a><div class="nav-group"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="community.html"><strong>Community</strong><span>Discord, Forum, docs and changelog.</span></a><a href="forum.html"><strong>Forum</strong><span>Long-form discussion.</span></a></div></div><a href="team.html">About</a></div>
-    <div class="nav-actions"><a class="button quiet nav-store" href="https://pixelboxx.tebex.io/" target="_blank" rel="noopener">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
+    <div class="nav-links" id="navLinks">
+      <div class="nav-group"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal and collaborative island progression.</span></a><a href="nexus.html" aria-current="page"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div>
+      <div class="nav-group"><button type="button" aria-haspopup="true">Development</button><div class="nav-dropdown"><a href="development.html"><strong>Development</strong><span>Current status, roadmap and product scale.</span></a><a href="changelog.html"><strong>Changelog</strong><span>Player-facing release notes.</span></a></div></div>
+      <div class="nav-group"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="community.html"><strong>Community</strong><span>Discord, Forum and documentation.</span></a><a href="forum.html"><strong>Forum</strong><span>Long-form discussion preview.</span></a></div></div>
+      <a href="team.html">About</a>
+    </div>
+    <div class="nav-actions"><a class="button quiet nav-discord" href="https://discord.gg/khRCRhR9d4" target="_blank" rel="noopener">Discord</a><a class="button quiet nav-store" href="store.html">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
   </div></nav>
 
   <main>
-    <section class="page-hero"><div class="shell"><div class="breadcrumbs"><a href="index.html">Pixel Network</a><span>/</span><span>Nexus</span></div><div class="page-hero-grid"><div><div class="eyebrow">Endgame</div><h1>The access layer for Pixel's endgame.</h1></div><p>The Nexus unlocks after reaching Prestige IV and defeating Viking, the final required World Boss in the current world route. That first unlock is permanent, while later instance milestones continue through Prestige VII, Legacy I and Legacy II.</p></div></div></section>
-
-    <section class="content-section"><div class="shell">
-      <div class="nexus-access reveal"><div><div class="content-eyebrow">Access</div><h2 style="margin:8px 0 10px;font-size:clamp(34px,4.6vw,58px);line-height:1;letter-spacing:-.045em">Endgame opens at Prestige IV + Viking.</h2><p style="margin:0;color:var(--muted);max-width:720px;line-height:1.7">Both conditions are required once: reach Prestige IV and defeat Viking. After that first clear, Nexus access stays unlocked permanently on the account.</p></div><div class="unlock"><b data-network="nexus.unlock">Prestige IV + defeat Viking</b></div></div>
-    </div></section>
-
-    <section class="content-section"><div class="shell">
-      <div class="content-head reveal"><div><div class="content-eyebrow">What changes</div><h2>Reaching the Nexus starts a second progression curve.</h2></div><p>The four-world route ends with Viking. From there, account milestones determine which instance difficulties become available instead of asking the player to clear another world gate.</p></div>
-      <div class="path-grid">
-        <article class="path-card reveal"><span class="path-label">Permanent unlock</span><h3>The final world gate is earned once.</h3><p>Prestige IV proves account progression; Viking proves completion of Winter's final combat milestone. Together they permanently unlock Nexus access.</p><div class="path-list"><span>Prestige IV</span><span>Defeat Viking</span><span>Persistent Nexus unlock</span></div></article>
-        <article class="path-card reveal"><span class="path-label">Instance ladder</span><h3>Difficulty becomes the next gate.</h3><p>Raphael and Azazel begin at Easy as Nexus opens. Abyss + Astral joins later, and the full ladder continues into Legacy progression.</p><div class="path-list"><span>Nexus unlock → first Easy encounters</span><span>Prestige VII → next difficulty step</span><span>Legacy I–II → late difficulty unlocks</span></div></article>
-      </div>
-    </div></section>
-
-    <section class="content-section"><div class="shell">
-      <div class="content-head reveal"><div><div class="content-eyebrow">Instance progression</div><h2>Every milestone opens a specific difficulty.</h2></div><p>The ladder is explicit: later account progression does not simply raise numbers globally; it opens harder versions of defined encounters.</p></div>
-      <div class="difficulty-road">
-        <article class="difficulty-tier reveal"><div class="unlock-at">Prestige IV + Viking</div><div class="encounters"><span>Raphael · Easy</span><span>Azazel · Easy</span></div></article>
-        <article class="difficulty-tier reveal"><div class="unlock-at">Prestige VII</div><div class="encounters"><span>Raphael · Medium</span><span>Azazel · Medium</span><span>Abyss + Astral · Easy</span></div></article>
-        <article class="difficulty-tier reveal"><div class="unlock-at">Legacy I</div><div class="encounters"><span>Raphael · Hard</span><span>Azazel · Hard</span><span>Abyss + Astral · Medium</span></div></article>
-        <article class="difficulty-tier reveal"><div class="unlock-at">Legacy II</div><div class="encounters"><span>Abyss + Astral · Hard</span></div></article>
-      </div>
-    </div></section>
-
-    <section class="content-section"><div class="shell">
-      <div class="content-head reveal"><div><div class="content-eyebrow">Encounters</div><h2>Three instances. Four bosses. Three difficulties.</h2></div><p>The current endgame ladder contains two single-boss encounters and one dual-boss encounter, each with a defined account milestone path.</p></div>
-      <div class="signature-grid">
-        <article class="signature-card reveal"><span class="sig-index">01 / INSTANCE</span><b>Raphael</b><h3>Single-boss encounter</h3><p>Easy opens together with the Nexus after Prestige IV + Viking. Medium follows at Prestige VII and Hard at Legacy I.</p><span class="card-meta">Prestige IV + Viking → Prestige VII → Legacy I</span></article>
-        <article class="signature-card reveal"><span class="sig-index">02 / INSTANCE</span><b>Azazel</b><h3>Single-boss encounter</h3><p>Azazel follows the same account milestone path as Raphael across Easy, Medium and Hard.</p><span class="card-meta">Prestige IV + Viking → Prestige VII → Legacy I</span></article>
-        <article class="signature-card reveal"><span class="sig-index">03 / INSTANCE</span><b style="font-size:32px">Abyss + Astral</b><h3>Dual-boss encounter</h3><p>The dual encounter enters the ladder later: Easy at Prestige VII, Medium at Legacy I and Hard at Legacy II.</p><span class="card-meta">Prestige VII → Legacy I → Legacy II</span></article>
+    <section class="nexus-visual-hero">
+      <div class="shell">
+        <div class="breadcrumbs"><a href="index.html">Pixel Network</a><span>/</span><span>Nexus</span></div>
+        <div class="nexus-hero-grid">
+          <div>
+            <div class="eyebrow">Endgame threshold</div>
+            <h1>Finish the worlds.<br><span>Enter the Nexus.</span></h1>
+            <p class="nexus-hero-copy">Prestige IV and the Viking clear close Pixel's current world progression. That first threshold permanently unlocks the Nexus, where progression shifts from world gates to defined Instance difficulties.</p>
+            <div class="nexus-hero-meta"><span>Prestige IV + Viking</span><span>Permanent unlock</span><span>3 Instances · 4 bosses</span><span>Legacy II apex</span></div>
+          </div>
+          <figure class="nexus-hero-visual">
+            <img src="assets/nexus/nexus-threshold.svg" width="1200" height="760" alt="Stylized Nexus threshold portal" fetchpriority="high"/>
+            <figcaption class="nexus-hero-badge"><div><small>Final world gate</small><strong>Prestige IV + defeat Viking</strong></div><span>UNLOCKS PERMANENTLY</span></figcaption>
+          </figure>
+        </div>
       </div>
     </section>
 
     <section class="content-section"><div class="shell">
-      <div class="content-head reveal"><div><div class="content-eyebrow">Current structure</div><h2>The Nexus is the endgame destination; Instances are its defined combat curve.</h2></div><p>Nexus access and the instance difficulty ladder form the current endgame structure. Additional Nexus-specific combat, exclusive item rotations and larger endgame formats can expand the destination over time.</p></div>
+      <div class="nexus-threshold reveal">
+        <div class="nexus-threshold-main"><div class="content-eyebrow">Access</div><h2>One final clear changes the progression model.</h2><p>Prestige IV proves the account milestone. Viking completes Winter's final combat milestone. Once both have been achieved, the Nexus remains available permanently instead of asking the player to repeat the world gate.</p><div class="nexus-threshold-chips"><span>Prestige IV</span><span>Defeat Viking</span><span>Persistent account unlock</span></div></div>
+        <aside class="nexus-threshold-side"><small>Nexus access</small><b data-network="nexus.unlock">Prestige IV + defeat Viking</b><p>After the first unlock, later progression controls Instance difficulty rather than Nexus access itself.</p></aside>
+      </div>
+    </div></section>
+
+    <section class="content-section"><div class="shell">
+      <div class="content-head reveal"><div><div class="content-eyebrow">Instances</div><h2>Three encounters define the current combat curve.</h2></div><p>Raphael and Azazel are single-boss encounters. Abyss + Astral is one dual-boss encounter. Their visual treatment is separate because their progression roles are different.</p></div>
+      <div class="nexus-instance-grid" data-nexus-encounters></div>
+      <div class="nexus-current-note reveal"><p>The Nexus is the endgame destination, while the currently defined combat progression is carried by these Instances. Additional Nexus-specific combat belongs to future expansion rather than being presented as playable today.</p><strong>Current structure</strong></div>
+    </div></section>
+
+    <section class="content-section"><div class="shell">
+      <div class="content-head reveal"><div><div class="content-eyebrow">Difficulty ladder</div><h2>Account milestones open specific versions of each encounter.</h2></div><p>The endgame does not simply raise every boss at once. Each milestone adds a defined difficulty or encounter, making the path readable from Nexus entry through Legacy II.</p></div>
+      <div class="nexus-ladder" data-nexus-ladder></div>
+    </div></section>
+
+    <section class="content-section"><div class="shell">
+      <div class="content-head reveal"><div><div class="content-eyebrow">Endgame index</div><h2>The current Nexus model in one view.</h2></div><p>These are player-facing progression facts, not internal implementation details.</p></div>
       <div class="index-list">
-        <div class="index-row reveal"><span>Nexus access</span><strong>Prestige IV + defeat Viking</strong></div>
-        <div class="index-row reveal"><span>Access model</span><strong>Permanent once unlocked</strong></div>
-        <div class="index-row reveal"><span>Instance encounters</span><strong><span data-network="content.instanceEncounters">3</span></strong></div>
-        <div class="index-row reveal"><span>Individual bosses</span><strong><span data-network="content.instanceBosses">4</span></strong></div>
-        <div class="index-row reveal"><span>Difficulty tiers</span><strong><span data-network="content.instanceDifficulties">3</span></strong></div>
+        <div class="index-row reveal"><span>Nexus access</span><strong data-network="nexus.unlock">Prestige IV + defeat Viking</strong></div>
+        <div class="index-row reveal"><span>Access model</span><strong data-network="nexus.accessModel">Permanent once unlocked</strong></div>
+        <div class="index-row reveal"><span>Instance encounters</span><strong data-network="content.instanceEncounters">3</strong></div>
+        <div class="index-row reveal"><span>Individual bosses</span><strong data-network="content.instanceBosses">4</strong></div>
+        <div class="index-row reveal"><span>Difficulty tiers</span><strong data-network="content.instanceDifficulties">3</strong></div>
         <div class="index-row reveal"><span>Final current difficulty unlock</span><strong>Legacy II</strong></div>
       </div>
     </div></section>
 
     <section class="content-section"><div class="shell">
-      <div class="content-head reveal"><div><div class="content-eyebrow">Expanding endgame</div><h2>The destination can grow without changing its identity.</h2></div><p>Future Nexus content extends the same endgame destination rather than splitting the account into another unrelated mode. These additions belong to Pixel's future endgame direction rather than the current playable foundation.</p></div>
+      <div class="content-head reveal"><div><div class="content-eyebrow">Expanding endgame</div><h2>The Nexus can grow without rewriting its role.</h2></div><p>Future additions extend the same endgame destination. They are intentionally separated from the current playable foundation so the website does not promise content before it exists.</p></div>
       <div class="path-grid">
-        <article class="path-card reveal"><span class="path-label">Current foundation</span><h3>Final world clear + instance progression.</h3><p>The current foundation begins when Prestige IV and the Viking clear permanently unlock Nexus, followed by the defined difficulty ladder tied to later Prestige and Legacy milestones.</p><div class="path-list"><span>Prestige IV + Viking access</span><span>Raphael</span><span>Azazel</span><span>Abyss + Astral</span></div></article>
-        <article class="path-card reveal"><span class="path-label">Direction / planned</span><h3>More long-term endgame layers.</h3><p>Exclusive rotating items and rewards, progressive raids, progressive dungeons and The Crucible of Legends belong to the future expansion of the endgame.</p><div class="path-list"><span>Exclusive rotating items & rewards</span><span>Progressive raids</span><span>Progressive dungeons</span><span>The Crucible of Legends</span></div></article>
+        <article class="path-card reveal"><span class="path-label">Current foundation</span><h3>Threshold + Instance progression.</h3><p>The current endgame begins with Prestige IV + Viking and continues through the Raphael, Azazel and Abyss + Astral difficulty ladder.</p><div class="path-list"><span>Permanent Nexus unlock</span><span>Raphael</span><span>Azazel</span><span>Abyss + Astral</span></div></article>
+        <article class="path-card reveal"><span class="path-label">Direction / planned</span><h3>More long-term layers.</h3><p>Exclusive rotating items and rewards, progressive raids, progressive dungeons and The Crucible of Legends remain future expansion of the Nexus endgame.</p><div class="path-list"><span>Rotating items & rewards</span><span>Progressive raids</span><span>Progressive dungeons</span><span>The Crucible of Legends</span></div></article>
       </div>
 
-      <div class="next-destination reveal"><div><small>Next</small><h3>See what is available, in development and planned.</h3><p>Development keeps future systems separate from current gameplay without exposing internal infrastructure.</p></div><a class="button primary" href="development.html">Development</a></div>
+      <div class="next-destination reveal"><div><small>Next</small><h3>Systems explain the mechanics behind the route.</h3><p>Levels, Prestige, Legacy, talismans, enchantments and world gates connect the account before and after the Nexus threshold.</p></div><a class="button primary" href="systems.html">Explore Systems</a></div>
     </div></section>
   </main>
 
-  <footer style="padding:34px 0 48px;border-top:1px solid rgba(255,255,255,.075)"><div class="shell" style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:#777b83;font-size:12px"><span>Pixel Network · Nexus</span><span><a href="worlds.html">Worlds</a> · <a href="development.html">Development</a> · <a href="community.html">Community</a></span></div></footer>
+  <footer style="padding:34px 0 48px;border-top:1px solid rgba(255,255,255,.075)"><div class="shell" style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:#777b83;font-size:12px"><span>Pixel Network · Nexus</span><span><a href="worlds.html">Worlds</a> · <a href="systems.html">Systems</a> · <a href="development.html">Development</a></span></div></footer>
 </body>
 </html>
