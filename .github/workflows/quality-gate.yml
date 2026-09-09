@@ -1,0 +1,33 @@
+name: PixelWeb Quality Gate
+
+on:
+  push:
+    branches: [main, "hardening/**"]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pixelweb-quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  static-security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Scan committed files for obvious secrets
+        run: python scripts/security_scan.py
+
+      - name: Validate static site integrity
+        run: python scripts/validate_site.py
