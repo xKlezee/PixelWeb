@@ -30,18 +30,18 @@
       'Approved original 1448×1086 PNG. PixelWeb displays the file without conversion or sprite cropping.'
     ),
     abyss: media(
-      'assets/nexus/abyss.png',
+      'assets/nexus/astral.png',
       'Abyss inside a violet void sanctum',
       'void',
       'approved-player-provided',
-      'Approved original 1448×1086 PNG. PixelWeb displays the file independently inside the dual encounter.'
+      'Approved original 1448×1086 PNG. The uploaded filenames for the dual encounter were inverted, so the manifest maps this unchanged original file to Abyss.'
     ),
     astral: media(
-      'assets/nexus/astral.png',
+      'assets/nexus/abyss.png',
       'Astral inside a luminous cosmic arena',
       'astral',
       'approved-player-provided',
-      'Approved original 1448×1086 PNG. PixelWeb displays the file independently inside the dual encounter.'
+      'Approved original 1448×1086 PNG. The uploaded filenames for the dual encounter were inverted, so the manifest maps this unchanged original file to Astral.'
     )
   });
 })();
