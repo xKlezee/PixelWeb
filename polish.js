@@ -39,8 +39,10 @@
   };
 
   /* Reading progress only. Scroll handlers must not mutate page geometry. */
-  const progress = document.createElement('div');
+  const progress = document.createElement('progress');
   progress.className = 'scroll-progress';
+  progress.max = 1;
+  progress.value = 0;
   progress.setAttribute('aria-hidden', 'true');
   document.body.prepend(progress);
 
@@ -55,7 +57,7 @@
   const updateScrollProgress = () => {
     scheduled = false;
     const y = window.scrollY || root.scrollTop || 0;
-    progress.style.transform = `scaleX(${Math.min(1, Math.max(0, y / maxScroll))})`;
+    progress.value = Math.min(1, Math.max(0, y / maxScroll));
   };
 
   const requestUpdate = () => {
@@ -143,7 +145,7 @@
   /* Navigation groups: hover is convenient on desktop, click/keyboard is authoritative. */
   const groups = [...document.querySelectorAll('.nav-group')];
 
-  const closeGroup = (group) => {
+  const closeGroup = group => {
     const button = group?.querySelector(':scope > button');
     group?.classList.remove('is-open');
     button?.setAttribute('aria-expanded', 'false');
@@ -155,7 +157,7 @@
     });
   };
 
-  const openGroup = (group) => {
+  const openGroup = group => {
     if (!group) return;
     const button = group.querySelector(':scope > button');
     closeGroups(group);
@@ -173,9 +175,7 @@
     button.setAttribute('aria-controls', menuId);
     button.setAttribute('aria-expanded', 'false');
 
-    if (menu.querySelector('[aria-current="page"]')) {
-      group.classList.add('contains-current');
-    }
+    if (menu.querySelector('[aria-current="page"]')) group.classList.add('contains-current');
 
     button.addEventListener('click', event => {
       event.preventDefault();
