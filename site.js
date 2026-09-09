@@ -13,15 +13,19 @@
     }
   };
 
-  if (!document.querySelector('link[data-play-modal-styles]')) {
-    const modalStyles = document.createElement('link');
-    modalStyles.rel = 'stylesheet';
-    modalStyles.href = 'play-modal.css';
-    modalStyles.dataset.playModalStyles = '';
-    document.head.appendChild(modalStyles);
-  }
+  const ensureStylesheet = (href, marker) => {
+    if (document.querySelector(`link[${marker}]`)) return;
+    const stylesheet = document.createElement('link');
+    stylesheet.rel = 'stylesheet';
+    stylesheet.href = href;
+    stylesheet.setAttribute(marker, '');
+    document.head.appendChild(stylesheet);
+  };
 
-  const readPath = (path) => path.split('.').reduce((value, key) => value?.[key], network);
+  ensureStylesheet('security-hardening.css', 'data-security-hardening-styles');
+  ensureStylesheet('play-modal.css', 'data-play-modal-styles');
+
+  const readPath = path => path.split('.').reduce((value, key) => value?.[key], network);
 
   // Public product data is rendered from data/network.js so repeated figures stay consistent.
   $$('[data-network]').forEach(el => {
@@ -30,7 +34,15 @@
   });
   $$('[data-network-progress]').forEach(el => {
     const value = Number(readPath(el.dataset.networkProgress));
-    if (Number.isFinite(value)) el.style.setProperty('--progress', `${Math.max(0, Math.min(100, value))}%`);
+    if (!Number.isFinite(value)) return;
+    const bounded = Math.max(0, Math.min(100, value));
+    if (el instanceof HTMLProgressElement) {
+      el.max = 100;
+      el.value = bounded;
+    }
+    el.setAttribute('aria-valuemin', '0');
+    el.setAttribute('aria-valuemax', '100');
+    el.setAttribute('aria-valuenow', String(bounded));
   });
   $$('[data-store-url]').forEach(link => {
     const storeUrl = safeHttpUrl(network?.store?.url);
@@ -68,8 +80,7 @@
       const input = document.createElement('textarea');
       input.value = serverIp;
       input.setAttribute('readonly', '');
-      input.style.position = 'fixed';
-      input.style.opacity = '0';
+      input.className = 'clipboard-fallback';
       document.body.appendChild(input);
       input.select();
       document.execCommand('copy');
