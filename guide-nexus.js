@@ -56,9 +56,17 @@
       const article = el('article', 'guide-world-stage');
       const head = el('div', 'guide-world-stage-head');
       head.append(el('span', '', `MILESTONE ${String(index + 1).padStart(2, '0')}`), el('strong', '', milestone));
-      const list = el('div', 'guide-milestone-unlocks');
-      unlocks.forEach(unlock => list.appendChild(el('span', '', unlock)));
-      article.append(head, list);
+
+      const facts = el('dl', 'guide-definition-list');
+      unlocks.forEach((unlock, unlockIndex) => {
+        facts.append(
+          el('dt', '', unlockIndex === 0 ? 'Unlocks' : 'Also'),
+          el('dd', '', unlock)
+        );
+      });
+      if (!unlocks.length) facts.append(el('dt', '', 'Unlocks'), el('dd', '', 'No current encounter unlock recorded.'));
+
+      article.append(head, facts);
       return article;
     });
     milestoneHost.replaceChildren(...stages);
