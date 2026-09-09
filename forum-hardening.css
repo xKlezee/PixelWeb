@@ -1,0 +1,25 @@
+[hidden] {
+  display: none !important;
+}
+
+.forum-preview-copy {
+  max-width: 430px;
+  margin: 14px 0 18px;
+  color: #777;
+  font-size: 11px;
+  line-height: 1.7;
+  text-align: center;
+}
+
+.post-modal-inner {
+  position: relative;
+}
+
+.post-modal-header {
+  margin-bottom: 18px;
+}
+
+.post-modal-title {
+  margin-bottom: 16px;
+  font-size: 19px;
+}
