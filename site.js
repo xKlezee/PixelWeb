@@ -3,25 +3,15 @@
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
   const network = window.PIXEL_NETWORK_PUBLIC || {};
 
-  // Browser-side inspection cannot be made impossible on a public website, but PixelWeb
-  // deliberately removes the common entry points used for casual inspection. Security must
-  // never depend on this layer: no secret, credential or private implementation detail belongs
-  // in client-delivered HTML, CSS or JavaScript.
-  document.addEventListener('contextmenu', event => {
-    event.preventDefault();
-  }, { capture: true });
-
-  document.addEventListener('keydown', event => {
-    const key = String(event.key || '').toLowerCase();
-    const windowsDevTools = event.ctrlKey && event.shiftKey && ['i', 'j', 'c'].includes(key);
-    const macDevTools = event.metaKey && event.altKey && ['i', 'j', 'c'].includes(key);
-    const viewSource = (event.ctrlKey || event.metaKey) && key === 'u';
-
-    if (event.key === 'F12' || windowsDevTools || macDevTools || viewSource) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
+  const safeHttpUrl = value => {
+    if (!value) return null;
+    try {
+      const url = new URL(String(value), window.location.href);
+      return ['http:', 'https:'].includes(url.protocol) ? url.href : null;
+    } catch {
+      return null;
     }
-  }, { capture: true });
+  };
 
   if (!document.querySelector('link[data-play-modal-styles]')) {
     const modalStyles = document.createElement('link');
@@ -43,7 +33,8 @@
     if (Number.isFinite(value)) el.style.setProperty('--progress', `${Math.max(0, Math.min(100, value))}%`);
   });
   $$('[data-store-url]').forEach(link => {
-    if (network?.store?.url) link.href = network.store.url;
+    const storeUrl = safeHttpUrl(network?.store?.url);
+    if (storeUrl) link.href = storeUrl;
   });
 
   const toast = $('#toast');
@@ -258,7 +249,8 @@
       if (active) {
         const img = $('img[data-src]', panel);
         if (img?.dataset.src) {
-          img.src = img.dataset.src;
+          const source = safeHttpUrl(img.dataset.src);
+          if (source) img.src = source;
           img.removeAttribute('data-src');
         }
       }
