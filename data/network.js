@@ -132,16 +132,16 @@
         boss: 'Viking',
         bossRole: 'Progression World Boss',
         unlock: 'Prestige III + defeat Eldric',
-        nextGate: 'Prestige IV + defeat Viking → Nexus',
+        nextGate: 'Prestige IV → Nexus',
         verified: true
       }
     ],
     nexus: {
-      unlock: 'Prestige IV + defeat Viking',
+      unlock: 'Prestige IV',
       unlockMilestone: 'Prestige IV',
-      requiredBoss: 'Viking',
+      requiredBoss: null,
       accessPersists: true,
-      vikingRequired: true,
+      vikingRequired: false,
       accessModel: 'Permanent once unlocked',
       combatLayer: 'Instance progression',
       verified: true,
@@ -150,7 +150,7 @@
           name: 'Raphael',
           format: 'Single-boss encounter',
           difficulties: [
-            { name: 'Easy', unlock: 'Prestige IV + defeat Viking' },
+            { name: 'Easy', unlock: 'Prestige IV' },
             { name: 'Medium', unlock: 'Prestige VII' },
             { name: 'Hard', unlock: 'Legacy I' }
           ]
@@ -159,7 +159,7 @@
           name: 'Azazel',
           format: 'Single-boss encounter',
           difficulties: [
-            { name: 'Easy', unlock: 'Prestige IV + defeat Viking' },
+            { name: 'Easy', unlock: 'Prestige IV' },
             { name: 'Medium', unlock: 'Prestige VII' },
             { name: 'Hard', unlock: 'Legacy I' }
           ]
