@@ -46,25 +46,25 @@
 }
 .systems-section-head p { margin:0;color:var(--muted);font-size:13px;line-height:1.7; }
 
-/* Progression is a timeline, not a card grid. */
+/* Progression is strictly Levels → Prestige → Legacy. */
 .systems-spine {
   position:relative;
   display:grid;
-  grid-template-columns:repeat(5,minmax(0,1fr));
+  grid-template-columns:repeat(3,minmax(0,1fr));
   gap:0;
-  max-width:1120px;
+  max-width:780px;
   margin:0 auto;
 }
 .systems-spine::before {
   content:'';
   position:absolute;
-  left:9%;
-  right:9%;
+  left:16.666%;
+  right:16.666%;
   top:24px;
   height:1px;
-  background:linear-gradient(90deg,rgba(118,160,255,.68),rgba(137,176,255,.52),rgba(184,128,72,.55),rgba(184,137,255,.58),rgba(205,181,108,.52));
+  background:linear-gradient(90deg,rgba(118,160,255,.68),rgba(137,176,255,.56),rgba(205,181,108,.56));
 }
-.systems-spine-stage { position:relative;min-width:0;padding:0 14px; }
+.systems-spine-stage { position:relative;min-width:0;padding:0 18px; }
 .systems-spine-marker {
   position:relative;
   z-index:1;
@@ -84,14 +84,14 @@
 .systems-spine-copy small { color:#788194;font-size:8px;text-transform:uppercase;letter-spacing:.12em;font-weight:800; }
 .systems-spine-copy b { display:block;margin-top:9px;color:#f0f1f4;font-size:22px;line-height:1;letter-spacing:-.04em; }
 .systems-spine-copy h3 { margin:9px 0 8px;font-size:17px;letter-spacing:-.025em; }
-.systems-spine-copy p { margin:0 auto;max-width:190px;color:var(--muted);font-size:10px;line-height:1.58; }
+.systems-spine-copy p { margin:0 auto;max-width:210px;color:var(--muted);font-size:10px;line-height:1.58; }
 
-/* Route handoffs are informational; only the CTA behaves like a button. */
+/* Content access lives outside the permanent progression spine. */
 .systems-route-links {
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
   max-width:920px;
-  margin:42px auto 0;
+  margin:0 auto;
   border-top:1px solid rgba(255,255,255,.065);
   border-bottom:1px solid rgba(255,255,255,.065);
 }
@@ -222,7 +222,7 @@
 @media (max-width:980px) {
   .systems-section-head { grid-template-columns:1fr;gap:16px;align-items:start; }
   .systems-spine { grid-template-columns:1fr;max-width:760px;gap:0; }
-  .systems-spine::before { left:23px;right:auto;top:24px;bottom:24px;width:1px;height:auto;background:linear-gradient(180deg,rgba(118,160,255,.65),rgba(184,128,72,.5),rgba(184,137,255,.58)); }
+  .systems-spine::before { left:23px;right:auto;top:24px;bottom:24px;width:1px;height:auto;background:linear-gradient(180deg,rgba(118,160,255,.65),rgba(137,176,255,.55),rgba(205,181,108,.55)); }
   .systems-spine-stage { display:grid;grid-template-columns:48px minmax(0,1fr);gap:20px;padding:0 0 26px; }
   .systems-spine-marker { margin:0;box-shadow:0 0 0 6px #0a0b0e; }
   .systems-spine-copy { text-align:left;padding-top:2px; }
