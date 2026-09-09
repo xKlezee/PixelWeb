@@ -3,6 +3,26 @@
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
   const network = window.PIXEL_NETWORK_PUBLIC || {};
 
+  // Browser-side inspection cannot be made impossible on a public website, but PixelWeb
+  // deliberately removes the common entry points used for casual inspection. Security must
+  // never depend on this layer: no secret, credential or private implementation detail belongs
+  // in client-delivered HTML, CSS or JavaScript.
+  document.addEventListener('contextmenu', event => {
+    event.preventDefault();
+  }, { capture: true });
+
+  document.addEventListener('keydown', event => {
+    const key = String(event.key || '').toLowerCase();
+    const windowsDevTools = event.ctrlKey && event.shiftKey && ['i', 'j', 'c'].includes(key);
+    const macDevTools = event.metaKey && event.altKey && ['i', 'j', 'c'].includes(key);
+    const viewSource = (event.ctrlKey || event.metaKey) && key === 'u';
+
+    if (event.key === 'F12' || windowsDevTools || macDevTools || viewSource) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }
+  }, { capture: true });
+
   if (!document.querySelector('link[data-play-modal-styles]')) {
     const modalStyles = document.createElement('link');
     modalStyles.rel = 'stylesheet';
