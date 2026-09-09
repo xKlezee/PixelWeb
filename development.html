@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <meta name="theme-color" content="#0b0c0e"/>
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; media-src 'self' https:; font-src 'self' https: data:; connect-src 'self' https://api.mcsrvstat.us; frame-src 'none'; worker-src 'none'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https: data:; media-src 'self' https:; font-src 'self' https: data:; connect-src 'self' https://api.mcsrvstat.us; frame-src 'none'; worker-src 'none'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
   <meta name="description" content="Track Pixel Network's public development status, current content scale and planned gameplay expansion."/>
   <title>Development — Pixel Network</title>
@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="site.css"/>
   <link rel="stylesheet" href="polish.css"/>
   <link rel="stylesheet" href="phase1.css"/>
+  <link rel="stylesheet" href="security-hardening.css"/>
   <script src="data/network.js" defer></script>
   <script src="site.js" defer></script>
   <script src="development.js" defer></script>
@@ -29,7 +30,7 @@
     <section class="page-hero"><div class="shell"><div class="breadcrumbs"><a href="index.html">Pixel Network</a><span>/</span><span>Development</span></div><div class="page-hero-grid"><div><div class="eyebrow">Development</div><h1>A public view of the game, not the infrastructure behind it.</h1></div><p>This page tracks the playable product: content scale, current direction and planned expansion. Internal architecture, plugins and server infrastructure remain outside the public website.</p></div></div></section>
 
     <section class="content-section"><div class="shell">
-      <div class="dev-progress reveal"><div><b><span data-network="development.completion">87</span>%</b><small>Current completion estimate</small></div><div><div class="progress-track" data-network-progress="development.completion"><span></span></div><div class="progress-copy">Updated manually by Pixel Network · <span data-network="development.updatedLabel">September 2026</span>. This is a product estimate, not an automated build metric.</div></div></div>
+      <div class="dev-progress reveal"><div><b><span data-network="development.completion">87</span>%</b><small>Current completion estimate</small></div><div><progress class="progress-track" data-network-progress="development.completion" max="100" value="87" aria-label="Current completion estimate">87%</progress><div class="progress-copy">Updated manually by Pixel Network · <span data-network="development.updatedLabel">September 2026</span>. This is a product estimate, not an automated build metric.</div></div></div>
     </div></section>
 
     <section class="content-section"><div class="shell">
@@ -78,6 +79,6 @@
     </div></section>
   </main>
 
-  <footer style="padding:34px 0 48px;border-top:1px solid rgba(255,255,255,.075)"><div class="shell" style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:#777b83;font-size:12px"><span>Pixel Network · Development</span><span><a href="nexus.html">Nexus</a> · <a href="changelog.html">Changelog</a> · <a href="community.html">Community</a></span></div></footer>
+  <footer class="site-footer"><div class="shell site-footer-inner"><span>Pixel Network · Development</span><span><a href="nexus.html">Nexus</a> · <a href="changelog.html">Changelog</a> · <a href="community.html">Community</a></span></div></footer>
 </body>
 </html>
