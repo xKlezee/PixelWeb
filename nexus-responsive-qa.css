@@ -1,0 +1,21 @@
+/* Responsive QA correction for Nexus dual encounter media.
+   Each source PNG remains a real 4:3 panel and stays fully visible side by side. */
+
+@media (max-width: 980px) {
+  .nexus-instance-media--dual {
+    aspect-ratio: auto;
+    align-items: stretch;
+  }
+
+  .nexus-instance-media--dual .nexus-boss-art {
+    aspect-ratio: 4 / 3;
+    height: auto;
+  }
+
+  .nexus-instance-media--dual .nexus-boss-art img {
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: contain;
+    object-position: center;
+  }
+}
