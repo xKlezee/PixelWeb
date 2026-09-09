@@ -133,7 +133,7 @@
 
 .nexus-instance-grid {
   display: grid;
-  grid-template-columns: repeat(3,minmax(0,1fr));
+  grid-template-columns: repeat(2,minmax(0,1fr));
   gap: 16px;
 }
 .nexus-instance-card {
@@ -145,6 +145,7 @@
   background: linear-gradient(180deg,rgba(var(--instance-accent),.03),#101217 42%,#0c0e12 100%);
   box-shadow: 0 16px 36px rgba(0,0,0,.2);
 }
+.nexus-instance-card:nth-child(3) { grid-column: 1 / -1; }
 .nexus-instance-card[data-accent='gold'] { --instance-accent: 225,195,102; }
 .nexus-instance-card[data-accent='crimson'] { --instance-accent: 221,77,91; }
 .nexus-instance-card[data-accent='dual'] { --instance-accent: 126,91,211; }
@@ -155,46 +156,52 @@
   background: #090a0e;
   border-bottom: 1px solid rgba(255,255,255,.05);
 }
-.nexus-instance-media--dual { aspect-ratio: 8/3; }
+.nexus-instance-media--dual {
+  aspect-ratio: auto;
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+}
 .nexus-boss-art {
+  position: relative;
+  min-width: 0;
+  margin: 0;
+  background: #090a0e;
+}
+.nexus-instance-media:not(.nexus-instance-media--dual) .nexus-boss-art { height: 100%; }
+.nexus-boss-art img {
   width: 100%;
   height: 100%;
   display: block;
-  background-image: url('assets/nexus/bosses.avif');
-  background-repeat: no-repeat;
-  background-color: #090a0e;
+  object-fit: contain;
+  object-position: center;
+  background: #090a0e;
 }
-.nexus-boss-art--raphael {
-  background-size: 200% 200%;
-  background-position: 0 0;
-}
-.nexus-boss-art--azazel {
-  background-size: 200% 200%;
-  background-position: 100% 0;
-}
-.nexus-boss-art--abyss {
-  background-size: 200% 200%;
-  background-position: 0 100%;
-}
-.nexus-boss-art--astral {
-  background-size: 200% 200%;
-  background-position: 100% 100%;
-}
-.nexus-boss-art--abyss-astral {
-  background-size: 100% 200%;
-  background-position: 50% 100%;
+.nexus-instance-media--dual .nexus-boss-art { aspect-ratio: 4/3; }
+.nexus-instance-media--dual .nexus-boss-art + .nexus-boss-art { border-left: 1px solid rgba(255,255,255,.09); }
+.nexus-boss-art figcaption {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  z-index: 2;
+  padding: 6px 9px;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 999px;
+  background: rgba(7,8,11,.82);
+  color: rgba(255,255,255,.82);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
 }
 .nexus-instance-media::after {
   content:'';
   position:absolute;
   inset:0;
   pointer-events:none;
-  background:linear-gradient(180deg,transparent 66%,rgba(8,9,12,.18));
+  background:linear-gradient(180deg,transparent 74%,rgba(8,9,12,.12));
 }
 .nexus-instance-media--dual::after {
-  background:
-    linear-gradient(90deg,transparent calc(50% - .5px),rgba(255,255,255,.11) 50%,transparent calc(50% + .5px)),
-    linear-gradient(180deg,transparent 62%,rgba(8,9,12,.18));
+  background:linear-gradient(180deg,transparent 74%,rgba(8,9,12,.12));
 }
 .nexus-instance-media.is-fallback {
   background: radial-gradient(circle at 50% 50%,rgba(var(--instance-accent),.18),transparent 55%),#090a0e;
@@ -297,9 +304,10 @@
   .nexus-hero-visual img { min-height:360px; }
   .nexus-threshold { grid-template-columns:1fr; }
   .nexus-instance-grid { grid-template-columns:1fr; }
+  .nexus-instance-card:nth-child(3) { grid-column:auto; }
   .nexus-instance-card { display:block; }
   .nexus-instance-media { aspect-ratio:4/3; min-height:0; }
-  .nexus-instance-media--dual { aspect-ratio:8/3; }
+  .nexus-instance-media--dual { aspect-ratio:auto; }
   .nexus-instance-card p { min-height:0; }
   .nexus-ladder { grid-template-columns:repeat(2,minmax(0,1fr)); row-gap:26px; }
   .nexus-ladder::before { display:none; }
@@ -309,6 +317,8 @@
   .nexus-hero-visual,
   .nexus-hero-visual img { min-height:300px; }
   .nexus-hero-badge { grid-template-columns:1fr; gap:8px; }
+  .nexus-instance-media--dual { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .nexus-boss-art figcaption { left:8px; bottom:8px; padding:5px 7px; font-size:8px; }
   .nexus-ladder { grid-template-columns:1fr; }
   .nexus-ladder-stage { display:grid; grid-template-columns:54px minmax(0,1fr); gap:10px; }
   .nexus-ladder-marker { width:42px; height:42px; margin:6px 0 0; box-shadow:none; }
