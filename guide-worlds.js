@@ -4,6 +4,7 @@
   const tableBody = document.querySelector('[data-guide-worlds-table]');
   const routeHost = document.querySelector('[data-guide-worlds-route]');
   const summaryHost = document.querySelector('[data-guide-worlds-summary]');
+  const orderHosts = document.querySelectorAll('[data-guide-worlds-order]');
 
   const el = (tag, className = '', text = null) => {
     const node = document.createElement(tag);
@@ -11,6 +12,14 @@
     if (text !== null && text !== undefined) node.textContent = String(text);
     return node;
   };
+
+  const orderedNames = worlds
+    .slice()
+    .sort((a, b) => Number(a.order || 0) - Number(b.order || 0))
+    .map(world => world.name)
+    .filter(Boolean)
+    .join(' → ');
+  orderHosts.forEach(node => { node.textContent = orderedNames || '—'; });
 
   if (summaryHost) {
     const values = [
@@ -31,14 +40,7 @@
   if (tableBody) {
     const rows = worlds.map(world => {
       const tr = document.createElement('tr');
-      const values = [
-        world.order,
-        world.name,
-        world.mines,
-        world.boss,
-        world.unlock,
-        world.nextGate
-      ];
+      const values = [world.order, world.name, world.mines, world.boss, world.unlock, world.nextGate];
       values.forEach(value => tr.appendChild(el('td', '', value ?? '—')));
       return tr;
     });
