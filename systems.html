@@ -31,16 +31,16 @@
 
   <main>
     <section class="systems-hero">
-      <div class="shell">
+      <div class="shell systems-hero-inner">
         <div class="breadcrumbs"><a href="index.html">Pixel Network</a><span>/</span><span>Systems</span></div>
-        <div class="systems-hero-grid">
-          <div>
-            <div class="eyebrow">System architecture</div>
-            <h1>One account.<br><span>Systems that build on it.</span></h1>
-            <p class="systems-hero-copy">Pixel is not a stack of disconnected features. Levels create the base account, Prestige changes access, world gates prove progression, Nexus shifts the model to endgame difficulties, and collections and equipment grow around that same route.</p>
-            <div class="systems-hero-metrics"><span><b data-network="progression.maxLevel">300</b>&nbsp;levels</span><span><b data-network="progression.maxPrestige">10</b>&nbsp;Prestige tiers</span><span><b data-network="progression.maxLegacy">4</b>&nbsp;Legacy tiers</span><span><b data-network="content.mines">27</b>&nbsp;mines</span></div>
-          </div>
-          <aside class="systems-hero-map" data-systems-hero-map aria-label="Pixel Network systems overview"></aside>
+        <div class="eyebrow">System architecture</div>
+        <h1>One account.<br><span>Systems that build on it.</span></h1>
+        <p class="systems-hero-copy">Pixel is not a stack of disconnected features. Levels create the base account, Prestige changes access, world gates prove progression, Nexus shifts the model to endgame difficulties, and collections and equipment grow around that same route.</p>
+        <div class="systems-hero-metrics">
+          <span><b data-network="progression.maxLevel">300</b>&nbsp;levels</span>
+          <span><b data-network="progression.maxPrestige">10</b>&nbsp;Prestige tiers</span>
+          <span><b data-network="progression.maxLegacy">4</b>&nbsp;Legacy tiers</span>
+          <span><b data-network="content.mines">27</b>&nbsp;mines</span>
         </div>
       </div>
     </section>
@@ -48,38 +48,26 @@
     <section class="systems-section"><div class="shell">
       <div class="systems-section-head reveal"><div><div class="content-eyebrow">Progression spine</div><h2>The account changes what the player can reach.</h2></div><p>This is the structural layer underneath Worlds and Nexus. It is milestone-driven rather than a universal quest chain.</p></div>
       <div class="systems-spine" data-systems-spine></div>
+      <div class="systems-route-links reveal">
+        <a class="systems-route-link" href="worlds.html"><small>World access</small><h3>Prestige becomes geography.</h3><p>Beholder, HollowKeeper, Eldric and Viking combine with account milestones to close the four-world route.</p><span class="arrow">Explore exact world gates →</span></a>
+        <a class="systems-route-link" href="nexus.html"><small>Endgame access</small><h3>The model changes after Winter.</h3><p>Prestige IV + Viking permanently unlocks Nexus access; later milestones open defined Instance difficulties instead of more worlds.</p><span class="arrow">Explore Nexus progression →</span></a>
+      </div>
     </div></section>
 
     <section class="systems-section"><div class="shell">
-      <div class="systems-section-head reveal"><div><div class="content-eyebrow">Core systems</div><h2>Collection, equipment and resources reinforce the same route.</h2></div><p>The important distinction is purpose: some systems define access, others deepen what the player owns, improves or pursues along the way.</p></div>
-
-      <div class="systems-core-layout">
-        <article class="systems-feature systems-feature--codex reveal" data-systems-codex></article>
-        <div class="systems-feature-side">
-          <article class="systems-feature systems-feature-small reveal" data-systems-enchantments></article>
-          <article class="systems-feature systems-feature-small reveal">
-            <span class="systems-feature-kicker">Endgame handoff</span>
-            <span class="systems-big-number" data-network="content.instanceEncounters">3</span>
-            <h3>Instances inherit account milestones</h3>
-            <p>Nexus does not replace progression. Prestige and Legacy continue deciding which versions of Raphael, Azazel and Abyss + Astral become available.</p>
-            <div class="systems-enchant-index" aria-label="Instance index"><span>R</span><span>A</span><span>A+A</span></div>
-          </article>
-        </div>
-      </div>
-
-      <article class="systems-mining reveal" data-systems-mining></article>
-
-      <div class="systems-link-pair">
-        <a class="systems-link-card reveal" href="worlds.html"><div><small>World access</small><h3>Boss clears turn Prestige into visible gates.</h3><p>Beholder, HollowKeeper, Eldric and Viking each close a progression world. Kraken remains optional and does not gate the route.</p></div><span class="arrow">Explore exact world gates →</span></a>
-        <a class="systems-link-card reveal" href="nexus.html"><div><small>Endgame access</small><h3>Prestige IV + Viking opens a permanent threshold.</h3><p>After the Nexus unlock, account milestones stop opening worlds and instead open defined Instance difficulties through Legacy II.</p></div><span class="arrow">Explore Nexus progression →</span></a>
+      <div class="systems-section-head reveal"><div><div class="content-eyebrow">Core systems</div><h2>Collection, equipment and resources reinforce the route.</h2></div><p>Not every mechanic needs its own card. These three systems carry most of the useful supporting information around permanent progression.</p></div>
+      <div class="systems-core-band">
+        <article class="systems-core-column reveal" data-systems-codex></article>
+        <article class="systems-core-column reveal" data-systems-enchantments></article>
+        <article class="systems-core-column reveal" data-systems-mining></article>
       </div>
     </div></section>
 
     <section class="systems-section"><div class="shell">
       <div class="systems-section-head reveal"><div><div class="content-eyebrow">Quest tracks</div><h2>Two current contexts. Neither drives the four-world route.</h2></div><p>Questing has a defined place in Pixel without becoming a universal progression script.</p></div>
-      <div class="systems-quest-grid">
-        <article class="systems-quest reveal"><small>BattlePass</small><h3>Seasonal activity track.</h3><p>BattlePass uses its own quests as a secondary progression layer. It rewards continued activity while permanent levels, Prestige, boss gates and Legacy remain separate.</p><div class="systems-quest-tags"><span>Dedicated quests</span><span>Secondary progression</span><span>Seasonal activity</span></div><div class="systems-quest-note">BattlePass quests do not replace the world progression structure.</div></article>
-        <article class="systems-quest reveal"><small>Skyblock</small><h3>Island-specific progression.</h3><p>Skyblock has its own quests tied to the player's island, alongside building, upgrades, collaborative play, visits, personal storage and personal vaults.</p><div class="systems-quest-tags"><span>Island quests</span><span>Own progression</span><span>Co-op compatible</span></div><div class="systems-quest-note">Skyblock is another way to play inside Pixel Network, not a universal questline for the four worlds.</div></article>
+      <div class="systems-quest-panel reveal">
+        <article class="systems-quest"><small>BattlePass</small><h3>Seasonal activity track.</h3><p>BattlePass uses its own quests as a secondary progression layer. It rewards continued activity while permanent levels, Prestige, boss gates and Legacy remain separate.</p><div class="systems-quest-tags"><span>Dedicated quests</span><span>Secondary progression</span><span>Seasonal activity</span></div><div class="systems-quest-note">BattlePass quests do not replace the world progression structure.</div></article>
+        <article class="systems-quest"><small>Skyblock</small><h3>Island-specific progression.</h3><p>Skyblock has its own quests tied to the player's island, alongside building, upgrades, collaborative play, visits, personal storage and personal vaults.</p><div class="systems-quest-tags"><span>Island quests</span><span>Own progression</span><span>Co-op compatible</span></div><div class="systems-quest-note">Skyblock is another way to play inside Pixel Network, not a universal questline for the four worlds.</div></article>
       </div>
     </div></section>
 
