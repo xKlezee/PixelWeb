@@ -15,35 +15,21 @@
       eyebrow: 'Account growth',
       value: String(progression.maxLevel ?? 300),
       title: 'Levels',
-      copy: 'The permanent account curve establishes the base layer before Prestige becomes the larger access system.'
+      copy: 'The permanent account curve establishes the base layer before Prestige becomes the larger long-term progression system.'
     },
     {
       code: '02',
-      eyebrow: 'Access layer',
+      eyebrow: 'Long-term progression',
       value: `${progression.maxPrestige ?? 10} tiers`,
       title: 'Prestige',
-      copy: 'Prestige turns long-term account progress into access milestones for later content.'
+      copy: 'Prestige extends the account beyond levels and becomes the main milestone layer before Legacy.'
     },
     {
       code: '03',
-      eyebrow: 'World route',
-      value: 'Route',
-      title: 'World gates',
-      copy: 'Selected progression milestones and clears determine when the next world becomes available.'
-    },
-    {
-      code: '04',
-      eyebrow: 'Endgame threshold',
-      value: 'Endgame',
-      title: 'Nexus',
-      copy: 'Nexus changes the progression model from opening worlds to expanding endgame difficulty.'
-    },
-    {
-      code: '05',
-      eyebrow: 'Late endgame',
+      eyebrow: 'Late progression',
       value: `${progression.maxLegacy ?? 4} tiers`,
       title: 'Legacy',
-      copy: 'Legacy continues the account after Prestige and participates in later endgame unlocks.'
+      copy: 'Legacy continues permanent account progression after Prestige and carries the account into the later endgame.'
     }
   ];
 
