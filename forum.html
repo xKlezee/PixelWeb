@@ -8,6 +8,7 @@
 <title>Community Forum — Pixel Network</title>
 <link rel="stylesheet" href="style.css"/>
 <link rel="stylesheet" href="forum-stage2.css"/>
+<link rel="stylesheet" href="forum-hardening.css"/>
 </head>
 <body>
 
@@ -20,13 +21,13 @@
       <span class="font-special" id="forum-preview-title">PIXEL NETWORK</span>
     </div>
     <p class="auth-tagline font-special">COMMUNITY FORUM · PREVIEW</p>
-    <p class="font-special" style="font-size:11px;line-height:1.7;color:#777;text-align:center;margin:14px 0 18px;max-width:430px">Preview sessions are local and temporary. No account credentials are required or stored.</p>
+    <p class="font-special forum-preview-copy">Preview sessions are local and temporary. No account credentials are required or stored.</p>
 
     <div class="auth-tabs" role="tablist" aria-label="Forum preview entry">
-      <button class="auth-tab active" id="tab-login" role="tab" aria-selected="true" aria-controls="panel-login" tabindex="0" onclick="switchTab('login')">
+      <button class="auth-tab active" id="tab-login" role="tab" aria-selected="true" aria-controls="panel-login" tabindex="0">
         <span class="font-special">ENTER</span>
       </button>
-      <button class="auth-tab" id="tab-signup" role="tab" aria-selected="false" aria-controls="panel-signup" tabindex="-1" onclick="switchTab('signup')">
+      <button class="auth-tab" id="tab-signup" role="tab" aria-selected="false" aria-controls="panel-signup" tabindex="-1">
         <span class="font-special">NEW PROFILE</span>
       </button>
     </div>
@@ -36,7 +37,7 @@
         <label class="field-lbl font-special" for="login-email">DISPLAY NAME</label>
         <input type="text" id="login-email" class="field-input font-special" placeholder="Guest" autocomplete="off"/>
       </div>
-      <button class="btn-primary font-special" onclick="doLogin()">ENTER FORUM</button>
+      <button class="btn-primary font-special" id="btn-login" type="button">ENTER FORUM</button>
     </div>
 
     <div id="panel-signup" class="auth-panel" role="tabpanel" aria-labelledby="tab-signup" hidden>
@@ -44,12 +45,12 @@
         <label class="field-lbl font-special" for="su-username">DISPLAY NAME</label>
         <input type="text" id="su-username" class="field-input font-special" placeholder="YourName" autocomplete="off"/>
       </div>
-      <button class="btn-primary font-special" onclick="doSignup()">CREATE PROFILE</button>
+      <button class="btn-primary font-special" id="btn-signup" type="button">CREATE PROFILE</button>
     </div>
   </div>
 </div>
 
-<div id="app" class="app" style="display:none">
+<div id="app" class="app" hidden>
   <header class="topnav">
     <div class="topnav-inner">
       <a href="index.html" class="topnav-brand" aria-label="Back to Pixel Network">
@@ -65,7 +66,7 @@
           </div>
           <span class="font-special" id="nav-username">...</span>
         </div>
-        <button class="btn-ghost font-special" onclick="doLogout()">EXIT</button>
+        <button class="btn-ghost font-special" id="btn-logout" type="button">EXIT</button>
       </div>
     </div>
   </header>
@@ -79,8 +80,8 @@
         <div class="profile-rank-badge font-special" id="profile-rank-badge">MEMBER</div>
         <div class="profile-username font-special" id="profile-username">LOADING...</div>
         <div class="profile-actions">
-          <button class="btn-link-mc font-special" id="btn-link-mc" onclick="generateLinkCode()">ACCOUNT LINKING</button>
-          <div class="link-code-box" id="link-code-box" style="display:none"></div>
+          <button class="btn-link-mc font-special" id="btn-link-mc" type="button">ACCOUNT LINKING</button>
+          <div class="link-code-box" id="link-code-box" hidden></div>
         </div>
       </div>
 
@@ -98,13 +99,13 @@
         <textarea id="post-body" class="create-textarea font-special" placeholder="Write something for the community..."></textarea>
         <div class="create-footer">
           <span class="cooldown-info font-special" id="cooldown-info" aria-live="polite"></span>
-          <button class="btn-submit font-special" id="btn-submit" onclick="submitPost()">PUBLISH</button>
+          <button class="btn-submit font-special" id="btn-submit" type="button">PUBLISH</button>
         </div>
       </div>
 
       <div class="posts-header">
         <span class="posts-count font-special" id="posts-count">LOADING...</span>
-        <button class="btn-refresh font-special" onclick="loadPosts()">REFRESH</button>
+        <button class="btn-refresh font-special" id="btn-refresh" type="button">REFRESH</button>
       </div>
 
       <div id="posts-feed" class="posts-feed" aria-live="polite">
