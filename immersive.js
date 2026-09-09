@@ -45,6 +45,11 @@
   let activeChapter = -1;
   let chapterTransition = 0;
 
+  if (progressBar instanceof HTMLProgressElement) {
+    progressBar.max = 1;
+    progressBar.value = 0;
+  }
+
   tabList?.setAttribute('role', 'tablist');
   tabList?.setAttribute('aria-label', 'Pixel Network story chapters');
   tabs.forEach((tab, index) => {
@@ -118,7 +123,7 @@
   function render() {
     frame = 0;
     const progress = getProgress();
-    if (progressBar) progressBar.style.transform = `scaleX(${progress})`;
+    if (progressBar instanceof HTMLProgressElement) progressBar.value = progress;
     setChapter(chapterFor(progress));
 
     if (!reducedMotion && duration > 0 && video.readyState >= 1) {
