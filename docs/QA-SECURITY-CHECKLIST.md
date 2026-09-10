@@ -14,6 +14,7 @@ A configured control is not a passed control. Record the actual result for the e
 - `python3 scripts/validate_media_integrity.py` completes successfully.
 - `node --check` completes successfully for every repository JavaScript file in scope.
 - `python3 scripts/validate_site.py` completes successfully.
+- `python3 scripts/validate_runtime_contracts.py` completes successfully.
 - `python3 scripts/validate_accessibility.py` completes successfully.
 - A workflow startup failure with no runner/steps is classified as infrastructure/account startup failure, not as a passing or failing validator result.
 - The current account-level billing lock is resolved separately; no check is weakened, skipped or removed merely to obtain green status.
@@ -22,6 +23,7 @@ A configured control is not a passed control. Record the actual result for the e
 
 - All local navigation links resolve.
 - All local images/scripts/styles referenced by top-level HTML exist.
+- Deferred local media referenced through `data-src`, `data-poster` or `data-srcset` also resolves and stays inside the repository root.
 - External `_blank` links include `rel="noopener"`.
 - No duplicate IDs exist within a page.
 - Keyboard navigation remains usable after removal of inline handlers.
@@ -37,7 +39,7 @@ A configured control is not a passed control. Record the actual result for the e
 - Dynamic `href` / `src` values are validated against expected schemes/origins where appropriate.
 - Forum preview content renders HTML-like payloads as inert text.
 - Guide renderers use safe DOM construction (`createElement`, `textContent`, `append`, `replaceChildren`) rather than HTML parsing sinks.
-- No runtime inline-style mutation is introduced.
+- No runtime inline-style mutation is introduced, including direct `element.style = ...` assignment.
 
 ## Guide content integrity
 
@@ -66,6 +68,7 @@ A configured control is not a passed control. Record the actual result for the e
 
 - `Video_Perfecto_Con_Fondo_Negro.mp4` has no eager `src` in the initial Home HTML.
 - The video retains `preload="none"` and a local `data-src` hydration source.
+- The deferred local video path is covered by `validate_runtime_contracts.py`.
 - Normal-motion browsing does not request the MP4 until the immersive section approaches its configured hydration margin or the user directly activates a story chapter.
 - Scroll scrubbing never seeks before valid metadata/duration is available.
 - `prefers-reduced-motion: reduce` does not hydrate/request the MP4 during normal use.
