@@ -13,12 +13,15 @@ This file records the branch state without upgrading controls or gameplay claims
 - Dependency-free runtime-contract validator for deferred media references and direct inline-style assignment.
 - Separate dependency-free structural accessibility validator.
 - Dedicated byte-level media-integrity validator for the four approved Nexus PNGs.
+- Dedicated canonical public-data contract validator (`scripts/validate_public_data.js`) that executes `data/network.js` in an isolated Node VM and checks cross-field product invariants without becoming a second data source.
+- Reference-driven public artifact builder (`scripts/build_public_site.py`) that stages `_site/` from explicit public HTML roots, declared runtime resources and recursively resolved local CSS dependencies.
+- Independent public artifact validator (`scripts/validate_public_bundle.py`) that re-checks the staged publication boundary, HTML/deferred-media/CSS references, file types and project-site URL constraints.
 - GitHub Actions quality gate with read-only repository permissions and commit-pinned official `actions/checkout`.
 - Strict CSP-ready frontend rules: no inline scripts, inline handlers, inline styles, `javascript:` URLs, string-to-DOM parsing sinks or runtime inline-style mutation accepted by the validation layers.
 - Deferred media URLs in `data-src`, `data-poster` and `data-srcset` are validated as HTTPS external URLs or existing repository-local paths.
+- Local CSS `url(...)` and quoted `@import` dependencies are included in the artifact graph only when they remain inside declared public roots.
 - Absolute external HTTP resources are rejected; external runtime destinations are expected to use HTTPS.
 - `connect-src` follows per-page least privilege: pages without a live status surface are self-only; pages that expose live Minecraft status may additionally connect only to `https://api.mcsrvstat.us`.
-- Selected canonical public literals and retired public claims are guarded so known drift cannot silently return.
 - Explicit pre-auth security requirements for Login, profiles, persistent Forum, moderation and private APIs.
 - Explicit classification of browser-delivered public data versus future private/backend data.
 - Forum remains preview-only; no persistent account/session/backend behavior is implied.
@@ -32,6 +35,7 @@ This file records the branch state without upgrading controls or gameplay claims
 - `validate_site.py` checks sitemap consistency, prevents `noindex` pages from being listed and keeps the repository-level `robots.txt` from regressing to a blanket `Disallow: /` policy.
 - **GitHub Pages boundary:** the current site is a project site at `https://xklezee.github.io/PixelWeb/`. Standards-compliant crawlers request `robots.txt` from the host root (`https://xklezee.github.io/robots.txt`), so `PixelWeb/robots.txt` is not an authoritative crawl policy on this default URL. Page-level `meta robots` directives are the effective per-page publication control until a custom/root domain deployment makes a repository-level robots file authoritative.
 - The repository-level `robots.txt` documents that limitation instead of pretending that hiding `docs/` or `scripts/` from crawler discovery protects them. Any file deployed through Pages must still be treated as public.
+- The prepared `_site/` artifact model excludes repository/security/engineering material from the future Pages payload, but it is not called the live publication boundary until Pages actually migrates to an Actions-built artifact.
 
 ### Accessibility and interaction foundation
 
@@ -51,7 +55,7 @@ This file records the branch state without upgrading controls or gameplay claims
 - Nexus heavy images remain below initial-load priority and use lazy/asynchronous image behavior where rendered.
 - Home immersive MP4 no longer has an initial `src`; it uses `preload="none"` plus `data-src`.
 - The MP4 is hydrated through `IntersectionObserver` shortly before the immersive story approaches the viewport, with a functional fallback where the observer API is unavailable.
-- Its deferred `data-src` path is now covered by `validate_runtime_contracts.py` so lazy hydration cannot hide a broken local media reference from repository validation.
+- Its deferred `data-src` path is covered by `validate_runtime_contracts.py` so lazy hydration cannot hide a broken local media reference from repository validation.
 - Scroll scrubbing waits for valid video metadata/duration before seeking.
 - `prefers-reduced-motion: reduce` intentionally prevents MP4 hydration/download while retaining the textual story and stable background.
 - Current repository inventory contains one immersive MP4, not a duplicate second Home copy.
@@ -60,6 +64,11 @@ This file records the branch state without upgrading controls or gameplay claims
 ### Public data and documentation architecture
 
 - `data/network.js` remains the canonical owner for shared public network facts.
+- `validate_public_data.js` checks that `content.currentWorlds` matches the actual World array, the route remains exactly Overworld → Pirate Kingdom → Nether → Winter, Nexus remains separate, per-World mines sum to the canonical total, World Boss/Nexus counts remain internally consistent, and local/external destinations satisfy publication rules.
+- The same contract keeps Nexus access permanent at Prestige IV with no Viking/boss requirement until intentionally changed with evidence.
+- Forum must remain `preview`, non-persistent and without an account-system claim until the backend exists.
+- Skyblock remains `source-verified / partial`; incomplete collaboration/team-management/promotion controls cannot silently move into the current feature list.
+- Store thresholds remain unpublished while `thresholdsVerified` is false.
 - Overview pages increasingly render exact shared values from canonical data rather than preserving literal fallback copies in HTML.
 - Store rank/category presentation is generated from the canonical Store model instead of maintaining a second manual catalogue.
 - Nexus access/count/milestone presentation is derived from canonical Nexus/Instance definitions rather than a manually maintained ladder.
@@ -92,13 +101,15 @@ The public Skyblock model and landing page no longer advertise collaboration con
 
 The hardening branch is periodically reconciled with `main` when Quality Gate-only commits are installed on the default branch for manual-dispatch visibility. Reconciliation uses a merge commit whose resulting tree remains the hardening candidate tree, so frontend content from `main` does not replace branch work.
 
-After each such reconciliation, `behind_by` is checked against the then-current `main`. Future work must still re-check both refs before write/merge operations because another session may advance either branch.
+The latest verified reconciliation used hardening tree `f97dcf17437f42ed3ef5b5a3fb196d8eedec4934` and produced commit `a3f35a46d8d6fc40c16163567b093ac967d7317f` with hardening and `main` as parents. The post-reconciliation compare reported `behind_by: 0` against `main` at `4aa71b2991396acd86f4cb0b3901d4d6d0bf010f`.
+
+Future work must still re-check both refs before write/merge operations because another session may advance either branch.
 
 ## Verification state
 
 ### Static/code review
 
-Current Guide and overview renderers follow the hardened DOM-safe construction model. Repository references, CSP structure, known publication invariants, transport policy, sitemap/index contract, media loading behavior and structural accessibility have been reviewed at source level.
+Current Guide and overview renderers follow the hardened DOM-safe construction model. Repository references, CSP structure, canonical data relationships, publication invariants, transport policy, sitemap/index contract, artifact dependency graph, media loading behavior and structural accessibility have been reviewed at source level.
 
 This source review does **not** substitute for successful execution of the repository validators or browser-render validation.
 
@@ -106,9 +117,11 @@ This source review does **not** substitute for successful execution of the repos
 
 **Account-level startup block — validator result not obtained.**
 
-Observed GitHub Actions jobs have not reached repository steps. GitHub reported that the job was not started because the account is locked due to a billing issue. Therefore failed workflow runs must not be interpreted as failures from `security_scan.py`, Python compilation, `validate_media_integrity.py`, `node --check`, `validate_site.py`, `validate_runtime_contracts.py` or `validate_accessibility.py`; those stages have not been observed executing on the final candidate.
+The latest verified PR-triggered run for reconciled HEAD `a3f35a46d8d6fc40c16163567b093ac967d7317f` was run `34484060396`. Its single `static-security` job completed in roughly four seconds with `steps: []`, `runner_id: 0` and an empty runner name. No downloadable runner log exists for that job. This is the same pre-runner startup pattern seen previously and is not evidence that a repository validator failed.
 
-The same Quality Gate definition is intentionally kept on `main` and on the hardening branch. Manual dispatch requires an explicit `target_ref`, allowing the workflow surfaced from `main` to validate the actual candidate branch/tag/SHA. Moving the frontend work to `main` would not bypass an account-level Actions billing lock and is not used as a substitute for validation.
+Therefore failed workflow runs must not be interpreted as failures from `security_scan.py`, Python compilation, `validate_media_integrity.py`, `node --check`, `validate_public_data.js`, `validate_site.py`, `validate_runtime_contracts.py`, `validate_accessibility.py`, `build_public_site.py` or `validate_public_bundle.py`; those stages have not been observed executing on the final candidate.
+
+The same Quality Gate definition is intentionally kept on `main` and on the hardening branch. Manual dispatch requires an explicit `target_ref`, allowing the workflow surfaced from `main` to validate the actual candidate branch/tag/SHA. Moving the frontend work to `main` would not bypass an account-level Actions billing/startup lock and is not used as a substitute for validation.
 
 ### Local execution / browser-render QA
 
@@ -120,11 +133,12 @@ The required 1440 / 1024 / 768 / 430 / 390 px matrix remains specified in `docs/
 
 ## Remaining release gates
 
-- Resolve the GitHub Actions account/billing startup block and obtain a real execution of every configured Quality Gate stage on the exact final candidate HEAD.
+- Resolve the GitHub Actions account/billing startup block and obtain a real execution of every configured Quality Gate stage on the exact final candidate HEAD, including canonical-data validation and `_site/` build/validation.
 - Perform the browser/render QA matrix and fix any visual, responsive, accessibility, loading or runtime issues found there.
 - Re-run automated checks after final browser-QA changes.
 - Keep the pull request in draft until those gates are satisfied.
 - Do not merge to `main` solely from static inspection.
+- Do not migrate Pages to the prepared `_site/` artifact until the artifact pipeline has executed successfully.
 
 ## Deferred by product architecture
 
