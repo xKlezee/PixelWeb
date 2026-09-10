@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
-"""Dependency-free static integrity and browser-safety checks for PixelWeb.
+"""Dependency-free static integrity, publication and browser-safety checks for PixelWeb.
 
 This validator encodes security and publication invariants rather than style preferences.
 A change that weakens the CSP, reintroduces inline executable/style content, breaks local
-references, adds unsafe DOM sinks, introduces insecure absolute HTTP resources, or
-reintroduces explicitly retired public claims fails before deployment.
+references, adds unsafe DOM sinks, introduces insecure absolute HTTP resources, reintroduces
+explicitly retired public claims, or breaks the public crawl/index contract fails before deployment.
 """
 from __future__ import annotations
 
 import html.parser
 import re
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
@@ -17,6 +18,10 @@ ROOT = Path(__file__).resolve().parents[1]
 HTML_FILES = sorted(ROOT.glob("*.html"))
 JS_FILES = sorted(path for path in ROOT.rglob("*.js") if ".git" not in path.parts)
 CSS_FILES = sorted(path for path in ROOT.rglob("*.css") if ".git" not in path.parts)
+SITE_BASE_URL = "https://xklezee.github.io/PixelWeb/"
+ROBOTS_PATH = ROOT / "robots.txt"
+SITEMAP_PATH = ROOT / "sitemap.xml"
+ERROR_PAGE_PATH = ROOT / "404.html"
 
 REQUIRED_CSP_DIRECTIVES = {
     "default-src": {"'self'"},
@@ -68,6 +73,7 @@ class PageParser(html.parser.HTMLParser):
         self.insecure_http_urls: list[tuple[str, str, int]] = []
         self.inline_scripts: list[int] = []
         self.csp: str | None = None
+        self.robots_meta: str | None = None
         self.has_referrer_policy = False
         self.has_live_status_surface = False
         self._ids: set[str] = set()
@@ -114,6 +120,8 @@ class PageParser(html.parser.HTMLParser):
                 self.csp = content
             if name == "referrer" and content:
                 self.has_referrer_policy = True
+            if name == "robots" and content:
+                self.robots_meta = content.lower()
 
         if tag in {"a", "link"} and attrs_dict.get("href"):
             self.refs.append(("href", attrs_dict["href"], line))
@@ -179,6 +187,12 @@ def is_guide_page(page: Path) -> bool:
     return page.name == "guides.html" or page.name.startswith("guide-")
 
 
+def page_public_url(page: Path) -> str:
+    if page.name == "index.html":
+        return SITE_BASE_URL
+    return f"{SITE_BASE_URL}{page.name}"
+
+
 def scan_text_file_for_insecure_http(path: Path, failures: list[str]) -> None:
     text = path.read_text(encoding="utf-8")
     for line_number, line in enumerate(text.splitlines(), start=1):
@@ -206,8 +220,66 @@ def scan_publication_invariants(paths: list[Path], failures: list[str]) -> None:
                 )
 
 
+def validate_crawl_contract(page_robots: dict[str, str | None], failures: list[str]) -> None:
+    if not ROBOTS_PATH.exists():
+        failures.append("robots.txt: missing public crawl policy")
+        return
+    if not SITEMAP_PATH.exists():
+        failures.append("sitemap.xml: missing public sitemap")
+        return
+    if not ERROR_PAGE_PATH.exists():
+        failures.append("404.html: missing branded error page")
+
+    robots_lines = [line.strip() for line in ROBOTS_PATH.read_text(encoding="utf-8").splitlines()]
+    if "Allow: /" not in robots_lines:
+        failures.append("robots.txt: must explicitly allow the public site root")
+    if "Disallow: /" in robots_lines:
+        failures.append("robots.txt: must not block the entire public site")
+    expected_sitemap_line = f"Sitemap: {SITE_BASE_URL}sitemap.xml"
+    if expected_sitemap_line not in robots_lines:
+        failures.append(f"robots.txt: missing canonical sitemap line ({expected_sitemap_line})")
+
+    try:
+        sitemap_root = ET.fromstring(SITEMAP_PATH.read_text(encoding="utf-8"))
+    except (ET.ParseError, UnicodeError) as exc:
+        failures.append(f"sitemap.xml: invalid XML ({exc})")
+        return
+
+    namespace = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+    locations = [
+        (node.text or "").strip()
+        for node in sitemap_root.findall("sm:url/sm:loc", namespace)
+        if (node.text or "").strip()
+    ]
+    if not locations:
+        failures.append("sitemap.xml: contains no URL locations")
+        return
+    if len(locations) != len(set(locations)):
+        failures.append("sitemap.xml: contains duplicate URL locations")
+
+    location_set = set(locations)
+    for location in locations:
+        if not location.startswith(SITE_BASE_URL):
+            failures.append(f"sitemap.xml: URL is outside canonical site base ({location})")
+
+    for page in HTML_FILES:
+        robots = page_robots.get(page.name) or ""
+        noindex = "noindex" in {token.strip() for token in robots.split(",") if token.strip()}
+        public_url = page_public_url(page)
+        if noindex and public_url in location_set:
+            failures.append(f"sitemap.xml: noindex page must not be listed ({page.name})")
+        if not noindex and public_url not in location_set:
+            failures.append(f"sitemap.xml: indexable page missing ({page.name})")
+
+    if "noindex" not in (page_robots.get("404.html") or ""):
+        failures.append("404.html: error page must declare noindex")
+    if "noindex" not in (page_robots.get("forum.html") or ""):
+        failures.append("forum.html: preview forum must remain noindex until persistence/auth is real")
+
+
 def main() -> int:
     failures: list[str] = []
+    page_robots: dict[str, str | None] = {}
 
     if not HTML_FILES:
         failures.append("No top-level HTML files found.")
@@ -216,6 +288,7 @@ def main() -> int:
         parser = PageParser()
         parser.feed(page.read_text(encoding="utf-8"))
         parser.close()
+        page_robots[page.name] = parser.robots_meta
         csp: dict[str, set[str]] = {}
 
         if not parser.csp:
@@ -302,6 +375,7 @@ def main() -> int:
         scan_text_file_for_insecure_http(css_file, failures)
 
     scan_publication_invariants([*HTML_FILES, *JS_FILES], failures)
+    validate_crawl_contract(page_robots, failures)
 
     if failures:
         print("Static site validation failed:")
