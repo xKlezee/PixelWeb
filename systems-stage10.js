@@ -16,6 +16,14 @@
     return node;
   };
 
+  const guideLink = (href, label) => {
+    const link = el('a', 'systems-route-button');
+    link.href = href;
+    link.append(el('span', '', label), el('span', '', '→'));
+    link.lastElementChild?.setAttribute('aria-hidden', 'true');
+    return link;
+  };
+
   const displayCap = (value, suffix = '') => value == null ? '—' : `${value}${suffix}`;
 
   const spine = [
@@ -75,7 +83,8 @@
       el('span', 'systems-feature-kicker', 'Talisman Codex'),
       el('h3', '', 'Collections with distinct jobs.'),
       el('p', '', 'The World Progression Codex stays separate from mine and special-purpose talisman collections, keeping completion readable.'),
-      metrics
+      metrics,
+      guideLink('guide-talismans.html', 'Open Talisman Codex')
     );
   }
 
@@ -84,7 +93,8 @@
       el('span', 'systems-feature-kicker', 'Equipment decisions'),
       el('span', 'systems-big-number', content.enchantments ?? '—'),
       el('h3', '', 'Enchantments'),
-      el('p', '', 'Custom enchantments add another decision layer to combat, mining and equipment without becoming a separate progression path.')
+      el('p', '', 'Custom enchantments add another decision layer to combat, mining and equipment without becoming a separate progression path.'),
+      guideLink('guide-enchantments.html', 'Open Enchantments Guide')
     );
   }
 
