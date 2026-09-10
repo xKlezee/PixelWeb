@@ -22,6 +22,12 @@
   const TAU = Math.PI * 2;
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const CATALOG_ROTATION = Object.freeze([0, 90 * DEG, 0]);
+  const PREVIEW_SPIN_SPEED = 0.48;
+  const PREVIEW_TARGET_OCCUPANCY = 0.62;
+  const INSPECT_TARGET_OCCUPANCY = 0.66;
+  const VISUAL_SCALE_SAMPLES = 8;
+  const previewSpinEpoch = performance.now();
+
   const FACE_NORMALS = Object.freeze({
     north: [0, 0, -1], south: [0, 0, 1], west: [-1, 0, 0],
     east: [1, 0, 0], up: [0, 1, 0], down: [0, -1, 0]
@@ -34,6 +40,7 @@
   const assetCache = new Map();
   const imageCache = new Map();
   const metadataCache = new Map();
+  const visualScaleCache = new Map();
   const renderers = new Set();
   const previewRenderers = new Map();
   let lastFrameTime = 0;
@@ -153,6 +160,7 @@
       this.preparedElements = [];
       this.center = [0, 0, 0];
       this.extent = 16;
+      this.visualScale = 1;
       this.baseRotation = [...CATALOG_ROTATION];
       this.currentYaw = 0;
       this.currentPitch = 0;
@@ -171,6 +179,7 @@
       this.ready = false;
       this.dirty = true;
       this.zoom = this.preview ? 1.05 : 1;
+      this.visualScale = 1;
       this.canvas.closest('[data-model-stage], .marketplace-item-preview')?.classList.add('is-loading');
       try {
         const assets = await loadItemAssets(item);
@@ -179,15 +188,24 @@
         this.textures = assets.textures;
         this.baseRotation = [...CATALOG_ROTATION];
         this.prepareModel();
-        const initialYaw = Number.isFinite(pose?.yaw) ? pose.yaw : 0;
-        const initialPitch = Number.isFinite(pose?.pitch) ? pose.pitch : 0;
+
+        const initialYaw = this.preview ? 0 : (Number.isFinite(pose?.yaw) ? pose.yaw : 0);
+        const initialPitch = this.preview ? 0 : (Number.isFinite(pose?.pitch) ? pose.pitch : 0);
         this.currentYaw = initialYaw;
         this.targetYaw = initialYaw;
         this.anchorYaw = initialYaw;
         this.currentPitch = initialPitch;
         this.targetPitch = initialPitch;
         this.anchorPitch = initialPitch;
+
         this.ready = true;
+        this.visualScale = this.resolveVisualScale();
+        this.currentYaw = initialYaw;
+        this.targetYaw = initialYaw;
+        this.anchorYaw = initialYaw;
+        this.currentPitch = initialPitch;
+        this.targetPitch = initialPitch;
+        this.anchorPitch = initialPitch;
         this.dirty = true;
         this.canvas.closest('[data-model-stage], .marketplace-item-preview')?.classList.remove('is-loading', 'is-error');
         this.render();
@@ -245,7 +263,9 @@
     }
 
     project(point) {
-      const scale = Math.min(this.canvas.width, this.canvas.height) / (this.extent * (this.preview ? 1.35 : 1.48)) * this.zoom;
+      const baseScale = Math.min(this.canvas.width, this.canvas.height)
+        / (this.extent * (this.preview ? 1.35 : 1.48));
+      const scale = baseScale * this.zoom * this.visualScale;
       return {
         x: this.canvas.width * 0.5 + point[0] * scale,
         y: this.canvas.height * (this.preview ? 0.51 : 0.5) - point[1] * scale,
@@ -311,10 +331,10 @@
           if (!cornerIndices || !face?.texture) return;
           const normal = this.applyGlobalNormalRotation(elementNormal(faceName, element));
           if (normal[2] <= 0.001) return;
-          const points3d = cornerIndices.map(index => transformed[index]);
           const texturePath = this.resolveTexturePath(face.texture);
           const texture = texturePath ? this.textures.get(texturePath) : null;
           if (!texture) return;
+          const points3d = cornerIndices.map(index => transformed[index]);
           faces.push({
             face,
             texture,
@@ -328,24 +348,109 @@
       this.dirty = false;
     }
 
+    measureVisibleSpan() {
+      if (!this.ctx) return 0;
+      const { width, height } = this.canvas;
+      const pixels = this.ctx.getImageData(0, 0, width, height).data;
+      let minX = width;
+      let minY = height;
+      let maxX = -1;
+      let maxY = -1;
+      for (let y = 0; y < height; y += 1) {
+        const row = y * width * 4;
+        for (let x = 0; x < width; x += 1) {
+          if (pixels[row + x * 4 + 3] <= 8) continue;
+          minX = Math.min(minX, x);
+          maxX = Math.max(maxX, x);
+          minY = Math.min(minY, y);
+          maxY = Math.max(maxY, y);
+        }
+      }
+      if (maxX < minX || maxY < minY) return 0;
+      return Math.max(maxX - minX + 1, maxY - minY + 1);
+    }
+
+    resolveVisualScale() {
+      const key = `${this.item?.id || this.item?.model}:${this.preview ? 'preview' : 'inspect'}`;
+      const cached = visualScaleCache.get(key);
+      if (Number.isFinite(cached)) return cached;
+
+      const savedYaw = this.currentYaw;
+      const savedPitch = this.currentPitch;
+      const savedTargetYaw = this.targetYaw;
+      const savedTargetPitch = this.targetPitch;
+      const savedAnchorYaw = this.anchorYaw;
+      const savedAnchorPitch = this.anchorPitch;
+      const savedScale = this.visualScale;
+      const now = performance.now();
+      let maxVisibleSpan = 0;
+
+      this.visualScale = 1;
+      this.currentPitch = 0;
+      for (let index = 0; index < VISUAL_SCALE_SAMPLES; index += 1) {
+        this.currentYaw = (index / VISUAL_SCALE_SAMPLES) * TAU;
+        this.render(now);
+        maxVisibleSpan = Math.max(maxVisibleSpan, this.measureVisibleSpan());
+      }
+
+      const targetOccupancy = this.preview ? PREVIEW_TARGET_OCCUPANCY : INSPECT_TARGET_OCCUPANCY;
+      const targetSpan = Math.min(this.canvas.width, this.canvas.height) * targetOccupancy;
+      const resolved = maxVisibleSpan > 0
+        ? clamp(targetSpan / maxVisibleSpan, 0.3, 3.2)
+        : savedScale;
+
+      visualScaleCache.set(key, resolved);
+      this.currentYaw = savedYaw;
+      this.currentPitch = savedPitch;
+      this.targetYaw = savedTargetYaw;
+      this.targetPitch = savedTargetPitch;
+      this.anchorYaw = savedAnchorYaw;
+      this.anchorPitch = savedAnchorPitch;
+      this.visualScale = resolved;
+      this.dirty = true;
+      this.clear();
+      return resolved;
+    }
+
     hasAnimatedTexture() {
       return [...this.textures.values()].some(texture => texture.frameCount > 1 && texture.frameTimeMs > 0);
     }
 
     tick(deltaSeconds, now) {
       if (!this.ready) return;
-      const easing = 1 - Math.pow(0.0008, Math.min(deltaSeconds, 0.05));
-      const nextYaw = lerpAngle(this.currentYaw, this.targetYaw, easing);
-      const nextPitch = this.currentPitch + (this.targetPitch - this.currentPitch) * easing;
-      if (Math.abs(wrapAngle(nextYaw - this.currentYaw)) > 0.0001 || Math.abs(nextPitch - this.currentPitch) > 0.0001) {
-        this.currentYaw = nextYaw;
-        this.currentPitch = nextPitch;
-        this.dirty = true;
+
+      if (this.preview) {
+        this.currentPitch = 0;
+        this.targetPitch = 0;
+        this.anchorPitch = 0;
+        if (!reducedMotion) {
+          const spinYaw = wrapAngle(((now - previewSpinEpoch) / 1000) * PREVIEW_SPIN_SPEED);
+          this.currentYaw = spinYaw;
+          this.targetYaw = spinYaw;
+          this.anchorYaw = spinYaw;
+          this.dirty = true;
+        } else if (Math.abs(this.currentYaw) > 0.0001) {
+          this.currentYaw = 0;
+          this.targetYaw = 0;
+          this.anchorYaw = 0;
+          this.dirty = true;
+        }
+      } else {
+        const easing = 1 - Math.pow(0.0008, Math.min(deltaSeconds, 0.05));
+        const nextYaw = lerpAngle(this.currentYaw, this.targetYaw, easing);
+        const nextPitch = this.currentPitch + (this.targetPitch - this.currentPitch) * easing;
+        if (Math.abs(wrapAngle(nextYaw - this.currentYaw)) > 0.0001 || Math.abs(nextPitch - this.currentPitch) > 0.0001) {
+          this.currentYaw = nextYaw;
+          this.currentPitch = nextPitch;
+          this.dirty = true;
+        }
       }
+
       if (this.dirty || (!reducedMotion && this.hasAnimatedTexture())) this.render(now);
     }
 
     nudge(yawDelta, pitchDelta = 0) {
+      if (this.preview) return;
       this.anchorYaw = wrapAngle(this.anchorYaw + yawDelta);
       this.anchorPitch = clamp(this.anchorPitch + pitchDelta, -0.62, 0.62);
       this.targetYaw = this.anchorYaw;
@@ -353,58 +458,46 @@
     }
 
     getPose() {
-      return { yaw: this.currentYaw, pitch: this.currentPitch };
+      return { yaw: this.currentYaw, pitch: this.preview ? 0 : this.currentPitch };
     }
   }
 
-  const bindDragRotation = (surface, renderer) => {
-    const interaction = {
-      pointerId: null,
-      lastX: 0,
-      lastY: 0,
-      travel: 0,
-      suppressClick: false
-    };
+  const bindInverseDragRotation = (surface, renderer) => {
+    let pointerId = null;
+    let lastX = 0;
+    let lastY = 0;
 
     surface.addEventListener('pointerdown', event => {
       if (event.pointerType === 'mouse' && event.button !== 0) return;
-      interaction.pointerId = event.pointerId;
-      interaction.lastX = event.clientX;
-      interaction.lastY = event.clientY;
-      interaction.travel = 0;
-      interaction.suppressClick = false;
+      pointerId = event.pointerId;
+      lastX = event.clientX;
+      lastY = event.clientY;
       surface.classList.add('is-dragging');
       surface.setPointerCapture?.(event.pointerId);
     });
 
     surface.addEventListener('pointermove', event => {
-      if (event.pointerId !== interaction.pointerId || !renderer.ready) return;
-      const dx = event.clientX - interaction.lastX;
-      const dy = event.clientY - interaction.lastY;
-      interaction.lastX = event.clientX;
-      interaction.lastY = event.clientY;
-      interaction.travel += Math.abs(dx) + Math.abs(dy);
-      renderer.nudge(dx * 0.010, dy * 0.0065);
+      if (event.pointerId !== pointerId || !renderer.ready) return;
+      const dx = event.clientX - lastX;
+      const dy = event.clientY - lastY;
+      lastX = event.clientX;
+      lastY = event.clientY;
+      renderer.nudge(-dx * 0.010, -dy * 0.0065);
     });
 
     const endDrag = event => {
-      if (event.pointerId !== interaction.pointerId) return;
-      interaction.pointerId = null;
-      interaction.suppressClick = interaction.travel > 4;
+      if (event.pointerId !== pointerId) return;
+      pointerId = null;
       surface.classList.remove('is-dragging');
       if (surface.hasPointerCapture?.(event.pointerId)) surface.releasePointerCapture(event.pointerId);
-      if (interaction.suppressClick) {
-        setTimeout(() => { interaction.suppressClick = false; }, 0);
-      }
     };
 
     surface.addEventListener('pointerup', endDrag);
     surface.addEventListener('pointercancel', endDrag);
-    return interaction;
   };
 
   const mainRenderer = new MinecraftModelRenderer(mainCanvas);
-  bindDragRotation(stage, mainRenderer);
+  bindInverseDragRotation(stage, mainRenderer);
 
   const selectItem = async (item, pose = null) => {
     activeNameNodes.forEach(node => { node.textContent = item.name; });
@@ -452,14 +545,10 @@
     const renderer = new MinecraftModelRenderer(previewCanvas, { preview: true });
     previewRenderers.set(item.id, renderer);
     renderer.setItem(item);
-    const interaction = bindDragRotation(preview, renderer);
 
-    button.addEventListener('click', event => {
-      if (interaction.suppressClick) {
-        event.preventDefault();
-        return;
-      }
-      selectItem(item, renderer.getPose());
+    button.addEventListener('click', () => {
+      const pose = renderer.getPose();
+      selectItem(item, { yaw: pose.yaw, pitch: 0 });
     });
     return button;
   };
@@ -496,5 +585,5 @@
   updateSubnav();
 
   const firstPreview = previewRenderers.get(items[0].id);
-  selectItem(items[0], firstPreview?.getPose() || null);
+  selectItem(items[0], firstPreview?.getPose() || { yaw: 0, pitch: 0 });
 })();
