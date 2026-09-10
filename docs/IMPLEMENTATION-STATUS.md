@@ -1,174 +1,198 @@
 # PixelWeb Hardening & Documentation — Implementation Status
 
-This file records the branch state without upgrading controls or gameplay claims beyond evidence actually obtained. It intentionally avoids embedding a "current HEAD" SHA because every documentation update would immediately make that value stale; GitHub branch/PR comparison is the authority for live ref state.
+This document records the current release-candidate architecture and gates without turning source inspection into runtime proof. It intentionally does not embed a HEAD SHA; GitHub branch/PR comparison is the authority for live ref state.
 
-## Implemented on this branch
+## Release posture
 
-### Repository and security foundation
+- `hardening/security-foundation-2026-09` remains the deliberate release candidate.
+- PR #1 remains draft.
+- `main` remains the stable/published frontend branch; frontend hardening is not promoted merely to work around the GitHub Actions billing/startup issue.
+- Intended promotion is a squash merge only after the exact final candidate clears automated and browser/render gates.
 
-- Defensive `.gitignore` for environment files, credentials, keys, generated output, logs, IDE files and local reports.
-- `SECURITY.md` with public/private disclosure boundaries and credential-incident handling.
-- Dependency-free committed-secret scanner.
-- Dependency-free static HTML/JavaScript/CSS integrity and browser-safety validator.
-- Dependency-free runtime-contract validator for deferred media references, direct `element.style = ...` assignment and canonical navigation invariants.
-- Separate dependency-free structural accessibility validator.
-- Dedicated byte-level media-integrity validator for the four approved Nexus PNGs.
-- Dedicated canonical public-data contract validator (`scripts/validate_public_data.js`) that executes browser-public data files in isolated Node VMs and checks relationships/policy without becoming a second gameplay rendering-data source.
-- Reference-driven public artifact builder (`scripts/build_public_site.py`) that stages `_site/` from explicit public HTML roots, declared runtime resources and recursively resolved local CSS dependencies.
-- Independent public artifact validator (`scripts/validate_public_bundle.py`) that re-checks the staged publication boundary, local references, file types and project-site URL constraints.
-- GitHub Actions Quality Gate with read-only repository permissions and commit-pinned official `actions/checkout`.
+## Implemented security and repository foundation
 
-### Browser/runtime hardening
+- Defensive `.gitignore` for environment files, credentials, keys, generated output, logs, editor files and local reports.
+- `SECURITY.md` documents public/private boundaries, credential incident handling and the future authenticated-backend boundary.
+- `scripts/security_scan.py` scans committed text for common secret material.
+- `scripts/validate_site.py` validates top-level HTML integrity, CSP/transport rules, local references and sitemap/publication contracts.
+- `scripts/validate_runtime_contracts.py` validates deferred media, direct style-assignment policy, navigation invariants, Guide fragments and Guide-library coverage.
+- `scripts/validate_accessibility.py` checks document structure, image alternatives and accessible naming of visible form controls.
+- `scripts/validate_player_facing_copy.py` keeps known repository-test/database/wiring/deployment implementation terminology out of browser-public player documentation while allowing legitimate evidence labels, formulas, stat keys and player commands.
+- `scripts/validate_media_integrity.py` protects the four approved Nexus boss PNGs by byte size, dimensions and exact Git blob SHA.
+- `scripts/validate_public_data.js` validates canonical public-data relationships, approved destinations/media origins, Forum preview state, Skyblock partial-state publication rules and Store threshold boundaries.
+- `scripts/build_public_site.py` stages a reference-driven `_site/` artifact instead of copying the repository wholesale.
+- `scripts/validate_public_bundle.py` independently verifies that staged artifact boundary and its local dependencies.
+- `.github/workflows/quality-gate.yml` executes the full guard chain with read-only repository permissions, commit-pinned official `actions/checkout`, no persisted checkout credentials and an explicit manual `target_ref`.
 
-- Strict CSP-ready frontend rules: no inline scripts, inline event handlers, inline styles, `javascript:` URLs, string-to-DOM parsing sinks or runtime inline-style mutation are accepted by the validation layers.
-- First-party renderers use DOM construction / `textContent` instead of interpolated `innerHTML`.
-- Dynamic-code execution patterns are rejected.
-- Deferred media URLs in `data-src`, `data-poster` and `data-srcset` are validated as HTTPS external URLs or existing repository-local paths.
-- Absolute external HTTP resources are rejected.
-- Protocol-relative HTML/CSS resource URLs (`//host/path`) are rejected at source validation, rejected by the public artifact builder before staging, and rejected again by the staged-bundle validator.
-- `connect-src` follows per-page least privilege: pages without a live status surface are self-only; pages that expose live Minecraft status may additionally connect only to `https://api.mcsrvstat.us`.
+## Browser/runtime hardening
+
+- No inline scripts, inline event handlers or inline style attributes are accepted by the static validation layer.
+- First-party renderers use DOM construction / `textContent` rather than string-to-DOM HTML parsing.
+- Dynamic code execution patterns are rejected.
+- Ordinary runtime inline-style mutation and direct `element.style = ...` assignment are rejected.
+- Absolute external HTTP and protocol-relative resource URLs are rejected.
+- Dynamic public destinations/media are restricted to approved schemes/origins where applicable.
+- `connect-src` follows page-level least privilege; only pages with the live Minecraft status surface may connect to `https://api.mcsrvstat.us`.
 - DevTools/right-click blocking is not used as a security boundary.
 
-### Public destination and media-origin contract
+## Navigation and interaction contract
 
-`data/network.js` remains the canonical owner for shared public network facts. `scripts/validate_public_data.js` now also enforces the publication destinations around that data model:
+- `polish.js` owns the canonical runtime navigation model while static HTML remains the no-JavaScript fallback.
+- Above 980 px with `hover:hover` and `pointer:fine`, Explore / Development / Community are pointer-hover groups: entering opens, travelling into the dropdown keeps the group open, leaving closes it, and mouse/trackpad click cannot pin it open.
+- At 980 px and below, navigation returns to explicit click/touch `.is-open` behavior even when a fine pointer is attached.
+- Keyboard opening, focus handling and Escape remain separate supported paths.
+- `security-hardening.css` carries the 981 px fine-pointer hover-only rule and is required on canonical public pages.
+- Detailed `guide-*.html` fallbacks mark exactly `guides.html` as `aria-current="page"` in the global navbar.
+- Same-page Guide fragment links must point to IDs that actually exist.
+- The primary `guides.html` library must contain exactly one `data-guide-entry` for every current `guide-*.html` detail page, with no duplicate or orphan primary entries.
+- First keyboard focus exposes a Skip to content path on standard pages.
+- Play and Forum dialogs retain focus containment, Escape close and trigger-focus restoration.
+- Forum overlays remain scroll-reachable on short-height windows.
 
-- Discord must remain the approved `discord.gg` invite currently owned by the project;
-- Store must remain the approved PixelBoxx Tebex destination;
-- legacy documentation and external changelog must remain the approved Pixel Network GitBook routes;
-- changing one of those destinations requires an intentional validator/policy update rather than silently accepting any arbitrary HTTPS URL.
+## Forum preview boundary
 
-World media is validated against the canonical World model:
+Forum remains deliberately non-persistent and `noindex`.
 
-- media keys must match the four canonical World ids exactly;
-- landscape images must use the approved Pixel GitBook image proxy and expected GitBook storage origin;
-- boss/optional-boss artwork must remain existing repository-local files under `assets/worlds/`;
-- optional boss media may exist only where the canonical World model declares an optional encounter.
+- Visible copy identifies the surface as a local preview.
+- No real account, credential, linking or persistent publishing service is implied.
+- Preview display name, title and body limits are enforced in JavaScript as well as HTML attributes.
+- Preview user text is rendered as inert text through DOM APIs.
+- Persistent Login/Profile/Forum work remains deferred until real server-side identity, authorization, session, CSRF/rate-limit and header-capable hosting prerequisites exist.
 
-This is a publication/security contract, not a second source for gameplay values.
+## Canonical public data
 
-### Public artifact boundary
+`data/network.js` remains the canonical owner for shared public network facts under the one-fact/one-owner rule.
+
+Current guarded invariants include:
+
+- exactly four Worlds in order: Overworld → Pirate Kingdom → Nether → Winter;
+- Nexus remains separate from the World array;
+- per-World mines sum to the canonical mine total;
+- World encounter count matches declared required/optional encounters;
+- Nexus encounter, boss and difficulty counts match the instance model;
+- Nexus access remains permanent at Prestige IV without a Viking/boss requirement unless intentionally changed with evidence;
+- Forum remains preview/non-persistent without an account-system claim;
+- Skyblock remains `source-verified / partial`; incomplete collaboration features stay outside the current feature list and use player-facing `Partial` / `Planned` descriptions rather than internal implementation copy;
+- Store monetary thresholds remain unpublished while `thresholdsVerified` is false;
+- Discord, Store and legacy GitBook destinations must remain the approved canonical HTTPS URLs;
+- Worlds landscape media remains constrained to the approved Pixel GitBook proxy/storage space and local World boss art remains under `assets/worlds/`.
+
+## Guides architecture
+
+Pixel Guides is intentionally a documentation surface, not another marketing page. It preserves the visual language of PixelWeb while using a denser reference layout, sidebar navigation, evidence/state labels, tables, formulas and cross-links.
+
+Evidence and factual state are separate concepts:
+
+- evidence examples: `source-verified`, `server-verified`, `live-client-verified`, `reconciled-reference`;
+- state examples: `current`, `partial`, `staged`, `planned`, `unknown`, `deprecated/retired`;
+- non-evidence reference roles such as Orientation reference and Current public reference do not pretend to be stronger verification classes.
+
+The generic `Verified guide` badge has been retired.
+
+### Current detailed Guides
+
+| Guide | Evidence / role | Public scope |
+|---|---|---|
+| Getting Started | Orientation reference | Joining, route orientation and links to owning references |
+| Worlds & Gates | Current public reference | Four-World route, mine counts, bosses/gates and explicit Nexus boundary |
+| Levels, Prestige & Legacy | Reconciled reference | Current caps/access milestones; reset, reward, XP and persistence semantics remain unpublished until independently re-verified |
+| Nexus & Instances | Reconciled reference | Current access, encounter catalogue and difficulty milestones; deeper encounter-runtime behavior is not expanded beyond established public facts |
+| Skyblock | Source verified / partial | Persistent island progression, upgrades, bank and quests; incomplete collaboration remains partial/planned |
+| Stats & Equipment | Source verified | Core combat/equipment stats plus exact mitigation formula/cap; mining-specific coverage remains outside this release |
+| Talisman Codex | Server verified | `/codex`, `/bag`, seven equipped slots, acquisition/state model and public advanced-effect semantics; Secret identities/requirements remain concealed |
+| Enchantments | Source verified | Family compatibility, current effect semantics and retired identities; no unperformed live-client claim and no repository-test internals |
+
+### Player-facing publication boundary
+
+- Public Guides explain gameplay behavior and the confidence/scope of a claim, not the internal engineering process used to obtain that confidence.
+- Repository-test details, database paths, command/menu wiring, deployment state, implementation-layer terminology and similar maintenance-only phrases are guarded out of browser-public Guide/data/renderer content.
+- `source verified` remains a legitimate evidence label; the copy guard is deliberately phrase-specific rather than banning technical vocabulary indiscriminately.
+- Shared numbers/rules come from canonical owners instead of duplicated manual copies where a canonical data source exists.
+- Nexus is never World 5.
+- Secret Talisman discovery trees, protected combinations and anti-abuse-sensitive inputs are not published.
+- Mining-specific Stats remain outside the active reference until a dedicated evidence pass is complete.
+- Legacy GitBook material remains migration/discovery context only and never overrides current evidence.
+
+## Guide discoverability and cross-linking
+
+- The eight detailed Guides are represented one-for-one in the main Guide library.
+- Systems links directly to Progression, Worlds, Nexus, Stats & Equipment, Talisman Codex and Enchantments from the conceptual surfaces where those topics appear.
+- Skyblock and Nexus overview pages provide direct routes into their detailed references.
+- Guide search exposes its controlled library, announces result-count changes through a polite live region and supports Escape to clear the query.
+- Guide section anchors, including each `#overview`, reserve sticky-navigation scroll offset.
+
+## Media and performance integrity
+
+- Raphael, Azazel, Abyss and Astral remain the approved original 1448×1086 PNG blobs. No AVIF/WebP conversion, recompression, downscale, sprite or replacement is used.
+- The deliberate Abyss/Astral filename inversion documented in `data/nexus-media.js` remains intact because it reflects the approved visual mapping.
+- Nexus boss renders use lazy loading, async decoding, low fetch priority and intrinsic dimensions.
+- Abyss + Astral remain two independent complete 4:3 images in the dual encounter.
+- Home immersive MP4 has no eager `src`, uses `preload="none"`, hydrates near the viewport and does not hydrate in reduced-motion mode.
+- Worlds loads the first landscape eagerly and later landscapes through deferred responsive hydration; local boss artwork remains lightweight/lazy.
+- The official root logo remains unchanged. A smaller derivative is only a future visual/performance investigation item, not permission to silently replace or recompress the original.
+- `docs/PERFORMANCE-BUDGET.md` records the current loading/integrity expectations.
+
+## CSP and hosting boundary
+
+The current meta-delivered CSP remains the static compatibility baseline. Meta CSP cannot enforce `frame-ancestors`; therefore authenticated production features require a hosting/proxy/backend boundary capable of real HTTP response headers.
+
+Repository privacy, obfuscation, minification, JavaScript checks or crawler directives are not authorization controls.
+
+## Public artifact boundary
 
 The prepared `_site/` model separates repository content from future hosted content.
 
 - Sitemap-declared public pages plus Forum/404 seed the artifact.
-- Root resources are included only when statically referenced or explicitly declared as runtime-loaded.
-- Local CSS `url(...)` and quoted `@import` dependencies are traversed recursively only inside declared public roots.
-- `assets/` and `data/` remain intentionally browser-public trees.
-- Arbitrary `docs/`, `scripts/`, `.github/`, environment files, logs, databases, keys/certificates and unrelated root files are not part of the artifact.
-- Root-relative URLs incompatible with the `/PixelWeb/` project-site base are rejected by the staged-bundle validator.
-- Symlinks are fail-closed: the builder rejects symlinked inputs rather than dereferencing them, and the staged-bundle validator rejects symlinks without reading through them.
-- Protocol-relative resources are fail-closed across source validation, build and staged validation.
+- Root resources are included only when referenced or explicitly declared as runtime-loaded.
+- Local CSS `url(...)` and quoted `@import` dependencies are traversed recursively inside declared public roots.
+- `assets/` and `data/` are intentionally browser-public trees and are restricted to expected browser/static data types.
+- `docs/`, `scripts/`, `.github/`, environment files, logs, databases, keys/certificates and unrelated root files are excluded from the intended artifact.
+- Root-relative project-site escape, protocol-relative resources and symlink traversal are fail-closed.
 
-The `_site/` model is prepared but is **not yet the live GitHub Pages source**.
+The `_site/` pipeline is prepared but is **not yet the live GitHub Pages source**.
 
-### Crawl, error and metadata layer
+## Current validation state
 
-- `sitemap.xml` lists indexable public product and Guide pages under the current project-site base URL.
-- Forum preview and the branded 404 remain `noindex` and are excluded from the sitemap.
-- `404.html` uses maintained Pixel Network destinations, strict CSP/referrer posture and no external runtime dependency.
-- Home has canonical/Open Graph/Twitter metadata using the existing official Pixel Network logo.
-- The repository-level `robots.txt` is not treated as a privacy or security boundary. On the current `https://xklezee.github.io/PixelWeb/` project-site URL, crawlers request the host-root `/robots.txt`, not a repository-subpath robots file.
+### Source/static review
 
-### Accessibility and interaction foundation
+The current candidate has been reviewed at source level for DOM safety, CSP structure, canonical data relationships, external destinations, Guide/publication boundaries, local dependencies, media loading, navigation contracts and structural accessibility.
 
-- Standard public pages expose one canonical runtime navigation model.
-- Desktop fine-pointer navigation is intentionally hover-only above the 980 px mobile breakpoint: Explore, Development and Community open while the pointer is within their group/dropdown and are not pinned by a mouse click.
-- At 980 px and below, navigation returns to explicit click/touch `.is-open` behavior even when a fine pointer is attached; keyboard interaction remains separately supported.
-- `polish.js` owns canonical mobile-menu state when present, while the basic `site.js` listener remains only as a fallback. The canonical controller captures the toggle event so menu state no longer depends on listener registration order.
-- `validate_runtime_contracts.py` protects the desktop hover-only media query and requires canonical public pages to load the navigation hardening layer.
-- Detailed `guide-*.html` fallback navigation now marks exactly `guides.html` as `aria-current="page"`; the runtime validator enforces that single-current contract so guide-specific product links cannot also claim to be the current global destination.
-- Keyboard users receive a first-focus `Skip to content` route generated by `polish.js`; the real `<main>` is made programmatically focusable when required.
-- Navigation dropdowns expose `aria-expanded` / `aria-controls` and support keyboard opening, Escape and focus behavior.
-- Play modal retains focus trapping, Escape close and focus restoration without inline styles.
-- Forum entry/post dialogs use labelled modal semantics, focus containment and trigger-focus restoration.
-- Short-height Forum overlays remain independently scrollable.
-- Forum preview display-name/title/message bounds are enforced in JavaScript in addition to HTML `maxlength`, so the local preview contract does not depend solely on mutable form attributes.
-- Guides search exposes the controlled library and announces result-count changes through a polite live region; Escape clears the query.
-- Guide section anchors and the `#overview` document header reserve scroll offset so sticky navigation does not intentionally cover anchored content.
-- `validate_accessibility.py` checks language, viewport, title, exactly one `<main>`, descriptions on indexable pages and explicit static-image `alt` text.
+This review is not a substitute for successful validator execution or browser rendering.
 
-### Performance and media integrity
+### GitHub Actions
 
-- Approved Raphael, Azazel, Abyss and Astral PNGs remain the original repository blobs; they are not recompressed, resized, converted, sprited or replaced.
-- `validate_media_integrity.py` enforces exact byte size, 1448×1086 dimensions and Git blob SHA for those four files.
-- Abyss + Astral preserve two complete 4:3 source images on responsive layouts.
-- Home immersive MP4 has no initial `src`, uses `preload="none"` and is hydrated near the viewport via `IntersectionObserver`.
-- Deferred MP4 references are covered by the runtime-contract validator.
-- Scroll scrubbing waits for valid metadata/duration before seeking.
-- `prefers-reduced-motion: reduce` prevents MP4 hydration/download while retaining the textual story.
-- `docs/PERFORMANCE-BUDGET.md` records network-priority, layout-stability and media-integrity release rules.
+**Blocked before runner assignment by the account-level billing/startup condition.**
 
-### Canonical gameplay/public-data invariants
+Observed failed Quality Gate jobs complete before a GitHub-hosted runner is assigned (`runner_id: 0`, empty runner name, `steps: []`). Those runs therefore do not establish PASS or FAIL for the repository validators.
 
-`validate_public_data.js` currently guards, among other relationships:
+### Local execution / browser QA
 
-- exactly four Worlds in order: Overworld → Pirate Kingdom → Nether → Winter;
-- Nexus remains separate from Worlds;
-- per-World mines sum to the canonical mine total;
-- World Boss encounter count matches declared World encounters;
-- Nexus encounter/boss/difficulty counts match the instance model;
-- Nexus access remains permanent at Prestige IV with no Viking/boss requirement until intentionally changed with evidence;
-- Forum remains preview, non-persistent and without an account-system claim;
-- Skyblock remains `source-verified / partial`, with incomplete collaboration/team-management/promotion controls outside the current feature list;
-- Store thresholds remain unpublished while `thresholdsVerified` is false.
+The available execution runtime has also failed to resolve/fetch `github.com`, so no local full-repository run is claimed as a substitute.
 
-### Detailed Guides currently present
+Required browser QA remains:
 
-| Guide | Evidence / state | Publication boundary |
-|---|---|---|
-| Getting Started | Orientation reference | Orientation only; delegates exact mechanics to owning Guides |
-| Worlds & Gates | Current public reference | Four Worlds only; Nexus remains separate |
-| Nexus & Instances | Reconciled reference | Staged/deployment-sensitive work stays qualified |
-| Talisman Codex | Server verified | Secret requirement trees and protected discovery inputs are not published |
-| Enchantments | Source verified | No live-client claim |
-| Stats & Equipment | Source verified | Mining-specific stat coverage remains outside this release |
-| Levels, Prestige & Legacy | Reconciled reference | Reset, reward, XP-curve and persistence semantics remain unpublished until re-verified |
-| Skyblock | Source verified / partial | Team-management and promotion remain explicitly incomplete |
-
-Evidence and feature state remain separate. Source presence or a visible menu item is not treated as proof of complete player-facing availability. The generic `Verified guide` index badge has been retired so orientation/current-reference pages cannot imply a stronger evidence class than the documentation model actually establishes.
-
-## Branch state
-
-The hardening branch is periodically reconciled with `main` when Quality-Gate-only commits are installed on the default branch for manual-dispatch visibility. Reconciliation uses a merge commit whose resulting tree remains the hardening candidate tree, so frontend content from `main` does not replace branch work.
-
-Do not rely on a SHA written into this document for merge decisions. Before any merge/reconciliation operation, query the live `main` and hardening refs and compare them directly. The PR remains the release candidate; `main` remains untouched by frontend hardening until release gates are satisfied.
-
-## Verification state
-
-### Static/code review
-
-Current Guide/overview renderers and the validation/build pipeline have been reviewed at source level for DOM-safety, CSP structure, canonical data relationships, approved external destinations, publication invariants, local/CSS dependency handling, transport policy, symlink/protocol-relative boundaries, sitemap/index behavior, media loading, navigation contracts and structural accessibility.
-
-This source review does **not** substitute for successful execution of the repository validators or browser-render validation.
-
-### GitHub Actions Quality Gate
-
-**Account-level/pre-runner startup block — validator result not obtained.**
-
-Observed failed Quality Gate jobs have completed before a GitHub-hosted runner was assigned (`runner_id: 0`, empty runner name, `steps: []`). Therefore those red runs are not evidence that `security_scan.py`, Python syntax compilation, `validate_media_integrity.py`, `node --check`, `validate_public_data.js`, `validate_site.py`, `validate_runtime_contracts.py`, `validate_accessibility.py`, `build_public_site.py` or `validate_public_bundle.py` failed; repository steps were not observed executing.
-
-The workflow definition is intentionally present on `main` and the hardening branch. Manual dispatch requires an explicit `target_ref`, allowing the default-branch workflow to validate the actual candidate branch/tag/SHA without moving the frontend candidate to `main`.
-
-### Local execution / browser-render QA
-
-**Pending in the currently available runtime.**
-
-The available container/runtime has again failed to resolve/fetch `github.com`, so a local full-repository validator execution and browser automation result cannot be claimed as a substitute for Actions.
-
-Required browser QA remains 1440 / 1024 / 768 / 430 / 390 px, plus short-height windows, 200% zoom, keyboard navigation, reduced motion, lazy media, CSP/runtime console state and network waterfall behavior. The desktop navigation QA additionally checks that mouse clicks do not pin Explore/Development/Community open, pointer travel into the dropdown does not flicker closed, leaving the group closes it, and the 980 px mobile boundary still uses explicit click/touch state.
+- 1440 / 1024 / 768 / 430 / 390 CSS px;
+- at least one short-height landscape window;
+- 200% browser zoom;
+- keyboard navigation and focus behavior;
+- reduced motion;
+- desktop hover-only dropdown behavior and 980 px mobile/touch boundary;
+- Guide anchors/search/tables;
+- Forum dialogs and preview behavior;
+- Play modal;
+- console/CSP state and network waterfall;
+- media crop/stretch/loading behavior, especially Abyss + Astral.
 
 ## Remaining release gates
 
-- Resolve the GitHub Actions startup/billing condition and obtain a real execution of every Quality Gate step on the exact final candidate HEAD.
-- Complete browser/render QA and remediate any visual, responsive, accessibility, loading or runtime issue found there.
-- Re-run the full automated gate after final browser-QA changes.
-- Keep PR #1 in draft until those gates are satisfied.
-- Do not merge to `main` solely from static inspection.
-- Do not migrate Pages to `_site/` until the artifact pipeline has executed successfully.
+1. Resolve the GitHub Actions billing/startup condition.
+2. Execute the complete Quality Gate against the exact final release-candidate HEAD and obtain a real green result.
+3. Complete browser/render QA and remediate every finding.
+4. Re-run the full automated gate after final browser-QA changes.
+5. Keep PR #1 draft until both gates pass.
+6. Only then squash-merge the candidate to `main`.
+7. Migrate Pages to the validated `_site/` artifact only after that artifact pipeline has actually executed successfully.
 
 ## Deferred by product architecture
 
-The following controls cannot be meaningfully completed until an authenticated backend exists: server-side authorization, session management, CSRF enforcement, API rate limiting, database access policies, moderation audit logs, private profile access and account-recovery flows.
-
-Persistent Login/Profile/Forum work must not start by placing privileged credentials or trust decisions in the static GitHub Pages frontend. A header-capable/backend hosting boundary described in `docs/CSP-PLAN.md` and `docs/AUTH-SECURITY-REQUIREMENTS.md` remains a prerequisite.
+Persistent Login/Profile/Forum, moderation and private APIs remain behind the authenticated-backend boundary. They require server-side authorization, session management, CSRF enforcement where applicable, API rate limiting, database access policy, moderation auditability, private-profile access control, account recovery and response-header-capable hosting before being treated as production features.
