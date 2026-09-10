@@ -4,6 +4,9 @@
   const rail = document.querySelector('[data-worlds-visual-rail]');
   const progress = document.querySelector('[data-worlds-progress]');
   const bossStrip = document.querySelector('[data-worlds-boss-strip]');
+  const WORLD_IMAGE_PROXY_ORIGIN = 'https://pixel-network-1.gitbook.io';
+  const WORLD_IMAGE_PROXY_PATH = '/home/~gitbook/image';
+  const LOCAL_WORLD_MEDIA_RE = /^assets\/worlds\/[A-Za-z0-9._-]+\.(?:svg|png|jpe?g|webp|avif)$/i;
 
   if (!rail || !Array.isArray(network.worlds)) return;
 
@@ -24,14 +27,20 @@
   const safeImageUrl = (source, width = null) => {
     if (!source) return '';
     const value = String(source).trim();
-    if (/^(?:assets\/|\.\/|\.\.\/)/.test(value)) return value;
+    if (LOCAL_WORLD_MEDIA_RE.test(value)) return value;
+
     try {
-      const url = new URL(value, location.href);
-      const sameOrigin = url.origin === location.origin;
-      const localAllowed = sameOrigin && ['http:', 'https:'].includes(url.protocol);
-      const filePreviewAllowed = location.protocol === 'file:' && url.protocol === 'file:';
-      if (!localAllowed && !filePreviewAllowed && url.protocol !== 'https:') return '';
-      if (width && url.protocol === 'https:') {
+      const url = new URL(value);
+      if (
+        url.protocol !== 'https:' ||
+        url.origin !== WORLD_IMAGE_PROXY_ORIGIN ||
+        url.pathname !== WORLD_IMAGE_PROXY_PATH ||
+        url.username || url.password || url.hash
+      ) {
+        return '';
+      }
+
+      if (width) {
         url.searchParams.set('width', String(width));
         url.searchParams.set('dpr', '1');
         url.searchParams.set('quality', width >= 1000 ? '86' : '82');
