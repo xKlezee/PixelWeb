@@ -2,7 +2,7 @@ name: PixelWeb Quality Gate
 
 on:
   push:
-    branches: [main, "hardening/**"]
+    branches: ["hardening/**"]
   pull_request:
     branches: [main]
   workflow_dispatch:
