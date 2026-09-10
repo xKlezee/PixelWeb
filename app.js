@@ -3,6 +3,11 @@
 const RANK_PREMIUM = ['vip', 'mvp', 'ultra', 'pixel', 'pixel+'];
 const RANK_MEDIA = ['media'];
 const RANK_STAFF = ['staff'];
+const PREVIEW_LIMITS = Object.freeze({
+  displayName: 32,
+  title: 120,
+  message: 4000
+});
 
 function getRankClass(rank) {
   const value = String(rank || 'member').toLowerCase();
@@ -92,9 +97,15 @@ function switchTab(tab) {
   });
 }
 
+function normalizeDisplayName(value) {
+  const trimmed = String(value ?? '').trim();
+  if (!trimmed) return PREVIEW_PROFILE.username;
+  return trimmed.slice(0, PREVIEW_LIMITS.displayName);
+}
+
 function enterPreview(username) {
   currentUser = { id: 'preview-session' };
-  currentProfile = { ...PREVIEW_PROFILE, username: username || PREVIEW_PROFILE.username };
+  currentProfile = { ...PREVIEW_PROFILE, username: normalizeDisplayName(username) };
   applyProfileToUI(currentProfile);
 
   const authOverlay = document.getElementById('auth-overlay');
@@ -108,13 +119,11 @@ function enterPreview(username) {
 }
 
 function doLogin() {
-  const username = document.getElementById('login-email')?.value.trim() || 'Guest';
-  enterPreview(username);
+  enterPreview(document.getElementById('login-email')?.value);
 }
 
 function doSignup() {
-  const username = document.getElementById('su-username')?.value.trim() || 'Guest';
-  enterPreview(username);
+  enterPreview(document.getElementById('su-username')?.value);
 }
 
 function doLogout() {
@@ -336,6 +345,16 @@ function submitPost() {
   const content = bodyInput?.value.trim() || '';
   if (!title || !content) {
     TOAST.error('A title and message are required.');
+    return;
+  }
+  if (title.length > PREVIEW_LIMITS.title) {
+    TOAST.error(`Titles are limited to ${PREVIEW_LIMITS.title} characters in this preview.`);
+    titleInput?.focus();
+    return;
+  }
+  if (content.length > PREVIEW_LIMITS.message) {
+    TOAST.error(`Messages are limited to ${PREVIEW_LIMITS.message} characters in this preview.`);
+    bodyInput?.focus();
     return;
   }
 
