@@ -171,6 +171,7 @@
       this.zoom = preview ? 1.05 : 1;
       this.ready = false;
       this.dirty = true;
+      this.dragging = false;
       renderers.add(this);
     }
 
@@ -436,6 +437,10 @@
           this.dirty = true;
         }
       } else {
+        if (!this.dragging && !reducedMotion) {
+          this.anchorYaw = wrapAngle(this.anchorYaw + PREVIEW_SPIN_SPEED * deltaSeconds);
+          this.targetYaw = this.anchorYaw;
+        }
         const easing = 1 - Math.pow(0.0008, Math.min(deltaSeconds, 0.05));
         const nextYaw = lerpAngle(this.currentYaw, this.targetYaw, easing);
         const nextPitch = this.currentPitch + (this.targetPitch - this.currentPitch) * easing;
@@ -462,7 +467,7 @@
     }
   }
 
-  const bindInverseDragRotation = (surface, renderer) => {
+  const bindDragRotation = (surface, renderer) => {
     let pointerId = null;
     let lastX = 0;
     let lastY = 0;
@@ -472,6 +477,7 @@
       pointerId = event.pointerId;
       lastX = event.clientX;
       lastY = event.clientY;
+      renderer.dragging = true;
       surface.classList.add('is-dragging');
       surface.setPointerCapture?.(event.pointerId);
     });
@@ -482,12 +488,13 @@
       const dy = event.clientY - lastY;
       lastX = event.clientX;
       lastY = event.clientY;
-      renderer.nudge(-dx * 0.010, -dy * 0.0065);
+      renderer.nudge(dx * 0.010, dy * 0.0065);
     });
 
     const endDrag = event => {
       if (event.pointerId !== pointerId) return;
       pointerId = null;
+      renderer.dragging = false;
       surface.classList.remove('is-dragging');
       if (surface.hasPointerCapture?.(event.pointerId)) surface.releasePointerCapture(event.pointerId);
     };
@@ -497,7 +504,7 @@
   };
 
   const mainRenderer = new MinecraftModelRenderer(mainCanvas);
-  bindInverseDragRotation(stage, mainRenderer);
+  bindDragRotation(stage, mainRenderer);
 
   const selectItem = async (item, pose = null) => {
     activeNameNodes.forEach(node => { node.textContent = item.name; });
