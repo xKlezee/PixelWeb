@@ -8,7 +8,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https: data:; font-src 'self' https: data:; connect-src 'self'; frame-src 'none'; worker-src 'none'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests"/>
 <meta name="referrer" content="strict-origin-when-cross-origin"/>
 <meta name="description" content="Preview the future Pixel Network community Forum without persistent accounts or stored credentials."/>
-<title>Community Forum — Pixel Network</title>
+<title>Community Forum Preview — Pixel Network</title>
 <link rel="stylesheet" href="style.css"/>
 <link rel="stylesheet" href="forum-stage2.css"/>
 <link rel="stylesheet" href="forum-hardening.css"/>
@@ -38,7 +38,7 @@
     <div id="panel-login" class="auth-panel active" role="tabpanel" aria-labelledby="tab-login">
       <div class="field-group">
         <label class="field-lbl font-special" for="login-email">DISPLAY NAME</label>
-        <input type="text" id="login-email" class="field-input font-special" placeholder="Guest" autocomplete="off"/>
+        <input type="text" id="login-email" class="field-input font-special" placeholder="Guest" autocomplete="off" maxlength="32"/>
       </div>
       <button class="btn-primary font-special" id="btn-login" type="button">ENTER FORUM</button>
     </div>
@@ -46,7 +46,7 @@
     <div id="panel-signup" class="auth-panel" role="tabpanel" aria-labelledby="tab-signup" hidden>
       <div class="field-group">
         <label class="field-lbl font-special" for="su-username">DISPLAY NAME</label>
-        <input type="text" id="su-username" class="field-input font-special" placeholder="YourName" autocomplete="off"/>
+        <input type="text" id="su-username" class="field-input font-special" placeholder="YourName" autocomplete="off" maxlength="32"/>
       </div>
       <button class="btn-primary font-special" id="btn-signup" type="button">START PREVIEW PROFILE</button>
     </div>
@@ -59,7 +59,7 @@
       <a href="index.html" class="topnav-brand" aria-label="Back to Pixel Network">
         <div class="brand-dot" aria-hidden="true"></div>
         <span class="font-special brand-name">PIXEL NETWORK</span>
-        <span class="brand-tag font-special">FORUM</span>
+        <span class="brand-tag font-special">FORUM · PREVIEW</span>
       </a>
       <div class="topnav-right">
         <a href="index.html" class="nav-link font-special" aria-label="Back to main site">← MAIN SITE</a>
@@ -95,14 +95,14 @@
 
     <main class="forum-main">
       <div class="create-post-box" id="create-post-box">
-        <div class="create-post-header"><span class="font-special">NEW POST</span></div>
+        <div class="create-post-header"><span class="font-special">NEW POST · LOCAL PREVIEW</span></div>
         <label class="field-lbl font-special" for="post-title">TITLE</label>
-        <input type="text" id="post-title" class="create-input font-special" placeholder="Post title" autocomplete="off"/>
+        <input type="text" id="post-title" class="create-input font-special" placeholder="Post title" autocomplete="off" maxlength="120"/>
         <label class="field-lbl font-special" for="post-body">MESSAGE</label>
-        <textarea id="post-body" class="create-textarea font-special" placeholder="Write something for the community..."></textarea>
+        <textarea id="post-body" class="create-textarea font-special" placeholder="Write something for the community..." maxlength="4000"></textarea>
         <div class="create-footer">
           <span class="cooldown-info font-special" id="cooldown-info" aria-live="polite"></span>
-          <button class="btn-submit font-special" id="btn-submit" type="button">PUBLISH</button>
+          <button class="btn-submit font-special" id="btn-submit" type="button">ADD PREVIEW POST</button>
         </div>
       </div>
 
