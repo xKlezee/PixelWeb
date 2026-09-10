@@ -3,9 +3,9 @@
     verification: {
       level: 'source-verified',
       verifiedAsOf: '2026-09-07',
-      completenessAudit: 'no source-backed unfinished functionality found',
-      runtimeClaim: 'not asserted',
-      note: 'Current source and regression coverage are verified. This guide does not convert source/test evidence into an unobserved live-client claim.'
+      liveClient: 'not-asserted',
+      scope: 'family compatibility, effect semantics and retired identities',
+      note: 'Current mechanics are documented from verified source behavior. Live-client presentation is not claimed where it has not been observed directly.'
     },
     limits: {
       maxPerItem: 4
@@ -17,15 +17,15 @@
       },
       {
         name: 'Stable enchant identity',
-        description: 'Enchant IDs and their stored positions remain stable. Retired IDs are not silently recycled for unrelated mechanics.'
+        description: 'Enchant identities remain stable over time. Retired identities are not silently reused for unrelated mechanics.'
       },
       {
-        name: 'One damage pipeline',
-        description: 'Enchant contributions feed the shared combat pipeline so permission, modifiers, mitigation and final application are not duplicated.'
+        name: 'One damage model',
+        description: 'Enchant effects participate in the same combat model so damage modifiers, mitigation and final damage remain consistent.'
       },
       {
         name: 'Specialized mechanics stay specialized',
-        description: 'Defensive, penetration, execution and area effects use their intended behavior instead of falling back to generic bonus damage.'
+        description: 'Defensive, penetration, execution and area effects keep their intended behavior instead of being reduced to generic bonus damage.'
       }
     ],
     families: [
@@ -75,7 +75,7 @@
         type: 'Offhand / defense',
         identity: 'Offhand resolved',
         shared: [],
-        note: 'Shield enchantments are resolved from the offhand and duplicate IDs are guarded against.'
+        note: 'Shield enchantments are read from the equipped offhand without double-counting the same enchantment across held items.'
       }
     ],
     specialized: [
@@ -83,37 +83,37 @@
         name: 'LIFESTEAL',
         kind: 'Defensive sustain',
         behavior: 'Heals from actual final damage dealt, scales by enchant level, caps at 20% of dealt damage and never exceeds the player’s maximum health.',
-        status: 'implemented'
+        status: 'current'
       },
       {
         name: 'EXECUTION',
         kind: 'Conditional offense',
         behavior: 'A low-probability Spear-exclusive execution mechanic. Bosses are excluded.',
-        status: 'implemented'
+        status: 'current'
       },
       {
         name: 'FRACTURE / SPLINTER',
         kind: 'Boss conditional',
-        behavior: 'Their special conditional path is restricted to boss targets.',
-        status: 'implemented'
+        behavior: 'Their special conditional effect is restricted to boss targets.',
+        status: 'current'
       },
       {
         name: 'PHASE_STRIKE / WRAITH',
         kind: 'Penetration',
-        behavior: 'Feeds real penetration semantics into the combat snapshot rather than becoming generic bonus damage.',
-        status: 'implemented'
+        behavior: 'Uses penetration semantics for the qualifying hit rather than becoming generic bonus damage.',
+        status: 'current'
       },
       {
         name: 'PULSE',
         kind: 'Area effect',
-        behavior: 'Uses a bounded area-of-effect path in which secondary targets are evaluated independently. Exact feel/balance parameters are intentionally omitted from this guide.',
-        status: 'implemented'
+        behavior: 'Uses a bounded area effect in which secondary targets are evaluated independently. Exact feel and balance parameters are intentionally omitted from this guide.',
+        status: 'current'
       },
       {
         name: 'GUARD / RESILIENCE / ANCHOR / SECOND_WIND',
         kind: 'Defense',
-        behavior: 'Use specialized defensive implementations and are not allowed to fall through to generic offensive damage.',
-        status: 'implemented'
+        behavior: 'Use dedicated defensive behavior rather than falling through to generic offensive damage.',
+        status: 'current'
       }
     ],
     conservativeDamage: [
@@ -147,7 +147,7 @@
       {
         name: 'GRAVITY_WELL',
         status: 'retired',
-        note: 'The mechanic is retired. Its stable ID must not be repurposed for a new pull effect without a new design decision.'
+        note: 'The mechanic is retired. Its identity is kept reserved instead of being reused for an unrelated effect.'
       },
       {
         name: 'REFLECTION',
@@ -157,7 +157,7 @@
       {
         name: 'THORNS / BURN_POWER',
         status: 'removed',
-        note: 'Removed from the active enchant system and should not be reintroduced merely to satisfy stale code or documentation.'
+        note: 'Removed from the active enchant system and not part of the current catalogue.'
       }
     ]
   };
