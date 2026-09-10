@@ -112,6 +112,9 @@ def css_references(text: str) -> list[str]:
 
 
 def sitemap_page_names(failures: list[str]) -> set[str]:
+    if SITEMAP.is_symlink():
+        failures.append("sitemap.xml: symlinks are not allowed in the public bundle")
+        return set()
     if not SITEMAP.is_file():
         failures.append("sitemap.xml: required public sitemap is missing")
         return set()
@@ -176,11 +179,21 @@ def validate_local_reference(
 def main() -> int:
     failures: list[str] = []
 
+    if PUBLIC.is_symlink():
+        print("Public bundle validation failed: _site/ must not be a symlink.")
+        return 1
     if not PUBLIC.is_dir():
         print("Public bundle validation failed: _site/ does not exist. Run build_public_site.py first.")
         return 1
 
-    files = sorted(path for path in PUBLIC.rglob("*") if path.is_file())
+    entries = sorted(PUBLIC.rglob("*"))
+    for path in entries:
+        if path.is_symlink():
+            failures.append(f"{path.relative_to(PUBLIC)}: symlinks are not allowed in the public bundle")
+
+    # Never dereference a symlink while validating content. A symlink already fails above;
+    # excluding it here prevents the validator itself from reading outside the staged tree.
+    files = sorted(path for path in entries if not path.is_symlink() and path.is_file())
     if not files:
         failures.append("_site/: public bundle is empty")
 
@@ -223,7 +236,7 @@ def main() -> int:
     # HTML/CSS dependency graph or explicitly declared as a known runtime-loaded resource.
     referenced_root_files: set[str] = set(PUBLIC_DYNAMIC_ROOT_FILES)
 
-    for page in sorted(PUBLIC.glob("*.html")):
+    for page in sorted(path for path in PUBLIC.glob("*.html") if not path.is_symlink()):
         parser = ReferenceParser()
         parser.feed(page.read_text(encoding="utf-8"))
         parser.close()
@@ -232,7 +245,7 @@ def main() -> int:
             label = f"{attr} at line {line}"
             validate_local_reference(page, raw, label, failures, referenced_root_files)
 
-    for stylesheet in sorted(PUBLIC.rglob("*.css")):
+    for stylesheet in sorted(path for path in PUBLIC.rglob("*.css") if not path.is_symlink()):
         try:
             text = stylesheet.read_text(encoding="utf-8")
         except UnicodeError:
@@ -252,6 +265,8 @@ def main() -> int:
         *expected_html,
     }
     for path in sorted(PUBLIC.iterdir(), key=lambda item: item.name.lower()):
+        if path.is_symlink():
+            continue
         if not path.is_file():
             continue
         if path.name in exempt_root_files or path.name in referenced_root_files:
