@@ -44,6 +44,7 @@
   let lastTime = -1;
   let activeChapter = -1;
   let chapterTransition = 0;
+  let videoHydrated = false;
 
   if (progressBar instanceof HTMLProgressElement) {
     progressBar.max = 1;
@@ -57,6 +58,28 @@
     tab.setAttribute('aria-selected', String(index === 0));
     tab.tabIndex = index === 0 ? 0 : -1;
   });
+
+  function hydrateVideo() {
+    if (reducedMotion || videoHydrated) return;
+    const source = String(video.dataset.src || '').trim();
+    if (!source) return;
+    videoHydrated = true;
+    video.src = source;
+    video.load();
+  }
+
+  if (!reducedMotion) {
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(entries => {
+        if (!entries.some(entry => entry.isIntersecting)) return;
+        observer.disconnect();
+        hydrateVideo();
+      }, { rootMargin: '600px 0px' });
+      observer.observe(section);
+    } else {
+      hydrateVideo();
+    }
+  }
 
   function chapterFor(progress) {
     if (progress < .245) return 0;
@@ -142,6 +165,7 @@
   function goToChapter(index, focus = false) {
     const chapter = chapters[index];
     if (!chapter) return;
+    hydrateVideo();
     const total = section.offsetHeight - window.innerHeight;
     const absoluteTop = window.scrollY + section.getBoundingClientRect().top;
     window.scrollTo({
@@ -153,11 +177,8 @@
 
   video.addEventListener('loadedmetadata', () => {
     duration = Number.isFinite(video.duration) ? video.duration : 0;
-    if (reducedMotion && duration > 0) {
-      try { video.currentTime = Math.min(duration * .28, Math.max(0, duration - .1)); } catch {}
-    }
     requestRender();
-  }, { once: true });
+  });
 
   window.addEventListener('scroll', requestRender, { passive: true });
   window.addEventListener('resize', requestRender, { passive: true });
