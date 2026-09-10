@@ -78,6 +78,7 @@ Evidence levels, from narrower to stronger observation:
 Factual state is a separate axis:
 
 - `current`: supported behavior/reference for the stated evidence level;
+- `partial`: a real implemented subsystem exists, but one or more explicitly identified player-facing paths remain incomplete; current and incomplete capabilities must be separated in public copy;
 - `staged`: implemented/reconciled but not yet deployed at the last verification;
 - `planned`: approved direction but not implemented/current;
 - `unknown`: insufficient evidence; do not invent a value;
@@ -88,7 +89,22 @@ A Guide must never upgrade evidence silently. Examples:
 - green source tests do not equal a live-client observation;
 - a source-ready fix does not become `current live` until deployment is established;
 - a live configuration catalogue can be `reconciled-reference` even when a later source fix that uses it is still staged;
+- a source-verified system can still have factual state `partial` when some reachable product paths are unfinished;
 - an old GitBook statement never upgrades an `unknown` fact.
+
+## Feature-completeness rule
+
+For public documentation, implementation presence and player availability are not synonyms.
+
+A feature is not promoted to the current player-facing set merely because:
+
+- a manager/class exists;
+- a menu contains a visible item;
+- a command name is mentioned in source;
+- substantial internal logic has been written;
+- an old planning document labels it complete.
+
+The player-facing path must be reachable at the stated evidence level. If menu routing, command dispatch, boot wiring, persistence or another required link is missing, document the implemented foundation and the incomplete path separately.
 
 ## Duplication policy
 
@@ -150,10 +166,13 @@ Guides are public content. Never place in guide data or source files:
 
 ## Current rollout
 
-`guides.html` is the stable documentation entry point. Detailed pages are promoted only after their evidence level and disclosure boundary are known.
+`guides.html` is the stable documentation entry point. Detailed pages are promoted only after their evidence level, factual state and disclosure boundary are known.
 
 Current pattern examples:
 
 - `guide-talismans.html`: server-verified mechanics with a separately disclosed client-QA gap;
 - `guide-enchantments.html`: source-verified mechanics/tests without claiming a live-client pass;
+- `guide-stats-equipment.html`: source-verified core stat semantics with mining-specific coverage intentionally excluded;
+- `guide-progression.html`: reconciled current caps/access milestones while reset/reward/persistence semantics remain deliberately unpublished;
+- `guide-skyblock.html`: source-verified island foundations with factual state `partial` because team-management wiring remains incomplete;
 - `guide-nexus.html`: reconciled catalogue/reference with staged deployment work called out separately.
