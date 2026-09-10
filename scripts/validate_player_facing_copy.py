@@ -32,8 +32,7 @@ FORBIDDEN_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
 
 def public_copy_files() -> list[Path]:
     files: set[Path] = set(ROOT.glob("*.html"))
-    files.update(ROOT.glob("guide-*.js"))
-    files.update(ROOT.glob("*-stage*.js"))
+    files.update(ROOT.glob("*.js"))
     files.update((ROOT / "data").glob("*.js"))
     files.update((ROOT / "data" / "guides").glob("*.js"))
     return sorted(path for path in files if path.is_file() and not path.is_symlink())
