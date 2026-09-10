@@ -22,6 +22,14 @@ DESKTOP_HOVER_NAV_RE = re.compile(
     r"\.nav-group\s*>\s*button\s*\{[\s\S]*?pointer-events\s*:\s*none\s*;",
     re.IGNORECASE,
 )
+SITE_NAV_RE = re.compile(
+    r"<nav\b[^>]*\bclass=['\"][^'\"]*\bsite-nav\b[^'\"]*['\"][^>]*>([\s\S]*?)</nav>",
+    re.IGNORECASE,
+)
+CURRENT_NAV_LINK_RE = re.compile(
+    r"<a\b(?=[^>]*\baria-current=['\"]page['\"])[^>]*\bhref=['\"]([^'\"]+)['\"][^>]*>",
+    re.IGNORECASE,
+)
 
 
 class DeferredMediaParser(html.parser.HTMLParser):
@@ -87,6 +95,25 @@ def validate_deferred_url(page: Path, attr: str, raw: str, line: int, failures: 
         failures.append(f"{page.name}:{line}: deferred {attr} target is missing ({value})")
 
 
+def validate_guide_navigation_current_state(page_name: str, failures: list[str]) -> None:
+    if not page_name.startswith("guide-") or not page_name.endswith(".html"):
+        return
+
+    text = (ROOT / page_name).read_text(encoding="utf-8")
+    nav_match = SITE_NAV_RE.search(text)
+    if not nav_match:
+        failures.append(f"{page_name}: Guide page is missing the canonical site navigation")
+        return
+
+    current_hrefs = CURRENT_NAV_LINK_RE.findall(nav_match.group(1))
+    if current_hrefs != ["guides.html"]:
+        rendered = ", ".join(current_hrefs) if current_hrefs else "none"
+        failures.append(
+            f"{page_name}: Guide navbar must mark exactly guides.html as aria-current=page "
+            f"(found: {rendered})"
+        )
+
+
 def validate_navigation_contract(page_parsers: dict[str, DeferredMediaParser], failures: list[str]) -> None:
     for page_name, parser in page_parsers.items():
         if page_name in NAVIGATION_PAGE_EXCEPTIONS:
@@ -95,6 +122,7 @@ def validate_navigation_contract(page_parsers: dict[str, DeferredMediaParser], f
             failures.append(
                 f"{page_name}: canonical public navigation must load security-hardening.css"
             )
+        validate_guide_navigation_current_state(page_name, failures)
 
     if not NAV_HARDENING_PATH.exists():
         failures.append("security-hardening.css: missing desktop navigation hardening layer")
@@ -141,7 +169,7 @@ def main() -> int:
 
     print(
         f"Runtime contracts passed for {len(HTML_FILES)} HTML pages and "
-        f"{len(JS_FILES)} JavaScript files, including desktop navigation behavior."
+        f"{len(JS_FILES)} JavaScript files, including desktop and Guide navigation behavior."
     )
     return 0
 
