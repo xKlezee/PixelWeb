@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Dependency-free static integrity and browser-safety checks for PixelWeb.
 
-This validator encodes security invariants rather than style preferences. A change
-that weakens the CSP, reintroduces inline executable/style content, breaks local
-references, adds unsafe DOM sinks, or introduces insecure absolute HTTP resources
-fails before deployment.
+This validator encodes security and publication invariants rather than style preferences.
+A change that weakens the CSP, reintroduces inline executable/style content, breaks local
+references, adds unsafe DOM sinks, introduces insecure absolute HTTP resources, or
+reintroduces explicitly retired public claims fails before deployment.
 """
 from __future__ import annotations
 
@@ -30,6 +30,21 @@ REQUIRED_CSP_DIRECTIVES = {
 }
 FORBIDDEN_CSP_TOKENS = {"'unsafe-inline'", "'unsafe-eval'", "'wasm-unsafe-eval'"}
 GUIDE_CONNECT_SRC = {"'self'"}
+
+# Retired product copy is guarded explicitly when its reappearance would overclaim a
+# feature state. These strings are not generic wording bans; they are known stale claims.
+FORBIDDEN_PUBLIC_COPY = {
+    "Personal and collaborative island progression.": (
+        "Skyblock collaboration is currently partial; use the canonical personal-island "
+        "description instead"
+    ),
+}
+
+# Some public values must have exactly one source owner. Other surfaces render them from
+# that owner instead of embedding a second literal that can drift later.
+CANONICAL_LITERAL_OWNERS = {
+    "pixelboxxx.minehut.gg": Path("data/network.js"),
+}
 
 # PixelWeb intentionally avoids string-to-DOM parsing and runtime inline-style mutation.
 # This keeps data rendering safe by construction and makes a strict CSP sustainable.
@@ -99,7 +114,7 @@ class PageParser(html.parser.HTMLParser):
             self.refs.append(("href", attrs_dict["href"], line))
         if tag in {"script", "img", "source", "video", "audio", "iframe"} and attrs_dict.get("src"):
             self.refs.append(("src", attrs_dict["src"], line))
-        if tag in {"video"} and attrs_dict.get("poster"):
+        if tag == "video" and attrs_dict.get("poster"):
             self.refs.append(("poster", attrs_dict["poster"], line))
         if tag in {"source", "img"} and attrs_dict.get("srcset"):
             for item in attrs_dict["srcset"].split(","):
@@ -166,6 +181,24 @@ def scan_text_file_for_insecure_http(path: Path, failures: list[str]) -> None:
             failures.append(
                 f"{path.relative_to(ROOT)}:{line_number}: insecure absolute HTTP URL detected"
             )
+
+
+def scan_publication_invariants(paths: list[Path], failures: list[str]) -> None:
+    for path in paths:
+        text = path.read_text(encoding="utf-8")
+        relative = path.relative_to(ROOT)
+
+        for stale_copy, explanation in FORBIDDEN_PUBLIC_COPY.items():
+            if stale_copy in text:
+                failures.append(f"{relative}: retired public claim detected — {explanation}")
+
+        for literal, owner in CANONICAL_LITERAL_OWNERS.items():
+            if literal not in text:
+                continue
+            if relative != owner:
+                failures.append(
+                    f"{relative}: canonical literal '{literal}' must be owned only by {owner}"
+                )
 
 
 def main() -> int:
@@ -257,6 +290,8 @@ def main() -> int:
 
     for css_file in CSS_FILES:
         scan_text_file_for_insecure_http(css_file, failures)
+
+    scan_publication_invariants([*HTML_FILES, *JS_FILES], failures)
 
     if failures:
         print("Static site validation failed:")
