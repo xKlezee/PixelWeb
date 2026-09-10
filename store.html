@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <meta name="theme-color" content="#0b0c0e"/>
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https: data:; media-src 'self' https:; font-src 'self' https: data:; connect-src 'self' https://api.mcsrvstat.us; frame-src 'none'; worker-src 'none'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https: data:; media-src 'self' https:; font-src 'self' https: data:; connect-src 'self'; frame-src 'none'; worker-src 'none'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
   <meta name="description" content="Shop Pixel Network and learn how lifetime support progression works."/>
   <title>Store — Pixel Network</title>
@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="phase1.css"/>
   <link rel="stylesheet" href="security-hardening.css"/>
   <script src="data/network.js" defer></script>
+  <script src="store-stage.js" defer></script>
   <script src="site.js" defer></script>
   <script src="polish.js" defer></script>
 </head>
@@ -22,8 +23,8 @@
 
   <nav class="site-nav" aria-label="Main navigation"><div class="shell nav-inner">
     <a class="brand" href="index.html"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a>
-    <div class="nav-links" id="navLinks"><div class="nav-group"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal and collaborative island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div><a href="development.html">Development</a><div class="nav-group"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="community.html"><strong>Community</strong><span>Discord, Forum, docs and changelog.</span></a><a href="forum.html"><strong>Forum</strong><span>Long-form discussion.</span></a></div></div><a href="team.html">About</a></div>
-    <div class="nav-actions"><a class="button quiet nav-store" href="store.html" aria-current="page">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
+    <div class="nav-links" id="navLinks"><div class="nav-group"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div><div class="nav-group"><button type="button" aria-haspopup="true">Development</button><div class="nav-dropdown"><a href="development.html"><strong>Development</strong><span>Current status, roadmap and product scale.</span></a><a href="changelog.html"><strong>Changelog</strong><span>Player-facing release notes.</span></a></div></div><div class="nav-group"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="community.html"><strong>Community</strong><span>Discord, Guides and Forum.</span></a><a href="guides.html"><strong>Guides</strong><span>Detailed player reference and mechanics.</span></a><a href="forum.html"><strong>Forum</strong><span>Long-form discussion preview.</span></a></div></div><a href="team.html">About</a></div>
+    <div class="nav-actions"><a class="button quiet nav-discord" href="https://discord.gg/7KzWpezTNZ" target="_blank" rel="noopener">Discord</a><a class="button quiet nav-store" href="store.html" aria-current="page">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
   </div></nav>
 
   <main>
@@ -41,10 +42,10 @@
     </div></section>
 
     <section class="content-section"><div class="shell">
-      <div class="content-head reveal"><div><div class="content-eyebrow">Rank path</div><h2>Five support milestones. One cumulative path.</h2></div><p>Pixel's support path moves from VIP through Pixel+. Exact monetary thresholds are intentionally omitted from this overview until the current ladder is reconfirmed.</p></div>
-      <div class="flow-line reveal"><div class="flow-step"><b>VIP</b><span>Support milestone</span></div><div class="flow-step"><b>MVP</b><span>Support milestone</span></div><div class="flow-step"><b>Ultra</b><span>Support milestone</span></div><div class="flow-step"><b>Pixel</b><span>Support milestone</span></div><div class="flow-step"><b>Pixel+</b><span>Support milestone</span></div></div>
+      <div class="content-head reveal"><div><div class="content-eyebrow">Rank path</div><h2>Support milestones. One cumulative path.</h2></div><p>Pixel's rank path is rendered from the current public Store model. Exact monetary thresholds are intentionally omitted from this overview until the current ladder is reconfirmed.</p></div>
+      <div class="flow-line reveal" data-store-ranks></div>
       <div class="index-list index-list-spaced">
-        <div class="index-row reveal"><span>Model</span><strong data-network="store.model">Lifetime support progression</strong></div>
+        <div class="index-row reveal"><span>Model</span><strong data-network="store.model">—</strong></div>
         <div class="index-row reveal"><span>Rank upgrade</span><strong>Automatic at milestones</strong></div>
         <div class="index-row reveal"><span>Support history</span><strong>Cumulative</strong></div>
         <div class="index-row reveal"><span>Threshold values</span><strong>Omitted from this overview</strong></div>
@@ -52,19 +53,15 @@
     </div></section>
 
     <section class="content-section"><div class="shell">
-      <div class="content-head reveal"><div><div class="content-eyebrow">Store content</div><h2>Supporting Pixel does not require buying a rank as a standalone product.</h2></div><p>Purchases across available Store content can contribute to the same support path. Current public categories include cosmetics, keys and decoration.</p></div>
-      <div class="detail-grid">
-        <article class="detail-card reveal"><small>Cosmetics</small><h3>Visual identity.</h3><p>Optional visual content can support the network while still contributing to lifetime support progression.</p></article>
-        <article class="detail-card reveal"><small>Keys</small><h3>Reward access.</h3><p>Keys sit inside the wider reward economy rather than replacing the long-term progression structure.</p></article>
-        <article class="detail-card reveal"><small>Decoration</small><h3>Personal expression.</h3><p>Decorative purchases provide another way to support Pixel without making the Store only about rank packages.</p></article>
-      </div>
+      <div class="content-head reveal"><div><div class="content-eyebrow">Store content</div><h2>Supporting Pixel does not require buying a rank as a standalone product.</h2></div><p>Purchases across currently published Store categories can contribute to the same support path.</p></div>
+      <div class="detail-grid" data-store-categories></div>
     </div></section>
 
     <section class="content-section"><div class="shell">
       <div class="content-head reveal"><div><div class="content-eyebrow">Progression & purchases</div><h2>Faster progression is possible; exclusive progression is not the goal.</h2></div><p>Store purchases can accelerate parts of progression, but Pixel's core progression and power systems remain obtainable through play. The Store is designed as a support and convenience layer around the game, not a separate route that replaces playing it.</p></div>
       <div class="path-grid">
         <article class="path-card reveal"><span class="path-label">Through play</span><h3>The progression remains playable.</h3><p>Levels, Prestige, Legacy, world access, equipment progression and the wider account journey remain part of normal gameplay.</p><div class="path-list"><span>Levels</span><span>Prestige</span><span>Legacy</span><span>World progression</span><span>Core power systems</span></div></article>
-        <article class="path-card reveal"><span class="path-label">Through Store</span><h3>Support can reduce friction.</h3><p>Purchases may accelerate progression or provide optional content while also contributing to the same cumulative support rank path.</p><div class="path-list"><span>Progression acceleration</span><span>Cosmetics</span><span>Keys</span><span>Decoration</span><span>Lifetime support</span></div></article>
+        <article class="path-card reveal"><span class="path-label">Through Store</span><h3>Support can reduce friction.</h3><p>Purchases may accelerate progression or provide optional content while also contributing to the same cumulative support rank path.</p><div class="path-list"><span>Progression acceleration</span><span>Optional content</span><span>Lifetime support</span></div></article>
       </div>
     </section>
 
