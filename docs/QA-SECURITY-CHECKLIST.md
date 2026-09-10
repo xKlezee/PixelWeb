@@ -32,6 +32,10 @@ A configured control is not a passed control. Record the actual result for the e
 - No duplicate IDs exist within a page.
 - Keyboard navigation remains usable after removal of inline handlers.
 - Canonical runtime navigation remains consistent across overview pages and detailed `guide-*.html` pages.
+- Above 980 px with a fine pointer, Explore / Development / Community are hover-only pointer targets: entering a group opens it, moving into its dropdown keeps it open, leaving the group closes it, and a mouse/trackpad click does not pin it open.
+- At 980 px and below, navigation uses explicit click/touch `.is-open` state even when a fine pointer is attached; the desktop hover-only rule must not disable the mobile-layout buttons.
+- Keyboard opening, focus movement and Escape remain available independently from the pointer-only desktop rule.
+- Every detailed `guide-*.html` fallback navbar marks exactly `guides.html` as `aria-current="page"`; no product-overview link simultaneously claims to be the current global destination.
 - Guides remains reachable from global Community navigation.
 - First keyboard focus exposes the global Skip to content link on standard pages.
 - Activating Skip to content moves both viewport and keyboard focus to the actual `<main>` region.
@@ -56,13 +60,14 @@ A configured control is not a passed control. Record the actual result for the e
 - No user-controlled value is interpolated into inline JavaScript.
 - Dynamic `href` / `src` values are validated against expected schemes/origins where appropriate.
 - Forum preview content renders HTML-like payloads as inert text.
+- Forum preview display names, post titles and post bodies stay within the JavaScript-enforced preview limits even if mutable HTML `maxlength` attributes are removed or changed in DevTools.
 - Guide renderers use safe DOM construction (`createElement`, `textContent`, `append`, `replaceChildren`) rather than HTML parsing sinks.
 - No runtime inline-style mutation is introduced, including direct `element.style = ...` assignment.
 
 ## Guide content integrity
 
-- Every detailed Guide states or inherits an explicit evidence level.
-- Evidence (`source-verified`, `server-verified`, `live-client-verified`, `reconciled-reference`) is kept separate from factual feature state (`current`, `partial`, `staged`, `planned`, `unknown`, `deprecated/retired`).
+- Every detailed Guide either states a defined evidence level (`source-verified`, `server-verified`, `live-client-verified`, `reconciled-reference`) or is explicitly labeled as a non-evidence reference role such as orientation/current public reference; generic `Verified guide` badges are not used as a substitute for provenance.
+- Evidence is kept separate from factual feature state (`current`, `partial`, `staged`, `planned`, `unknown`, `deprecated/retired`).
 - A source-verified but partial system is not presented as fully player-available.
 - Shared numeric facts are read from their canonical owner rather than copied into multiple guide files.
 - Nexus is never presented as World 5.
@@ -72,6 +77,8 @@ A configured control is not a passed control. Record the actual result for the e
 - Mining-specific stat coverage remains outside the current Stats guide until its producer-to-consumer audit is complete.
 - Secret Talisman discovery trees, protected combinations and anti-abuse-sensitive inputs are not exposed in public Guide data.
 - Legacy GitBook claims never override current evidence.
+- Guides search result-count changes are announced without moving focus, and Escape clears the current query.
+- Sidebar in-page links land below sticky navigation rather than hiding the anchored heading.
 
 ## Media integrity
 
@@ -116,9 +123,10 @@ A configured control is not a passed control. Record the actual result for the e
 - Play modal focus trap, Escape close and focus restoration work.
 - Forum entry dialog receives initial focus, traps Tab/Shift+Tab while active and remains scroll-reachable on short viewports.
 - Forum post modal focus and Escape behavior work and restore focus to the source card.
-- Mobile navigation opens/closes and returns focus correctly.
+- Desktop fine-pointer dropdowns follow hover-only behavior without overlap, click-pinning or flicker while crossing from the group label into its dropdown.
+- Mobile navigation opens/closes and returns focus correctly, including a desktop browser narrowed to 980 px or below.
 - Guide sidebars/section rails remain navigable by keyboard and touch.
-- Guide search works at mobile widths and 200% zoom.
+- Guide search works at mobile widths and 200% zoom and announces changing result counts appropriately.
 
 ## Responsive widths
 
