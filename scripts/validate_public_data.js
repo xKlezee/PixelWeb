@@ -25,6 +25,7 @@ const EXPECTED_PUBLIC_URLS = Object.freeze({
 const WORLD_IMAGE_PROXY_ORIGIN = 'https://pixel-network-1.gitbook.io';
 const WORLD_IMAGE_PROXY_PATH = '/home/~gitbook/image';
 const WORLD_IMAGE_STORAGE_ORIGIN = 'https://712597880-files.gitbook.io';
+const WORLD_IMAGE_STORAGE_PATH_PREFIX = '/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces/n7xotQKtgeq6qSw4VBXF/uploads/';
 
 const fail = message => failures.push(message);
 const check = (condition, message) => {
@@ -62,9 +63,11 @@ const approvedWorldLandscape = value => {
     const nestedValue = outer.searchParams.get('url');
     if (!nestedValue) return false;
     const nested = new URL(nestedValue);
+    const decodedStoragePath = decodeURIComponent(nested.pathname);
     return (
       nested.protocol === 'https:' &&
       nested.origin === WORLD_IMAGE_STORAGE_ORIGIN &&
+      decodedStoragePath.startsWith(WORLD_IMAGE_STORAGE_PATH_PREFIX) &&
       !nested.username && !nested.password && !nested.hash
     );
   } catch {
@@ -202,7 +205,7 @@ if (worldMedia && typeof worldMedia === 'object') {
 
     check(
       approvedWorldLandscape(visual.source),
-      `${world.name} landscape must use the approved Pixel GitBook image proxy and GitBook storage origin`
+      `${world.name} landscape must use the approved Pixel GitBook image proxy and Pixel GitBook storage space`
     );
     check(
       visual.boss && approvedLocalWorldMedia(visual.boss.source),
