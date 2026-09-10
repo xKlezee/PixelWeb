@@ -33,6 +33,8 @@ The artifact intentionally contains:
 
 The CSS dependency rule is deliberately fail-closed: root-relative CSS URLs are invalid for the current `/PixelWeb/` project-site base, dependencies may not escape the repository, and CSS may not pull arbitrary undeclared repository directories into the public artifact.
 
+Symlinks are also fail-closed. The builder rejects a symlinked `_site/`, sitemap, public page, root resource, CSS dependency, public directory, or descendant of `assets/` / `data/` rather than dereferencing it. `validate_public_bundle.py` independently rejects symlinks in a staged artifact and excludes them from content parsing, so validation itself does not follow an unexpected link outside the artifact tree.
+
 It must not publish repository/security/engineering material such as:
 
 - `docs/`;
