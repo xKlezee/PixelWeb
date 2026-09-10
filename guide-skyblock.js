@@ -14,7 +14,7 @@
   if (summary) {
     const entries = [
       ['Reference state', 'Partial'],
-      ['Evidence', 'Source qualified'],
+      ['Evidence', 'Source verified'],
       ['Current capabilities', Array.isArray(skyblock.features) ? skyblock.features.length : '—'],
       ['Partial areas', Array.isArray(skyblock.partialFeatures) ? skyblock.partialFeatures.length : '—']
     ];
