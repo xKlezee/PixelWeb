@@ -4,8 +4,8 @@
 This validator encodes security and publication invariants rather than style preferences.
 A change that weakens the CSP, reintroduces inline executable/style content, breaks local
 references, adds unsafe DOM sinks, introduces insecure or protocol-relative external resources,
-reintroduces explicitly retired public claims, or breaks the public crawl/index contract fails
-before deployment.
+reintroduces explicitly retired public claims, or breaks the public crawl/canonical/index contract
+fails before deployment.
 """
 from __future__ import annotations
 
@@ -79,6 +79,7 @@ class PageParser(html.parser.HTMLParser):
         self.insecure_http_urls: list[tuple[str, str, int]] = []
         self.protocol_relative_urls: list[tuple[str, str, int]] = []
         self.inline_scripts: list[int] = []
+        self.canonical_links: list[tuple[str, int]] = []
         self.csp: str | None = None
         self.robots_meta: str | None = None
         self.has_referrer_policy = False
@@ -131,6 +132,12 @@ class PageParser(html.parser.HTMLParser):
                 self.has_referrer_policy = True
             if name == "robots" and content:
                 self.robots_meta = content.lower()
+
+        if tag == "link":
+            rel = {token.lower() for token in str(attrs_dict.get("rel") or "").split()}
+            href = str(attrs_dict.get("href") or "").strip()
+            if "canonical" in rel and href:
+                self.canonical_links.append((href, line))
 
         if tag in {"a", "link"} and attrs_dict.get("href"):
             self.refs.append(("href", attrs_dict["href"], line))
@@ -238,7 +245,11 @@ def scan_publication_invariants(paths: list[Path], failures: list[str]) -> None:
                 )
 
 
-def validate_crawl_contract(page_robots: dict[str, str | None], failures: list[str]) -> None:
+def validate_crawl_contract(
+    page_robots: dict[str, str | None],
+    page_canonicals: dict[str, list[tuple[str, int]]],
+    failures: list[str],
+) -> None:
     if not ROBOTS_PATH.exists():
         failures.append("robots.txt: missing public crawl policy")
         return
@@ -284,10 +295,39 @@ def validate_crawl_contract(page_robots: dict[str, str | None], failures: list[s
         robots = page_robots.get(page.name) or ""
         noindex = "noindex" in {token.strip() for token in robots.split(",") if token.strip()}
         public_url = page_public_url(page)
+        canonicals = page_canonicals.get(page.name, [])
+
         if noindex and public_url in location_set:
             failures.append(f"sitemap.xml: noindex page must not be listed ({page.name})")
-        if not noindex and public_url not in location_set:
-            failures.append(f"sitemap.xml: indexable page missing ({page.name})")
+
+        if not noindex:
+            if public_url not in location_set:
+                failures.append(f"sitemap.xml: indexable page missing ({page.name})")
+
+            if not canonicals:
+                failures.append(f"{page.name}: indexable page missing rel=canonical")
+            elif len(canonicals) > 1:
+                lines = ", ".join(str(line) for _, line in canonicals)
+                failures.append(
+                    f"{page.name}: indexable page must declare exactly one rel=canonical "
+                    f"(found {len(canonicals)} at lines {lines})"
+                )
+            else:
+                canonical_url, line = canonicals[0]
+                canonical_parts = urlsplit(canonical_url)
+                if canonical_parts.scheme != "https" or not canonical_parts.netloc:
+                    failures.append(
+                        f"{page.name}:{line}: canonical must be an absolute HTTPS URL ({canonical_url})"
+                    )
+                if canonical_url != public_url:
+                    failures.append(
+                        f"{page.name}:{line}: canonical must match sitemap public URL "
+                        f"({public_url}), found {canonical_url}"
+                    )
+                if canonical_url not in location_set:
+                    failures.append(
+                        f"{page.name}:{line}: canonical URL is not present in sitemap.xml ({canonical_url})"
+                    )
 
     if "noindex" not in (page_robots.get("404.html") or ""):
         failures.append("404.html: error page must declare noindex")
@@ -298,6 +338,7 @@ def validate_crawl_contract(page_robots: dict[str, str | None], failures: list[s
 def main() -> int:
     failures: list[str] = []
     page_robots: dict[str, str | None] = {}
+    page_canonicals: dict[str, list[tuple[str, int]]] = {}
 
     if not HTML_FILES:
         failures.append("No top-level HTML files found.")
@@ -307,6 +348,7 @@ def main() -> int:
         parser.feed(page.read_text(encoding="utf-8"))
         parser.close()
         page_robots[page.name] = parser.robots_meta
+        page_canonicals[page.name] = parser.canonical_links
         csp: dict[str, set[str]] = {}
 
         if not parser.csp:
@@ -396,7 +438,7 @@ def main() -> int:
         scan_css_file_for_protocol_relative_urls(css_file, failures)
 
     scan_publication_invariants([*HTML_FILES, *JS_FILES], failures)
-    validate_crawl_contract(page_robots, failures)
+    validate_crawl_contract(page_robots, page_canonicals, failures)
 
     if failures:
         print("Static site validation failed:")

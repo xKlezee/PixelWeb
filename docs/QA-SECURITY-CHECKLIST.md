@@ -108,7 +108,11 @@ A configured control is not a passed control. Record the actual result for the e
 ## Crawl / publication behavior
 
 - `sitemap.xml` contains all indexable top-level public product/Guide pages and excludes `noindex` pages.
-- Forum preview and `404.html` retain page-level `noindex`.
+- Every sitemap-indexed page declares exactly one static absolute HTTPS `rel="canonical"`.
+- Each canonical URL matches that page's exact public URL in `sitemap.xml`; `index.html` maps to `https://xklezee.github.io/PixelWeb/` rather than `/index.html`.
+- Missing, duplicate, relative, non-HTTPS, mismatched or non-sitemap canonicals are rejected by `validate_site.py`.
+- Forum preview and `404.html` retain page-level `noindex` and remain outside the sitemap-indexed canonical requirement.
+- Canonical metadata is present in source HTML and is not injected by JavaScript or the `_site/` builder.
 - `robots.txt` does not contain a blanket `Disallow: /`.
 - On the current `https://xklezee.github.io/PixelWeb/` project-site deployment, repository-level `PixelWeb/robots.txt` is **not** treated as the authoritative host robots policy; crawlers request `/robots.txt` at the host root.
 - No privacy/security claim relies on crawler exclusion. Files deployed through GitHub Pages are treated as public.
@@ -176,7 +180,7 @@ Do not mark a viewport PASS from CSS inspection alone. Browser-render verificati
 
 The branch is not ready to merge until both conditions are true:
 
-1. the automated quality gate has **actually executed and passed** on the final candidate HEAD, including player-facing copy, canonical-data and `_site/` artifact validation; and
+1. the automated quality gate has **actually executed and passed** on the final candidate HEAD, including player-facing copy, canonical public-data/crawl metadata and `_site/` artifact validation; and
 2. the browser/render matrix has been completed with any findings remediated and rechecked.
 
 Keep the pull request in draft while either gate is unresolved.

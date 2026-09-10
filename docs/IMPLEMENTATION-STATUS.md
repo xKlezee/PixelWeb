@@ -14,7 +14,7 @@ This document records the current release-candidate architecture and gates witho
 - Defensive `.gitignore` for environment files, credentials, keys, generated output, logs, editor files and local reports.
 - `SECURITY.md` documents public/private boundaries, credential incident handling and the future authenticated-backend boundary.
 - `scripts/security_scan.py` scans committed text for common secret material.
-- `scripts/validate_site.py` validates top-level HTML integrity, CSP/transport rules, local references and sitemap/publication contracts.
+- `scripts/validate_site.py` validates top-level HTML integrity, CSP/transport rules, local references and sitemap/publication contracts. Indexable pages must expose exactly one absolute HTTPS canonical URL matching the page URL declared by `sitemap.xml`; missing, duplicate, mismatched and non-sitemap canonicals fail validation.
 - `scripts/validate_runtime_contracts.py` validates deferred media, direct style-assignment policy, navigation invariants, Guide fragments and Guide-library coverage.
 - `scripts/validate_accessibility.py` checks document structure, image alternatives and accessible naming of visible form controls.
 - `scripts/validate_player_facing_copy.py` keeps known repository-test/database/wiring/deployment implementation terminology out of browser-public player documentation while allowing legitimate evidence labels, formulas, stat keys and player commands.
@@ -76,6 +76,13 @@ Current guarded invariants include:
 - Store monetary thresholds remain unpublished while `thresholdsVerified` is false;
 - Discord, Store and legacy GitBook destinations must remain the approved canonical HTTPS URLs;
 - Worlds landscape media remains constrained to the approved Pixel GitBook proxy/storage space and local World boss art remains under `assets/worlds/`.
+
+## Canonical crawl metadata
+
+- Every sitemap-indexed page carries a static absolute HTTPS `rel="canonical"` in its HTML `<head>`.
+- `index.html` canonically maps to `https://xklezee.github.io/PixelWeb/`; the remaining indexable pages map one-for-one to the exact URLs declared in `sitemap.xml`.
+- `forum.html` and `404.html` remain intentionally `noindex` and outside the sitemap-indexed canonical requirement.
+- Canonicals are not injected by JavaScript or by the public-site builder; source HTML remains the authority and the validator cross-checks it against the sitemap.
 
 ## Guides architecture
 
@@ -155,7 +162,7 @@ The `_site/` pipeline is prepared but is **not yet the live GitHub Pages source*
 
 ### Source/static review
 
-The current candidate has been reviewed at source level for DOM safety, CSP structure, canonical data relationships, external destinations, Guide/publication boundaries, local dependencies, media loading, navigation contracts and structural accessibility.
+The current candidate has been reviewed at source level for DOM safety, CSP structure, canonical crawl metadata, canonical data relationships, external destinations, Guide/publication boundaries, local dependencies, media loading, navigation contracts and structural accessibility.
 
 This review is not a substitute for successful validator execution or browser rendering.
 
