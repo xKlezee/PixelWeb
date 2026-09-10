@@ -29,6 +29,7 @@ const WORLD_IMAGE_STORAGE_ORIGIN = 'https://712597880-files.gitbook.io';
 const WORLD_IMAGE_STORAGE_PATH_PREFIX = '/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces/n7xotQKtgeq6qSw4VBXF/uploads/';
 const HTML_COMMENT_RE = /<!--[\s\S]*?-->/g;
 const ANCHOR_HREF_RE = /<a\b[^>]*\bhref\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/gi;
+const NON_NAVIGATION_PREFIXES = ['#', 'mailto:', 'tel:'];
 
 const fail = message => failures.push(message);
 const check = (condition, message) => {
@@ -134,7 +135,7 @@ function validateStaticExternalNavigation(data) {
     let match;
     while ((match = ANCHOR_HREF_RE.exec(source)) !== null) {
       const raw = (match[1] ?? match[2] ?? match[3] ?? '').trim();
-      if (!raw || raw.startsWith(('#', 'mailto:', 'tel:'))) continue;
+      if (!raw || NON_NAVIGATION_PREFIXES.some(prefix => raw.startsWith(prefix))) continue;
       if (raw.startsWith('//')) {
         fail(`${fileName}: protocol-relative anchor destination is not allowed (${raw})`);
         continue;
