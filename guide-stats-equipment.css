@@ -1,0 +1,259 @@
+/* Pixel Network — Stats & Equipment guide
+   Technical reference components layered over the shared Guides shell. */
+
+.stats-key {
+  display: block;
+  width: fit-content;
+  margin-top: 5px;
+  color: #77849e;
+  font: 700 8px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.stats-formula {
+  display: grid;
+  grid-template-columns: minmax(0,1.3fr) minmax(240px,.7fr);
+  gap: 14px;
+  align-items: stretch;
+}
+.stats-formula-main,
+.stats-formula-note {
+  min-width: 0;
+  padding: 24px;
+  border: 1px solid rgba(255,255,255,.058);
+  border-radius: 17px;
+  background: rgba(255,255,255,.014);
+}
+.stats-formula-main small,
+.stats-formula-note small {
+  display: block;
+  margin-bottom: 12px;
+  color: #78859e;
+  font-size: 8px;
+  font-weight: 850;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.stats-formula-code {
+  display: block;
+  overflow-x: auto;
+  padding: 15px 16px;
+  border: 1px solid rgba(143,178,255,.11);
+  border-radius: 11px;
+  background: rgba(7,9,12,.72);
+  color: #becdf0;
+  font: 700 12px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  white-space: nowrap;
+}
+.stats-formula-main p,
+.stats-formula-note p {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 10.5px;
+  line-height: 1.68;
+}
+.stats-formula-note strong {
+  display: block;
+  font-size: clamp(34px,4vw,50px);
+  line-height: .9;
+  letter-spacing: -.055em;
+  color: #d2ddf5;
+}
+.stats-formula-note span {
+  display: block;
+  margin-top: 8px;
+  color: #8b94a5;
+  font-size: 9px;
+  line-height: 1.55;
+}
+
+.stats-family-grid {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 12px;
+}
+.stats-family-card {
+  min-width: 0;
+  min-height: 196px;
+  display: flex;
+  flex-direction: column;
+  padding: 21px;
+  border: 1px solid rgba(255,255,255,.056);
+  border-radius: 16px;
+  background: linear-gradient(145deg,rgba(18,21,25,.66),rgba(10,12,15,.84));
+}
+.stats-family-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.stats-family-category,
+.stats-family-status {
+  font-size: 7.5px;
+  font-weight: 850;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+.stats-family-category { color: #7e8aa1; }
+.stats-family-status {
+  min-height: 23px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 7px;
+  border: 1px solid rgba(143,178,255,.11);
+  border-radius: 999px;
+  color: #9db3dd;
+  background: rgba(143,178,255,.02);
+}
+.stats-family-card[data-documentation='separate-audit-required'] .stats-family-status,
+.stats-family-card[data-documentation='partial-reference'] .stats-family-status {
+  border-color: rgba(246,201,69,.12);
+  background: rgba(246,201,69,.015);
+  color: #c8b57d;
+}
+.stats-family-card h3 {
+  margin: 16px 0 10px;
+  font-size: 19px;
+  letter-spacing: -.03em;
+}
+.stats-family-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.stats-family-chips code,
+.stats-family-empty {
+  min-height: 25px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 7px;
+  border: 1px solid rgba(255,255,255,.055);
+  border-radius: 7px;
+  background: rgba(255,255,255,.015);
+  color: #929bab;
+  font: 700 7.5px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.stats-family-card p {
+  margin: auto 0 0;
+  color: var(--muted);
+  font-size: 10.5px;
+  line-height: 1.62;
+}
+
+.stats-layer-grid {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 12px;
+}
+.stats-layer-card {
+  min-width: 0;
+  padding: 21px;
+  border-left: 2px solid rgba(143,178,255,.22);
+  border-radius: 0 14px 14px 0;
+  background: linear-gradient(90deg,rgba(143,178,255,.028),rgba(255,255,255,.01));
+}
+.stats-layer-card small {
+  color: #77849c;
+  font-size: 8px;
+  font-weight: 850;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+.stats-layer-card h3 {
+  margin: 9px 0 7px;
+  font-size: 17px;
+  letter-spacing: -.025em;
+}
+.stats-layer-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 10.5px;
+  line-height: 1.65;
+}
+
+.stats-exclusion-grid {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 10px;
+}
+.stats-exclusion {
+  min-width: 0;
+  padding: 19px;
+  border: 1px solid rgba(246,201,69,.095);
+  border-radius: 14px;
+  background: rgba(246,201,69,.012);
+}
+.stats-exclusion code {
+  color: #c8b57d;
+  font: 750 9px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.stats-exclusion p {
+  margin: 9px 0 0;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.62;
+}
+
+.stats-verification-grid {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 12px;
+}
+.stats-verification-grid .verification-card {
+  min-width: 0;
+  padding: 21px;
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 16px;
+  background: rgba(255,255,255,.014);
+}
+.stats-verification-grid .verification-card small {
+  color: #7c879c;
+  font-size: 8px;
+  font-weight: 850;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+.stats-verification-grid .verification-card h3 {
+  margin: 9px 0 7px;
+  font-size: 18px;
+  letter-spacing: -.025em;
+}
+.stats-verification-grid .verification-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 10.5px;
+  line-height: 1.64;
+}
+.stats-verification-grid .verification-card.is-verified {
+  border-color: rgba(143,178,255,.13);
+  background: rgba(143,178,255,.018);
+}
+.stats-verification-grid .verification-card.is-pending {
+  border-color: rgba(246,201,69,.11);
+  background: rgba(246,201,69,.014);
+}
+
+@media (max-width: 1080px) {
+  .stats-family-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .stats-exclusion-grid,
+  .stats-verification-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 760px) {
+  .stats-formula,
+  .stats-family-grid,
+  .stats-layer-grid { grid-template-columns: 1fr; }
+  .stats-family-card { min-height: 0; }
+}
+
+@media (max-width: 430px) {
+  .stats-formula-main,
+  .stats-formula-note,
+  .stats-family-card,
+  .stats-layer-card,
+  .stats-exclusion,
+  .stats-verification-grid .verification-card { padding: 18px; }
+  .stats-formula-code { font-size: 10.5px; }
+}
