@@ -16,7 +16,7 @@ FORBIDDEN_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
     (re.compile(r"\bregression suite\b", re.IGNORECASE), "regression-suite detail"),
     (re.compile(r"\bpre-existing skipped test\b", re.IGNORECASE), "test-harness detail"),
     (re.compile(r"\bdatabase paths?\b", re.IGNORECASE), "database-path detail"),
-    (re.compile(r"\bcommand (?:and |/)??menu wiring\b", re.IGNORECASE), "command/menu wiring detail"),
+    (re.compile(r"\bcommand (?:and |/)?menu wiring\b", re.IGNORECASE), "command/menu wiring detail"),
     (re.compile(r"\bmenu wiring\b", re.IGNORECASE), "menu-wiring detail"),
     (re.compile(r"\bplayer-facing wiring\b", re.IGNORECASE), "implementation wiring detail"),
     (re.compile(r"\bsource-ready\b", re.IGNORECASE), "source/deployment state"),
