@@ -30,6 +30,14 @@ CURRENT_NAV_LINK_RE = re.compile(
     r"<a\b(?=[^>]*\baria-current=['\"]page['\"])[^>]*\bhref=['\"]([^'\"]+)['\"][^>]*>",
     re.IGNORECASE,
 )
+GUIDE_LIBRARY_ENTRY_RE = re.compile(
+    r"<article\b(?=[^>]*\bdata-guide-entry\b)[^>]*>([\s\S]*?)</article>",
+    re.IGNORECASE,
+)
+GUIDE_LIBRARY_TARGET_RE = re.compile(
+    r"<a\b[^>]*\bhref=['\"](guide-[A-Za-z0-9._-]+\.html)['\"][^>]*>",
+    re.IGNORECASE,
+)
 
 
 class DeferredMediaParser(html.parser.HTMLParser):
@@ -141,6 +149,52 @@ def validate_guide_fragments(
             )
 
 
+def validate_guide_library_coverage(failures: list[str]) -> None:
+    index = ROOT / "guides.html"
+    if not index.is_file() or index.is_symlink():
+        failures.append("guides.html: Guide library index must be a regular file")
+        return
+
+    text = index.read_text(encoding="utf-8")
+    entries = GUIDE_LIBRARY_ENTRY_RE.findall(text)
+    targets: list[str] = []
+
+    for position, entry in enumerate(entries, start=1):
+        entry_targets = GUIDE_LIBRARY_TARGET_RE.findall(entry)
+        if len(entry_targets) != 1:
+            rendered = ", ".join(entry_targets) if entry_targets else "none"
+            failures.append(
+                f"guides.html: library entry {position} must link to exactly one guide-*.html target "
+                f"(found: {rendered})"
+            )
+            continue
+        targets.append(entry_targets[0])
+
+    actual_guides = sorted(path.name for path in ROOT.glob("guide-*.html") if path.is_file() and not path.is_symlink())
+    duplicate_targets = sorted({target for target in targets if targets.count(target) > 1})
+    if duplicate_targets:
+        failures.append(
+            "guides.html: Guide library contains duplicate detailed-guide targets: "
+            + ", ".join(duplicate_targets)
+        )
+
+    missing = sorted(set(actual_guides) - set(targets))
+    extra = sorted(set(targets) - set(actual_guides))
+    if missing:
+        failures.append(
+            "guides.html: Guide library is missing detailed pages: " + ", ".join(missing)
+        )
+    if extra:
+        failures.append(
+            "guides.html: Guide library points to undeclared detailed pages: " + ", ".join(extra)
+        )
+    if len(entries) != len(actual_guides):
+        failures.append(
+            f"guides.html: Guide library entry count ({len(entries)}) must match detailed Guide page count "
+            f"({len(actual_guides)})"
+        )
+
+
 def validate_navigation_contract(page_parsers: dict[str, DeferredMediaParser], failures: list[str]) -> None:
     for page_name, parser in page_parsers.items():
         if page_name not in NAVIGATION_PAGE_EXCEPTIONS and "security-hardening.css" not in parser.stylesheets:
@@ -178,6 +232,7 @@ def main() -> int:
             validate_deferred_url(page, attr, value, line, failures)
 
     validate_navigation_contract(page_parsers, failures)
+    validate_guide_library_coverage(failures)
 
     for js_file in JS_FILES:
         text = js_file.read_text(encoding="utf-8")
@@ -195,7 +250,7 @@ def main() -> int:
 
     print(
         f"Runtime contracts passed for {len(HTML_FILES)} HTML pages and "
-        f"{len(JS_FILES)} JavaScript files, including desktop and Guide navigation behavior."
+        f"{len(JS_FILES)} JavaScript files, including desktop navigation and Guide library behavior."
     )
     return 0
 
