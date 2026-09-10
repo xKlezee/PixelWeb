@@ -82,6 +82,8 @@ def sitemap_urls(failures: list[str]) -> list[str]:
         for element in root.iter()
         if element.tag.rsplit("}", 1)[-1] == "loc" and str(element.text or "").strip()
     ]
+    if not urls:
+        failures.append("sitemap.xml: no indexed URLs found")
     if len(urls) != len(set(urls)):
         failures.append("sitemap.xml: duplicate <loc> URLs are not allowed")
     return urls
@@ -158,8 +160,8 @@ def validate_page(page_name: str, public_url: str, failures: list[str]) -> None:
     title = single_value(page_name, "<title>", parser.titles, failures)
     canonical = require_exact(page_name, "canonical URL", parser.canonicals, public_url, failures)
 
-    og_type = require_exact(page_name, "og:type", parser.meta_properties.get("og:type", []), "website", failures)
-    og_site = require_exact(
+    require_exact(page_name, "og:type", parser.meta_properties.get("og:type", []), "website", failures)
+    require_exact(
         page_name,
         "og:site_name",
         parser.meta_properties.get("og:site_name", []),
@@ -201,9 +203,6 @@ def validate_page(page_name: str, public_url: str, failures: list[str]) -> None:
         failures.append(f"{page_name}: twitter:title must match og:title")
     if og_description is not None and twitter_description is not None and twitter_description != og_description:
         failures.append(f"{page_name}: twitter:description must match og:description")
-
-    # Keep variables intentionally evaluated by the exact-value checks above.
-    _ = og_type, og_site
 
 
 def main() -> int:
