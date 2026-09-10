@@ -6,11 +6,17 @@
   const network = window.PIXEL_NETWORK_PUBLIC || {};
   const currentPage = location.pathname.split('/').pop() || 'index.html';
 
-  const safeHttpUrl = (value, fallback = null) => {
-    if (!value) return fallback;
+  // Local development may use HTTP on the same origin. Any external destination supplied
+  // by public data must be HTTPS so a content update cannot silently weaken transport.
+  const safePublicUrl = (value, fallback = null) => {
+    const raw = String(value ?? '').trim();
+    if (!raw) return fallback;
     try {
-      const url = new URL(String(value), location.href);
-      return ['http:', 'https:'].includes(url.protocol) ? url.href : fallback;
+      const url = new URL(raw, location.href);
+      const sameOrigin = url.origin === location.origin;
+      if (sameOrigin && ['http:', 'https:'].includes(url.protocol)) return url.href;
+      if (location.protocol === 'file:' && url.protocol === 'file:') return url.href;
+      return url.protocol === 'https:' ? url.href : fallback;
     } catch {
       return fallback;
     }
@@ -110,7 +116,7 @@
         ['gameplay.html', 'Gameplay', 'The main player journey.'],
         ['systems.html', 'Systems', 'Progression, collection and equipment.'],
         ['worlds.html', 'Worlds', 'The current world progression.'],
-        ['skyblock.html', 'Skyblock', 'Personal and collaborative island progression.'],
+        ['skyblock.html', 'Skyblock', 'Personal island progression.'],
         ['nexus.html', 'Nexus', 'Endgame access and instance progression.']
       ]
     },
@@ -245,8 +251,24 @@
   /* Canonical desktop actions: Discord, Store, Play, menu toggle. */
   const navActions = nav?.querySelector('.nav-actions');
   const storeLanding = safeLocalPage(network?.store?.landing, 'store.html');
-  const discordFallback = 'https://discord.gg/7KzWpezTNZ';
-  const discordUrl = safeHttpUrl(network?.community?.discordUrl, discordFallback);
+  const discordUrl = safePublicUrl(network?.community?.discordUrl);
+
+  const configureDiscordLink = link => {
+    if (!link) return;
+    link.textContent = 'Discord';
+    link.setAttribute('aria-label', 'Join Pixel Network on Discord');
+    if (discordUrl) {
+      link.href = discordUrl;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      link.removeAttribute('aria-disabled');
+      return;
+    }
+    link.removeAttribute('href');
+    link.removeAttribute('target');
+    link.removeAttribute('rel');
+    link.setAttribute('aria-disabled', 'true');
+  };
 
   if (navActions) {
     let desktopDiscord = navActions.querySelector('.nav-discord');
@@ -255,11 +277,7 @@
       desktopDiscord.className = 'button quiet nav-discord';
       navActions.prepend(desktopDiscord);
     }
-    desktopDiscord.textContent = 'Discord';
-    desktopDiscord.href = discordUrl;
-    desktopDiscord.target = '_blank';
-    desktopDiscord.rel = 'noopener';
-    desktopDiscord.setAttribute('aria-label', 'Join Pixel Network on Discord');
+    configureDiscordLink(desktopDiscord);
 
     let desktopStore = navActions.querySelector('.nav-store');
     if (!desktopStore) {
@@ -280,10 +298,7 @@
   if (navLinks) {
     const mobileDiscord = document.createElement('a');
     mobileDiscord.className = 'nav-mobile-store nav-mobile-discord';
-    mobileDiscord.href = discordUrl;
-    mobileDiscord.target = '_blank';
-    mobileDiscord.rel = 'noopener';
-    mobileDiscord.textContent = 'Discord';
+    configureDiscordLink(mobileDiscord);
     navLinks.appendChild(mobileDiscord);
 
     const mobileStore = document.createElement('a');
@@ -317,9 +332,7 @@
   }
 
   /* Keep the public Discord destination synchronized with data/network.js. */
-  document.querySelectorAll('[data-discord-url]').forEach(link => {
-    link.href = discordUrl;
-  });
+  document.querySelectorAll('[data-discord-url]').forEach(link => configureDiscordLink(link));
 
   const closeMobileNav = () => {
     navLinks?.classList.remove('open');
