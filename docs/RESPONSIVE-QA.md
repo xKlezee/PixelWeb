@@ -138,10 +138,11 @@ Browser-render status remains pending until the hardening branch can be opened i
 
 ### Crawl / error surfaces
 
-- `robots.txt` allows the public site rather than globally blocking `/`;
-- `docs/` and `scripts/` are excluded from crawler discovery policy but remain treated as public files when hosted by GitHub Pages;
-- `sitemap.xml` contains only indexable public product/Guide pages;
-- Forum preview and the branded 404 are excluded from the sitemap and declare `noindex`;
+- the current deployment is a GitHub Pages **project site** under `/PixelWeb/`; the repository-level `PixelWeb/robots.txt` is therefore not treated as authoritative because standards-compliant crawlers request `/robots.txt` at the host root;
+- `robots.txt` documents that hosting boundary and must not be described as a security or privacy control;
+- `sitemap.xml` contains only indexable public product/Guide pages under the current project-site base URL;
+- Forum preview and the branded 404 are excluded from the sitemap and declare `noindex` at page level;
+- files published through GitHub Pages remain public whether or not a crawler is asked to ignore them;
 - `404.html` uses the same strict CSP/referrer policy and maintained site destinations rather than becoming an unstyled dead end;
 - Home exposes canonical and Open Graph/Twitter metadata using the existing official Pixel Network logo; no social-preview image was generated or recompressed.
 
@@ -150,9 +151,12 @@ Browser-render status remains pending until the hardening branch can be opened i
 The Quality Gate now has separate responsibilities rather than treating every concern as one script:
 
 - `security_scan.py`: obvious committed-secret patterns;
-- `validate_site.py`: CSP, unsafe HTML/JS patterns, local references, HTTPS policy, canonical-public-data invariants and crawl/sitemap contract;
+- `validate_media_integrity.py`: exact byte size, 1448×1086 dimensions and Git blob SHA for the four approved Nexus PNGs;
+- `validate_site.py`: CSP, unsafe HTML/JS patterns, local references, HTTPS policy, canonical-public-data invariants and sitemap/index consistency;
 - `validate_accessibility.py`: document language, viewport, title, exactly one `<main>`, descriptions for indexable pages and explicit `alt` on static images;
 - `node --check`: JavaScript syntax.
+
+Manual workflow dispatch requires an explicit candidate branch, tag or SHA, so the workflow definition on `main` can validate the actual candidate tree rather than silently checking a different ref.
 
 These checks are **configured but not reported as PASS** while the GitHub account billing lock prevents the Actions job from starting. The current execution environment also cannot resolve `github.com` for a local clone, so browser/runtime validation remains a separate pending gate.
 
