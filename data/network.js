@@ -67,7 +67,10 @@
       maxLevel: 300,
       maxPrestige: 10,
       maxLegacy: 4,
-      verified: true
+      evidence: 'reconciled-reference',
+      state: 'current',
+      verified: false,
+      verifiedScope: 'Public caps and access milestones are maintained here; reset, reward and persistence semantics remain intentionally unpublished until independently re-verified.'
     },
     content: {
       currentWorlds: 4,
@@ -177,17 +180,28 @@
       ]
     },
     skyblock: {
-      verified: true,
+      evidence: 'source-qualified',
+      state: 'partial',
+      verified: false,
       features: [
         'Own island',
         'Island progression',
-        'Invite friends',
-        'Build together',
-        'Visit other islands',
-        'Improve the island',
-        'Skyblock quests',
-        'Personal storage',
-        'Personal vaults'
+        'Island persistence',
+        'Island upgrades',
+        'Island bank',
+        'Skyblock quests'
+      ],
+      partialFeatures: [
+        {
+          name: 'Island team management',
+          status: 'Partially implemented',
+          detail: 'Invite, accept, deny, leave and kick foundations exist in source, but the player-facing command and menu wiring is not complete.'
+        },
+        {
+          name: 'Member promotion',
+          status: 'Coming soon',
+          detail: 'The promotion surface exists as a placeholder and is not documented as an available player action.'
+        }
       ]
     },
     store: {
