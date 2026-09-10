@@ -1,7 +1,6 @@
 /* Pixel Network — evidence-qualified Guide status tokens.
    Evidence labels must communicate provenance without relying on color alone. */
 
-.guide-status.is-verified,
 .guide-status.is-server,
 .guide-status.is-source,
 .guide-status.is-reconciled,
@@ -11,7 +10,6 @@
   gap: 7px;
 }
 
-.guide-status.is-verified::before,
 .guide-status.is-server::before,
 .guide-status.is-source::before,
 .guide-status.is-reconciled::before,
@@ -24,12 +22,6 @@
   border-radius: 50%;
   background: currentColor;
   opacity: .72;
-}
-
-.guide-status.is-verified {
-  border-color: rgba(143,178,255,.18);
-  background: rgba(143,178,255,.042);
-  color: #b7cbf7;
 }
 
 .guide-status.is-server {
@@ -71,7 +63,6 @@
 }
 
 @media (max-width: 430px) {
-  .guide-status.is-verified,
   .guide-status.is-server,
   .guide-status.is-source,
   .guide-status.is-reconciled,
