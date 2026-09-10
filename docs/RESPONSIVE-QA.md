@@ -28,7 +28,8 @@ Browser-render status remains pending until the hardening branch can be opened i
 - detailed `guide-*.html` pages keep Guides selected in the canonical navigation;
 - Store and Discord are available in the mobile menu while Play remains directly accessible in the header;
 - keyboard Escape closes open navigation groups/mobile navigation;
-- dropdown controls expose `aria-expanded` and `aria-controls`.
+- dropdown controls expose `aria-expanded` and `aria-controls`;
+- a global first-focus **Skip to content** link is generated for standard pages, targets the real `<main>` region, makes that region programmatically focusable when required, and moves focus after activation rather than only scrolling visually.
 
 ### Shared content layouts
 
@@ -44,7 +45,12 @@ Browser-render status remains pending until the hardening branch can be opened i
 - immersive story has reduced mobile height and hides the desktop scroll hint;
 - world gallery becomes a two-column compact gallery below 980 px;
 - closing/status/store sections collapse below 980 px;
-- Story progress is now a native `<progress>` element instead of transform-based inline styling.
+- Story progress is a native `<progress>` element instead of transform-based inline styling;
+- the immersive MP4 has no initial `src`, uses `preload="none"`, and is hydrated through `IntersectionObserver` approximately 600 px before the story approaches the viewport;
+- if `IntersectionObserver` is unavailable, the video falls back to hydration without breaking the story;
+- the scroll scrub waits for valid `loadedmetadata`/duration before seeking;
+- direct chapter interaction also hydrates the video when motion is allowed;
+- with `prefers-reduced-motion: reduce`, the video is intentionally not hydrated or downloaded and the textual story remains usable against the static background.
 
 ### Worlds
 
@@ -54,14 +60,15 @@ Browser-render status remains pending until the hardening branch can be opened i
 - five boss encounters become a one-column editorial strip below 980 px instead of an uneven 2+2+1 grid;
 - individual card content uses shrink-safe grid columns.
 
-**Consolidation note:** `worlds-stage8.css` still contains an older five-stage progress definition that is overridden by `worlds-stage8-media.css`. It is not currently the effective rule, but should be merged out when the Stage 8 stylesheets are consolidated.
+**Consolidation note:** `worlds-stage8.css` still contains an older five-stage progress definition that is overridden by `worlds-stage8-media.css`. It is not currently the effective rule, but should be merged out only after browser render verification of the current four-world implementation.
 
 ### Nexus
 
 - hero, access block and instance grid collapse below 980 px;
 - difficulty ladder changes 4 → 2 → 1 columns;
 - long instance copy no longer relies on desktop minimum heights after collapse;
-- **fixed in this hardening branch:** Abyss + Astral no longer inherit a 4:3 *combined* container on tablet/mobile. Each unchanged 1448×1086 PNG keeps its own 4:3 panel side by side with `object-fit: contain`, preventing responsive cropping.
+- **fixed in this hardening branch:** Abyss + Astral no longer inherit a 4:3 *combined* container on tablet/mobile. Each unchanged 1448×1086 PNG keeps its own 4:3 panel side by side with `object-fit: contain`, preventing responsive cropping;
+- approved Raphael, Azazel, Abyss and Astral source PNG bytes are not recompressed, resized, converted or replaced as a performance shortcut.
 
 ### Systems
 
@@ -117,11 +124,37 @@ Browser-render status remains pending until the hardening branch can be opened i
 
 ### Forum
 
+- Forum remains explicitly `noindex` while it is a local preview rather than persistent authentication/community infrastructure;
 - sidebar collapses below 860 px;
 - dense top navigation is reduced below 640 px;
 - post/modal spacing is reduced below 640 px;
-- **fixed in this hardening branch:** auth and post overlays now have their own vertical scrolling and switch to top alignment on short (`max-height: 700px`) viewports, preventing a centered modal from becoming unreachable in landscape/short windows;
+- auth and post overlays have their own vertical scrolling and switch to top alignment on short (`max-height: 700px`) viewports, preventing a centered modal from becoming unreachable in landscape/short windows;
+- the initial preview dialog now exposes `aria-modal`, a labelled title and descriptive preview copy;
+- initial focus enters the active display-name field when the entry dialog is visible;
+- Tab/Shift+Tab are trapped inside the entry dialog while the application is hidden;
+- after entering the preview, focus moves to the post-title field;
+- post dialogs trap focus, close with Escape and restore focus to the triggering post card;
 - reduced-motion disables meaningful animation/transition duration.
+
+### Crawl / error surfaces
+
+- `robots.txt` allows the public site rather than globally blocking `/`;
+- `docs/` and `scripts/` are excluded from crawler discovery policy but remain treated as public files when hosted by GitHub Pages;
+- `sitemap.xml` contains only indexable public product/Guide pages;
+- Forum preview and the branded 404 are excluded from the sitemap and declare `noindex`;
+- `404.html` uses the same strict CSP/referrer policy and maintained site destinations rather than becoming an unstyled dead end;
+- Home exposes canonical and Open Graph/Twitter metadata using the existing official Pixel Network logo; no social-preview image was generated or recompressed.
+
+## Automated structural guards prepared
+
+The Quality Gate now has separate responsibilities rather than treating every concern as one script:
+
+- `security_scan.py`: obvious committed-secret patterns;
+- `validate_site.py`: CSP, unsafe HTML/JS patterns, local references, HTTPS policy, canonical-public-data invariants and crawl/sitemap contract;
+- `validate_accessibility.py`: document language, viewport, title, exactly one `<main>`, descriptions for indexable pages and explicit `alt` on static images;
+- `node --check`: JavaScript syntax.
+
+These checks are **configured but not reported as PASS** while the GitHub account billing lock prevents the Actions job from starting. The current execution environment also cannot resolve `github.com` for a local clone, so browser/runtime validation remains a separate pending gate.
 
 ## Browser verification checklist
 
@@ -130,28 +163,34 @@ When a browser preview of this exact branch is available, every required viewpor
 1. no unexpected horizontal page scroll;
 2. navigation opens, closes and restores state correctly;
 3. dropdowns do not render outside the viewport;
-4. Play modal is fully reachable with mouse, touch and keyboard;
-5. Forum entry and post modal remain fully reachable at short heights;
-6. focus indicators are visible and not clipped;
-7. Escape closes modal/menu layers in the expected order;
-8. no image is stretched or unintentionally cropped;
-9. Abyss + Astral display both complete source images side by side;
-10. Worlds rail scroll-snap does not trap page scrolling;
-11. 4-world progress geometry is aligned with four rendered steps;
-12. owner portraits keep equal visual footprint and PxlMads faces inward;
-13. Home immersive video does not cause layout shifts;
-14. Guides sidebar stays usable at desktop heights and the horizontal guide navigation remains touch-scrollable on tablet/mobile;
-15. Guide tables can be horizontally inspected without producing page-level horizontal overflow;
-16. Guides search remains usable at 390/430 px and at 200% browser zoom;
-17. Progression layer rail and Nexus milestone cards collapse without clipped copy or compressed status values;
-18. Skyblock current-capability and partial-feature sections remain visually distinct at 390/430 px;
-19. dynamically rendered Guide facts/cards appear after scripts load with no empty structural gaps;
-20. reduced-motion produces a stable, usable page;
-21. browser console has zero uncaught errors and zero CSP violations caused by first-party code;
-22. Network panel shows no insecure HTTP subresources;
-23. Guide pages make no unexpected external `connect-src` requests;
-24. images marked lazy are not fetched eagerly without reason;
-25. page remains usable at 200% browser zoom.
+4. the first keyboard focus exposes the Skip to content link and activating it moves both scroll position and focus to `<main>`;
+5. Play modal is fully reachable with mouse, touch and keyboard;
+6. Forum entry and post modal remain fully reachable at short heights;
+7. Forum entry dialog keeps Tab/Shift+Tab inside the modal until preview entry;
+8. focus indicators are visible and not clipped;
+9. Escape closes modal/menu layers in the expected order;
+10. no image is stretched or unintentionally cropped;
+11. Abyss + Astral display both complete source images side by side;
+12. Worlds rail scroll-snap does not trap page scrolling;
+13. 4-world progress geometry is aligned with four rendered steps;
+14. owner portraits keep equal visual footprint and PxlMads faces inward;
+15. Home immersive video does not cause layout shifts;
+16. Home initial network waterfall does **not** request `Video_Perfecto_Con_Fondo_Negro.mp4` before the immersive section approaches the hydration margin;
+17. reduced-motion mode makes no request for the immersive MP4 during normal page use;
+18. Guides sidebar stays usable at desktop heights and the horizontal guide navigation remains touch-scrollable on tablet/mobile;
+19. Guide tables can be horizontally inspected without producing page-level horizontal overflow;
+20. Guides search remains usable at 390/430 px and at 200% browser zoom;
+21. Progression layer rail and Nexus milestone cards collapse without clipped copy or compressed status values;
+22. Skyblock current-capability and partial-feature sections remain visually distinct at 390/430 px;
+23. dynamically rendered Guide facts/cards appear after scripts load with no empty structural gaps;
+24. reduced-motion produces a stable, usable page;
+25. browser console has zero uncaught errors and zero CSP violations caused by first-party code;
+26. Network panel shows no insecure HTTP subresources;
+27. Guide pages make no unexpected external `connect-src` requests;
+28. images marked lazy are not fetched eagerly without reason;
+29. canonical/Open Graph metadata resolves to the expected public GitHub Pages URL on Home;
+30. unknown routes render the branded 404 without broken local resources;
+31. page remains usable at 200% browser zoom.
 
 ## Release rule
 
