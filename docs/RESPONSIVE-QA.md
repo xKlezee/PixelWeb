@@ -27,6 +27,12 @@ Browser-render status remains pending until the hardening branch can be opened i
 - a single canonical runtime navigation model owns Explore, Development, Community, Guides and About destinations;
 - detailed `guide-*.html` pages keep Guides selected in the canonical navigation;
 - Store and Discord are available in the mobile menu while Play remains directly accessible in the header;
+- on fine-pointer desktop layouts, Explore / Development / Community are hover targets rather than pointer-click toggles; their buttons do not receive pointer events, preventing a click from pinning one dropdown open over another;
+- the dropdown remains open while the pointer stays anywhere inside its owning navigation group, including the dropdown itself;
+- the structural dropdown includes an 8 px hover bridge between the top-level control and the absolute-positioned menu so normal downward pointer travel does not cross a dead gap;
+- leaving the owning navigation group collapses the pointer-opened dropdown; entering another group makes that group authoritative and prevents stacked pointer-open menus;
+- touch/mobile keeps explicit button toggling because hover is not available;
+- keyboard navigation remains available independently of the desktop pointer rule through focus, ArrowDown and Escape handling;
 - keyboard Escape closes open navigation groups/mobile navigation;
 - dropdown controls expose `aria-expanded` and `aria-controls`;
 - a global first-focus **Skip to content** link is generated for standard pages, targets the real `<main>` region, makes that region programmatically focusable when required, and moves focus after activation rather than only scrolling visually.
@@ -133,6 +139,8 @@ Browser-render status remains pending until the hardening branch can be opened i
 - initial focus enters the active display-name field when the entry dialog is visible;
 - Tab/Shift+Tab are trapped inside the entry dialog while the application is hidden;
 - after entering the preview, focus moves to the post-title field;
+- visible product copy remains explicitly preview/local, including preview-profile creation, planned account linking and local preview posting;
+- display name/title/message lengths are bounded in HTML and re-enforced in `app.js` so DOM manipulation does not silently widen the preview contract;
 - post dialogs trap focus, close with Escape and restore focus to the triggering post card;
 - reduced-motion disables meaningful animation/transition duration.
 
@@ -152,11 +160,15 @@ The Quality Gate now has separate responsibilities rather than treating every co
 
 - `security_scan.py`: obvious committed-secret patterns;
 - `validate_media_integrity.py`: exact byte size, 1448×1086 dimensions and Git blob SHA for the four approved Nexus PNGs;
-- `validate_site.py`: CSP, unsafe HTML/JS patterns, local references, HTTPS policy, canonical-public-data invariants and sitemap/index consistency;
+- `node --check`: JavaScript syntax across repository JS files;
+- `validate_public_data.js`: canonical gameplay/public-data relationships, approved public destinations, static external-link consistency and Worlds media-origin policy;
+- `validate_site.py`: CSP, unsafe HTML/JS patterns, local references, HTTPS/protocol-relative policy and sitemap/index consistency;
+- `validate_runtime_contracts.py`: deferred-media references and direct/ordinary runtime inline-style mutations;
 - `validate_accessibility.py`: document language, viewport, title, exactly one `<main>`, descriptions for indexable pages and explicit `alt` on static images;
-- `node --check`: JavaScript syntax.
+- `build_public_site.py`: fail-closed reference-driven `_site/` construction with CSS dependency traversal and symlink/protocol-relative rejection;
+- `validate_public_bundle.py`: independent staged-artifact boundary, file-type, reference, CSS dependency, symlink and project-site path validation.
 
-Manual workflow dispatch requires an explicit candidate branch, tag or SHA, so the workflow definition on `main` can validate the actual candidate tree rather than silently checking a different ref.
+Manual workflow dispatch requires an explicit candidate branch, tag or SHA, so the workflow definition on `main` can validate the actual candidate tree rather than silently checking a different ref. Pull-request runs validate the PR event SHA; the former redundant hardening-branch push trigger has been removed.
 
 These checks are **configured but not reported as PASS** while the GitHub account billing lock prevents the Actions job from starting. The current execution environment also cannot resolve `github.com` for a local clone, so browser/runtime validation remains a separate pending gate.
 
@@ -165,36 +177,42 @@ These checks are **configured but not reported as PASS** while the GitHub accoun
 When a browser preview of this exact branch is available, every required viewport must be checked for:
 
 1. no unexpected horizontal page scroll;
-2. navigation opens, closes and restores state correctly;
-3. dropdowns do not render outside the viewport;
-4. the first keyboard focus exposes the Skip to content link and activating it moves both scroll position and focus to `<main>`;
-5. Play modal is fully reachable with mouse, touch and keyboard;
-6. Forum entry and post modal remain fully reachable at short heights;
-7. Forum entry dialog keeps Tab/Shift+Tab inside the modal until preview entry;
-8. focus indicators are visible and not clipped;
-9. Escape closes modal/menu layers in the expected order;
-10. no image is stretched or unintentionally cropped;
-11. Abyss + Astral display both complete source images side by side;
-12. Worlds rail scroll-snap does not trap page scrolling;
-13. 4-world progress geometry is aligned with four rendered steps;
-14. owner portraits keep equal visual footprint and PxlMads faces inward;
-15. Home immersive video does not cause layout shifts;
-16. Home initial network waterfall does **not** request `Video_Perfecto_Con_Fondo_Negro.mp4` before the immersive section approaches the hydration margin;
-17. reduced-motion mode makes no request for the immersive MP4 during normal page use;
-18. Guides sidebar stays usable at desktop heights and the horizontal guide navigation remains touch-scrollable on tablet/mobile;
-19. Guide tables can be horizontally inspected without producing page-level horizontal overflow;
-20. Guides search remains usable at 390/430 px and at 200% browser zoom;
-21. Progression layer rail and Nexus milestone cards collapse without clipped copy or compressed status values;
-22. Skyblock current-capability and partial-feature sections remain visually distinct at 390/430 px;
-23. dynamically rendered Guide facts/cards appear after scripts load with no empty structural gaps;
-24. reduced-motion produces a stable, usable page;
-25. browser console has zero uncaught errors and zero CSP violations caused by first-party code;
-26. Network panel shows no insecure HTTP subresources;
-27. Guide pages make no unexpected external `connect-src` requests;
-28. images marked lazy are not fetched eagerly without reason;
-29. canonical/Open Graph metadata resolves to the expected public GitHub Pages URL on Home;
-30. unknown routes render the branded 404 without broken local resources;
-31. page remains usable at 200% browser zoom.
+2. on desktop fine-pointer devices, Explore / Development / Community open on pointer hover without requiring click;
+3. pointer-clicking the top-level desktop group area does not pin a dropdown open;
+4. pointer movement from a top-level group into its dropdown crosses no dead gap or flicker zone;
+5. leaving a desktop navigation group fully collapses its dropdown, and switching directly between groups never leaves two dropdowns visibly stacked;
+6. touch/mobile can still open and close navigation groups without relying on hover;
+7. keyboard focus / ArrowDown / Escape remain usable independently of pointer-only behavior;
+8. dropdowns do not render outside the viewport;
+9. the first keyboard focus exposes the Skip to content link and activating it moves both scroll position and focus to `<main>`;
+10. Play modal is fully reachable with mouse, touch and keyboard;
+11. Forum entry and post modal remain fully reachable at short heights;
+12. Forum entry dialog keeps Tab/Shift+Tab inside the modal until preview entry;
+13. Forum display-name/post limits match the visible maxlength behavior and no preview action implies persistence/account availability;
+14. focus indicators are visible and not clipped;
+15. Escape closes modal/menu layers in the expected order;
+16. no image is stretched or unintentionally cropped;
+17. Abyss + Astral display both complete source images side by side;
+18. Worlds rail scroll-snap does not trap page scrolling;
+19. 4-world progress geometry is aligned with four rendered steps;
+20. owner portraits keep equal visual footprint and PxlMads faces inward;
+21. Home immersive video does not cause layout shifts;
+22. Home initial network waterfall does **not** request `Video_Perfecto_Con_Fondo_Negro.mp4` before the immersive section approaches the hydration margin;
+23. reduced-motion mode makes no request for the immersive MP4 during normal page use;
+24. Guides sidebar stays usable at desktop heights and the horizontal guide navigation remains touch-scrollable on tablet/mobile;
+25. Guide tables can be horizontally inspected without producing page-level horizontal overflow;
+26. Guides search remains usable at 390/430 px and at 200% browser zoom;
+27. Progression layer rail and Nexus milestone cards collapse without clipped copy or compressed status values;
+28. Skyblock current-capability and partial-feature sections remain visually distinct at 390/430 px;
+29. dynamically rendered Guide facts/cards appear after scripts load with no empty structural gaps;
+30. reduced-motion produces a stable, usable page;
+31. browser console has zero uncaught errors and zero CSP violations caused by first-party code;
+32. Network panel shows no insecure HTTP subresources;
+33. Guide pages make no unexpected external `connect-src` requests;
+34. images marked lazy are not fetched eagerly without reason;
+35. canonical/Open Graph metadata resolves to the expected public GitHub Pages URL on Home;
+36. unknown routes render the branded 404 without broken local resources;
+37. page remains usable at 200% browser zoom.
 
 ## Release rule
 
