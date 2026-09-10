@@ -26,6 +26,7 @@ A configured control is not a passed control. Record the actual result for the e
 ## Navigation and page integrity
 
 - All local navigation links resolve.
+- Every local fragment link resolves to an existing `id` in its actual destination HTML document, including same-page anchors (`#section`) and cross-page anchors such as `guides.html#systems` or `store.html#how-it-works`.
 - All local images/scripts/styles referenced by top-level HTML exist.
 - Deferred local media referenced through `data-src`, `data-poster` or `data-srcset` resolves and stays inside the repository root.
 - Local CSS `url(...)` and quoted `@import` dependencies resolve inside declared public roots and remain present in `_site/`.
@@ -37,7 +38,7 @@ A configured control is not a passed control. Record the actual result for the e
 - At 980 px and below, navigation uses explicit click/touch `.is-open` state even when a fine pointer is attached; the desktop hover-only rule must not disable the mobile-layout buttons.
 - Keyboard opening, focus movement and Escape remain available independently from the pointer-only desktop rule.
 - Every detailed `guide-*.html` fallback navbar marks exactly `guides.html` as `aria-current="page"`; no product-overview link simultaneously claims to be the current global destination.
-- Every same-page Guide link such as `#overview`, `#verification` or a sidebar section points to an ID that actually exists on that page.
+- Guide sidebar links such as `#overview` and `#verification` are covered by the same global fragment-target contract rather than a Guide-only special case.
 - Guides remains reachable from global Community navigation.
 - First keyboard focus exposes the global Skip to content link on standard pages.
 - Activating Skip to content moves both viewport and keyboard focus to the actual `<main>` region.
