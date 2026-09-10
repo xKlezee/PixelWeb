@@ -17,6 +17,7 @@ A configured control is not a passed control. Record the actual result for the e
 - `python3 scripts/validate_site.py` completes successfully.
 - `python3 scripts/validate_runtime_contracts.py` completes successfully.
 - `python3 scripts/validate_accessibility.py` completes successfully.
+- `python3 scripts/validate_player_facing_copy.py` completes successfully.
 - `python3 scripts/build_public_site.py` successfully stages the reference-driven `_site/` artifact.
 - `python3 scripts/validate_public_bundle.py` successfully validates the staged publication boundary and all local HTML/deferred-media/CSS dependencies.
 - A workflow startup failure with no runner/steps is classified as infrastructure/account startup failure, not as a passing or failing validator result.
@@ -26,7 +27,7 @@ A configured control is not a passed control. Record the actual result for the e
 
 - All local navigation links resolve.
 - All local images/scripts/styles referenced by top-level HTML exist.
-- Deferred local media referenced through `data-src`, `data-poster` or `data-srcset` also resolves and stays inside the repository root.
+- Deferred local media referenced through `data-src`, `data-poster` or `data-srcset` resolves and stays inside the repository root.
 - Local CSS `url(...)` and quoted `@import` dependencies resolve inside declared public roots and remain present in `_site/`.
 - External `_blank` links include `rel="noopener"`.
 - No duplicate IDs exist within a page.
@@ -36,6 +37,7 @@ A configured control is not a passed control. Record the actual result for the e
 - At 980 px and below, navigation uses explicit click/touch `.is-open` state even when a fine pointer is attached; the desktop hover-only rule must not disable the mobile-layout buttons.
 - Keyboard opening, focus movement and Escape remain available independently from the pointer-only desktop rule.
 - Every detailed `guide-*.html` fallback navbar marks exactly `guides.html` as `aria-current="page"`; no product-overview link simultaneously claims to be the current global destination.
+- Every same-page Guide link such as `#overview`, `#verification` or a sidebar section points to an ID that actually exists on that page.
 - Guides remains reachable from global Community navigation.
 - First keyboard focus exposes the global Skip to content link on standard pages.
 - Activating Skip to content moves both viewport and keyboard focus to the actual `<main>` region.
@@ -50,8 +52,8 @@ A configured control is not a passed control. Record the actual result for the e
 - Nexus encounter, individual-boss and difficulty-tier counts remain internally consistent.
 - Nexus access remains permanent at its canonical unlock and does not silently acquire a Viking/boss requirement.
 - Forum remains `preview`, non-persistent and without a claimed account system until the backend architecture exists.
-- Skyblock remains `source-verified / partial`; collaboration/team-management/promotion controls do not move into the current feature list without explicit re-verification.
-- Public external URLs in the canonical model use HTTPS; local landing destinations resolve to top-level public HTML files.
+- Skyblock remains `source-verified / partial`; incomplete collaboration controls stay outside the current feature list and use player-facing `Partial` / `Planned` descriptions rather than implementation details.
+- Public external URLs in the canonical model use HTTPS and match approved project destinations; local landing destinations resolve to top-level public HTML files.
 - Store thresholds remain unpublished while `thresholdsVerified` is false.
 
 ## Dynamic rendering
@@ -70,12 +72,16 @@ A configured control is not a passed control. Record the actual result for the e
 - Evidence is kept separate from factual feature state (`current`, `partial`, `staged`, `planned`, `unknown`, `deprecated/retired`).
 - A source-verified but partial system is not presented as fully player-available.
 - Shared numeric facts are read from their canonical owner rather than copied into multiple guide files.
+- The primary library in `guides.html` contains exactly one `data-guide-entry` for every current `guide-*.html` detail page and contains no duplicate/orphan primary entries.
+- Player-facing HTML/data/renderer copy does not expose repository-test, database-path, command/menu-wiring, deployment-state or equivalent implementation terminology covered by `validate_player_facing_copy.py`.
 - Nexus is never presented as World 5.
 - The current World route remains exactly four Worlds: Overworld, Pirate Kingdom, Nether, Winter.
-- Skyblock collaboration controls remain outside the current feature set until their player-facing wiring is complete and re-verified.
+- Skyblock collaboration controls remain partial/planned until the complete player-facing feature is independently re-verified.
 - Progression reset/reward/XP/persistence semantics remain unpublished until independently re-verified.
-- Mining-specific stat coverage remains outside the current Stats guide until its producer-to-consumer audit is complete.
+- Mining-specific stat coverage remains outside the current Stats guide until it receives its own evidence pass.
 - Secret Talisman discovery trees, protected combinations and anti-abuse-sensitive inputs are not exposed in public Guide data.
+- Talisman player-facing facts remain intact where documented: `/codex`, `/bag`, seven equipped slots, World Affinity `+3%`, world-neutral Synergy and strongest-only qualifying Meta behavior.
+- Enchantments keeps evidence scope separate from any unperformed live-client claim and does not publish repository/CI test-harness internals.
 - Legacy GitBook claims never override current evidence.
 - Guides search result-count changes are announced without moving focus, and Escape clears the current query.
 - Sidebar in-page links land below sticky navigation rather than hiding the anchored heading.
@@ -150,6 +156,7 @@ Do not mark a viewport PASS from CSS inspection alone. Browser-render verificati
 - Interactive controls have usable pointer/touch target size.
 - Status/evidence meaning is not communicated by color alone.
 - Every static `<img>` exposes an explicit `alt`, including `alt=""` when truly decorative.
+- Every visible text/search input and textarea has an accessible name through a real label or ARIA association.
 - Each top-level page has exactly one `<main>` landmark.
 - Page remains usable at 200% browser zoom.
 - Reduced-motion mode removes nonessential animation without hiding content.
@@ -161,6 +168,7 @@ Do not mark a viewport PASS from CSS inspection alone. Browser-render verificati
 - No `.env`, private key, credential file, local database, runtime log or private operational report is tracked.
 - Public data files contain only intentionally PUBLIC information.
 - Guide pages keep `connect-src 'self'` unless a documented feature-level exception is approved.
+- Browser-public player documentation contains gameplay/reference content and evidence boundaries, not repository-test/deployment/database internals.
 - No security claim relies on DevTools blocking, minification, obfuscation, `robots.txt` or repository privacy.
 - No future authentication UI is treated as secure without server-side authorization/session controls.
 
@@ -168,7 +176,7 @@ Do not mark a viewport PASS from CSS inspection alone. Browser-render verificati
 
 The branch is not ready to merge until both conditions are true:
 
-1. the automated quality gate has **actually executed and passed** on the final candidate HEAD, including canonical-data and `_site/` artifact validation; and
+1. the automated quality gate has **actually executed and passed** on the final candidate HEAD, including player-facing copy, canonical-data and `_site/` artifact validation; and
 2. the browser/render matrix has been completed with any findings remediated and rechecked.
 
 Keep the pull request in draft while either gate is unresolved.
