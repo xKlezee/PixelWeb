@@ -15,6 +15,7 @@ This document records the current release-candidate architecture and gates witho
 - `SECURITY.md` documents public/private boundaries, credential incident handling and the future authenticated-backend boundary.
 - `scripts/security_scan.py` scans committed text for common secret material.
 - `scripts/validate_site.py` validates top-level HTML integrity, CSP/transport rules, local references and sitemap/publication contracts. Indexable pages must expose exactly one absolute HTTPS canonical URL matching the page URL declared by `sitemap.xml`; missing, duplicate, mismatched and non-sitemap canonicals fail validation.
+- `scripts/validate_social_metadata.py` validates sitemap-indexed Open Graph/Twitter metadata, including unique required fields, canonical `og:url`, document-title alignment, Twitter/Open Graph consistency and the official shared Pixel Network social image.
 - `scripts/validate_runtime_contracts.py` validates deferred media, direct style-assignment policy, navigation invariants, local same-page/cross-page fragment targets and Guide-library coverage.
 - `scripts/validate_accessibility.py` checks document structure, image alternatives and accessible naming of visible form controls.
 - `scripts/validate_player_facing_copy.py` keeps known repository-test/database/wiring/deployment implementation terminology out of browser-public player documentation while allowing legitimate evidence labels, formulas, stat keys and player commands.
@@ -83,6 +84,16 @@ Current guarded invariants include:
 - `index.html` canonically maps to `https://xklezee.github.io/PixelWeb/`; the remaining indexable pages map one-for-one to the exact URLs declared in `sitemap.xml`.
 - `forum.html` and `404.html` remain intentionally `noindex` and outside the sitemap-indexed canonical requirement.
 - Canonicals are not injected by JavaScript or by the public-site builder; source HTML remains the authority and the validator cross-checks it against the sitemap.
+
+## Social sharing metadata
+
+- All sitemap-indexed pages carry static Open Graph and Twitter metadata in source HTML; social crawlers do not depend on JavaScript hydration.
+- Page-specific `og:title` matches the document title and `og:url` matches the canonical public URL.
+- Each page has a non-empty Open Graph description, and Twitter title/description mirror the corresponding Open Graph fields.
+- `og:type` remains `website` and `og:site_name` remains `Pixel Network` across the indexable surface.
+- The shared Open Graph/Twitter image remains the official absolute Pixel Network logo URL, with the expected Open Graph image alt text.
+- `forum.html` and `404.html` remain outside this requirement because they are intentionally `noindex` and not sitemap-indexed.
+- `scripts/validate_social_metadata.py` is wired into the Quality Gate to reject missing, duplicate, empty or inconsistent social-sharing metadata once the automated runner can execute.
 
 ## Guides architecture
 
@@ -162,7 +173,7 @@ The `_site/` pipeline is prepared but is **not yet the live GitHub Pages source*
 
 ### Source/static review
 
-The current candidate has been reviewed at source level for DOM safety, CSP structure, canonical crawl metadata, canonical data relationships, external destinations, Guide/publication boundaries, local dependencies, local fragment-link integrity, media loading, navigation contracts and structural accessibility.
+The current candidate has been reviewed at source level for DOM safety, CSP structure, canonical crawl metadata, social-sharing metadata structure, canonical data relationships, external destinations, Guide/publication boundaries, local dependencies, local fragment-link integrity, media loading, navigation contracts and structural accessibility.
 
 This review is not a substitute for successful validator execution or browser rendering.
 
