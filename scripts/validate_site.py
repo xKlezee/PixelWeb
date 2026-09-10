@@ -29,7 +29,9 @@ REQUIRED_CSP_DIRECTIVES = {
     "form-action": {"'self'"},
 }
 FORBIDDEN_CSP_TOKENS = {"'unsafe-inline'", "'unsafe-eval'", "'wasm-unsafe-eval'"}
-GUIDE_CONNECT_SRC = {"'self'"}
+SELF_ONLY_CONNECT_SRC = {"'self'"}
+STATUS_CONNECT_SRC = {"'self'", "https://api.mcsrvstat.us"}
+LIVE_STATUS_IDS = {"serverStatusText", "playerCount", "serverStatusDot"}
 
 # Retired product copy is guarded explicitly when its reappearance would overclaim a
 # feature state. These strings are not generic wording bans; they are known stale claims.
@@ -67,6 +69,7 @@ class PageParser(html.parser.HTMLParser):
         self.inline_scripts: list[int] = []
         self.csp: str | None = None
         self.has_referrer_policy = False
+        self.has_live_status_surface = False
         self._ids: set[str] = set()
         self._inline_script_line: int | None = None
         self._inline_script_has_content = False
@@ -91,6 +94,8 @@ class PageParser(html.parser.HTMLParser):
             if element_id in self._ids:
                 self.duplicate_ids.append((element_id, line))
             self._ids.add(element_id)
+            if element_id in LIVE_STATUS_IDS:
+                self.has_live_status_surface = True
 
         for attr, value in attrs:
             attr_lower = attr.lower()
@@ -235,13 +240,18 @@ def main() -> int:
                         f"{', '.join(sorted(forbidden))}"
                     )
 
+        expected_connect_src = STATUS_CONNECT_SRC if parser.has_live_status_surface else SELF_ONLY_CONNECT_SRC
+        if csp.get("connect-src") != expected_connect_src:
+            expected_label = "'self' https://api.mcsrvstat.us" if parser.has_live_status_surface else "'self'"
+            failures.append(
+                f"{page.name}: connect-src must be exactly {expected_label} for this page's runtime surface"
+            )
+
+        ref_values = {raw for _, raw, _ in parser.refs}
+        if parser.has_live_status_surface and "site.js" not in ref_values:
+            failures.append(f"{page.name}: live status surface requires site.js")
+
         if is_guide_page(page):
-            if csp.get("connect-src") != GUIDE_CONNECT_SRC:
-                failures.append(
-                    f"{page.name}: Guides must use exactly connect-src 'self' unless the "
-                    "documentation network boundary is deliberately revised"
-                )
-            ref_values = {raw for _, raw, _ in parser.refs}
             if "guides.css" not in ref_values:
                 failures.append(f"{page.name}: Guide page must load guides.css")
             if "data/network.js" not in ref_values:
