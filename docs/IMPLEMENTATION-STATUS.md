@@ -1,6 +1,6 @@
 # PixelWeb Hardening & Documentation — Implementation Status
 
-This file records the branch state without upgrading controls or gameplay claims beyond evidence actually obtained.
+This file records the branch state without upgrading controls or gameplay claims beyond evidence actually obtained. It intentionally avoids embedding a "current HEAD" SHA because every documentation update would immediately make that value stale; GitHub branch/PR comparison is the authority for live ref state.
 
 ## Implemented on this branch
 
@@ -10,75 +10,101 @@ This file records the branch state without upgrading controls or gameplay claims
 - `SECURITY.md` with public/private disclosure boundaries and credential-incident handling.
 - Dependency-free committed-secret scanner.
 - Dependency-free static HTML/JavaScript/CSS integrity and browser-safety validator.
-- Dependency-free runtime-contract validator for deferred media references and direct inline-style assignment.
+- Dependency-free runtime-contract validator for deferred media references and direct `element.style = ...` assignment.
 - Separate dependency-free structural accessibility validator.
 - Dedicated byte-level media-integrity validator for the four approved Nexus PNGs.
-- Dedicated canonical public-data contract validator (`scripts/validate_public_data.js`) that executes `data/network.js` in an isolated Node VM and checks cross-field product invariants without becoming a second data source.
+- Dedicated canonical public-data contract validator (`scripts/validate_public_data.js`) that executes browser-public data files in isolated Node VMs and checks relationships/policy without becoming a second gameplay rendering-data source.
 - Reference-driven public artifact builder (`scripts/build_public_site.py`) that stages `_site/` from explicit public HTML roots, declared runtime resources and recursively resolved local CSS dependencies.
-- Independent public artifact validator (`scripts/validate_public_bundle.py`) that re-checks the staged publication boundary, HTML/deferred-media/CSS references, file types and project-site URL constraints.
-- GitHub Actions quality gate with read-only repository permissions and commit-pinned official `actions/checkout`.
-- Strict CSP-ready frontend rules: no inline scripts, inline handlers, inline styles, `javascript:` URLs, string-to-DOM parsing sinks or runtime inline-style mutation accepted by the validation layers.
+- Independent public artifact validator (`scripts/validate_public_bundle.py`) that re-checks the staged publication boundary, local references, file types and project-site URL constraints.
+- GitHub Actions Quality Gate with read-only repository permissions and commit-pinned official `actions/checkout`.
+
+### Browser/runtime hardening
+
+- Strict CSP-ready frontend rules: no inline scripts, inline event handlers, inline styles, `javascript:` URLs, string-to-DOM parsing sinks or runtime inline-style mutation are accepted by the validation layers.
+- First-party renderers use DOM construction / `textContent` instead of interpolated `innerHTML`.
+- Dynamic-code execution patterns are rejected.
 - Deferred media URLs in `data-src`, `data-poster` and `data-srcset` are validated as HTTPS external URLs or existing repository-local paths.
-- Local CSS `url(...)` and quoted `@import` dependencies are included in the artifact graph only when they remain inside declared public roots.
-- Absolute external HTTP resources are rejected; external runtime destinations are expected to use HTTPS.
+- Absolute external HTTP resources are rejected.
+- Protocol-relative HTML/CSS resource URLs (`//host/path`) are rejected at source validation, rejected by the public artifact builder before staging, and rejected again by the staged-bundle validator.
 - `connect-src` follows per-page least privilege: pages without a live status surface are self-only; pages that expose live Minecraft status may additionally connect only to `https://api.mcsrvstat.us`.
-- Explicit pre-auth security requirements for Login, profiles, persistent Forum, moderation and private APIs.
-- Explicit classification of browser-delivered public data versus future private/backend data.
-- Forum remains preview-only; no persistent account/session/backend behavior is implied.
+- DevTools/right-click blocking is not used as a security boundary.
 
-### Crawl, error and public metadata layer
+### Public destination and media-origin contract
 
-- `sitemap.xml` lists only indexable public product and Guide pages under the current project-site base URL.
+`data/network.js` remains the canonical owner for shared public network facts. `scripts/validate_public_data.js` now also enforces the publication destinations around that data model:
+
+- Discord must remain the approved `discord.gg` invite currently owned by the project;
+- Store must remain the approved PixelBoxx Tebex destination;
+- legacy documentation and external changelog must remain the approved Pixel Network GitBook routes;
+- changing one of those destinations requires an intentional validator/policy update rather than silently accepting any arbitrary HTTPS URL.
+
+World media is validated against the canonical World model:
+
+- media keys must match the four canonical World ids exactly;
+- landscape images must use the approved Pixel GitBook image proxy and expected GitBook storage origin;
+- boss/optional-boss artwork must remain existing repository-local files under `assets/worlds/`;
+- optional boss media may exist only where the canonical World model declares an optional encounter.
+
+This is a publication/security contract, not a second source for gameplay values.
+
+### Public artifact boundary
+
+The prepared `_site/` model separates repository content from future hosted content.
+
+- Sitemap-declared public pages plus Forum/404 seed the artifact.
+- Root resources are included only when statically referenced or explicitly declared as runtime-loaded.
+- Local CSS `url(...)` and quoted `@import` dependencies are traversed recursively only inside declared public roots.
+- `assets/` and `data/` remain intentionally browser-public trees.
+- Arbitrary `docs/`, `scripts/`, `.github/`, environment files, logs, databases, keys/certificates and unrelated root files are not part of the artifact.
+- Root-relative URLs incompatible with the `/PixelWeb/` project-site base are rejected by the staged-bundle validator.
+- Symlinks are fail-closed: the builder rejects symlinked inputs rather than dereferencing them, and the staged-bundle validator rejects symlinks without reading through them.
+- Protocol-relative resources are fail-closed across source validation, build and staged validation.
+
+The `_site/` model is prepared but is **not yet the live GitHub Pages source**.
+
+### Crawl, error and metadata layer
+
+- `sitemap.xml` lists indexable public product and Guide pages under the current project-site base URL.
 - Forum preview and the branded 404 remain `noindex` and are excluded from the sitemap.
-- `404.html` uses maintained Pixel Network destinations, the same strict CSP/referrer posture and no external runtime dependency.
-- Home has a canonical URL plus Open Graph/Twitter metadata using the existing official Pixel Network logo.
-- `validate_site.py` checks sitemap consistency, prevents `noindex` pages from being listed and keeps the repository-level `robots.txt` from regressing to a blanket `Disallow: /` policy.
-- **GitHub Pages boundary:** the current site is a project site at `https://xklezee.github.io/PixelWeb/`. Standards-compliant crawlers request `robots.txt` from the host root (`https://xklezee.github.io/robots.txt`), so `PixelWeb/robots.txt` is not an authoritative crawl policy on this default URL. Page-level `meta robots` directives are the effective per-page publication control until a custom/root domain deployment makes a repository-level robots file authoritative.
-- The repository-level `robots.txt` documents that limitation instead of pretending that hiding `docs/` or `scripts/` from crawler discovery protects them. Any file deployed through Pages must still be treated as public.
-- The prepared `_site/` artifact model excludes repository/security/engineering material from the future Pages payload, but it is not called the live publication boundary until Pages actually migrates to an Actions-built artifact.
+- `404.html` uses maintained Pixel Network destinations, strict CSP/referrer posture and no external runtime dependency.
+- Home has canonical/Open Graph/Twitter metadata using the existing official Pixel Network logo.
+- The repository-level `robots.txt` is not treated as a privacy or security boundary. On the current `https://xklezee.github.io/PixelWeb/` project-site URL, crawlers request the host-root `/robots.txt`, not a repository-subpath robots file.
 
 ### Accessibility and interaction foundation
 
 - Standard public pages expose one canonical runtime navigation model.
-- Keyboard users receive a first-focus `Skip to content` route generated by `polish.js`.
-- The skip target is the real `<main>` region and is made programmatically focusable when required; activation moves focus instead of only scrolling visually.
-- Navigation dropdowns expose `aria-expanded` and `aria-controls`, support keyboard opening/closing and Escape behavior.
-- The Play modal retains focus trapping, Escape close and focus restoration without inline styles.
-- Forum entry dialog has labelled/described modal semantics, initial focus and Tab/Shift+Tab focus containment while the preview application is hidden.
-- Forum post dialogs trap focus, close with Escape and restore focus to the triggering post card.
-- `validate_accessibility.py` checks document language, viewport, title, exactly one `<main>`, non-empty descriptions on indexable pages and explicit `alt` on static images.
+- `polish.js` owns canonical mobile-menu state when present, while the basic `site.js` listener remains only as a fallback. The canonical controller captures the toggle event so menu state no longer depends on listener registration order.
+- Keyboard users receive a first-focus `Skip to content` route generated by `polish.js`; the real `<main>` is made programmatically focusable when required.
+- Navigation dropdowns expose `aria-expanded` / `aria-controls` and support keyboard opening, Escape and focus behavior.
+- Play modal retains focus trapping, Escape close and focus restoration without inline styles.
+- Forum entry/post dialogs use labelled modal semantics, focus containment and trigger-focus restoration.
+- Short-height Forum overlays remain independently scrollable.
+- `validate_accessibility.py` checks language, viewport, title, exactly one `<main>`, descriptions on indexable pages and explicit static-image `alt` text.
 
-### Performance foundation
+### Performance and media integrity
 
-- Approved Raphael, Azazel, Abyss and Astral PNGs remain the original repository blobs; they are not recompressed, resized, converted or replaced.
-- `validate_media_integrity.py` enforces each approved PNG's exact byte size, 1448×1086 dimensions and Git blob SHA.
-- Nexus heavy images remain below initial-load priority and use lazy/asynchronous image behavior where rendered.
-- Home immersive MP4 no longer has an initial `src`; it uses `preload="none"` plus `data-src`.
-- The MP4 is hydrated through `IntersectionObserver` shortly before the immersive story approaches the viewport, with a functional fallback where the observer API is unavailable.
-- Its deferred `data-src` path is covered by `validate_runtime_contracts.py` so lazy hydration cannot hide a broken local media reference from repository validation.
-- Scroll scrubbing waits for valid video metadata/duration before seeking.
-- `prefers-reduced-motion: reduce` intentionally prevents MP4 hydration/download while retaining the textual story and stable background.
-- Current repository inventory contains one immersive MP4, not a duplicate second Home copy.
+- Approved Raphael, Azazel, Abyss and Astral PNGs remain the original repository blobs; they are not recompressed, resized, converted, sprited or replaced.
+- `validate_media_integrity.py` enforces exact byte size, 1448×1086 dimensions and Git blob SHA for those four files.
+- Abyss + Astral preserve two complete 4:3 source images on responsive layouts.
+- Home immersive MP4 has no initial `src`, uses `preload="none"` and is hydrated near the viewport via `IntersectionObserver`.
+- Deferred MP4 references are covered by the runtime-contract validator.
+- Scroll scrubbing waits for valid metadata/duration before seeking.
+- `prefers-reduced-motion: reduce` prevents MP4 hydration/download while retaining the textual story.
 - `docs/PERFORMANCE-BUDGET.md` records network-priority, layout-stability and media-integrity release rules.
 
-### Public data and documentation architecture
+### Canonical gameplay/public-data invariants
 
-- `data/network.js` remains the canonical owner for shared public network facts.
-- `validate_public_data.js` checks that `content.currentWorlds` matches the actual World array, the route remains exactly Overworld → Pirate Kingdom → Nether → Winter, Nexus remains separate, per-World mines sum to the canonical total, World Boss/Nexus counts remain internally consistent, and local/external destinations satisfy publication rules.
-- The same contract keeps Nexus access permanent at Prestige IV with no Viking/boss requirement until intentionally changed with evidence.
-- Forum must remain `preview`, non-persistent and without an account-system claim until the backend exists.
-- Skyblock remains `source-verified / partial`; incomplete collaboration/team-management/promotion controls cannot silently move into the current feature list.
+`validate_public_data.js` currently guards, among other relationships:
+
+- exactly four Worlds in order: Overworld → Pirate Kingdom → Nether → Winter;
+- Nexus remains separate from Worlds;
+- per-World mines sum to the canonical mine total;
+- World Boss encounter count matches declared World encounters;
+- Nexus encounter/boss/difficulty counts match the instance model;
+- Nexus access remains permanent at Prestige IV with no Viking/boss requirement until intentionally changed with evidence;
+- Forum remains preview, non-persistent and without an account-system claim;
+- Skyblock remains `source-verified / partial`, with incomplete collaboration/team-management/promotion controls outside the current feature list;
 - Store thresholds remain unpublished while `thresholdsVerified` is false.
-- Overview pages increasingly render exact shared values from canonical data rather than preserving literal fallback copies in HTML.
-- Store rank/category presentation is generated from the canonical Store model instead of maintaining a second manual catalogue.
-- Nexus access/count/milestone presentation is derived from canonical Nexus/Instance definitions rather than a manually maintained ladder.
-- Detailed Guide-domain files hold only system-specific material and do not duplicate shared numeric gates when a canonical value already exists.
-- Guides and hardened overview renderers use `textContent`, `createElement`, `append` and `replaceChildren` rather than string-to-DOM parsing.
-- Evidence level and factual feature state are modeled separately.
-- Evidence taxonomy: `source-verified`, `server-verified`, `live-client-verified`, `reconciled-reference`.
-- Factual states include `current`, `partial`, `staged`, `planned`, `unknown` and `deprecated/retired`.
-- Feature completeness requires a reachable player path; source presence or a visible menu item alone does not qualify as availability.
-- Legacy GitBook material is migration/discovery input only, never current authority.
 
 ### Detailed Guides currently present
 
@@ -93,52 +119,46 @@ This file records the branch state without upgrading controls or gameplay claims
 | Levels, Prestige & Legacy | Reconciled reference | Reset, reward, XP-curve and persistence semantics remain unpublished until re-verified |
 | Skyblock | Source verified / partial | Team-management and promotion remain explicitly incomplete |
 
-### Skyblock correction
-
-The public Skyblock model and landing page no longer advertise collaboration controls as fully available. Source-backed island lifecycle, persistence, upgrades, banking and Skyblock quests remain in the current capability set; invite/member-management and promotion are represented separately as partial/incomplete.
+Evidence and feature state remain separate. Source presence or a visible menu item is not treated as proof of complete player-facing availability.
 
 ## Branch state
 
-The hardening branch is periodically reconciled with `main` when Quality Gate-only commits are installed on the default branch for manual-dispatch visibility. Reconciliation uses a merge commit whose resulting tree remains the hardening candidate tree, so frontend content from `main` does not replace branch work.
+The hardening branch is periodically reconciled with `main` when Quality-Gate-only commits are installed on the default branch for manual-dispatch visibility. Reconciliation uses a merge commit whose resulting tree remains the hardening candidate tree, so frontend content from `main` does not replace branch work.
 
-The latest verified reconciliation used hardening tree `f97dcf17437f42ed3ef5b5a3fb196d8eedec4934` and produced commit `a3f35a46d8d6fc40c16163567b093ac967d7317f` with hardening and `main` as parents. The post-reconciliation compare reported `behind_by: 0` against `main` at `4aa71b2991396acd86f4cb0b3901d4d6d0bf010f`.
-
-Future work must still re-check both refs before write/merge operations because another session may advance either branch.
+Do not rely on a SHA written into this document for merge decisions. Before any merge/reconciliation operation, query the live `main` and hardening refs and compare them directly. The PR remains the release candidate; `main` remains untouched by frontend hardening until release gates are satisfied.
 
 ## Verification state
 
 ### Static/code review
 
-Current Guide and overview renderers follow the hardened DOM-safe construction model. Repository references, CSP structure, canonical data relationships, publication invariants, transport policy, sitemap/index contract, artifact dependency graph, media loading behavior and structural accessibility have been reviewed at source level.
+Current Guide/overview renderers and the validation/build pipeline have been reviewed at source level for DOM-safety, CSP structure, canonical data relationships, approved external destinations, publication invariants, local/CSS dependency handling, transport policy, symlink/protocol-relative boundaries, sitemap/index behavior, media loading and structural accessibility.
 
 This source review does **not** substitute for successful execution of the repository validators or browser-render validation.
 
-### GitHub Actions quality gate
+### GitHub Actions Quality Gate
 
-**Account-level startup block — validator result not obtained.**
+**Account-level/pre-runner startup block — validator result not obtained.**
 
-The latest verified PR-triggered run for reconciled HEAD `a3f35a46d8d6fc40c16163567b093ac967d7317f` was run `34484060396`. Its single `static-security` job completed in roughly four seconds with `steps: []`, `runner_id: 0` and an empty runner name. No downloadable runner log exists for that job. This is the same pre-runner startup pattern seen previously and is not evidence that a repository validator failed.
+Observed failed Quality Gate jobs have completed before a GitHub-hosted runner was assigned (`runner_id: 0`, empty runner name, `steps: []`). Therefore those red runs are not evidence that `security_scan.py`, Python syntax compilation, `validate_media_integrity.py`, `node --check`, `validate_public_data.js`, `validate_site.py`, `validate_runtime_contracts.py`, `validate_accessibility.py`, `build_public_site.py` or `validate_public_bundle.py` failed; repository steps were not observed executing.
 
-Therefore failed workflow runs must not be interpreted as failures from `security_scan.py`, Python compilation, `validate_media_integrity.py`, `node --check`, `validate_public_data.js`, `validate_site.py`, `validate_runtime_contracts.py`, `validate_accessibility.py`, `build_public_site.py` or `validate_public_bundle.py`; those stages have not been observed executing on the final candidate.
-
-The same Quality Gate definition is intentionally kept on `main` and on the hardening branch. Manual dispatch requires an explicit `target_ref`, allowing the workflow surfaced from `main` to validate the actual candidate branch/tag/SHA. Moving the frontend work to `main` would not bypass an account-level Actions billing/startup lock and is not used as a substitute for validation.
+The workflow definition is intentionally present on `main` and the hardening branch. Manual dispatch requires an explicit `target_ref`, allowing the default-branch workflow to validate the actual candidate branch/tag/SHA without moving the frontend candidate to `main`.
 
 ### Local execution / browser-render QA
 
-**Pending due current execution environment.**
+**Pending in the currently available runtime.**
 
-Attempts to clone/download the repository into the available runtime have failed because that environment cannot resolve `github.com`. As a result, a local full-repository validator run and browser automation cannot currently be claimed either.
+The available container/runtime has not been able to resolve/fetch `github.com`, so a local full-repository validator execution and browser automation result cannot be claimed as a substitute for Actions.
 
-The required 1440 / 1024 / 768 / 430 / 390 px matrix remains specified in `docs/RESPONSIVE-QA.md`, with additional checks for short-height windows, 200% zoom, keyboard navigation, reduced motion, lazy media, CSP/runtime errors and network waterfall behavior.
+Required browser QA remains 1440 / 1024 / 768 / 430 / 390 px, plus short-height windows, 200% zoom, keyboard navigation, reduced motion, lazy media, CSP/runtime console state and network waterfall behavior.
 
 ## Remaining release gates
 
-- Resolve the GitHub Actions account/billing startup block and obtain a real execution of every configured Quality Gate stage on the exact final candidate HEAD, including canonical-data validation and `_site/` build/validation.
-- Perform the browser/render QA matrix and fix any visual, responsive, accessibility, loading or runtime issues found there.
-- Re-run automated checks after final browser-QA changes.
-- Keep the pull request in draft until those gates are satisfied.
+- Resolve the GitHub Actions startup/billing condition and obtain a real execution of every Quality Gate step on the exact final candidate HEAD.
+- Complete browser/render QA and remediate any visual, responsive, accessibility, loading or runtime issue found there.
+- Re-run the full automated gate after final browser-QA changes.
+- Keep PR #1 in draft until those gates are satisfied.
 - Do not merge to `main` solely from static inspection.
-- Do not migrate Pages to the prepared `_site/` artifact until the artifact pipeline has executed successfully.
+- Do not migrate Pages to `_site/` until the artifact pipeline has executed successfully.
 
 ## Deferred by product architecture
 
