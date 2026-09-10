@@ -31,17 +31,19 @@ The workflow declares only:
 - commit-pinned official `actions/checkout`;
 - no deployment/write token requirement.
 
+To avoid redundant usage once Actions is healthy, the gate no longer runs separately on every push to `hardening/**`. The current automatic trigger is the pull request targeting `main`; an explicit `workflow_dispatch` remains available for candidate branch/tag/SHA validation.
+
 ## 3. Manual candidate validation after billing is restored
 
-The workflow definition is installed on `main` so GitHub exposes **Run workflow** from the default branch, but manual dispatch now requires an explicit `target_ref`.
+The workflow definition is installed on `main` so GitHub exposes **Run workflow** from the default branch, but manual dispatch requires an explicit `target_ref`.
 
 For the current hardening candidate enter:
 
 `hardening/security-foundation-2026-09`
 
-A full commit SHA may be used instead when validating a frozen release candidate.
+A full commit SHA should be used when validating a frozen release candidate immediately before promotion.
 
-The checkout step resolves manual dispatch to the supplied branch/tag/SHA. Push and pull-request runs continue to validate the event SHA.
+The checkout step resolves manual dispatch to the supplied branch/tag/SHA. Pull-request runs validate the event SHA. There is intentionally no additional hardening-push trigger, avoiding duplicate runs while the PR is open.
 
 After billing/account access is restored:
 
@@ -52,9 +54,13 @@ After billing/account access is restored:
 5. Confirm the committed-secret scanner executes.
 6. Confirm approved Nexus media integrity executes.
 7. Confirm JavaScript `node --check` executes for repository JS files.
-8. Confirm static site/CSP/transport/sitemap validation executes.
-9. Confirm structural accessibility validation executes.
-10. Require a green result on the exact candidate ref before treating automated validation as passed.
+8. Confirm canonical public-data/origin/static-link validation executes.
+9. Confirm static site/CSP/transport/sitemap validation executes.
+10. Confirm deferred-media/runtime-contract validation executes.
+11. Confirm structural accessibility validation executes.
+12. Confirm `_site/` is built from the allowlisted/reference-driven publication graph.
+13. Confirm the staged public-bundle validator executes successfully.
+14. Require a green result on the exact candidate ref before treating automated validation as passed.
 
 If an actual repository step fails after the runner starts, fix the reported code/content failure and rerun. A runner-startup failure and a validator failure are different states and must not be conflated.
 
@@ -79,7 +85,7 @@ Once the Quality Gate executes reliably, review the ruleset/protection for `main
 
 Do not make a non-executing check permanently required while the account cannot start it. Once execution is healthy and a stable check name is confirmed, make the successful Quality Gate a merge requirement.
 
-The hardening PR remains draft until both automated validation and browser/render QA pass.
+The hardening PR remains draft until both automated validation and browser/render QA pass. The intended promotion method is a squash merge so the official branch receives one reviewable release commit rather than the iterative hardening history.
 
 ## 6. Browser release gate
 
