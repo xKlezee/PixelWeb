@@ -4,7 +4,7 @@
       level: 'server-verified',
       verifiedAsOf: '2026-08-25',
       clientPresentation: 'pending',
-      note: 'Mechanics and persistence are server-verified. Final visual, audio and interaction feel still require a real-client pass.'
+      note: 'Talisman mechanics and persistent collection behavior are server-verified. Final visual, audio and interaction feel still require a real-client pass.'
     },
     commands: {
       codex: '/codex',
@@ -25,12 +25,12 @@
       {
         id: 'unlocked',
         name: 'Unlocked',
-        description: 'The requirement engine has accepted the entry and its configured acquisition path can proceed.'
+        description: 'The entry’s requirements are complete and its intended acquisition path becomes available.'
       },
       {
         id: 'obtained',
         name: 'Obtained',
-        description: 'Ownership is recorded and the Codex treats the item as acquired.'
+        description: 'The Talisman is recorded as owned in the Codex.'
       }
     ],
     categories: [
@@ -45,7 +45,7 @@
         id: 'world-boss',
         name: 'World Boss',
         scope: '5 talismans',
-        description: 'Talismans associated with World Boss progression and boss-clear acquisition logic.',
+        description: 'Talismans associated with World Boss progression and boss-clear acquisition.',
         disclosure: 'public'
       },
       {
@@ -59,7 +59,7 @@
         id: 'mob-hunt',
         name: 'Mob Hunt',
         scope: '1 current entry',
-        description: 'A hunt-oriented category driven by tracked combat requirements.',
+        description: 'A hunt-oriented category driven by combat progress.',
         disclosure: 'public'
       },
       {
@@ -72,23 +72,23 @@
       {
         id: 'meta',
         name: 'Meta',
-        scope: 'Configured set logic',
-        description: 'Advanced combinations that modify eligible effects only when their required equipped set qualifies.',
+        scope: 'Advanced set interactions',
+        description: 'Advanced combinations can modify eligible effects when the required equipped set qualifies.',
         disclosure: 'partial'
       }
     ],
     acquisitionPaths: [
       {
         name: 'In-world acquisition',
-        description: 'The Codex observes ownership earned through the relevant gameplay source instead of duplicating the reward.'
+        description: 'When a Talisman is earned through its gameplay source, the Codex records that ownership instead of granting a duplicate reward.'
       },
       {
         name: 'Codex claim',
-        description: 'Only entries explicitly configured as Codex-claimable can be granted from the Codex interface.'
+        description: 'Only Talismans intended to be claimed from the Codex can be obtained directly through that interface.'
       },
       {
         name: 'External progression source',
-        description: 'Some entries can come from another system such as Battle Pass; the Codex records the result without becoming a second grant path.'
+        description: 'Some entries can come from another progression system such as Battle Pass; the Codex records the resulting ownership.'
       },
       {
         name: 'Concealed acquisition',
@@ -97,7 +97,7 @@
     ],
     bag: {
       slots: 7,
-      description: 'The Talisman Bag is the equipped-set surface. Changes are committed when the bag closes and the active effects are recalculated.'
+      description: 'The Talisman Bag defines the equipped set. Changes take effect when the Bag closes and active Talisman effects update from the equipped contents.'
     },
     rarity: {
       levels: ['Common', 'Uncommon', 'Rare', 'Epic', 'Legendary', 'Mythic', 'Divine'],
@@ -107,12 +107,12 @@
       {
         id: 'base',
         name: 'Base effects',
-        description: 'Effects contributed by the equipped talismans are collected first.'
+        description: 'Effects contributed by equipped Talismans are established first.'
       },
       {
         id: 'affinity',
         name: 'World Affinity',
-        description: 'Eligible home-world effect buckets receive the configured home-world bonus before later modifiers.',
+        description: 'Eligible effects tied to a Talisman’s home World receive the home-World bonus before later modifiers.',
         publicValue: '+3% home-world bonus'
       },
       {
@@ -123,15 +123,13 @@
       {
         id: 'meta',
         name: 'Meta',
-        description: 'Eligible effects are modified last. Competing Meta modifiers for the same effect use the strongest qualifying value rather than stacking recursively.'
+        description: 'Eligible effects are modified last. When more than one qualifying Meta modifier affects the same eligible effect, only the strongest value applies rather than stacking recursively.'
       }
     ],
     clientPending: [
-      'Final category-screen presentation and state colors',
-      'Completion-glow appearance',
-      'Discovery ActionBar timing and presentation',
-      'Tab-completion feel for player-facing aliases',
-      'Shift-click and drag interaction feel',
+      'Category and state presentation',
+      'Discovery feedback timing and presentation',
+      'Inventory interaction feel',
       'Equip / unequip audio perception',
       'Nexus Jewelry presentation in a real client'
     ]
