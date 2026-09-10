@@ -8,12 +8,13 @@ The target deployment architecture is **validated artifact deployment**, not pub
 
 Do not switch the Pages source until all of the following are true:
 
-1. The GitHub account billing lock is resolved.
+1. The GitHub account billing lock/startup block is resolved.
 2. `PixelWeb Quality Gate` can start a real GitHub-hosted runner.
 3. A manual dispatch against the exact hardening candidate ref completes successfully.
-4. `scripts/build_public_site.py` builds `_site/` successfully.
-5. `scripts/validate_public_bundle.py` passes against that exact `_site/` output.
-6. Browser/render QA is complete for the candidate being deployed.
+4. `scripts/validate_public_data.js` passes against the exact candidate data model.
+5. `scripts/build_public_site.py` builds `_site/` successfully.
+6. `scripts/validate_public_bundle.py` passes against that exact `_site/` output.
+7. Browser/render QA is complete for the candidate being deployed.
 
 ## Target deployment boundary
 
@@ -24,10 +25,13 @@ The artifact intentionally contains:
 - sitemap-declared public HTML pages;
 - the explicitly `noindex` Forum and 404 surfaces;
 - root CSS/JavaScript/media referenced by those pages;
+- local dependencies recursively reachable from included CSS through `url(...)` or quoted `@import`, provided those dependencies remain inside declared public roots;
 - the explicitly declared runtime-loaded `play-modal.css`;
 - browser-public `assets/`;
 - browser-public `data/`;
 - `.nojekyll`, `robots.txt` and `sitemap.xml`.
+
+The CSS dependency rule is deliberately fail-closed: root-relative CSS URLs are invalid for the current `/PixelWeb/` project-site base, dependencies may not escape the repository, and CSS may not pull arbitrary undeclared repository directories into the public artifact.
 
 It must not publish repository/security/engineering material such as:
 
@@ -39,17 +43,17 @@ It must not publish repository/security/engineering material such as:
 - repository README/security-operation files;
 - local logs, databases, key/certificate material or other operational artifacts.
 
-`validate_public_bundle.py` is the release guard for this boundary. Do not bypass it to make a deployment succeed.
+`validate_public_bundle.py` independently re-checks this boundary after the build. It also rejects missing local HTML/deferred-media/CSS targets, undeclared top-level HTML, unreferenced/unapproved root files, unexpected file types in `assets/` or `data/`, sensitive operational suffixes and root-relative project-site URLs. Do not bypass it to make a deployment succeed.
 
 ## Migration sequence after Actions is healthy
 
-1. Run the Quality Gate manually against the exact candidate SHA and confirm every repository validation step passes.
+1. Run the Quality Gate manually against the exact candidate SHA and confirm every repository validation step passes, including canonical-data validation.
 2. Build and validate `_site/` in the same deployment workflow before any Pages upload step.
 3. Use GitHub's official Pages artifact/upload/deploy actions, pinned to approved full commit SHAs under the repository's action policy.
 4. Give the deployment job only the permissions required by GitHub Pages (`pages: write` and `id-token: write`) while keeping the validation/build job read-only.
 5. Configure the `github-pages` environment and use GitHub's Pages deployment protection model rather than granting broad repository write access.
 6. Change the repository Pages source to **GitHub Actions** only after the artifact workflow exists on `main` and has been reviewed.
-7. Deploy once, then verify the live URL, all navigation, 404 handling, Guide routes, Nexus media, Home deferred media, CSP console state and network waterfall.
+7. Deploy once, then verify the live URL, all navigation, 404 handling, Guide routes, Nexus media, Home deferred media, CSS/font/media dependencies, CSP console state and network waterfall.
 8. Confirm operational repository paths such as `/PixelWeb/docs/` and `/PixelWeb/scripts/` are no longer part of the deployed artifact.
 9. Keep the previous deployment configuration documented until the first artifact deployment is confirmed healthy, but do not run two competing Pages deployment methods indefinitely.
 
