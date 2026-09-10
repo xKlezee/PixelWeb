@@ -97,8 +97,6 @@
     ],
     bag: {
       slots: 7,
-      guiRange: '10–16',
-      jewelrySlots: '6–7',
       description: 'The Talisman Bag is the equipped-set surface. Changes are committed when the bag closes and the active effects are recalculated.'
     },
     rarity: {
