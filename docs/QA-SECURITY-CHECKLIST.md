@@ -15,6 +15,7 @@ A configured control is not a passed control. Record the actual result for the e
 - `node --check` completes successfully for every repository JavaScript file in scope.
 - `node scripts/validate_public_data.js` completes successfully.
 - `python3 scripts/validate_site.py` completes successfully.
+- `python3 scripts/validate_social_metadata.py` completes successfully.
 - `python3 scripts/validate_runtime_contracts.py` completes successfully.
 - `python3 scripts/validate_accessibility.py` completes successfully.
 - `python3 scripts/validate_player_facing_copy.py` completes successfully.
@@ -112,8 +113,12 @@ A configured control is not a passed control. Record the actual result for the e
 - Every sitemap-indexed page declares exactly one static absolute HTTPS `rel="canonical"`.
 - Each canonical URL matches that page's exact public URL in `sitemap.xml`; `index.html` maps to `https://xklezee.github.io/PixelWeb/` rather than `/index.html`.
 - Missing, duplicate, relative, non-HTTPS, mismatched or non-sitemap canonicals are rejected by `validate_site.py`.
-- Forum preview and `404.html` retain page-level `noindex` and remain outside the sitemap-indexed canonical requirement.
-- Canonical metadata is present in source HTML and is not injected by JavaScript or the `_site/` builder.
+- Every sitemap-indexed page declares exactly one complete Open Graph/Twitter social-sharing block in source HTML.
+- `og:url` matches the page canonical URL; `og:title` matches the document `<title>`; Twitter title/description mirror their Open Graph counterparts.
+- `og:type` remains `website`, `og:site_name` remains `Pixel Network`, and both Open Graph/Twitter image fields use the official absolute Pixel Network logo URL with the expected Open Graph image alt text.
+- Missing, duplicate, empty or inconsistent social metadata is rejected by `validate_social_metadata.py`.
+- Forum preview and `404.html` retain page-level `noindex` and remain outside the sitemap-indexed canonical/social-metadata requirement.
+- Canonical and social metadata are present in source HTML and are not injected by JavaScript or the `_site/` builder.
 - `robots.txt` does not contain a blanket `Disallow: /`.
 - On the current `https://xklezee.github.io/PixelWeb/` project-site deployment, repository-level `PixelWeb/robots.txt` is **not** treated as the authoritative host robots policy; crawlers request `/robots.txt` at the host root.
 - No privacy/security claim relies on crawler exclusion. Files deployed through GitHub Pages are treated as public.
@@ -181,7 +186,7 @@ Do not mark a viewport PASS from CSS inspection alone. Browser-render verificati
 
 The branch is not ready to merge until both conditions are true:
 
-1. the automated quality gate has **actually executed and passed** on the final candidate HEAD, including player-facing copy, canonical public-data/crawl metadata and `_site/` artifact validation; and
+1. the automated quality gate has **actually executed and passed** on the final candidate HEAD, including player-facing copy, canonical public-data/crawl/social metadata and `_site/` artifact validation; and
 2. the browser/render matrix has been completed with any findings remediated and rechecked.
 
 Keep the pull request in draft while either gate is unresolved.
