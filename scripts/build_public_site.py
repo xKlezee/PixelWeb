@@ -11,6 +11,8 @@ public directories.
 CSS dependencies are resolved recursively as part of the same allowlist. A local resource that
 exists only behind ``url(...)`` or a quoted ``@import`` cannot silently disappear from the Pages
 artifact, and CSS is not allowed to pull an undeclared repository directory into publication.
+Symlinks are rejected at the source boundary so an allowlisted path cannot dereference content
+from an undeclared or external location during artifact construction.
 """
 from __future__ import annotations
 
@@ -74,6 +76,8 @@ def copy_file(source: Path, destination: Path) -> None:
 
 
 def sitemap_pages() -> set[str]:
+    if SITEMAP.is_symlink():
+        raise ValueError("sitemap.xml must not be a symlink")
     if not SITEMAP.is_file():
         raise FileNotFoundError("sitemap.xml is required to derive the public page set")
 
@@ -143,7 +147,13 @@ def css_local_target(source: Path, raw: str) -> tuple[Path, Path] | None:
             f"{source.relative_to(ROOT)}: root-relative CSS URL is invalid for the /PixelWeb/ project site ({raw})"
         )
 
-    target = (source.parent / path).resolve()
+    candidate = source.parent / path
+    if candidate.is_symlink():
+        raise ValueError(
+            f"{source.relative_to(ROOT)}: local CSS dependency must not be a symlink ({raw})"
+        )
+
+    target = candidate.resolve()
     try:
         relative = target.relative_to(ROOT.resolve())
     except ValueError as exc:
@@ -160,6 +170,8 @@ def resolve_css_dependencies(root_files: set[str]) -> None:
 
     while queue:
         source = queue.pop()
+        if source.is_symlink():
+            raise ValueError(f"CSS dependency source must not be a symlink: {source.relative_to(ROOT)}")
         source = source.resolve()
         if source in seen:
             continue
@@ -205,6 +217,9 @@ def main() -> int:
         print(f"Public-site build failed: {exc}")
         return 1
 
+    if OUTPUT.is_symlink():
+        print("Public-site build failed: _site/ must not be a symlink")
+        return 1
     if OUTPUT.exists():
         shutil.rmtree(OUTPUT)
     OUTPUT.mkdir(parents=True)
@@ -214,6 +229,9 @@ def main() -> int:
     # Static references from explicitly public pages are the only additional root files allowed.
     for page_name in sorted(public_pages):
         page = ROOT / page_name
+        if page.is_symlink():
+            print(f"Public-site build failed: public page must not be a symlink: {page_name}")
+            return 1
         if not page.is_file():
             print(f"Public-site build failed: public page is missing: {page_name}")
             return 1
@@ -234,6 +252,9 @@ def main() -> int:
     copied = 0
     for name in sorted(root_files, key=str.lower):
         source = ROOT / name
+        if source.is_symlink():
+            print(f"Public-site build failed: allowlisted root file must not be a symlink: {name}")
+            return 1
         if not source.is_file():
             print(f"Public-site build failed: allowlisted root file is missing: {name}")
             return 1
@@ -242,9 +263,20 @@ def main() -> int:
 
     for directory in sorted(PUBLIC_DIRECTORIES):
         source = ROOT / directory
+        if source.is_symlink():
+            print(f"Public-site build failed: public directory must not be a symlink: {directory}/")
+            return 1
         if not source.is_dir():
             print(f"Public-site build failed: public directory is missing: {directory}/")
             return 1
+
+        symlinks = sorted(path for path in source.rglob("*") if path.is_symlink())
+        if symlinks:
+            print(f"Public-site build failed: symlinks are not allowed inside {directory}/:")
+            for path in symlinks:
+                print(f"  {path.relative_to(ROOT)}")
+            return 1
+
         destination = OUTPUT / directory
         shutil.copytree(source, destination, symlinks=False)
         copied += sum(1 for path in destination.rglob("*") if path.is_file())
