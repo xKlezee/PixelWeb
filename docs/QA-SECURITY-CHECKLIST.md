@@ -9,13 +9,16 @@ A configured control is not a passed control. Record the actual result for the e
 - The exact candidate HEAD is recorded before validation.
 - Manual dispatch is started with the exact candidate branch/tag/SHA in `target_ref`.
 - `PixelWeb Quality Gate` starts a real runner and exposes repository steps.
-- Python syntax compilation completes for every committed validator.
+- Python syntax compilation completes for every committed Python validator/builder.
 - `python3 scripts/security_scan.py` completes successfully.
 - `python3 scripts/validate_media_integrity.py` completes successfully.
 - `node --check` completes successfully for every repository JavaScript file in scope.
+- `node scripts/validate_public_data.js` completes successfully.
 - `python3 scripts/validate_site.py` completes successfully.
 - `python3 scripts/validate_runtime_contracts.py` completes successfully.
 - `python3 scripts/validate_accessibility.py` completes successfully.
+- `python3 scripts/build_public_site.py` successfully stages the reference-driven `_site/` artifact.
+- `python3 scripts/validate_public_bundle.py` successfully validates the staged publication boundary and all local HTML/deferred-media/CSS dependencies.
 - A workflow startup failure with no runner/steps is classified as infrastructure/account startup failure, not as a passing or failing validator result.
 - The current account-level billing lock is resolved separately; no check is weakened, skipped or removed merely to obtain green status.
 
@@ -24,6 +27,7 @@ A configured control is not a passed control. Record the actual result for the e
 - All local navigation links resolve.
 - All local images/scripts/styles referenced by top-level HTML exist.
 - Deferred local media referenced through `data-src`, `data-poster` or `data-srcset` also resolves and stays inside the repository root.
+- Local CSS `url(...)` and quoted `@import` dependencies resolve inside declared public roots and remain present in `_site/`.
 - External `_blank` links include `rel="noopener"`.
 - No duplicate IDs exist within a page.
 - Keyboard navigation remains usable after removal of inline handlers.
@@ -31,6 +35,20 @@ A configured control is not a passed control. Record the actual result for the e
 - Guides remains reachable from global Community navigation.
 - First keyboard focus exposes the global Skip to content link on standard pages.
 - Activating Skip to content moves both viewport and keyboard focus to the actual `<main>` region.
+
+## Canonical public data
+
+- `data/network.js` remains the single owner for shared public network facts.
+- `content.currentWorlds` equals the actual World array length.
+- The current route remains exactly Overworld → Pirate Kingdom → Nether → Winter; Nexus remains outside the World array.
+- Summed per-World mine counts equal the canonical total mine count.
+- Declared World Boss encounters equal the encounters represented by each World plus optional encounters.
+- Nexus encounter, individual-boss and difficulty-tier counts remain internally consistent.
+- Nexus access remains permanent at its canonical unlock and does not silently acquire a Viking/boss requirement.
+- Forum remains `preview`, non-persistent and without a claimed account system until the backend architecture exists.
+- Skyblock remains `source-verified / partial`; collaboration/team-management/promotion controls do not move into the current feature list without explicit re-verification.
+- Public external URLs in the canonical model use HTTPS; local landing destinations resolve to top-level public HTML files.
+- Store thresholds remain unpublished while `thresholdsVerified` is false.
 
 ## Dynamic rendering
 
@@ -81,8 +99,15 @@ A configured control is not a passed control. Record the actual result for the e
 - `robots.txt` does not contain a blanket `Disallow: /`.
 - On the current `https://xklezee.github.io/PixelWeb/` project-site deployment, repository-level `PixelWeb/robots.txt` is **not** treated as the authoritative host robots policy; crawlers request `/robots.txt` at the host root.
 - No privacy/security claim relies on crawler exclusion. Files deployed through GitHub Pages are treated as public.
+- `_site/` is derived from explicit publication roots rather than arbitrary root file extensions.
+- Sitemap pages plus explicitly `noindex` Forum/404 are the only top-level HTML allowed into `_site/`.
+- Root resources are included only through the public HTML/CSS dependency graph or the explicitly declared runtime-loaded Play-modal stylesheet.
+- `docs/`, `scripts/`, `.github/`, `.env*`, repository README/security-operation files, key/certificate material, logs and databases are absent from `_site/`.
+- Files inside browser-public `assets/` and `data/` remain restricted to expected static/browser data types.
+- Root-relative URLs that would escape the `/PixelWeb/` project-site base are rejected.
 - Home canonical/Open Graph/Twitter URLs resolve to the intended current public base.
 - Unknown routes render the branded 404 without broken local resources.
+- The prepared `_site/` model is not called the live deployment boundary until Pages has actually migrated to an Actions-built artifact.
 
 ## Browser behavior
 
@@ -135,7 +160,7 @@ Do not mark a viewport PASS from CSS inspection alone. Browser-render verificati
 
 The branch is not ready to merge until both conditions are true:
 
-1. the automated quality gate has **actually executed and passed** on the final candidate HEAD; and
+1. the automated quality gate has **actually executed and passed** on the final candidate HEAD, including canonical-data and `_site/` artifact validation; and
 2. the browser/render matrix has been completed with any findings remediated and rechecked.
 
 Keep the pull request in draft while either gate is unresolved.
