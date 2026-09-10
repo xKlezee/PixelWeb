@@ -158,6 +158,12 @@ def validate_page(page_name: str, public_url: str, failures: list[str]) -> None:
         failures.append(f"{page_name}: sitemap-indexed page must not declare noindex")
 
     title = single_value(page_name, "<title>", parser.titles, failures)
+    description = single_value(
+        page_name,
+        "meta description",
+        parser.meta_names.get("description", []),
+        failures,
+    )
     canonical = require_exact(page_name, "canonical URL", parser.canonicals, public_url, failures)
 
     require_exact(page_name, "og:type", parser.meta_properties.get("og:type", []), "website", failures)
@@ -197,6 +203,8 @@ def validate_page(page_name: str, public_url: str, failures: list[str]) -> None:
 
     if title is not None and og_title is not None and og_title != title:
         failures.append(f"{page_name}: og:title must match the document title")
+    if description is not None and og_description is not None and og_description != description:
+        failures.append(f"{page_name}: og:description must match the meta description")
     if canonical is not None and og_url is not None and og_url != canonical:
         failures.append(f"{page_name}: og:url must match the canonical URL")
     if og_title is not None and twitter_title is not None and twitter_title != og_title:
