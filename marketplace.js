@@ -161,9 +161,10 @@
     image.src = src;
   });
 
-  const loadAnimationMetadata = async src => {
+  const loadAnimationMetadata = async metadataSrc => {
+    if (!metadataSrc) return null;
     try {
-      const response = await fetch(`${src}.mcmeta`, { cache: 'force-cache' });
+      const response = await fetch(metadataSrc, { cache: 'force-cache' });
       if (!response.ok) return null;
       const metadata = await response.json();
       const frameTime = Number(metadata?.animation?.frametime);
@@ -173,9 +174,9 @@
     }
   };
 
-  const loadTexture = async src => {
+  const loadTexture = async (src, metadataSrc = null) => {
     const image = await loadImage(src);
-    const animation = await loadAnimationMetadata(src);
+    const animation = await loadAnimationMetadata(metadataSrc);
     const squareFrames = animation && image.width > 0 && image.height >= image.width && image.height % image.width === 0;
     const frameHeight = squareFrames ? image.width : image.height;
     const frameCount = squareFrames ? Math.max(1, image.height / image.width) : 1;
@@ -299,11 +300,13 @@
     state.yawOffset = 0;
     state.pitchOffset = 0;
     state.zoom = 1;
+    state.animationActive = false;
+    cancelAnimationFrame(state.animationFrame);
     stage.classList.add('is-loading');
-    stage.classList.remove('is-error');
-    setStatus('Loading Nexo model…');
+    stage.classList.remove('is-error', 'is-ready');
+    setStatus('Loading model…');
 
-    root.querySelectorAll('[data-active-name]').forEach(node => { node.textContent = item.name; });
+    if (activeName) activeName.textContent = item.name;
     if (activeVariant) activeVariant.textContent = item.variant;
     if (activeSlot) activeSlot.textContent = item.slot || '—';
     if (activeMaterial) activeMaterial.textContent = item.material || '—';
@@ -322,8 +325,11 @@
       const model = await response.json();
       if (requestToken !== state.requestToken) return;
 
-      const texturePaths = [...new Set(Object.values(item.textures || {}))];
-      const loaded = await Promise.all(texturePaths.map(async path => [path, await loadTexture(path)]));
+      const textureEntries = Object.entries(item.textures || {});
+      const loaded = await Promise.all(textureEntries.map(async ([key, path]) => [
+        path,
+        await loadTexture(path, item.animationMetadata?.[key] || null)
+      ]));
       if (requestToken !== state.requestToken) return;
 
       state.model = model;
