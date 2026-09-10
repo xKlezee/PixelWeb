@@ -2,6 +2,7 @@
   const nav = document.querySelector('.site-nav');
   const navLinks = document.getElementById('navLinks');
   const navToggle = document.getElementById('navToggle');
+  const main = document.querySelector('main');
   const mobileNav = matchMedia('(max-width: 980px)');
   const network = window.PIXEL_NETWORK_PUBLIC || {};
   const currentPage = location.pathname.split('/').pop() || 'index.html';
@@ -58,13 +59,24 @@
     return link;
   };
 
+  /* Keyboard users get a stable first-focus route past global navigation. */
+  let skipLink = null;
+  if (main) {
+    if (!main.id) main.id = 'main-content';
+    skipLink = document.createElement('a');
+    skipLink.className = 'skip-link';
+    skipLink.href = `#${main.id}`;
+    skipLink.textContent = 'Skip to content';
+  }
+
   /* Reading progress only. Scroll handlers must not mutate page geometry. */
   const progress = document.createElement('progress');
   progress.className = 'scroll-progress';
   progress.max = 1;
   progress.value = 0;
   progress.setAttribute('aria-hidden', 'true');
-  document.body.prepend(progress);
+  if (skipLink) document.body.prepend(skipLink, progress);
+  else document.body.prepend(progress);
 
   const root = document.documentElement;
   let maxScroll = 1;
