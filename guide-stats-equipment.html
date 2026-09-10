@@ -51,24 +51,24 @@
         <header class="guides-document-header" id="overview">
           <div class="eyebrow">Combat & equipment reference</div>
           <h1>Stats & Equipment.</h1>
-          <p class="guides-document-lead">Pixel does not treat every combat effect, enchant proc and registry key as the same kind of statistic. This reference starts with the core stats whose producer-to-consumer path is established, then shows where equipment-family rules and layered mechanics take over.</p>
-          <div class="guides-document-meta"><span>Source-verified core</span><span>Consumer-backed entries only</span><span>Mining stats require separate audit</span></div>
+          <p class="guides-document-lead">Pixel separates base combat stats from conditional effects and system-specific mechanics. This reference starts with the core stats whose current gameplay role is established, then shows where equipment-family rules and layered mechanics take over.</p>
+          <div class="guides-document-meta"><span>Source-verified core</span><span>Current gameplay roles only</span><span>Mining stats require a separate reference</span></div>
           <div class="guide-facts" data-guide-stats-summary aria-label="Stats and Equipment summary"></div>
         </header>
 
         <section class="guide-section" id="core-stats">
-          <div class="guide-section-head"><div><small>01 / Core stats</small><h2>A stat is documented because something actually consumes it.</h2></div><p>The table intentionally stays smaller than the underlying registry. A declared key is not enough: the current guide requires a demonstrated gameplay path before presenting a stat as part of the active core.</p></div>
-          <div class="guide-table-wrap"><table class="guide-table"><caption>Core source-verified combat and equipment stats</caption><thead><tr><th>Stat</th><th>Primary family</th><th>Runtime role</th><th>Meaning</th></tr></thead><tbody data-guide-core-stats></tbody></table></div>
+          <div class="guide-section-head"><div><small>01 / Core stats</small><h2>Each published stat has a defined gameplay role.</h2></div><p>The table intentionally stays focused on the current combat/equipment core. A name from older documentation is not enough on its own to make a stat part of this reference.</p></div>
+          <div class="guide-table-wrap"><table class="guide-table"><caption>Core source-verified combat and equipment stats</caption><thead><tr><th>Stat</th><th>Primary family</th><th>Gameplay role</th><th>Meaning</th></tr></thead><tbody data-guide-core-stats></tbody></table></div>
           <div class="guide-callout"><span aria-hidden="true"></span><div><strong>Damage-per-hit and attack cadence are separate.</strong><p>A melee weapon cannot be evaluated from Attack Damage alone. Attack Speed changes how often that damage can be delivered, so sustained output depends on both values together.</p></div></div>
         </section>
 
         <section class="guide-section" id="mitigation">
           <div class="guide-section-head"><div><small>02 / Survivability</small><h2>Defense and Max Health form one curve.</h2></div><p>Defense is not converted into a flat percentage in isolation. Pixel's mitigation model scales it against the defender's maximum health and applies a hard ceiling.</p></div>
           <div class="stats-formula">
-            <div class="stats-formula-main"><small>Source formula</small><code class="stats-formula-code" data-guide-mitigation-formula>—</code><p data-guide-mitigation-principle></p></div>
+            <div class="stats-formula-main"><small>Current formula</small><code class="stats-formula-code" data-guide-mitigation-formula>—</code><p data-guide-mitigation-principle></p></div>
             <aside class="stats-formula-note"><small>Maximum reduction</small><strong data-guide-mitigation-cap>—</strong><span>The ceiling prevents Defense from turning continued stat growth into complete damage immunity.</span><p>Max Health still matters after mitigation because it enlarges the health pool the remaining damage must consume.</p></aside>
           </div>
-          <div class="guide-callout"><span aria-hidden="true"></span><div><strong>Mitigation belongs once in the damage path.</strong><p>Player-facing documentation treats mitigation as one target-side calculation. Enchants or other modifiers should not create duplicate damage events merely to obtain a second reduction pass.</p></div></div>
+          <div class="guide-callout"><span aria-hidden="true"></span><div><strong>Mitigation applies once to a qualifying hit.</strong><p>Additional effects can modify damage or its interaction with Defense, but they do not imply an extra mitigation pass unless the mechanic explicitly defines one.</p></div></div>
         </section>
 
         <section class="guide-section" id="families">
@@ -77,19 +77,19 @@
         </section>
 
         <section class="guide-section" id="layers">
-          <div class="guide-section-head"><div><small>04 / Layered mechanics</small><h2>Not every real mechanic needs to become another base stat.</h2></div><p>Penetration, Lifesteal, boss-conditional effects and area damage are genuine gameplay behaviors, but their owning systems define when and how they apply.</p></div>
+          <div class="guide-section-head"><div><small>04 / Layered mechanics</small><h2>Not every real mechanic needs to become another base stat.</h2></div><p>Penetration, Lifesteal, boss-conditional effects and area damage are genuine gameplay behaviors, but the systems that grant them define when and how they apply.</p></div>
           <div class="stats-layer-grid" data-guide-layered-mechanics></div>
-          <div class="guide-callout"><span aria-hidden="true"></span><div><strong>Ownership prevents semantic drift.</strong><p>For example, Lifesteal belongs to the system that grants and evaluates it; it is not interchangeable with Max Health. Penetration modifies mitigation semantics; it is not simply another Attack Damage field. Detailed effect behavior remains in the Enchantments and Talisman guides.</p><div class="guide-callout-actions"><a class="guide-text-link" href="guide-enchantments.html">Enchantments →</a><a class="guide-text-link" href="guide-talismans.html">Talisman Codex →</a></div></div></div>
+          <div class="guide-callout"><span aria-hidden="true"></span><div><strong>Clear ownership keeps meanings stable.</strong><p>Lifesteal is not interchangeable with Max Health, and Penetration is not simply another Attack Damage field. Detailed effect behavior remains in the Enchantments and Talisman guides.</p><div class="guide-callout-actions"><a class="guide-text-link" href="guide-enchantments.html">Enchantments →</a><a class="guide-text-link" href="guide-talismans.html">Talisman Codex →</a></div></div></div>
         </section>
 
         <section class="guide-section" id="scope">
-          <div class="guide-section-head"><div><small>05 / Scope boundary</small><h2>Unknown coverage stays visibly unknown.</h2></div><p>Pixel Guides does not turn a registry declaration or an old planning spreadsheet into proof of current gameplay behavior. These areas stay outside the active table until their consumer path is re-verified.</p></div>
+          <div class="guide-section-head"><div><small>05 / Scope boundary</small><h2>Unknown coverage stays visibly unknown.</h2></div><p>This reference does not promote a candidate stat into the active model simply because it appears in older material. Separate systems remain outside this page until their own current documentation is ready.</p></div>
           <div class="stats-exclusion-grid" data-guide-excluded-stats></div>
-          <div class="guide-callout is-legacy"><span aria-hidden="true"></span><div><strong>Historical stat inventories are discovery aids, not current contracts.</strong><p>Older spreadsheets and the legacy GitBook remain useful for identifying candidate stats and intended slots, but a green marker from an old planning document does not override the current producer-to-consumer audit.</p><div class="guide-callout-actions"><a class="guide-text-link" href="https://pixel-network-1.gitbook.io/home/documentation" target="_blank" rel="noopener">Open legacy reference ↗</a></div></div></div>
+          <div class="guide-callout is-legacy"><span aria-hidden="true"></span><div><strong>Historical stat inventories are discovery aids, not current contracts.</strong><p>Older references can identify topics worth revisiting, but they do not override the current documented stat model.</p><div class="guide-callout-actions"><a class="guide-text-link" href="https://pixel-network-1.gitbook.io/home/documentation" target="_blank" rel="noopener">Open legacy reference ↗</a></div></div></div>
         </section>
 
         <section class="guide-section" id="verification">
-          <div class="guide-section-head"><div><small>06 / Documentation confidence</small><h2>Core meaning is source verified; deployment-sensitive fixes remain qualified.</h2></div><p>This guide deliberately avoids converting a recent source-ready combat correction into a production claim. It documents stable stat semantics and flags the areas that still need their own evidence pass.</p></div>
+          <div class="guide-section-head"><div><small>06 / Documentation confidence</small><h2>Core combat meaning is source verified.</h2></div><p>This guide documents the current combat/equipment stat semantics supported by evidence and keeps separate systems, especially mining-specific stats, outside that claim.</p></div>
           <div class="stats-verification-grid" data-guide-stats-verification></div>
         </section>
       </article>
