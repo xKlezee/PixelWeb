@@ -13,6 +13,28 @@
     return node;
   };
 
+  const milestoneOrder = [];
+  const addMilestone = value => {
+    const milestone = String(value || '').trim();
+    if (milestone && !milestoneOrder.includes(milestone)) milestoneOrder.push(milestone);
+  };
+
+  addMilestone(nexus.unlockMilestone || nexus.unlock);
+  encounters.forEach(instance => {
+    (instance.difficulties || []).forEach(difficulty => addMilestone(difficulty.unlock));
+  });
+
+  const finalMilestone = milestoneOrder[milestoneOrder.length - 1] || '—';
+  const encounterCount = network.content?.instanceEncounters ?? encounters.length;
+  const bossCount = network.content?.instanceBosses ?? '—';
+
+  document.querySelectorAll('[data-nexus-final-unlock]').forEach(node => {
+    node.textContent = finalMilestone;
+  });
+  document.querySelectorAll('[data-nexus-summary-counts]').forEach(node => {
+    node.textContent = `${encounterCount} Instances · ${bossCount} bosses`;
+  });
+
   const safeImageUrl = source => {
     if (!source) return '';
     const value = String(source).trim();
@@ -125,23 +147,11 @@
   }
 
   if (ladderHost) {
-    const milestoneOrder = [];
-    const addMilestone = value => {
-      const milestone = String(value || '').trim();
-      if (milestone && !milestoneOrder.includes(milestone)) milestoneOrder.push(milestone);
-    };
-
-    addMilestone(nexus.unlockMilestone || nexus.unlock);
-    encounters.forEach(instance => {
-      (instance.difficulties || []).forEach(difficulty => addMilestone(difficulty.unlock));
-    });
-
     const stageNames = ['Threshold', 'Expansion', 'Legacy', 'Apex'];
     const grouped = new Map(milestoneOrder.map(milestone => [milestone, []]));
 
     encounters.forEach(instance => {
       (instance.difficulties || []).forEach(difficulty => {
-        addMilestone(difficulty.unlock);
         if (!grouped.has(difficulty.unlock)) grouped.set(difficulty.unlock, []);
         grouped.get(difficulty.unlock).push(`${instance.name} · ${difficulty.name}`);
       });
