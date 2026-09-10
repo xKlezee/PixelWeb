@@ -180,7 +180,7 @@
       ]
     },
     skyblock: {
-      evidence: 'source-qualified',
+      evidence: 'source-verified',
       state: 'partial',
       verified: false,
       features: [
