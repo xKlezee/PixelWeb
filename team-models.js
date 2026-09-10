@@ -103,7 +103,7 @@
         rotatePoint([px + cx, py + cy, pz + cz], yaw, pitch)
       );
       const depthValue = points.reduce((sum, point) => sum + point[2], 0) / points.length;
-      return [{ points, texture, depth: depthValue, layer }];
+      return [{ points, texture, depth: depthValue }];
     });
   };
 
@@ -140,8 +140,10 @@
     const ctx = canvas.getContext('2d', { alpha:true });
     if (!ctx) return;
 
-    let yaw = Number(viewer.dataset.yaw || -28) * DEG;
-    let pitch = Number(viewer.dataset.pitch || -7) * DEG;
+    const initialYaw = Number(viewer.dataset.yaw || -28) * DEG;
+    const initialPitch = Number(viewer.dataset.pitch || -7) * DEG;
+    let yaw = initialYaw;
+    let pitch = initialPitch;
     let dragging = false;
     let lastX = 0;
     let lastY = 0;
@@ -177,12 +179,12 @@
       skin = image;
       viewer.classList.add('is-ready');
       viewer.classList.remove('is-error');
-      setStatus('Drag to rotate · live skin by username');
+      setStatus('Drag to rotate · synced by username');
       render();
     };
     image.onerror = () => {
       viewer.classList.add('is-error');
-      setStatus('Live skin unavailable · try again later');
+      setStatus('Current skin unavailable · try again later');
     };
     image.src = `${SKIN_BASE}${encodeURIComponent(player)}`;
 
@@ -225,8 +227,8 @@
       else if (event.key === 'ArrowUp') pitch = clamp(pitch - pitchStep, -24 * DEG, 18 * DEG);
       else if (event.key === 'ArrowDown') pitch = clamp(pitch + pitchStep, -24 * DEG, 18 * DEG);
       else if (event.key === 'Home') {
-        yaw = -28 * DEG;
-        pitch = -7 * DEG;
+        yaw = initialYaw;
+        pitch = initialPitch;
       } else return;
       event.preventDefault();
       render();
