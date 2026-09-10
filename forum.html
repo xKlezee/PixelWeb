@@ -7,6 +7,7 @@
 <meta name="theme-color" content="#0b0c0e"/>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https: data:; font-src 'self' https: data:; connect-src 'self'; frame-src 'none'; worker-src 'none'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests"/>
 <meta name="referrer" content="strict-origin-when-cross-origin"/>
+<meta name="description" content="Preview the future Pixel Network community Forum without persistent accounts or stored credentials."/>
 <title>Community Forum — Pixel Network</title>
 <link rel="stylesheet" href="style.css"/>
 <link rel="stylesheet" href="forum-stage2.css"/>
@@ -17,13 +18,13 @@
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <div id="auth-overlay" class="auth-overlay">
-  <div class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="forum-preview-title">
+  <div class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="forum-preview-title" aria-describedby="forum-preview-description">
     <div class="auth-logo">
       <div class="auth-logo-dot" aria-hidden="true"></div>
       <span class="font-special" id="forum-preview-title">PIXEL NETWORK</span>
     </div>
     <p class="auth-tagline font-special">COMMUNITY FORUM · PREVIEW</p>
-    <p class="font-special forum-preview-copy">Preview sessions are local and temporary. No account credentials are required or stored.</p>
+    <p class="font-special forum-preview-copy" id="forum-preview-description">Preview sessions are local and temporary. No account credentials are required or stored.</p>
 
     <div class="auth-tabs" role="tablist" aria-label="Forum preview entry">
       <button class="auth-tab active" id="tab-login" role="tab" aria-selected="true" aria-controls="panel-login" tabindex="0">
@@ -121,5 +122,6 @@
 </div>
 
 <script src="app.js"></script>
+<script src="forum-a11y.js"></script>
 </body>
 </html>
