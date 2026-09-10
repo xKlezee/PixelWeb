@@ -1,7 +1,7 @@
 (() => {
   window.PIXEL_GUIDE_SKYBLOCK = Object.freeze({
     evidence: {
-      level: 'source-qualified',
+      level: 'source-verified',
       state: 'partial',
       summary: 'Island lifecycle, persistence and economy-backed progression have current source paths. Team-management controls remain explicitly partial and are not presented as available.'
     },
