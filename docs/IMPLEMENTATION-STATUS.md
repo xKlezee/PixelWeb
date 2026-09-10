@@ -181,7 +181,7 @@ This review is not a substitute for successful validator execution or browser re
 
 **Blocked before runner assignment by the account-level billing/startup condition.**
 
-Observed failed Quality Gate jobs complete before a GitHub-hosted runner is assigned (`runner_id: 0`, empty runner name, `steps: []`). Those runs therefore do not establish PASS or FAIL for the repository validators.
+Observed failed Quality Gate jobs complete before a GitHub-hosted runner is assigned (`runner_id: 0`, empty runner name, `steps: []`). Those runs therefore do not establish PASS or FAIL for the repository validators, including the social metadata guard.
 
 ### Local execution / browser QA
 
