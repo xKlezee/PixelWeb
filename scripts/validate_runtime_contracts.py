@@ -37,10 +37,17 @@ class DeferredMediaParser(html.parser.HTMLParser):
         super().__init__(convert_charrefs=True)
         self.urls: list[tuple[str, str, int]] = []
         self.stylesheets: set[str] = set()
+        self.ids: set[str] = set()
+        self.same_page_fragments: list[tuple[str, int]] = []
 
     def handle_starttag(self, tag: str, attrs) -> None:
         line, _ = self.getpos()
         attrs_dict = dict(attrs)
+        tag = tag.lower()
+
+        element_id = str(attrs_dict.get("id") or "").strip()
+        if element_id:
+            self.ids.add(element_id)
 
         for attr in DEFERRED_URL_ATTRS:
             value = attrs_dict.get(attr)
@@ -54,11 +61,16 @@ class DeferredMediaParser(html.parser.HTMLParser):
                 if candidate:
                     self.urls.append(("data-srcset", candidate, line))
 
-        if tag.lower() == "link":
+        if tag == "link":
             rel = {token.lower() for token in str(attrs_dict.get("rel") or "").split()}
             href = str(attrs_dict.get("href") or "").strip()
             if "stylesheet" in rel and href:
                 self.stylesheets.add(href)
+
+        if tag == "a":
+            href = str(attrs_dict.get("href") or "").strip()
+            if href.startswith("#") and len(href) > 1:
+                self.same_page_fragments.append((unquote(href[1:]), line))
 
     def handle_startendtag(self, tag: str, attrs) -> None:
         self.handle_starttag(tag, attrs)
@@ -114,15 +126,29 @@ def validate_guide_navigation_current_state(page_name: str, failures: list[str])
         )
 
 
+def validate_guide_fragments(
+    page_name: str,
+    parser: DeferredMediaParser,
+    failures: list[str],
+) -> None:
+    if not page_name.startswith("guide-") or not page_name.endswith(".html"):
+        return
+
+    for fragment, line in parser.same_page_fragments:
+        if fragment not in parser.ids:
+            failures.append(
+                f"{page_name}:{line}: in-page Guide link points to missing id '#{fragment}'"
+            )
+
+
 def validate_navigation_contract(page_parsers: dict[str, DeferredMediaParser], failures: list[str]) -> None:
     for page_name, parser in page_parsers.items():
-        if page_name in NAVIGATION_PAGE_EXCEPTIONS:
-            continue
-        if "security-hardening.css" not in parser.stylesheets:
+        if page_name not in NAVIGATION_PAGE_EXCEPTIONS and "security-hardening.css" not in parser.stylesheets:
             failures.append(
                 f"{page_name}: canonical public navigation must load security-hardening.css"
             )
         validate_guide_navigation_current_state(page_name, failures)
+        validate_guide_fragments(page_name, parser, failures)
 
     if not NAV_HARDENING_PATH.exists():
         failures.append("security-hardening.css: missing desktop navigation hardening layer")
