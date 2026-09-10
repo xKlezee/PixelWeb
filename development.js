@@ -2,11 +2,15 @@
   const network = window.PIXEL_NETWORK_PUBLIC || {};
   const readPath = path => path.split('.').reduce((value, key) => value?.[key], network);
 
-  const safeHttpUrl = value => {
-    if (!value) return null;
+  const safePublicUrl = value => {
+    const raw = String(value ?? '').trim();
+    if (!raw) return null;
     try {
-      const url = new URL(String(value), location.href);
-      return ['http:', 'https:'].includes(url.protocol) ? url.href : null;
+      const url = new URL(raw, location.href);
+      const sameOrigin = url.origin === location.origin;
+      if (sameOrigin && ['http:', 'https:'].includes(url.protocol)) return url.href;
+      if (location.protocol === 'file:' && url.protocol === 'file:') return url.href;
+      return url.protocol === 'https:' ? url.href : null;
     } catch {
       return null;
     }
@@ -23,8 +27,14 @@
   });
 
   document.querySelectorAll('[data-changelog-external]').forEach(link => {
-    const externalUrl = safeHttpUrl(network?.changelog?.externalUrl);
-    if (externalUrl) link.href = externalUrl;
+    const externalUrl = safePublicUrl(network?.changelog?.externalUrl);
+    if (externalUrl) {
+      link.href = externalUrl;
+      link.removeAttribute('aria-disabled');
+      return;
+    }
+    link.removeAttribute('href');
+    link.setAttribute('aria-disabled', 'true');
   });
 
   document.querySelectorAll('[data-changelog-feed]').forEach(feed => {
