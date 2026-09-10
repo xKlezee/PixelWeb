@@ -13,6 +13,10 @@ The approved Nexus boss artwork stays in its original PNG files and original res
 
 Performance work must optimize **when** those files are requested and decoded, not alter their source bytes.
 
+This requirement is enforced by `scripts/validate_media_integrity.py`. The validator checks each approved file's exact byte size, 1448×1086 PNG dimensions and Git blob SHA. A visually similar recompression is still a failure because the approved source must remain byte-identical.
+
+The logical Abyss/Astral presentation mapping is intentionally separate from file integrity. `data/nexus-media.js` documents that the originally uploaded filenames for those two visuals were inverted; the integrity guard protects both original files without changing that approved mapping.
+
 ## Network priority contract
 
 Only content that is plausibly part of the initial viewport may receive high fetch priority.
@@ -78,6 +82,7 @@ Target guardrails for the public static site on a representative mobile profile:
 - no Home immersive MP4 request during the initial viewport before the story approaches the viewport
 - no immersive MP4 request at all when the user requests reduced motion
 - no duplicate download of identical local media under different repository paths
+- all four approved Nexus PNGs pass byte-level media integrity checks
 
 These are release guardrails, not claims that the current unrendered hardening branch already achieves them.
 
