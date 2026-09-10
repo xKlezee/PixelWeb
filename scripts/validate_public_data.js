@@ -14,6 +14,7 @@ const vm = require('node:vm');
 const ROOT = path.resolve(__dirname, '..');
 const DATA_FILE = path.join(ROOT, 'data', 'network.js');
 const WORLD_MEDIA_FILE = path.join(ROOT, 'data', 'worlds-media.js');
+const PUBLIC_SITE_BASE = new URL('https://xklezee.github.io/PixelWeb/');
 const failures = [];
 
 const EXPECTED_PUBLIC_URLS = Object.freeze({
@@ -26,6 +27,8 @@ const WORLD_IMAGE_PROXY_ORIGIN = 'https://pixel-network-1.gitbook.io';
 const WORLD_IMAGE_PROXY_PATH = '/home/~gitbook/image';
 const WORLD_IMAGE_STORAGE_ORIGIN = 'https://712597880-files.gitbook.io';
 const WORLD_IMAGE_STORAGE_PATH_PREFIX = '/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces/n7xotQKtgeq6qSw4VBXF/uploads/';
+const HTML_COMMENT_RE = /<!--[\s\S]*?-->/g;
+const ANCHOR_HREF_RE = /<a\b[^>]*\bhref\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/gi;
 
 const fail = message => failures.push(message);
 const check = (condition, message) => {
@@ -79,10 +82,20 @@ const approvedLocalWorldMedia = value => {
   if (typeof value !== 'string' || !/^assets\/worlds\/[A-Za-z0-9._-]+\.(?:svg|png|jpe?g|webp|avif)$/i.test(value)) {
     return false;
   }
-  return fs.existsSync(path.join(ROOT, value));
+  try {
+    const stat = fs.lstatSync(path.join(ROOT, value));
+    return stat.isFile() && !stat.isSymbolicLink();
+  } catch {
+    return false;
+  }
 };
 
 function loadWindowExport(file, exportName) {
+  const stat = fs.lstatSync(file);
+  if (!stat.isFile() || stat.isSymbolicLink()) {
+    throw new Error(`${path.relative(ROOT, file)} must be a regular non-symlink file`);
+  }
+
   const source = fs.readFileSync(file, 'utf8');
   const sandbox = { window: Object.create(null) };
   vm.createContext(sandbox, {
@@ -94,6 +107,62 @@ function loadWindowExport(file, exportName) {
     timeout: 1000
   });
   return sandbox.window[exportName];
+}
+
+function validateStaticExternalNavigation(data) {
+  const approvedExternal = new Set([
+    data.community?.discordUrl,
+    data.community?.legacyDocumentationUrl,
+    data.changelog?.externalUrl,
+    data.store?.url
+  ].map(value => {
+    try {
+      return new URL(value).href;
+    } catch {
+      return null;
+    }
+  }).filter(Boolean));
+
+  const htmlFiles = fs.readdirSync(ROOT, { withFileTypes: true })
+    .filter(entry => entry.isFile() && entry.name.endsWith('.html'))
+    .map(entry => entry.name)
+    .sort();
+
+  for (const fileName of htmlFiles) {
+    const source = fs.readFileSync(path.join(ROOT, fileName), 'utf8').replace(HTML_COMMENT_RE, '');
+    ANCHOR_HREF_RE.lastIndex = 0;
+    let match;
+    while ((match = ANCHOR_HREF_RE.exec(source)) !== null) {
+      const raw = (match[1] ?? match[2] ?? match[3] ?? '').trim();
+      if (!raw || raw.startsWith(('#', 'mailto:', 'tel:'))) continue;
+      if (raw.startsWith('//')) {
+        fail(`${fileName}: protocol-relative anchor destination is not allowed (${raw})`);
+        continue;
+      }
+
+      let url;
+      try {
+        url = new URL(raw, PUBLIC_SITE_BASE);
+      } catch {
+        continue; // validate_site.py owns malformed/local-reference diagnostics.
+      }
+
+      const hasExplicitScheme = /^[A-Za-z][A-Za-z0-9+.-]*:/.test(raw);
+      if (!hasExplicitScheme) continue;
+      if (url.protocol !== 'https:') continue; // validate_site.py owns insecure/dangerous scheme diagnostics.
+
+      const sameProjectSite = (
+        url.origin === PUBLIC_SITE_BASE.origin &&
+        (url.pathname === '/PixelWeb' || url.pathname.startsWith('/PixelWeb/'))
+      );
+      if (sameProjectSite) continue;
+
+      check(
+        approvedExternal.has(url.href),
+        `${fileName}: external anchor must match a canonical public destination from data/network.js (${raw})`
+      );
+    }
+  }
 }
 
 let data;
@@ -126,6 +195,8 @@ for (const [label, value, expected] of [
 ]) {
   check(exactHttpsUrl(value, expected), `${label} public URL must remain the approved canonical HTTPS destination (${expected})`);
 }
+
+validateStaticExternalNavigation(data);
 
 for (const [label, value] of [
   ['Forum landing', data.community?.forumLanding],
@@ -299,5 +370,5 @@ if (failures.length) {
 console.log(
   `Canonical public data validation passed: ${worlds.length} Worlds, ${mineTotal} mines, ` +
   `${worldBossEncounterTotal} World encounters, ${instances.length} Nexus encounters, ` +
-  `${derivedBossCount} instance bosses and approved public/media origins.`
+  `${derivedBossCount} instance bosses and canonical static/external destinations.`
 );
