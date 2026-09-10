@@ -15,11 +15,14 @@
 
   const safeImageUrl = source => {
     if (!source) return '';
-    const value = String(source);
+    const value = String(source).trim();
     if (/^(?:assets\/|\.\/|\.\.\/)/.test(value)) return value;
     try {
       const url = new URL(value, location.href);
-      return ['http:', 'https:'].includes(url.protocol) ? url.href : '';
+      const sameOrigin = url.origin === location.origin;
+      if (sameOrigin && ['http:', 'https:'].includes(url.protocol)) return url.href;
+      if (location.protocol === 'file:' && url.protocol === 'file:') return url.href;
+      return url.protocol === 'https:' ? url.href : '';
     } catch {
       return '';
     }
@@ -54,8 +57,10 @@
     img.loading = 'lazy';
     img.decoding = 'async';
     img.fetchPriority = 'low';
+    if (/^https:\/\//i.test(source)) img.referrerPolicy = 'no-referrer';
     img.src = source;
     img.alt = visual?.alt || `${label || 'Nexus encounter'} concept visual`;
+    // Preserve the approved original image relationship: every boss source is 1448×1086 (4:3).
     img.width = 1448;
     img.height = 1086;
     figure.appendChild(img);
@@ -78,31 +83,37 @@
       return wrap;
     }
 
-    const abyss = renderVisual(visuals[0], 'Abyss');
-    const astral = renderVisual(visuals[1], 'Astral');
-    if (abyss) wrap.appendChild(abyss);
-    if (astral) wrap.appendChild(astral);
+    const first = renderVisual(visuals[0], 'Abyss');
+    const second = renderVisual(visuals[1], 'Astral');
+    if (first) wrap.appendChild(first);
+    if (second) wrap.appendChild(second);
     return wrap;
   };
 
   if (encounterHost) {
-    const cards = encounters.map((instance, index) => {
+    encounterHost.replaceChildren(...encounters.map((instance, index) => {
       const article = el('article', 'nexus-instance-card');
       article.dataset.accent = accentFor(instance.name);
       article.appendChild(renderMedia(instance));
 
       const body = el('div', 'nexus-instance-body');
       const topline = el('div', 'nexus-instance-topline');
-      topline.append(el('span', '', `0${index + 1} / INSTANCE`), el('small', '', instance.format || ''));
+      topline.append(el('span', '', `${String(index + 1).padStart(2, '0')} / INSTANCE`), el('small', '', instance.format || ''));
       body.append(topline, el('h3', '', instance.name || 'Nexus encounter'));
 
-      const description = instance.name === 'Abyss + Astral'
-        ? 'A dual-boss encounter that joins the endgame ladder later and reaches the final current difficulty at Legacy II.'
-        : `${instance.name} opens at Easy with the Nexus threshold, then advances through Medium and Hard as the account reaches later milestones.`;
+      const difficulties = Array.isArray(instance.difficulties) ? instance.difficulties : [];
+      const firstDifficulty = difficulties[0];
+      const lastDifficulty = difficulties[difficulties.length - 1];
+      let description = 'Difficulty access follows the canonical account milestones for this encounter.';
+      if (firstDifficulty && lastDifficulty) {
+        description = instance.name === 'Abyss + Astral'
+          ? `This dual-boss encounter enters the ladder at ${firstDifficulty.name} · ${firstDifficulty.unlock} and currently extends through ${lastDifficulty.name} · ${lastDifficulty.unlock}.`
+          : `${instance.name} begins at ${firstDifficulty.name} · ${firstDifficulty.unlock} and expands through later account milestones to ${lastDifficulty.name} · ${lastDifficulty.unlock}.`;
+      }
       body.appendChild(el('p', '', description));
 
       const chips = el('div', 'nexus-difficulty-chips');
-      (instance.difficulties || []).forEach(item => {
+      difficulties.forEach(item => {
         const chip = el('span');
         chip.append(el('b', '', item.name || ''), document.createTextNode(item.unlock || ''));
         chips.appendChild(chip);
@@ -110,40 +121,44 @@
       body.append(chips, el('div', 'nexus-instance-path', difficultyCopy(instance)));
       article.appendChild(body);
       return article;
-    });
-    encounterHost.replaceChildren(...cards);
+    }));
   }
 
   if (ladderHost) {
-    const milestoneOrder = [
-      nexus.unlock || 'Prestige IV',
-      'Prestige VII',
-      'Legacy I',
-      'Legacy II'
-    ];
+    const milestoneOrder = [];
+    const addMilestone = value => {
+      const milestone = String(value || '').trim();
+      if (milestone && !milestoneOrder.includes(milestone)) milestoneOrder.push(milestone);
+    };
+
+    addMilestone(nexus.unlockMilestone || nexus.unlock);
+    encounters.forEach(instance => {
+      (instance.difficulties || []).forEach(difficulty => addMilestone(difficulty.unlock));
+    });
+
     const stageNames = ['Threshold', 'Expansion', 'Legacy', 'Apex'];
     const grouped = new Map(milestoneOrder.map(milestone => [milestone, []]));
 
     encounters.forEach(instance => {
       (instance.difficulties || []).forEach(difficulty => {
+        addMilestone(difficulty.unlock);
         if (!grouped.has(difficulty.unlock)) grouped.set(difficulty.unlock, []);
         grouped.get(difficulty.unlock).push(`${instance.name} · ${difficulty.name}`);
       });
     });
 
-    const stages = milestoneOrder.map((milestone, index) => {
+    ladderHost.replaceChildren(...milestoneOrder.map((milestone, index) => {
       const article = el('article', 'nexus-ladder-stage');
       const marker = el('div', 'nexus-ladder-marker');
-      marker.appendChild(el('span', '', `0${index + 1}`));
+      marker.appendChild(el('span', '', String(index + 1).padStart(2, '0')));
 
       const copy = el('div', 'nexus-ladder-copy');
-      copy.append(el('small', '', stageNames[index] || 'Stage'), el('h3', '', milestone));
+      copy.append(el('small', '', stageNames[index] || `Stage ${index + 1}`), el('h3', '', milestone));
       const unlocks = el('div', 'nexus-ladder-unlocks');
       (grouped.get(milestone) || []).forEach(item => unlocks.appendChild(el('span', '', item)));
       copy.appendChild(unlocks);
       article.append(marker, copy);
       return article;
-    });
-    ladderHost.replaceChildren(...stages);
+    }));
   }
 })();
