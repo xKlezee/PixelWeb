@@ -3,11 +3,14 @@
 from __future__ import annotations
 
 import html.parser
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLIC = ROOT / "_site"
+SITEMAP = PUBLIC / "sitemap.xml"
+SITE_BASE_URL = "https://xklezee.github.io/PixelWeb/"
 
 FORBIDDEN_PREFIXES = {
     "docs/",
@@ -15,13 +18,22 @@ FORBIDDEN_PREFIXES = {
     ".github/",
     ".git/",
 }
-FORBIDDEN_FILES = {
-    ".env",
-    ".env.example",
+FORBIDDEN_BASENAMES = {
     ".gitignore",
-    "README.md",
-    "SECURITY.md",
+    "readme.md",
+    "security.md",
 }
+FORBIDDEN_SUFFIXES = {
+    ".pem", ".key", ".p12", ".pfx", ".crt", ".cer",
+    ".log", ".sql", ".sqlite", ".sqlite3", ".db",
+}
+PUBLIC_DATA_SUFFIXES = {".js", ".json"}
+PUBLIC_ASSET_SUFFIXES = {
+    ".png", ".jpg", ".jpeg", ".gif", ".webp", ".avif", ".ico", ".svg",
+    ".mp4", ".webm", ".mov", ".woff", ".woff2",
+}
+PUBLIC_NOINDEX_PAGES = {"forum.html", "404.html"}
+PUBLIC_DYNAMIC_ROOT_FILES = {"play-modal.css"}
 LOCAL_URL_ATTRS = {"href", "src", "poster", "data-src", "data-poster"}
 SRCSET_ATTRS = {"srcset", "data-srcset"}
 
@@ -67,11 +79,38 @@ def local_target(page: Path, raw: str) -> Path | None:
         return None
 
     if path.startswith("/"):
-        # PixelWeb currently lives under /PixelWeb/. Root-relative URLs are intentionally
-        # avoided because they would resolve outside this project-site bundle.
+        # PixelWeb currently lives under /PixelWeb/. Root-relative URLs resolve outside
+        # the project-site artifact and are intentionally forbidden.
         return PUBLIC / "__invalid_root_relative__"
 
     return (page.parent / path).resolve()
+
+
+def sitemap_page_names(failures: list[str]) -> set[str]:
+    if not SITEMAP.is_file():
+        failures.append("sitemap.xml: required public sitemap is missing")
+        return set()
+
+    try:
+        root = ET.fromstring(SITEMAP.read_text(encoding="utf-8"))
+    except (ET.ParseError, UnicodeError) as exc:
+        failures.append(f"sitemap.xml: invalid XML ({exc})")
+        return set()
+
+    namespace = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+    pages: set[str] = set()
+    for node in root.findall("sm:url/sm:loc", namespace):
+        location = (node.text or "").strip()
+        if not location.startswith(SITE_BASE_URL):
+            failures.append(f"sitemap.xml: URL outside canonical base ({location})")
+            continue
+        suffix = unquote(location[len(SITE_BASE_URL):])
+        page = "index.html" if not suffix else suffix
+        if "/" in page or not page.endswith(".html"):
+            failures.append(f"sitemap.xml: non-top-level HTML publication entry ({location})")
+            continue
+        pages.add(page)
+    return pages
 
 
 def main() -> int:
@@ -86,18 +125,43 @@ def main() -> int:
         failures.append("_site/: public bundle is empty")
 
     relative_files = {path.relative_to(PUBLIC).as_posix() for path in files}
-    for relative in sorted(relative_files):
+    for path in files:
+        relative = path.relative_to(PUBLIC).as_posix()
         lowered = relative.lower()
-        if relative in FORBIDDEN_FILES:
+        basename = path.name.lower()
+        suffix = path.suffix.lower()
+        parts_lower = [part.lower() for part in path.relative_to(PUBLIC).parts]
+
+        if basename in FORBIDDEN_BASENAMES:
             failures.append(f"{relative}: repository/internal file must not be in public bundle")
         if any(lowered.startswith(prefix) for prefix in FORBIDDEN_PREFIXES):
             failures.append(f"{relative}: internal directory must not be in public bundle")
-        if lowered.startswith(".env"):
-            failures.append(f"{relative}: environment file must not be in public bundle")
+        if any(part.startswith(".env") for part in parts_lower):
+            failures.append(f"{relative}: environment file/path must not be in public bundle")
+        if suffix in FORBIDDEN_SUFFIXES:
+            failures.append(f"{relative}: sensitive/operational file type must not be public")
+
+        relative_path = path.relative_to(PUBLIC)
+        if relative_path.parts and relative_path.parts[0] == "data" and suffix not in PUBLIC_DATA_SUFFIXES:
+            failures.append(f"{relative}: unexpected file type inside browser-public data/")
+        if relative_path.parts and relative_path.parts[0] == "assets" and suffix not in PUBLIC_ASSET_SUFFIXES:
+            failures.append(f"{relative}: unexpected file type inside browser-public assets/")
 
     required = {"index.html", "404.html", "sitemap.xml", ".nojekyll"}
     for relative in sorted(required - relative_files):
         failures.append(f"{relative}: required public file is missing")
+
+    sitemap_pages = sitemap_page_names(failures)
+    expected_html = sitemap_pages | PUBLIC_NOINDEX_PAGES
+    actual_html = {path.name for path in PUBLIC.glob("*.html")}
+    for page in sorted(actual_html - expected_html):
+        failures.append(f"{page}: HTML page is not declared by sitemap/noindex publication roots")
+    for page in sorted(expected_html - actual_html):
+        failures.append(f"{page}: declared public HTML page is missing from bundle")
+
+    # Root files outside HTML/media/public metadata should be either statically referenced
+    # by a public page or explicitly declared as a known runtime-loaded resource.
+    referenced_root_files: set[str] = set(PUBLIC_DYNAMIC_ROOT_FILES)
 
     for page in sorted(PUBLIC.glob("*.html")):
         parser = ReferenceParser()
@@ -110,7 +174,7 @@ def main() -> int:
                 continue
 
             try:
-                target.relative_to(PUBLIC.resolve())
+                relative_target = target.relative_to(PUBLIC.resolve())
             except ValueError:
                 failures.append(
                     f"{page.name}:{line}: local {attr} escapes public bundle ({raw})"
@@ -127,6 +191,21 @@ def main() -> int:
                 failures.append(
                     f"{page.name}:{line}: local {attr} target missing from public bundle ({raw})"
                 )
+                continue
+
+            if len(relative_target.parts) == 1:
+                referenced_root_files.add(relative_target.name)
+
+    exempt_root_files = {
+        ".nojekyll", "robots.txt", "sitemap.xml",
+        *expected_html,
+    }
+    for path in sorted(PUBLIC.iterdir(), key=lambda item: item.name.lower()):
+        if not path.is_file():
+            continue
+        if path.name in exempt_root_files or path.name in referenced_root_files:
+            continue
+        failures.append(f"{path.name}: unreferenced/unapproved root file in public bundle")
 
     if failures:
         print("Public bundle validation failed:")
@@ -136,7 +215,7 @@ def main() -> int:
 
     print(
         f"Public bundle validation passed for {len(files)} files and "
-        f"{len(list(PUBLIC.glob('*.html')))} top-level HTML pages."
+        f"{len(actual_html)} top-level HTML pages."
     )
     return 0
 
