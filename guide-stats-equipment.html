@@ -66,7 +66,7 @@
           <div class="guide-section-head"><div><small>02 / Survivability</small><h2>Defense and Max Health form one curve.</h2></div><p>Defense is not converted into a flat percentage in isolation. Pixel's mitigation model scales it against the defender's maximum health and applies a hard ceiling.</p></div>
           <div class="stats-formula">
             <div class="stats-formula-main"><small>Source formula</small><code class="stats-formula-code" data-guide-mitigation-formula>—</code><p data-guide-mitigation-principle></p></div>
-            <aside class="stats-formula-note"><small>Maximum reduction</small><strong>80%</strong><span>The ceiling prevents Defense from turning continued stat growth into complete damage immunity.</span><p>Max Health still matters after mitigation because it enlarges the health pool the remaining damage must consume.</p></aside>
+            <aside class="stats-formula-note"><small>Maximum reduction</small><strong data-guide-mitigation-cap>—</strong><span>The ceiling prevents Defense from turning continued stat growth into complete damage immunity.</span><p>Max Health still matters after mitigation because it enlarges the health pool the remaining damage must consume.</p></aside>
           </div>
           <div class="guide-callout"><span aria-hidden="true"></span><div><strong>Mitigation belongs once in the damage path.</strong><p>Player-facing documentation treats mitigation as one target-side calculation. Enchants or other modifiers should not create duplicate damage events merely to obtain a second reduction pass.</p></div></div>
         </section>
