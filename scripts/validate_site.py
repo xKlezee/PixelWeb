@@ -3,8 +3,9 @@
 
 This validator encodes security and publication invariants rather than style preferences.
 A change that weakens the CSP, reintroduces inline executable/style content, breaks local
-references, adds unsafe DOM sinks, introduces insecure absolute HTTP resources, reintroduces
-explicitly retired public claims, or breaks the public crawl/index contract fails before deployment.
+references, adds unsafe DOM sinks, introduces insecure or protocol-relative external resources,
+reintroduces explicitly retired public claims, or breaks the public crawl/index contract fails
+before deployment.
 """
 from __future__ import annotations
 
@@ -59,6 +60,11 @@ HTML_SINK_RE = re.compile(r"\.(?:innerHTML|outerHTML)\s*=|insertAdjacentHTML\s*\
 INLINE_STYLE_JS_RE = re.compile(r"\.style(?:\.|\[)|setAttribute\s*\(\s*['\"]style['\"]")
 DYNAMIC_CODE_RE = re.compile(r"\b(?:eval\s*\(|new\s+Function\s*\(|setTimeout\s*\(\s*['\"]|setInterval\s*\(\s*['\"])")
 INSECURE_HTTP_RE = re.compile(r"(?i)\bhttp://")
+CSS_COMMENT_RE = re.compile(r"/\*.*?\*/", re.DOTALL)
+PROTOCOL_RELATIVE_CSS_RE = re.compile(
+    r"(?:url\(\s*['\"]?|@import\s+['\"])//",
+    re.IGNORECASE,
+)
 
 
 class PageParser(html.parser.HTMLParser):
@@ -71,6 +77,7 @@ class PageParser(html.parser.HTMLParser):
         self.duplicate_ids: list[tuple[str, int]] = []
         self.dangerous_urls: list[tuple[str, str, int]] = []
         self.insecure_http_urls: list[tuple[str, str, int]] = []
+        self.protocol_relative_urls: list[tuple[str, str, int]] = []
         self.inline_scripts: list[int] = []
         self.csp: str | None = None
         self.robots_meta: str | None = None
@@ -89,6 +96,8 @@ class PageParser(html.parser.HTMLParser):
             self.dangerous_urls.append((attr, raw, line))
         if lowered.startswith("http://"):
             self.insecure_http_urls.append((attr, raw, line))
+        if raw.startswith("//"):
+            self.protocol_relative_urls.append((attr, raw, line))
 
     def handle_starttag(self, tag: str, attrs):
         attrs_dict = dict(attrs)
@@ -199,6 +208,15 @@ def scan_text_file_for_insecure_http(path: Path, failures: list[str]) -> None:
         if INSECURE_HTTP_RE.search(line):
             failures.append(
                 f"{path.relative_to(ROOT)}:{line_number}: insecure absolute HTTP URL detected"
+            )
+
+
+def scan_css_file_for_protocol_relative_urls(path: Path, failures: list[str]) -> None:
+    text = CSS_COMMENT_RE.sub("", path.read_text(encoding="utf-8"))
+    for line_number, line in enumerate(text.splitlines(), start=1):
+        if PROTOCOL_RELATIVE_CSS_RE.search(line):
+            failures.append(
+                f"{path.relative_to(ROOT)}:{line_number}: protocol-relative CSS resource URL detected"
             )
 
 
@@ -347,6 +365,8 @@ def main() -> int:
             failures.append(f"{page.name}:{line}: dangerous javascript: URL in {attr} ({value})")
         for attr, value, line in parser.insecure_http_urls:
             failures.append(f"{page.name}:{line}: external {attr} must use HTTPS ({value})")
+        for attr, value, line in parser.protocol_relative_urls:
+            failures.append(f"{page.name}:{line}: protocol-relative {attr} URL is not allowed ({value})")
 
         for attr, raw, line in parser.refs:
             target = local_target(raw)
@@ -373,6 +393,7 @@ def main() -> int:
 
     for css_file in CSS_FILES:
         scan_text_file_for_insecure_http(css_file, failures)
+        scan_css_file_for_protocol_relative_urls(css_file, failures)
 
     scan_publication_invariants([*HTML_FILES, *JS_FILES], failures)
     validate_crawl_contract(page_robots, failures)
