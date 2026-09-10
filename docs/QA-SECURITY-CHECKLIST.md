@@ -1,192 +1,161 @@
 # Security & Release Regression QA Checklist
 
-Run this checklist after security/documentation refactors and before moving the hardening pull request out of draft or merging to `main`.
+Run this checklist against the exact candidate HEAD before promoting substantial PixelWeb frontend changes to `main`.
 
-A configured control is not a passed control. Record the actual result for the exact candidate HEAD.
+A configured control is not a passed control. Record the actual result for the exact candidate commit.
 
 ## Repository / automated gate
 
-- The exact candidate HEAD is recorded before validation.
-- Manual dispatch is started with the exact candidate branch/tag/SHA in `target_ref`.
-- `PixelWeb Quality Gate` starts a real runner and exposes repository steps.
-- Python syntax compilation completes for every committed Python validator/builder.
+- Record the exact candidate HEAD before validation.
+- `PixelWeb Quality Gate` must start a real runner and expose repository steps before its result is interpreted as validator PASS/FAIL.
+- Python syntax compilation completes for committed Python validators/builders.
 - `python3 scripts/security_scan.py` completes successfully.
 - `python3 scripts/validate_media_integrity.py` completes successfully.
-- `node --check` completes successfully for every repository JavaScript file in scope.
+- `node --check` completes successfully for repository JavaScript.
 - `node scripts/validate_public_data.js` completes successfully.
 - `python3 scripts/validate_site.py` completes successfully.
 - `python3 scripts/validate_social_metadata.py` completes successfully.
 - `python3 scripts/validate_runtime_contracts.py` completes successfully.
 - `python3 scripts/validate_accessibility.py` completes successfully.
 - `python3 scripts/validate_player_facing_copy.py` completes successfully.
-- `python3 scripts/build_public_site.py` successfully stages the reference-driven `_site/` artifact.
-- `python3 scripts/validate_public_bundle.py` successfully validates the staged publication boundary and all local HTML/deferred-media/CSS dependencies.
-- A workflow startup failure with no runner/steps is classified as infrastructure/account startup failure, not as a passing or failing validator result.
-- The current account-level billing lock is resolved separately; no check is weakened, skipped or removed merely to obtain green status.
+- `python3 scripts/build_public_site.py` stages `_site/` successfully.
+- `python3 scripts/validate_public_bundle.py` validates the staged publication boundary successfully.
+- A workflow startup failure with no runner/steps is classified as infrastructure/account state, not code PASS/FAIL.
 
 ## Navigation and page integrity
 
 - All local navigation links resolve.
-- Every local fragment link resolves to an existing `id` in its actual destination HTML document, including same-page anchors (`#section`) and cross-page anchors such as `guides.html#systems` or `store.html#how-it-works`.
-- All local images/scripts/styles referenced by top-level HTML exist.
-- Deferred local media referenced through `data-src`, `data-poster` or `data-srcset` resolves and stays inside the repository root.
-- Local CSS `url(...)` and quoted `@import` dependencies resolve inside declared public roots and remain present in `_site/`.
+- Every local same-page/cross-page fragment resolves to an existing destination `id`.
+- Local images/scripts/styles/deferred media resolve inside the intended repository/public roots.
 - External `_blank` links include `rel="noopener"`.
-- No duplicate IDs exist within a page.
-- Keyboard navigation remains usable after removal of inline handlers.
-- Canonical runtime navigation remains consistent across overview pages and detailed `guide-*.html` pages.
-- Above 980 px with a fine pointer, Explore / Development / Community are hover-only pointer targets: entering a group opens it, moving into its dropdown keeps it open, leaving closes it, and a mouse/trackpad click does not pin it open.
-- At 980 px and below, navigation uses explicit click/touch `.is-open` state even when a fine pointer is attached; the desktop hover-only rule must not disable the mobile-layout buttons.
-- Keyboard opening, focus movement and Escape remain available independently from the pointer-only desktop rule.
-- Every detailed `guide-*.html` fallback navbar marks exactly `guides.html` as `aria-current="page"`; no product-overview link simultaneously claims to be the current global destination.
-- Guide sidebar links such as `#overview` and `#verification` are covered by the same global fragment-target contract rather than a Guide-only special case.
-- Guides remains reachable from global Community navigation.
-- First keyboard focus exposes the global Skip to content link on standard pages.
-- Activating Skip to content moves both viewport and keyboard focus to the actual `<main>` region.
+- No duplicate IDs exist.
+- Above 980 px with a fine pointer, Explore / Development / Community retain hover-only pointer behavior without click-pinning.
+- At 980 px and below, explicit mobile click/touch group behavior remains available.
+- Keyboard opening/focus/Escape remain independent supported paths.
+- Guides remains selected for detailed `guide-*.html` pages.
+- Skip to content is the first useful keyboard route on standard pages and moves focus to `<main>`.
+- Contextual sibling navigation appears only for the current category:
+  - Explore → Gameplay / Systems / Worlds / Skyblock / Nexus;
+  - Development → Development / Changelog;
+  - Community → Community / Guides.
+- The current contextual destination and its parent global group use the Pixel Blue active treatment without relying on color alone for meaning.
+- The contextual rail remains horizontally usable at narrow widths and does not create page-level overflow.
+- No visible Forum destination/copy reappears in global or contextual navigation, including before runtime navigation replacement.
+
+## Forum retirement
+
+- Forum is not exposed as an active product surface.
+- Community contains no Forum preview card, post UI, account UI or Forum CTA.
+- Home does not describe Forum as a destination.
+- `data/network.js` contains no active Forum landing/state model.
+- `validate_public_data.js` does not require a Forum preview contract.
+- Former Forum-only JavaScript/CSS files remain removed.
+- `forum.html` contains only the compatibility redirect surface, declares `noindex,nofollow,noarchive`, and redirects to `community.html` without loops.
+- `forum.html` remains excluded from `sitemap.xml`.
 
 ## Canonical public data
 
 - `data/network.js` remains the single owner for shared public network facts.
-- `content.currentWorlds` equals the actual World array length.
-- The current route remains exactly Overworld → Pirate Kingdom → Nether → Winter; Nexus remains outside the World array.
-- Summed per-World mine counts equal the canonical total mine count.
-- Declared World Boss encounters equal the encounters represented by each World plus optional encounters.
-- Nexus encounter, individual-boss and difficulty-tier counts remain internally consistent.
-- Nexus access remains permanent at its canonical unlock and does not silently acquire a Viking/boss requirement.
-- Forum remains `preview`, non-persistent and without a claimed account system until the backend architecture exists.
-- Skyblock remains `source-verified / partial`; incomplete collaboration controls stay outside the current feature list and use player-facing `Partial` / `Planned` descriptions rather than implementation details.
-- Public external URLs in the canonical model use HTTPS and match approved project destinations; local landing destinations resolve to top-level public HTML files.
+- Current World route remains exactly Overworld → Pirate Kingdom → Nether → Winter; Nexus remains outside the World array.
+- Per-World mine counts sum to the canonical total.
+- World/Nexus encounter counts remain internally consistent.
+- Nexus access remains permanent at its canonical unlock without silently acquiring a Viking/boss requirement.
+- Skyblock remains `source-verified / partial`; incomplete collaboration remains outside the current feature list.
+- Public external destinations use approved canonical HTTPS URLs.
 - Store thresholds remain unpublished while `thresholdsVerified` is false.
 
-## Dynamic rendering
+## About / owner skin viewers
 
-- User-controlled or future API-controlled text is rendered with `textContent` or equivalent context-safe encoding.
+- About keeps Klezee and PxlMads equal in owner status/visual weight.
+- `team-models.js` resolves skin textures by the configured usernames rather than repository-pinned owner renders.
+- Both viewers render readable Minecraft geometry without smoothing-related blur.
+- Pointer drag rotates the model and releases pointer capture correctly.
+- ArrowLeft/ArrowRight rotate yaw; ArrowUp/ArrowDown adjust pitch.
+- Home resets each owner to that viewer's own initial angle.
+- Keyboard focus indicator remains visible around each viewer.
+- Provider failure leaves a readable status rather than an empty/broken owner panel.
+- Product copy describes the skin as username-synchronized rather than implying instant update guarantees.
+- The no-JavaScript fallback also uses username-based remote renders.
+- Browser/network QA confirms the selected skin provider permits the CORS behavior required for canvas rendering.
+
+## Dynamic rendering / CSP
+
+- Future/API-controlled text is rendered through safe DOM construction / `textContent` where appropriate.
 - No user-controlled value is interpolated into inline JavaScript.
-- Dynamic `href` / `src` values are validated against expected schemes/origins where appropriate.
-- Forum preview content renders HTML-like payloads as inert text.
-- Forum preview display names, post titles and post bodies stay within the JavaScript-enforced preview limits even if mutable HTML `maxlength` attributes are removed or changed in DevTools.
-- Guide renderers use safe DOM construction (`createElement`, `textContent`, `append`, `replaceChildren`) rather than HTML parsing sinks.
-- No runtime inline-style mutation is introduced, including direct `element.style = ...` assignment.
+- No string-to-DOM parsing sink is introduced.
+- No direct runtime inline-style mutation is introduced.
+- Dynamic URLs are constrained to expected scheme/origin where appropriate.
+- Contextual navigation is constructed from the same canonical runtime navigation model rather than duplicated independent data.
+- About's remote skin requests remain governed by the page's existing `img-src` policy and do not require weakening script/style CSP.
 
 ## Guide content integrity
 
-- Every detailed Guide either states a defined evidence level (`source-verified`, `server-verified`, `live-client-verified`, `reconciled-reference`) or is explicitly labeled as a non-evidence reference role such as orientation/current public reference; generic `Verified guide` badges are not used as a substitute for provenance.
-- Evidence is kept separate from factual feature state (`current`, `partial`, `staged`, `planned`, `unknown`, `deprecated/retired`).
-- A source-verified but partial system is not presented as fully player-available.
-- Shared numeric facts are read from their canonical owner rather than copied into multiple guide files.
-- The primary library in `guides.html` contains exactly one `data-guide-entry` for every current `guide-*.html` detail page and contains no duplicate/orphan primary entries.
-- Player-facing HTML/data/renderer copy does not expose repository-test, database-path, command/menu-wiring, deployment-state or equivalent implementation terminology covered by `validate_player_facing_copy.py`.
+- Guide evidence remains separate from feature state.
+- Shared numeric facts read from canonical owners where one exists.
+- `guides.html` retains one primary entry for each detailed `guide-*.html` page.
+- Browser-public Guide copy avoids repository/deployment/database implementation detail guarded by `validate_player_facing_copy.py`.
 - Nexus is never presented as World 5.
-- The current World route remains exactly four Worlds: Overworld, Pirate Kingdom, Nether, Winter.
-- Skyblock collaboration controls remain partial/planned until the complete player-facing feature is independently re-verified.
 - Progression reset/reward/XP/persistence semantics remain unpublished until independently re-verified.
-- Mining-specific stat coverage remains outside the current Stats guide until it receives its own evidence pass.
-- Secret Talisman discovery trees, protected combinations and anti-abuse-sensitive inputs are not exposed in public Guide data.
-- Talisman player-facing facts remain intact where documented: `/codex`, `/bag`, seven equipped slots, World Affinity `+3%`, world-neutral Synergy and strongest-only qualifying Meta behavior.
-- Enchantments keeps evidence scope separate from any unperformed live-client claim and does not publish repository/CI test-harness internals.
-- Legacy GitBook claims never override current evidence.
-- Guides search result-count changes are announced without moving focus, and Escape clears the current query.
-- Sidebar in-page links land below sticky navigation rather than hiding the anchored heading.
+- Secret Talisman discovery inputs remain concealed.
+- Existing Talisman and Enchantment evidence/scopes remain unchanged by this frontend iteration.
 
 ## Media integrity
 
-- `assets/nexus/raphael.png`, `azazel.png`, `abyss.png` and `astral.png` remain original PNG assets unless the owner explicitly requests a source-asset change.
-- `validate_media_integrity.py` confirms each approved file's expected byte size, 1448×1086 dimensions and exact Git blob SHA.
-- No automatic AVIF/WebP conversion, recompression or resolution reduction is introduced for those approved boss images.
-- Performance improvements use loading, decoding, priority and layout behavior instead of silently changing the originals.
-- Abyss + Astral render as two independent source images in the dual encounter.
-- The deliberate logical Abyss/Astral filename inversion documented in `data/nexus-media.js` is not "corrected" without visual/source verification.
-
-## Home loading behavior
-
-- `Video_Perfecto_Con_Fondo_Negro.mp4` has no eager `src` in the initial Home HTML.
-- The video retains `preload="none"` and a local `data-src` hydration source.
-- The deferred local video path is covered by `validate_runtime_contracts.py`.
-- Normal-motion browsing does not request the MP4 until the immersive section approaches its configured hydration margin or the user directly activates a story chapter.
-- Scroll scrubbing never seeks before valid metadata/duration is available.
-- `prefers-reduced-motion: reduce` does not hydrate/request the MP4 during normal use.
-- Deferring the MP4 does not collapse the story layout or hide textual content.
+- `assets/nexus/raphael.png`, `azazel.png`, `abyss.png`, `astral.png` remain byte-identical approved 1448×1086 PNGs.
+- No automatic AVIF/WebP conversion, recompression or downscale is introduced.
+- Abyss + Astral remain two independent complete 4:3 source images.
+- Home immersive video remains deferred and reduced-motion avoids unnecessary loading.
 
 ## Crawl / publication behavior
 
-- `sitemap.xml` contains all indexable top-level public product/Guide pages and excludes `noindex` pages.
-- Every sitemap-indexed page declares exactly one static absolute HTTPS `rel="canonical"`.
-- Each canonical URL matches that page's exact public URL in `sitemap.xml`; `index.html` maps to `https://xklezee.github.io/PixelWeb/` rather than `/index.html`.
-- Missing, duplicate, relative, non-HTTPS, mismatched or non-sitemap canonicals are rejected by `validate_site.py`.
-- Every sitemap-indexed page declares exactly one complete Open Graph/Twitter social-sharing block in source HTML.
-- `og:url` matches the page canonical URL; `og:title` matches the document `<title>`; Twitter title/description mirror their Open Graph counterparts.
-- `og:type` remains `website`, `og:site_name` remains `Pixel Network`, and both Open Graph/Twitter image fields use the official absolute Pixel Network logo URL with the expected Open Graph image alt text.
-- Missing, duplicate, empty or inconsistent social metadata is rejected by `validate_social_metadata.py`.
-- Forum preview and `404.html` retain page-level `noindex` and remain outside the sitemap-indexed canonical/social-metadata requirement.
-- Canonical and social metadata are present in source HTML and are not injected by JavaScript or the `_site/` builder.
-- `robots.txt` does not contain a blanket `Disallow: /`.
-- On the current `https://xklezee.github.io/PixelWeb/` project-site deployment, repository-level `PixelWeb/robots.txt` is **not** treated as the authoritative host robots policy; crawlers request `/robots.txt` at the host root.
-- No privacy/security claim relies on crawler exclusion. Files deployed through GitHub Pages are treated as public.
-- `_site/` is derived from explicit publication roots rather than arbitrary root file extensions.
-- Sitemap pages plus explicitly `noindex` Forum/404 are the only top-level HTML allowed into `_site/`.
-- Root resources are included only through the public HTML/CSS dependency graph or the explicitly declared runtime-loaded Play-modal stylesheet.
-- `docs/`, `scripts/`, `.github/`, `.env*`, repository README/security-operation files, key/certificate material, logs and databases are absent from `_site/`.
-- Files inside browser-public `assets/` and `data/` remain restricted to expected static/browser data types.
-- Root-relative URLs that would escape the `/PixelWeb/` project-site base are rejected.
-- Home and every other sitemap-indexed page keep canonical/Open Graph/Twitter URL identity aligned with the intended current public base.
-- Unknown routes render the branded 404 without broken local resources.
-- The prepared `_site/` model is not called the live deployment boundary until Pages has actually migrated to an Actions-built artifact.
+- `sitemap.xml` contains all indexable product/Guide pages and excludes non-indexed compatibility/error pages.
+- Every sitemap-indexed page keeps one absolute HTTPS canonical matching its sitemap URL.
+- Indexed pages retain coherent source Open Graph/Twitter metadata.
+- `forum.html` and `404.html` remain outside the sitemap and `noindex`.
+- Canonical/social metadata remains source HTML, not runtime-injected.
+- `_site/` remains derived from explicit publication roots/dependencies rather than arbitrary repository files.
+- `docs/`, `scripts/`, `.github/`, env files, private keys, logs/databases and internal repository artifacts remain absent from the intended public bundle.
+- The prepared `_site/` artifact is not called the live deployment source unless Pages is actually migrated to it.
 
 ## Browser behavior
 
-- Home, Gameplay, Worlds, Nexus, Systems, Skyblock, Store, Community, Forum, Development, Changelog, About/Team and every detailed Guide load without uncaught console errors.
-- Reduced-motion behavior still works.
-- Play modal focus trap, Escape close and focus restoration work.
-- Forum entry dialog receives initial focus, traps Tab/Shift+Tab while active and remains scroll-reachable on short viewports.
-- Forum post modal focus and Escape behavior work and restore focus to the source card.
-- Desktop fine-pointer dropdowns follow hover-only behavior without overlap, click-pinning or flicker while crossing from the group label into its dropdown.
-- Mobile navigation opens/closes and returns focus correctly, including a desktop browser narrowed to 980 px or below.
-- Guide sidebars/section rails remain navigable by keyboard and touch.
-- Guide search works at mobile widths and 200% zoom and announces changing result counts appropriately.
+Verify Home, Gameplay, Worlds, Nexus, Systems, Skyblock, Store, Community, Development, Changelog, About and every detailed Guide. Direct `forum.html` is tested only as a legacy redirect.
 
-## Responsive widths
+At minimum confirm:
 
-Verify at minimum **1440, 1024, 768, 430 and 390 CSS px** plus at least one short-height landscape window.
+- no uncaught first-party console errors;
+- no first-party CSP violations;
+- global nav hover/touch/keyboard behavior works at the 980 px boundary;
+- contextual sibling rail is correct and active state follows the current page;
+- Play modal focus trap/Escape/restore behavior works;
+- Guide sidebars/rails/search/tables remain usable;
+- owner skin textures resolve and both canvases can be rotated with pointer and keyboard;
+- owner viewer failure state remains usable;
+- direct `forum.html` redirects to Community and no Forum UI flashes first;
+- reduced-motion mode remains usable;
+- no unexpected HTTP subresources are requested.
+
+## Responsive matrix
+
+Verify at minimum **1440, 1024, 768, 430 and 390 CSS px**, plus short-height landscape and 200% browser zoom.
 
 At every width check:
 
 - no unexpected page-level horizontal overflow;
-- no clipped controls;
-- no overlapping text/media;
+- no clipped controls/text;
+- no overlapping content/media;
 - no inaccessible navigation;
-- no unintended image crop or stretch;
-- no layout shift that hides primary actions;
-- intentional table/carousel scrollers remain independently usable.
+- no unintended image crop/stretch;
+- contextual rails/tables remain independently scrollable where intentional;
+- owner viewer dimensions remain balanced with the owner copy.
 
-Do not mark a viewport PASS from CSS inspection alone. Browser-render verification is a separate release gate.
-
-## Accessibility / interaction
-
-- Focus indicators are visible and not clipped.
-- Interactive controls have usable pointer/touch target size.
-- Status/evidence meaning is not communicated by color alone.
-- Every static `<img>` exposes an explicit `alt`, including `alt=""` when truly decorative.
-- Every visible text/search input and textarea has an accessible name through a real label or ARIA association.
-- Each top-level page has exactly one `<main>` landmark.
-- Page remains usable at 200% browser zoom.
-- Reduced-motion mode removes nonessential animation without hiding content.
-- Keyboard users can reach and dismiss menus/modals without a pointer.
-
-## Security controls
-
-- No real secret appears in the branch diff or committed snapshot.
-- No `.env`, private key, credential file, local database, runtime log or private operational report is tracked.
-- Public data files contain only intentionally PUBLIC information.
-- Guide pages keep `connect-src 'self'` unless a documented feature-level exception is approved.
-- Browser-public player documentation contains gameplay/reference content and evidence boundaries, not repository-test/deployment/database internals.
-- No security claim relies on DevTools blocking, minification, obfuscation, `robots.txt` or repository privacy.
-- No future authentication UI is treated as secure without server-side authorization/session controls.
+Do not mark a viewport PASS from CSS/source inspection alone.
 
 ## Final merge gate
 
-The branch is not ready to merge until both conditions are true:
+The branch is ready to promote only when both are true:
 
-1. the automated quality gate has **actually executed and passed** on the final candidate HEAD, including player-facing copy, canonical public-data/crawl/social metadata and `_site/` artifact validation; and
-2. the browser/render matrix has been completed with any findings remediated and rechecked.
+1. the automated quality gate has actually executed and passed on the exact final candidate HEAD; and
+2. the browser/render matrix has been completed with findings remediated and rechecked.
 
-Keep the pull request in draft while either gate is unresolved.
+Until then, keep the work isolated from stable `main` and do not describe it as browser-verified.
