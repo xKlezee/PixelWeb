@@ -38,6 +38,10 @@ GUIDE_LIBRARY_TARGET_RE = re.compile(
     r"<a\b[^>]*\bhref=['\"](guide-[A-Za-z0-9._-]+\.html)['\"][^>]*>",
     re.IGNORECASE,
 )
+GUIDE_LIBRARY_COUNT_RE = re.compile(
+    r"<[^>]+\bdata-guide-count\b[^>]*>\s*(\d+)\s+(?:entry|entries)\s*</[^>]+>",
+    re.IGNORECASE,
+)
 
 
 class DeferredMediaParser(html.parser.HTMLParser):
@@ -191,6 +195,17 @@ def validate_guide_library_coverage(failures: list[str]) -> None:
     if len(entries) != len(actual_guides):
         failures.append(
             f"guides.html: Guide library entry count ({len(entries)}) must match detailed Guide page count "
+            f"({len(actual_guides)})"
+        )
+
+    count_matches = GUIDE_LIBRARY_COUNT_RE.findall(text)
+    if len(count_matches) != 1:
+        failures.append(
+            f"guides.html: expected exactly one static data-guide-count summary, found {len(count_matches)}"
+        )
+    elif int(count_matches[0]) != len(actual_guides):
+        failures.append(
+            f"guides.html: static Guide count ({count_matches[0]}) must match detailed Guide page count "
             f"({len(actual_guides)})"
         )
 
