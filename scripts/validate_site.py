@@ -3,7 +3,8 @@
 
 This validator encodes security invariants rather than style preferences. A change
 that weakens the CSP, reintroduces inline executable/style content, breaks local
-references, or adds unsafe DOM sinks fails before deployment.
+references, adds unsafe DOM sinks, or introduces insecure absolute HTTP resources
+fails before deployment.
 """
 from __future__ import annotations
 
@@ -14,7 +15,8 @@ from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 HTML_FILES = sorted(ROOT.glob("*.html"))
-JS_FILES = sorted({*ROOT.glob("*.js"), *(ROOT / "data").rglob("*.js")})
+JS_FILES = sorted(path for path in ROOT.rglob("*.js") if ".git" not in path.parts)
+CSS_FILES = sorted(path for path in ROOT.rglob("*.css") if ".git" not in path.parts)
 
 REQUIRED_CSP_DIRECTIVES = {
     "default-src": {"'self'"},
@@ -34,6 +36,7 @@ GUIDE_CONNECT_SRC = {"'self'"}
 HTML_SINK_RE = re.compile(r"\.(?:innerHTML|outerHTML)\s*=|insertAdjacentHTML\s*\(|document\.write\s*\(")
 INLINE_STYLE_JS_RE = re.compile(r"\.style(?:\.|\[)|setAttribute\s*\(\s*['\"]style['\"]")
 DYNAMIC_CODE_RE = re.compile(r"\b(?:eval\s*\(|new\s+Function\s*\(|setTimeout\s*\(\s*['\"]|setInterval\s*\(\s*['\"])")
+INSECURE_HTTP_RE = re.compile(r"(?i)\bhttp://")
 
 
 class PageParser(html.parser.HTMLParser):
@@ -45,12 +48,23 @@ class PageParser(html.parser.HTMLParser):
         self.inline_styles: list[tuple[str, int]] = []
         self.duplicate_ids: list[tuple[str, int]] = []
         self.dangerous_urls: list[tuple[str, str, int]] = []
+        self.insecure_http_urls: list[tuple[str, str, int]] = []
         self.inline_scripts: list[int] = []
         self.csp: str | None = None
         self.has_referrer_policy = False
         self._ids: set[str] = set()
         self._inline_script_line: int | None = None
         self._inline_script_has_content = False
+
+    def _record_resource_url(self, attr: str, value: str, line: int) -> None:
+        raw = str(value).strip()
+        if not raw:
+            return
+        lowered = raw.lower()
+        if lowered.startswith("javascript:"):
+            self.dangerous_urls.append((attr, raw, line))
+        if lowered.startswith("http://"):
+            self.insecure_http_urls.append((attr, raw, line))
 
     def handle_starttag(self, tag: str, attrs):
         attrs_dict = dict(attrs)
@@ -69,9 +83,8 @@ class PageParser(html.parser.HTMLParser):
                 self.inline_handlers.append((tag, attr, line))
             if attr_lower == "style" and value is not None:
                 self.inline_styles.append((tag, line))
-            if attr_lower in {"href", "src", "action", "formaction", "xlink:href"} and value:
-                if str(value).strip().lower().startswith("javascript:"):
-                    self.dangerous_urls.append((attr_lower, value, line))
+            if attr_lower in {"href", "src", "action", "formaction", "xlink:href", "poster"} and value:
+                self._record_resource_url(attr_lower, value, line)
 
         if tag == "meta":
             http_equiv = str(attrs_dict.get("http-equiv") or "").lower()
@@ -86,10 +99,13 @@ class PageParser(html.parser.HTMLParser):
             self.refs.append(("href", attrs_dict["href"], line))
         if tag in {"script", "img", "source", "video", "audio", "iframe"} and attrs_dict.get("src"):
             self.refs.append(("src", attrs_dict["src"], line))
+        if tag in {"video"} and attrs_dict.get("poster"):
+            self.refs.append(("poster", attrs_dict["poster"], line))
         if tag in {"source", "img"} and attrs_dict.get("srcset"):
             for item in attrs_dict["srcset"].split(","):
                 candidate = item.strip().split(" ", 1)[0]
                 if candidate:
+                    self._record_resource_url("srcset", candidate, line)
                     self.refs.append(("srcset", candidate, line))
 
         if tag == "a" and attrs_dict.get("target") == "_blank":
@@ -141,6 +157,15 @@ def local_target(raw: str) -> Path | None:
 
 def is_guide_page(page: Path) -> bool:
     return page.name == "guides.html" or page.name.startswith("guide-")
+
+
+def scan_text_file_for_insecure_http(path: Path, failures: list[str]) -> None:
+    text = path.read_text(encoding="utf-8")
+    for line_number, line in enumerate(text.splitlines(), start=1):
+        if INSECURE_HTTP_RE.search(line):
+            failures.append(
+                f"{path.relative_to(ROOT)}:{line_number}: insecure absolute HTTP URL detected"
+            )
 
 
 def main() -> int:
@@ -204,6 +229,8 @@ def main() -> int:
             failures.append(f"{page.name}:{line}: inline script is blocked by script-src 'self'")
         for attr, value, line in parser.dangerous_urls:
             failures.append(f"{page.name}:{line}: dangerous javascript: URL in {attr} ({value})")
+        for attr, value, line in parser.insecure_http_urls:
+            failures.append(f"{page.name}:{line}: external {attr} must use HTTPS ({value})")
 
         for attr, raw, line in parser.refs:
             target = local_target(raw)
@@ -226,6 +253,10 @@ def main() -> int:
             failures.append(f"{relative}: HTML parsing sink detected")
         if INLINE_STYLE_JS_RE.search(text):
             failures.append(f"{relative}: runtime inline-style mutation detected")
+        scan_text_file_for_insecure_http(js_file, failures)
+
+    for css_file in CSS_FILES:
+        scan_text_file_for_insecure_http(css_file, failures)
 
     if failures:
         print("Static site validation failed:")
@@ -234,8 +265,8 @@ def main() -> int:
         return 1
 
     print(
-        f"Static site validation passed for {len(HTML_FILES)} HTML pages "
-        f"and {len(JS_FILES)} JavaScript files."
+        f"Static site validation passed for {len(HTML_FILES)} HTML pages, "
+        f"{len(JS_FILES)} JavaScript files and {len(CSS_FILES)} CSS files."
     )
     return 0
 
