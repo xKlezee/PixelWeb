@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#0b0c0e"/>
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https: data:; media-src 'self' https:; font-src 'self' https: data:; connect-src 'self'; frame-src 'none'; worker-src 'none'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
-  <meta name="description" content="Verified Pixel Network guide to the Talisman Codex, collection states, categories, acquisition paths, the Talisman Bag and advanced effect interactions."/>
+  <meta name="description" content="Pixel Network server-verified guide to the Talisman Codex, collection states, categories, acquisition paths, the Talisman Bag and advanced effect interactions."/>
   <title>Talisman Codex Guide — Pixel Network</title>
   <link rel="icon" href="LOGO%20OFICIAL.png"/>
   <link rel="stylesheet" href="site.css"/>
@@ -42,7 +42,7 @@
       <aside class="guides-sidebar" aria-label="Talisman Codex guide sections">
         <div class="guides-sidebar-brand"><small>Guide</small><strong>Talisman Codex</strong><span>Collection state, acquisition, equipped effects and the rules that connect them.</span></div>
         <nav class="guides-sidebar-nav">
-          <div class="guides-nav-group"><small>On this page</small><a href="#overview">Overview</a><a href="#states">Codex states</a><a href="#categories">Categories</a><a href="#acquisition">Acquisition</a><a href="#bag">Talisman Bag</a><a href="#effects">Effect pipeline</a><a href="#verification">Verification</a></div>
+          <div class="guides-nav-group"><small>On this page</small><a href="#overview">Overview</a><a href="#states">Codex states</a><a href="#categories">Categories</a><a href="#acquisition">Acquisition</a><a href="#bag">Talisman Bag</a><a href="#effects">Effect order</a><a href="#verification">Verification</a></div>
           <div class="guides-nav-group"><small>Related</small><a href="systems.html">Systems overview</a><a href="guide-worlds.html">Worlds & Gates</a><a href="guide-nexus.html">Nexus & Instances</a><a href="guides.html">All Guides</a></div>
         </nav>
       </aside>
@@ -51,15 +51,15 @@
         <header class="guides-document-header" id="overview">
           <div class="eyebrow">Collection & equipment reference</div>
           <h1>Talisman Codex.</h1>
-          <p class="guides-document-lead">The Codex is the reference layer for Talisman discovery and ownership. The Talisman Bag is the equipped layer: it determines which owned pieces contribute to the active build. This guide separates those responsibilities so collection progress, acquisition and equipped effects stay understandable.</p>
-          <div class="guides-document-meta"><span>Server-side behavior verified</span><span>Persistent collection state</span><span>Secret requirements remain concealed</span></div>
+          <p class="guides-document-lead">The Codex tracks Talisman discovery and ownership. The Talisman Bag is the equipped layer: it determines which owned pieces contribute to the active build. This guide separates those responsibilities so collection progress, acquisition and equipped effects stay understandable.</p>
+          <div class="guides-document-meta"><span>Server-verified mechanics</span><span>Persistent collection state</span><span>Secret requirements remain concealed</span></div>
           <div class="guide-facts" data-guide-talisman-summary aria-label="Talisman Codex summary"></div>
         </header>
 
         <section class="guide-section" id="states">
-          <div class="guide-section-head"><div><small>01 / State model</small><h2>Every Codex entry advances through a controlled reveal.</h2></div><p>The state machine separates discovering an item from unlocking its acquisition path and finally recording ownership.</p></div>
+          <div class="guide-section-head"><div><small>01 / State model</small><h2>Every Codex entry advances through a controlled reveal.</h2></div><p>The four states separate discovering an entry from unlocking its acquisition path and finally recording ownership.</p></div>
           <div class="talisman-state-flow" data-guide-talisman-states></div>
-          <div class="guide-callout"><span aria-hidden="true"></span><div><strong>State is authoritative on the server.</strong><p>The interface is a presentation of server-evaluated state. A clicked icon is not trusted as proof that an entry is unlocked or claimable.</p></div></div>
+          <div class="guide-callout"><span aria-hidden="true"></span><div><strong>Requirements determine Codex state.</strong><p>Interacting with an entry does not bypass its discovery or acquisition requirements. The Codex reflects the state the player has actually reached.</p></div></div>
         </section>
 
         <section class="guide-section" id="categories">
@@ -69,30 +69,30 @@
         </section>
 
         <section class="guide-section" id="acquisition">
-          <div class="guide-section-head"><div><small>03 / Acquisition</small><h2>The Codex tracks ownership without becoming every reward source.</h2></div><p>An entry's acquisition source is part of its content definition. The interface cannot turn an external or in-world reward into an extra Codex grant.</p></div>
+          <div class="guide-section-head"><div><small>03 / Acquisition</small><h2>The Codex records ownership without duplicating every reward source.</h2></div><p>A Talisman keeps its intended acquisition path whether it comes from world progression, the Codex itself, another progression system or concealed content.</p></div>
           <div class="guide-reference-grid" data-guide-talisman-acquisition></div>
-          <div class="guide-callout"><span aria-hidden="true"></span><div><strong>Duplicate grant paths are deliberately avoided.</strong><p>Codex claims are only accepted for content configured for that source, and the ownership transition is committed as part of the same server-side operation.</p></div></div>
+          <div class="guide-callout"><span aria-hidden="true"></span><div><strong>One acquisition should not become two rewards.</strong><p>When another gameplay source grants a Talisman, the Codex records ownership rather than granting a second copy simply because the collection state changed.</p></div></div>
         </section>
 
         <section class="guide-section" id="bag">
           <div class="guide-section-head"><div><small>04 / Equipment</small><h2>Owned is not the same as equipped.</h2></div><p>The Codex records collection progress. The Talisman Bag defines the active equipped set that contributes effects to the player's build.</p></div>
           <div class="guide-facts" data-guide-talisman-bag aria-label="Talisman Bag facts"></div>
-          <p class="talisman-bag-note">Bag changes are committed on close and the active effect set is recalculated from the resulting equipped contents. Nexus Jewelry shares this equipment surface but uses its reserved Jewelry positions rather than behaving like an unrestricted normal slot.</p>
+          <p class="talisman-bag-note">Changes to the equipped set take effect when the Bag closes. Nexus Jewelry shares this equipment surface but uses reserved Jewelry positions rather than behaving like an unrestricted normal slot.</p>
           <div class="guide-callout"><span aria-hidden="true"></span><div><strong>Rarity is a shared progression language.</strong><p>The Talisman system uses Pixel's global item rarity ladder instead of maintaining a second category-specific rarity model.</p><div class="talisman-rarity-ladder" data-guide-talisman-rarity aria-label="Talisman rarity ladder"></div></div></div>
         </section>
 
         <section class="guide-section" id="effects">
-          <div class="guide-section-head"><div><small>05 / Advanced effects</small><h2>Effects resolve in a defined order.</h2></div><p>The order matters because contextual bonuses and advanced combinations should modify a stable base rather than feed back into themselves.</p></div>
+          <div class="guide-section-head"><div><small>05 / Advanced effects</small><h2>Effects resolve in a defined order.</h2></div><p>The order matters because contextual bonuses and advanced combinations modify a stable base instead of feeding back into themselves.</p></div>
           <div class="talisman-pipeline" data-guide-talisman-pipeline></div>
-          <div class="guide-callout"><span aria-hidden="true"></span><div><strong>No recursive stacking loop.</strong><p>Synergy is evaluated from equipped item identity and remains world-neutral. Meta modifiers resolve after the earlier stages and use the strongest qualifying modifier for the same eligible effect instead of chaining repeatedly.</p></div></div>
-          <div class="talisman-secret-policy"><strong>Advanced combinations are documented by behavior, not by spoiler.</strong><p>This public guide explains how Synergy and Meta behave, but intentionally does not publish concealed set composition or hidden discovery conditions. Exact player-visible combinations can be documented only where Pixel intends them to be public.</p></div>
+          <div class="guide-callout"><span aria-hidden="true"></span><div><strong>No recursive stacking loop.</strong><p>Synergy depends on the equipped combination and remains world-neutral. Meta applies after the earlier stages and uses only the strongest qualifying modifier for the same eligible effect rather than repeatedly stacking equivalent modifiers.</p></div></div>
+          <div class="talisman-secret-policy"><strong>Advanced combinations are documented by behavior, not by spoiler.</strong><p>This public guide explains how Synergy and Meta behave, but intentionally does not publish concealed set composition or hidden discovery conditions. Exact combinations are documented only where Pixel intends them to be public.</p></div>
         </section>
 
         <section class="guide-section" id="verification">
-          <div class="guide-section-head"><div><small>06 / Documentation confidence</small><h2>Mechanics verified; client presentation still has a separate gate.</h2></div><p>Pixel Guides distinguishes source/server confidence from things that can only be proven by actually using the interface inside Minecraft.</p></div>
+          <div class="guide-section-head"><div><small>06 / Documentation confidence</small><h2>Mechanics are server verified; presentation has a separate gate.</h2></div><p>Mechanics and persistent collection behavior have server-level evidence. Visual, audio and interaction details remain explicitly pending until they are checked in a real Minecraft client.</p></div>
           <div class="verification-grid" data-guide-talisman-verification></div>
           <ul class="verification-pending" data-guide-talisman-pending aria-label="Remaining client validation items"></ul>
-          <div class="guide-callout is-legacy"><span aria-hidden="true"></span><div><strong>The old GitBook is not authoritative for this system.</strong><p>It can still help identify historical topics, but current Talisman behavior is documented from the verified implementation and validation record. A legacy value or requirement does not override the current guide.</p><div class="guide-callout-actions"><a class="guide-text-link" href="https://pixel-network-1.gitbook.io/home/documentation" target="_blank" rel="noopener">Open legacy reference ↗</a></div></div></div>
+          <div class="guide-callout is-legacy"><span aria-hidden="true"></span><div><strong>The old GitBook is not authoritative for this system.</strong><p>It can still identify historical topics worth checking, but a legacy value or requirement does not override the current server-verified reference.</p><div class="guide-callout-actions"><a class="guide-text-link" href="https://pixel-network-1.gitbook.io/home/documentation" target="_blank" rel="noopener">Open legacy reference ↗</a></div></div></div>
         </section>
       </article>
     </div>
