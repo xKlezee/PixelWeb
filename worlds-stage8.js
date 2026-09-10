@@ -9,9 +9,9 @@
 
   const descriptions = {
     overworld: 'The foundation of the shared route: mining, equipment, economy and combat establish the language used by every later stage.',
-    pirate: 'The first expansion stage, where the required HollowKeeper and optional Kraken deliberately serve different progression roles.',
-    nether: 'Pressure rises without resetting the account. Eldric closes the third world stage before Winter begins.',
-    winter: 'The fourth and final current world. Viking closes Winter\'s World Boss arc, while Prestige IV separately unlocks Nexus.'
+    pirate: 'The first expansion stage, where the required World Boss and optional encounter deliberately serve different progression roles.',
+    nether: 'Pressure rises without resetting the route. Its World Boss closes the third stage before Winter begins.',
+    winter: 'The fourth and final current world. Its World Boss closes the World arc while Nexus remains a separate endgame access layer.'
   };
 
   const el = (tag, className = '', text = null) => {
@@ -23,12 +23,15 @@
 
   const safeImageUrl = (source, width = null) => {
     if (!source) return '';
-    const value = String(source);
+    const value = String(source).trim();
     if (/^(?:assets\/|\.\/|\.\.\/)/.test(value)) return value;
     try {
       const url = new URL(value, location.href);
-      if (!['http:', 'https:'].includes(url.protocol)) return '';
-      if (width) {
+      const sameOrigin = url.origin === location.origin;
+      const localAllowed = sameOrigin && ['http:', 'https:'].includes(url.protocol);
+      const filePreviewAllowed = location.protocol === 'file:' && url.protocol === 'file:';
+      if (!localAllowed && !filePreviewAllowed && url.protocol !== 'https:') return '';
+      if (width && url.protocol === 'https:') {
         url.searchParams.set('width', String(width));
         url.searchParams.set('dpr', '1');
         url.searchParams.set('quality', width >= 1000 ? '86' : '82');
@@ -40,14 +43,13 @@
   };
 
   const markExternal = (img, source) => {
-    if (/^https?:\/\//i.test(source)) img.referrerPolicy = 'no-referrer';
+    if (/^https:\/\//i.test(source)) img.referrerPolicy = 'no-referrer';
   };
 
   const statRow = (label, value, accent = false) => {
     const row = el('div', 'worlds-stat');
     row.append(el('span', '', label));
-    const strong = el('strong', accent ? 'accent' : '', value ?? '—');
-    row.append(strong);
+    row.append(el('strong', accent ? 'accent' : '', value ?? '—'));
     return row;
   };
 
@@ -78,7 +80,7 @@
     article.dataset.accent = visual.accent || 'green';
 
     const mediaWrap = el('div', `worlds-card-media${visual.source ? '' : ' is-fallback'}`);
-    mediaWrap.appendChild(el('span', 'worlds-card-index', `0${index + 1}`));
+    mediaWrap.appendChild(el('span', 'worlds-card-index', String(index + 1).padStart(2, '0')));
 
     const visualSource = safeImageUrl(visual.source, 960);
     if (visualSource) {
@@ -139,7 +141,8 @@
     body.appendChild(stats);
 
     if (world.id === 'winter') {
-      body.appendChild(el('div', 'worlds-card-note', 'Winter is the final current world. Viking is its final World Boss; Nexus access is a separate Prestige IV unlock.'));
+      const nexusGate = network?.nexus?.unlockMilestone || network?.nexus?.unlock || 'account progression';
+      body.appendChild(el('div', 'worlds-card-note', `Winter is the final current world. ${world.boss || 'Its World Boss'} closes the World Boss arc; Nexus access is a separate ${nexusGate} unlock.`));
     }
 
     article.append(mediaWrap, body);
@@ -182,21 +185,16 @@
   }
 
   if (progress) {
-    const steps = [
-      ['Overworld', 'World 1 · Beholder'],
-      ['Prestige I', 'World 2 · Pirate Kingdom · HollowKeeper'],
-      ['Prestige II', 'World 3 · Nether · Eldric'],
-      ['Prestige III', 'World 4 · Winter · Viking']
-    ];
     const line = el('div', 'worlds-progress-line');
     line.setAttribute('aria-hidden', 'true');
     const grid = el('div', 'worlds-progress-grid');
-    steps.forEach(([title, sub]) => {
+    network.worlds.forEach(world => {
       const step = el('div', 'worlds-progress-step');
       const dot = el('div', 'worlds-progress-dot');
       dot.setAttribute('aria-hidden', 'true');
       const copy = el('div');
-      copy.append(el('b', '', title), el('span', '', sub));
+      const access = world.order === 1 ? 'Starting world' : world.unlock;
+      copy.append(el('b', '', world.name), el('span', '', `World ${world.order ?? '—'} · ${access || 'Access milestone'}`));
       step.append(dot, copy);
       grid.appendChild(step);
     });
@@ -204,20 +202,28 @@
   }
 
   if (bossStrip) {
-    const byId = id => network.worlds.find(world => world.id === id) || {};
-    const overworld = byId('overworld');
-    const pirate = byId('pirate');
-    const nether = byId('nether');
-    const winter = byId('winter');
-    const bosses = [
-      { label: 'Overworld · Required', name: overworld.boss, copy: 'Paired with Prestige I to open Pirate Kingdom.', media: media.overworld?.boss },
-      { label: 'Pirate · Required', name: pirate.boss, copy: 'Paired with Prestige II to open Nether.', media: media.pirate?.boss },
-      { label: 'Pirate · Optional', name: pirate.optionalEncounter, copy: 'A thematic encounter that gates nothing.', media: media.pirate?.optionalBoss },
-      { label: 'Nether · Required', name: nether.boss, copy: 'Paired with Prestige III to open Winter.', media: media.nether?.boss },
-      { label: 'Winter · Final boss', name: winter.boss, copy: 'Winter\'s final World Boss. Nexus access is not tied to this clear.', media: media.winter?.boss }
-    ];
+    const bosses = [];
+    network.worlds.forEach(world => {
+      const visual = media[world.id] || {};
+      bosses.push({
+        label: `${world.name} · ${world.id === 'winter' ? 'Final World Boss' : 'Required World Boss'}`,
+        name: world.boss,
+        copy: world.id === 'winter'
+          ? 'Closes the current four-World boss arc; Nexus access remains a separate account milestone.'
+          : 'Required as part of the transition into the next World stage.',
+        media: visual.boss
+      });
+      if (world.optionalEncounter) {
+        bosses.push({
+          label: `${world.name} · Optional`,
+          name: world.optionalEncounter,
+          copy: 'Optional encounter; it is not part of the main World Boss gate.',
+          media: visual.optionalBoss
+        });
+      }
+    });
 
-    const items = bosses.map(entry => {
+    bossStrip.replaceChildren(...bosses.map(entry => {
       const item = el('article', 'worlds-boss-item reveal');
       const source = safeImageUrl(entry.media?.source);
       if (source) {
@@ -236,7 +242,6 @@
       copy.append(el('small', '', entry.label), el('h3', '', entry.name || ''), el('p', '', entry.copy));
       item.appendChild(copy);
       return item;
-    });
-    bossStrip.replaceChildren(...items);
+    }));
   }
 })();
