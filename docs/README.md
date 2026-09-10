@@ -32,7 +32,7 @@ Repository-level automated controls live outside this directory:
 - `scripts/validate_media_integrity.py` — exact source-integrity guard for the four approved Nexus PNGs;
 - `scripts/validate_public_data.js` — canonical public-data relationship, approved-destination, Worlds-media and product-publication validator;
 - `scripts/validate_site.py` — structural, CSP, transport, local-reference and sitemap/index/canonical-URL validator;
-- `scripts/validate_runtime_contracts.py` — deferred-media, navigation, Guide-fragment, Guide-library coverage and direct-style-assignment guard;
+- `scripts/validate_runtime_contracts.py` — deferred-media, navigation, local-fragment-target, Guide-library coverage and direct-style-assignment guard;
 - `scripts/validate_accessibility.py` — document-structure, image-alternative and visible-form-control naming guard;
 - `scripts/validate_player_facing_copy.py` — browser-public documentation boundary that rejects known repository-test/database/wiring/deployment implementation phrases while preserving legitimate player/evidence terminology;
 - `scripts/build_public_site.py` — reference-driven builder for the `_site/` Pages artifact;
