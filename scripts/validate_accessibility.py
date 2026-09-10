@@ -8,6 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 HTML_FILES = sorted(ROOT.glob("*.html"))
 VALID_TH_SCOPES = {"col", "row", "colgroup", "rowgroup"}
+STATIC_ARIA_IDREF_ATTRIBUTES = {"aria-labelledby", "aria-describedby", "aria-controls"}
 
 
 class AccessibilityParser(html.parser.HTMLParser):
@@ -20,7 +21,9 @@ class AccessibilityParser(html.parser.HTMLParser):
         self.main_count = 0
         self.images_without_alt: list[int] = []
         self.labels_for: set[str] = set()
+        self.label_targets: list[tuple[str, int]] = []
         self.element_ids: set[str] = set()
+        self.aria_idrefs: list[tuple[str, str, str, int]] = []
         self.text_controls: list[tuple[str, str, str, str, int]] = []
         self.table_headers: list[tuple[str, int]] = []
         self.tables: list[tuple[int, str]] = []
@@ -40,6 +43,11 @@ class AccessibilityParser(html.parser.HTMLParser):
         element_id = str(attrs_dict.get("id") or "").strip()
         if element_id:
             self.element_ids.add(element_id)
+
+        for attr_name in STATIC_ARIA_IDREF_ATTRIBUTES:
+            raw_value = str(attrs_dict.get(attr_name) or "").strip()
+            if raw_value:
+                self.aria_idrefs.append((tag, attr_name, raw_value, line))
 
         if tag == "html":
             self.lang = str(attrs_dict.get("lang") or "").strip() or None
@@ -68,6 +76,7 @@ class AccessibilityParser(html.parser.HTMLParser):
             target = str(attrs_dict.get("for") or "").strip()
             if target:
                 self.labels_for.add(target)
+                self.label_targets.append((target, line))
         elif tag in {"input", "textarea"}:
             input_type = str(attrs_dict.get("type") or "text").strip().lower()
             if tag == "input" and input_type == "hidden":
@@ -101,19 +110,34 @@ class AccessibilityParser(html.parser.HTMLParser):
                 caption_parts.append(data)
 
 
+def validate_aria_idrefs(page: Path, parser: AccessibilityParser, failures: list[str]) -> None:
+    for tag, attribute, raw_value, line in parser.aria_idrefs:
+        referenced_ids = [token for token in raw_value.split() if token]
+        missing = [token for token in referenced_ids if token not in parser.element_ids]
+        if missing:
+            failures.append(
+                f"{page.name}:{line}: <{tag}> {attribute} references missing target(s): "
+                + ", ".join(missing)
+            )
+
+
+def validate_label_targets(page: Path, parser: AccessibilityParser, failures: list[str]) -> None:
+    for target, line in parser.label_targets:
+        if target not in parser.element_ids:
+            failures.append(
+                f"{page.name}:{line}: <label for={target!r}> references a missing element id"
+            )
+
+
 def validate_text_controls(page: Path, parser: AccessibilityParser, failures: list[str]) -> None:
     for tag, element_id, aria_label, aria_labelledby, line in parser.text_controls:
         if aria_label:
             continue
 
         if aria_labelledby:
-            referenced_ids = [token for token in aria_labelledby.split() if token]
-            missing = [token for token in referenced_ids if token not in parser.element_ids]
-            if not referenced_ids or missing:
-                detail = ", ".join(missing) if missing else "no ids"
-                failures.append(
-                    f"{page.name}:{line}: <{tag}> aria-labelledby references missing target(s): {detail}"
-                )
+            # Generic ARIA IDREF validation verifies the referenced ids. Presence of the
+            # attribute is enough here to satisfy the control-naming path without
+            # duplicating the same missing-target diagnostic.
             continue
 
         if element_id and element_id in parser.labels_for:
@@ -172,6 +196,8 @@ def main() -> int:
         for line in parser.images_without_alt:
             failures.append(f"{page.name}:{line}: <img> must declare alt, including alt=\"\" for decorative images")
 
+        validate_aria_idrefs(page, parser, failures)
+        validate_label_targets(page, parser, failures)
         validate_text_controls(page, parser, failures)
         validate_tables(page, parser, failures)
 
