@@ -27,7 +27,9 @@ Only content that is plausibly part of the initial viewport may receive high fet
 
 The four approved Nexus PNG files are each roughly 2.1 MB. That size is intentionally accepted because the originals are a product requirement. They therefore must remain below the initial viewport and low-priority unless a future design explicitly makes one of them the LCP image.
 
-The Home immersive MP4 is roughly 1.1 MB. `preload=metadata` is the current safe baseline until a browser-rendered measurement proves that explicit source hydration is necessary and does not harm scroll-scrubbing reliability.
+The Home immersive MP4 is roughly 1.1 MB and is now explicitly deferred. The HTML contains no initial `src`, uses `preload=none`, and stores the local source in `data-src`. `immersive.js` hydrates the source with `IntersectionObserver` only when the story approaches the viewport (currently a 600 px root margin), then waits for metadata before scroll scrubbing can seek through the video. Under `prefers-reduced-motion: reduce`, the video is not hydrated at all; the section remains readable over its intentional dark fallback surface.
+
+This behavior is a performance contract. Do not restore an eager `src` to the Home story merely to simplify the script.
 
 ## External media
 
@@ -54,6 +56,7 @@ Dynamic sections should preserve their expected footprint through CSS rather tha
 - `IntersectionObserver` is preferred for reveal and media hydration.
 - No animation loop should run when the relevant component is absent.
 - Reduced-motion behavior must remain supported.
+- Deferred media must remain functional when `IntersectionObserver` is unavailable; a safe fallback may hydrate immediately in that legacy case.
 
 ## Release measurements
 
@@ -72,6 +75,8 @@ Target guardrails for the public static site on a representative mobile profile:
 - CLS: <= 0.10
 - INP: <= 200 ms
 - no unexpected eager request for all four Nexus boss PNG files from pages where they are below the fold
+- no Home immersive MP4 request during the initial viewport before the story approaches the viewport
+- no immersive MP4 request at all when the user requests reduced motion
 - no duplicate download of identical local media under different repository paths
 
 These are release guardrails, not claims that the current unrendered hardening branch already achieves them.
