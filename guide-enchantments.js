@@ -21,7 +21,7 @@
   appendFacts(document.querySelector('[data-guide-enchant-summary]'), [
     ['Current catalogue', network.content?.enchantments ?? '—'],
     ['Max per item', guide.limits?.maxPerItem ?? '—'],
-    ['Verification', 'Source + tests'],
+    ['Evidence', 'Source verified'],
     ['Live-client claim', 'Not asserted']
   ]);
 
@@ -61,7 +61,7 @@
     specializedHost.replaceChildren(...guide.specialized.map(item => {
       const article = el('article', 'enchant-mechanic');
       const head = el('div', 'enchant-mechanic-head');
-      head.append(el('span', 'enchant-mechanic-kind', item.kind || 'Mechanic'), el('span', 'enchant-mechanic-status', item.status || 'verified'));
+      head.append(el('span', 'enchant-mechanic-kind', item.kind || 'Mechanic'), el('span', 'enchant-mechanic-status', item.status || 'current'));
       article.append(head, el('h3', '', item.name || 'Enchant'), el('p', '', item.behavior || ''));
       return article;
     }));
@@ -96,14 +96,26 @@
   const verificationHost = document.querySelector('[data-guide-enchant-verification]');
   if (verificationHost) {
     const source = el('article', 'verification-card is-verified');
-    source.append(el('small', '', 'Current source'), el('h3', '', 'Verified'), el('p', '', 'The current PixelEnchants source audit found no source-backed unfinished functionality in the active runtime.'));
+    source.append(
+      el('small', '', 'Evidence'),
+      el('h3', '', 'Source verified'),
+      el('p', '', `Family compatibility, effect semantics and retired identities were verified against the current source as of ${guide.verification?.verifiedAsOf || 'the recorded verification date'}.`)
+    );
 
-    const tests = el('article', 'verification-card is-verified');
-    tests.append(el('small', '', 'Regression baseline'), el('h3', '', 'Green'), el('p', '', 'The latest recorded repository baseline keeps the PixelEnchants test suite green with its pre-existing skipped test accounted for.'));
+    const scope = el('article', 'verification-card is-verified');
+    scope.append(
+      el('small', '', 'Publication scope'),
+      el('h3', '', 'Bounded'),
+      el('p', '', 'Only current behavior and explicit retirements are documented. An enchant name alone is never treated as proof of an extra mechanic.')
+    );
 
     const live = el('article', 'verification-card is-pending');
-    live.append(el('small', '', 'Live client'), el('h3', '', 'Not claimed'), el('p', '', 'This page does not treat source and unit/integration evidence as proof that every effect has been visually or experientially re-tested in a live client.'));
+    live.append(
+      el('small', '', 'Live client'),
+      el('h3', '', 'Not claimed'),
+      el('p', '', 'This guide does not claim that every effect has been visually or experientially re-tested in a live Minecraft client.')
+    );
 
-    verificationHost.replaceChildren(source, tests, live);
+    verificationHost.replaceChildren(source, scope, live);
   }
 })();
