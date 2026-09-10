@@ -25,6 +25,10 @@
     ['Live-client claim', 'Not asserted']
   ]);
 
+  document.querySelectorAll('[data-guide-enchant-cap]').forEach(node => {
+    node.textContent = String(guide.limits?.maxPerItem ?? '—');
+  });
+
   const principlesHost = document.querySelector('[data-guide-enchant-principles]');
   if (principlesHost && Array.isArray(guide.principles)) {
     principlesHost.replaceChildren(...guide.principles.map((item, index) => {
