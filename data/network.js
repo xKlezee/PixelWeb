@@ -52,14 +52,8 @@
     },
     community: {
       discordUrl: 'https://discord.gg/7KzWpezTNZ',
-      forumLanding: 'forum.html',
       guidesLanding: 'guides.html',
       legacyDocumentationUrl: 'https://pixel-network-1.gitbook.io/home/documentation',
-      forum: {
-        mode: 'preview',
-        persistent: false,
-        accountSystemAvailable: false
-      },
       testimonials: [],
       verified: true
     },
