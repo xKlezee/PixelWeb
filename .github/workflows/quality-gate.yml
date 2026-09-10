@@ -46,6 +46,9 @@ jobs:
             node --check "$file"
           done < <(find . -type f -name '*.js' -not -path './.git/*' -print0)
 
+      - name: Validate canonical public data consistency
+        run: node scripts/validate_public_data.js
+
       - name: Validate static site integrity, CSP and transport policy
         run: python3 scripts/validate_site.py
 
