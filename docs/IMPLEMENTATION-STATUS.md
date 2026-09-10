@@ -22,13 +22,13 @@ This file records the branch state without upgrading controls or gameplay claims
 
 ### Crawl, error and public metadata layer
 
-- `robots.txt` allows the public site instead of blocking `/` globally.
-- `docs/` and `scripts/` are excluded from crawler discovery policy while still treated as public repository/Pages content.
-- `sitemap.xml` lists only indexable public product and Guide pages.
+- `sitemap.xml` lists only indexable public product and Guide pages under the current project-site base URL.
 - Forum preview and the branded 404 remain `noindex` and are excluded from the sitemap.
 - `404.html` uses maintained Pixel Network destinations, the same strict CSP/referrer posture and no external runtime dependency.
 - Home has a canonical URL plus Open Graph/Twitter metadata using the existing official Pixel Network logo.
-- `validate_site.py` enforces the crawl/index contract so `Disallow: /`, sitemap drift or accidental Forum indexing becomes a failing invariant.
+- `validate_site.py` checks sitemap consistency, prevents `noindex` pages from being listed and keeps the repository-level `robots.txt` from regressing to a blanket `Disallow: /` policy.
+- **GitHub Pages boundary:** the current site is a project site at `https://xklezee.github.io/PixelWeb/`. Standards-compliant crawlers request `robots.txt` from the host root (`https://xklezee.github.io/robots.txt`), so `PixelWeb/robots.txt` is not an authoritative crawl policy on this default URL. Page-level `meta robots` directives are the effective per-page publication control until a custom/root domain deployment makes a repository-level robots file authoritative.
+- The repository-level `robots.txt` now documents that limitation instead of pretending that hiding `docs/` or `scripts/` from crawler discovery protects them. Any file deployed through Pages must still be treated as public.
 
 ### Accessibility and interaction foundation
 
@@ -93,7 +93,7 @@ After reconciliation the branch was `behind_by: 0` relative to the then-current 
 
 ### Static/code review
 
-Current Guide and overview renderers follow the hardened DOM-safe construction model. Repository references, CSP structure, known publication invariants, transport policy, crawl contract, media loading behavior and structural accessibility have been reviewed at source level.
+Current Guide and overview renderers follow the hardened DOM-safe construction model. Repository references, CSP structure, known publication invariants, transport policy, sitemap/index contract, media loading behavior and structural accessibility have been reviewed at source level.
 
 This source review does **not** substitute for successful execution of the repository validators or browser-render validation.
 
