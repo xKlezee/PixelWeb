@@ -5,7 +5,7 @@
  *
  * This is intentionally a product-contract validator, not a second source of rendering data.
  * It catches contradictions inside data/network.js and forces intentional review when current
- * product invariants (four Worlds, separate Nexus, preview Forum, partial Skyblock) change.
+ * product invariants or approved public destinations/media origins change.
  */
 const fs = require('node:fs');
 const path = require('node:path');
@@ -13,7 +13,18 @@ const vm = require('node:vm');
 
 const ROOT = path.resolve(__dirname, '..');
 const DATA_FILE = path.join(ROOT, 'data', 'network.js');
+const WORLD_MEDIA_FILE = path.join(ROOT, 'data', 'worlds-media.js');
 const failures = [];
+
+const EXPECTED_PUBLIC_URLS = Object.freeze({
+  discord: 'https://discord.gg/7KzWpezTNZ',
+  legacyDocumentation: 'https://pixel-network-1.gitbook.io/home/documentation',
+  changelog: 'https://pixel-network-1.gitbook.io/home/changelog',
+  store: 'https://pixelboxx.tebex.io/'
+});
+const WORLD_IMAGE_PROXY_ORIGIN = 'https://pixel-network-1.gitbook.io';
+const WORLD_IMAGE_PROXY_PATH = '/home/~gitbook/image';
+const WORLD_IMAGE_STORAGE_ORIGIN = 'https://712597880-files.gitbook.io';
 
 const fail = message => failures.push(message);
 const check = (condition, message) => {
@@ -23,34 +34,72 @@ const check = (condition, message) => {
 const unique = values => new Set(values).size === values.length;
 const isPositiveInteger = value => Number.isInteger(value) && value > 0;
 const isRootHtml = value => typeof value === 'string' && /^[A-Za-z0-9._-]+\.html$/.test(value);
-const isHttpsUrl = value => {
+
+const exactHttpsUrl = (value, expected) => {
   if (typeof value !== 'string' || !value.trim()) return false;
   try {
-    return new URL(value).protocol === 'https:';
+    const actual = new URL(value);
+    const canonical = new URL(expected);
+    return actual.protocol === 'https:' && actual.href === canonical.href;
   } catch {
     return false;
   }
 };
 
-function loadCanonicalData() {
-  const source = fs.readFileSync(DATA_FILE, 'utf8');
+const approvedWorldLandscape = value => {
+  if (typeof value !== 'string' || !value.trim()) return false;
+  try {
+    const outer = new URL(value);
+    if (
+      outer.protocol !== 'https:' ||
+      outer.origin !== WORLD_IMAGE_PROXY_ORIGIN ||
+      outer.pathname !== WORLD_IMAGE_PROXY_PATH ||
+      outer.username || outer.password || outer.hash
+    ) {
+      return false;
+    }
+
+    const nestedValue = outer.searchParams.get('url');
+    if (!nestedValue) return false;
+    const nested = new URL(nestedValue);
+    return (
+      nested.protocol === 'https:' &&
+      nested.origin === WORLD_IMAGE_STORAGE_ORIGIN &&
+      !nested.username && !nested.password && !nested.hash
+    );
+  } catch {
+    return false;
+  }
+};
+
+const approvedLocalWorldMedia = value => {
+  if (typeof value !== 'string' || !/^assets\/worlds\/[A-Za-z0-9._-]+\.(?:svg|png|jpe?g|webp|avif)$/i.test(value)) {
+    return false;
+  }
+  return fs.existsSync(path.join(ROOT, value));
+};
+
+function loadWindowExport(file, exportName) {
+  const source = fs.readFileSync(file, 'utf8');
   const sandbox = { window: Object.create(null) };
   vm.createContext(sandbox, {
     name: 'pixelweb-public-data-validation',
     codeGeneration: { strings: false, wasm: false }
   });
   vm.runInContext(source, sandbox, {
-    filename: 'data/network.js',
+    filename: path.relative(ROOT, file),
     timeout: 1000
   });
-  return sandbox.window.PIXEL_NETWORK_PUBLIC;
+  return sandbox.window[exportName];
 }
 
 let data;
+let worldMedia;
 try {
-  data = loadCanonicalData();
+  data = loadWindowExport(DATA_FILE, 'PIXEL_NETWORK_PUBLIC');
+  worldMedia = loadWindowExport(WORLD_MEDIA_FILE, 'PIXEL_WORLDS_MEDIA');
 } catch (error) {
-  console.error(`Canonical public data validation failed to load data/network.js: ${error.message}`);
+  console.error(`Canonical public data validation failed to load public data: ${error.message}`);
   process.exit(1);
 }
 
@@ -66,13 +115,13 @@ check(data.meta?.brand === 'Pixel Network', 'canonical brand must remain Pixel N
 check(typeof data.server?.ip === 'string' && data.server.ip.trim().length > 0, 'server IP must be non-empty');
 check(!/^[a-z]+:\/\//i.test(data.server?.ip || ''), 'server IP must be an address, not a URL with embedded scheme');
 
-for (const [label, value] of [
-  ['Discord', data.community?.discordUrl],
-  ['legacy documentation', data.community?.legacyDocumentationUrl],
-  ['external changelog', data.changelog?.externalUrl],
-  ['Store', data.store?.url]
+for (const [label, value, expected] of [
+  ['Discord', data.community?.discordUrl, EXPECTED_PUBLIC_URLS.discord],
+  ['legacy documentation', data.community?.legacyDocumentationUrl, EXPECTED_PUBLIC_URLS.legacyDocumentation],
+  ['external changelog', data.changelog?.externalUrl, EXPECTED_PUBLIC_URLS.changelog],
+  ['Store', data.store?.url, EXPECTED_PUBLIC_URLS.store]
 ]) {
-  check(isHttpsUrl(value), `${label} public URL must use HTTPS`);
+  check(exactHttpsUrl(value, expected), `${label} public URL must remain the approved canonical HTTPS destination (${expected})`);
 }
 
 for (const [label, value] of [
@@ -135,6 +184,41 @@ check(
   data.content?.worldBossEncounters === worldBossEncounterTotal,
   `content.worldBossEncounters must equal declared World encounters (${worldBossEncounterTotal})`
 );
+
+check(worldMedia && typeof worldMedia === 'object', 'data/worlds-media.js must expose window.PIXEL_WORLDS_MEDIA');
+if (worldMedia && typeof worldMedia === 'object') {
+  check(Object.isFrozen(worldMedia), 'top-level Worlds media object must remain frozen');
+  const expectedMediaIds = worlds.map(world => world.id).sort();
+  const actualMediaIds = Object.keys(worldMedia).sort();
+  check(
+    actualMediaIds.join('|') === expectedMediaIds.join('|'),
+    'Worlds media keys must match the canonical World ids exactly'
+  );
+
+  for (const world of worlds) {
+    const visual = worldMedia[world.id];
+    check(visual && typeof visual === 'object', `${world.name} must have a Worlds media entry`);
+    if (!visual || typeof visual !== 'object') continue;
+
+    check(
+      approvedWorldLandscape(visual.source),
+      `${world.name} landscape must use the approved Pixel GitBook image proxy and GitBook storage origin`
+    );
+    check(
+      visual.boss && approvedLocalWorldMedia(visual.boss.source),
+      `${world.name} boss artwork must be an existing local assets/worlds resource`
+    );
+
+    if (world.optionalEncounter) {
+      check(
+        visual.optionalBoss && approvedLocalWorldMedia(visual.optionalBoss.source),
+        `${world.name} optional boss artwork must be an existing local assets/worlds resource`
+      );
+    } else {
+      check(!visual.optionalBoss, `${world.name} must not declare optional boss media without a canonical optional encounter`);
+    }
+  }
+}
 
 const nexus = data.nexus || {};
 const instances = Array.isArray(nexus.instances) ? nexus.instances : [];
@@ -211,5 +295,6 @@ if (failures.length) {
 
 console.log(
   `Canonical public data validation passed: ${worlds.length} Worlds, ${mineTotal} mines, ` +
-  `${worldBossEncounterTotal} World encounters, ${instances.length} Nexus encounters and ${derivedBossCount} instance bosses.`
+  `${worldBossEncounterTotal} World encounters, ${instances.length} Nexus encounters, ` +
+  `${derivedBossCount} instance bosses and approved public/media origins.`
 );
