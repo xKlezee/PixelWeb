@@ -39,6 +39,7 @@
 
   const changelogLanding = safeLocalPage(network?.changelog?.landing, 'changelog.html');
   const guidesLanding = safeLocalPage(network?.community?.guidesLanding, 'guides.html');
+  const marketplaceLanding = 'marketplace.html';
   const isGuideDetailPage = /^guide-[A-Za-z0-9._-]+\.html$/.test(currentPage);
   const isCurrentLocalDestination = href => currentPage === href || (isGuideDetailPage && href === guidesLanding);
 
@@ -177,6 +178,13 @@
 
       group.append(button, menu);
       fragment.appendChild(group);
+
+      /* Marketplace is a first-level product category, not an Explore or Store child. */
+      if (groupData.label === 'Explore') {
+        const marketplace = createLocalTextLink(marketplaceLanding, 'Marketplace');
+        marketplace.classList.add('nav-marketplace');
+        fragment.appendChild(marketplace);
+      }
     });
 
     const about = createLocalTextLink('team.html', 'About');
@@ -373,6 +381,7 @@
 
     const destinations = document.createElement('span');
     [
+      [marketplaceLanding, 'Marketplace'],
       ['store.html', 'Store'],
       [guidesLanding, 'Guides'],
       ['community.html', 'Community'],
