@@ -35,7 +35,7 @@ A configured control is not a passed control. Record the actual result for the e
 - No duplicate IDs exist within a page.
 - Keyboard navigation remains usable after removal of inline handlers.
 - Canonical runtime navigation remains consistent across overview pages and detailed `guide-*.html` pages.
-- Above 980 px with a fine pointer, Explore / Development / Community are hover-only pointer targets: entering a group opens it, moving into its dropdown keeps it open, leaving the group closes it, and a mouse/trackpad click does not pin it open.
+- Above 980 px with a fine pointer, Explore / Development / Community are hover-only pointer targets: entering a group opens it, moving into its dropdown keeps it open, leaving closes it, and a mouse/trackpad click does not pin it open.
 - At 980 px and below, navigation uses explicit click/touch `.is-open` state even when a fine pointer is attached; the desktop hover-only rule must not disable the mobile-layout buttons.
 - Keyboard opening, focus movement and Escape remain available independently from the pointer-only desktop rule.
 - Every detailed `guide-*.html` fallback navbar marks exactly `guides.html` as `aria-current="page"`; no product-overview link simultaneously claims to be the current global destination.
@@ -128,7 +128,7 @@ A configured control is not a passed control. Record the actual result for the e
 - `docs/`, `scripts/`, `.github/`, `.env*`, repository README/security-operation files, key/certificate material, logs and databases are absent from `_site/`.
 - Files inside browser-public `assets/` and `data/` remain restricted to expected static/browser data types.
 - Root-relative URLs that would escape the `/PixelWeb/` project-site base are rejected.
-- Home canonical/Open Graph/Twitter URLs resolve to the intended current public base.
+- Home and every other sitemap-indexed page keep canonical/Open Graph/Twitter URL identity aligned with the intended current public base.
 - Unknown routes render the branded 404 without broken local resources.
 - The prepared `_site/` model is not called the live deployment boundary until Pages has actually migrated to an Actions-built artifact.
 
