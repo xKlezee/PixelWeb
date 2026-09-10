@@ -23,6 +23,8 @@ class AccessibilityParser(html.parser.HTMLParser):
         self.element_ids: set[str] = set()
         self.text_controls: list[tuple[str, str, str, str, int]] = []
         self.table_headers: list[tuple[str, int]] = []
+        self.tables: list[tuple[int, str]] = []
+        self._table_stack: list[dict[str, object]] = []
         self._in_title = False
         self._title_parts: list[str] = []
 
@@ -45,6 +47,10 @@ class AccessibilityParser(html.parser.HTMLParser):
             self.main_count += 1
         elif tag == "img" and "alt" not in attrs_dict:
             self.images_without_alt.append(line)
+        elif tag == "table":
+            self._table_stack.append({"line": line, "caption_parts": [], "in_caption": False})
+        elif tag == "caption" and self._table_stack:
+            self._table_stack[-1]["in_caption"] = True
         elif tag == "th":
             self.table_headers.append((str(attrs_dict.get("scope") or "").strip().lower(), line))
         elif tag == "title":
@@ -75,12 +81,24 @@ class AccessibilityParser(html.parser.HTMLParser):
             ))
 
     def handle_endtag(self, tag: str) -> None:
-        if tag.lower() == "title":
+        tag = tag.lower()
+        if tag == "title":
             self._in_title = False
+        elif tag == "caption" and self._table_stack:
+            self._table_stack[-1]["in_caption"] = False
+        elif tag == "table" and self._table_stack:
+            table = self._table_stack.pop()
+            caption_parts = table["caption_parts"]
+            caption = "".join(caption_parts).strip() if isinstance(caption_parts, list) else ""
+            self.tables.append((int(table["line"]), caption))
 
     def handle_data(self, data: str) -> None:
         if self._in_title:
             self._title_parts.append(data)
+        if self._table_stack and self._table_stack[-1].get("in_caption"):
+            caption_parts = self._table_stack[-1]["caption_parts"]
+            if isinstance(caption_parts, list):
+                caption_parts.append(data)
 
 
 def validate_text_controls(page: Path, parser: AccessibilityParser, failures: list[str]) -> None:
@@ -108,7 +126,7 @@ def validate_text_controls(page: Path, parser: AccessibilityParser, failures: li
         )
 
 
-def validate_table_headers(page: Path, parser: AccessibilityParser, failures: list[str]) -> None:
+def validate_tables(page: Path, parser: AccessibilityParser, failures: list[str]) -> None:
     for scope, line in parser.table_headers:
         if scope in VALID_TH_SCOPES:
             continue
@@ -122,6 +140,12 @@ def validate_table_headers(page: Path, parser: AccessibilityParser, failures: li
             f"{page.name}:{line}: <th> has invalid scope={scope!r}; expected one of "
             f"{', '.join(sorted(VALID_TH_SCOPES))}"
         )
+
+    for line, caption in parser.tables:
+        if not caption:
+            failures.append(
+                f"{page.name}:{line}: <table> requires a non-empty <caption> for an accessible table name"
+            )
 
 
 def main() -> int:
@@ -149,7 +173,7 @@ def main() -> int:
             failures.append(f"{page.name}:{line}: <img> must declare alt, including alt=\"\" for decorative images")
 
         validate_text_controls(page, parser, failures)
-        validate_table_headers(page, parser, failures)
+        validate_tables(page, parser, failures)
 
     if failures:
         print("Accessibility structure validation failed:")
