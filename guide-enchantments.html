@@ -51,43 +51,43 @@
         <header class="guides-document-header" id="overview">
           <div class="eyebrow">Equipment reference</div>
           <h1>Enchantments.</h1>
-          <p class="guides-document-lead">Pixel's enchantment system is built around equipment families, stable enchant identity and a shared combat pipeline. This guide documents what the mechanics actually do rather than inferring behavior from their names.</p>
-          <div class="guides-document-meta"><span>Current source audited</span><span><span data-network="content.enchantments">—</span> public catalogue entries</span><span>Retired IDs remain retired</span></div>
+          <p class="guides-document-lead">Pixel's enchantment system is built around equipment families, stable enchant identity and a shared combat model. This guide documents what the mechanics actually do rather than inferring behavior from their names.</p>
+          <div class="guides-document-meta"><span>Current source audited</span><span><span data-network="content.enchantments">—</span> public catalogue entries</span><span>Retired identities stay retired</span></div>
           <div class="guide-facts" data-guide-enchant-summary aria-label="Enchantments summary"></div>
         </header>
 
         <section class="guide-section" id="rules">
-          <div class="guide-section-head"><div><small>01 / System contract</small><h2>Compatibility is deliberate, not accidental.</h2></div><p>Equipment families own their allowed pool, while combat effects converge into shared damage and mitigation infrastructure instead of creating parallel event paths.</p></div>
+          <div class="guide-section-head"><div><small>01 / System contract</small><h2>Compatibility is deliberate, not accidental.</h2></div><p>Equipment families own their allowed pool, while combat effects follow the same damage and mitigation rules instead of creating separate interpretations of a hit.</p></div>
           <div class="enchant-principles" data-guide-enchant-principles></div>
           <div class="enchant-cap-rule"><div class="enchant-cap-number" data-guide-enchant-cap>—</div><div class="enchant-cap-copy"><strong>Global enchant cap per item</strong><p>The cap applies across the equipment model. A family can expose characteristic and shared enchantments, but an item cannot accumulate an unbounded list simply because several systems recognize it.</p></div></div>
         </section>
 
         <section class="guide-section" id="families">
-          <div class="guide-section-head"><div><small>02 / Equipment families</small><h2>One enchant system, several mechanical identities.</h2></div><p>Sword, Axe and Spear are distinct melee families. Bow, Elytra and Shield preserve their own resolution rules instead of inheriting whatever happens to work for a sword.</p></div>
+          <div class="guide-section-head"><div><small>02 / Equipment families</small><h2>One enchant system, several mechanical identities.</h2></div><p>Sword, Axe and Spear are distinct melee families. Bow, Elytra and Shield preserve their own rules instead of inheriting whatever happens to fit a sword.</p></div>
           <div class="guide-table-wrap"><table class="guide-table"><caption>Current family-level enchant model</caption><thead><tr><th>Family</th><th>Characteristic identity</th><th>Shared / dedicated pool</th><th>Design contract</th></tr></thead><tbody data-guide-enchant-families></tbody></table></div>
-          <div class="guide-callout"><span aria-hidden="true"></span><div><strong>Shield resolution includes the offhand.</strong><p>The resolver reads Shield enchantments from the actual offhand and guards against counting the same enchant identity twice when mainhand and offhand overlap.</p></div></div>
+          <div class="guide-callout"><span aria-hidden="true"></span><div><strong>Shield enchantments use the equipped offhand.</strong><p>The same enchantment is not counted twice merely because held items overlap in what they provide.</p></div></div>
         </section>
 
         <section class="guide-section" id="specialized">
-          <div class="guide-section-head"><div><small>03 / Specialized mechanics</small><h2>Some enchants alter combat semantics, not just damage.</h2></div><p>These mechanics have dedicated behavior and must not silently fall back to a generic damage proc when their specialized path is expected.</p></div>
+          <div class="guide-section-head"><div><small>03 / Specialized mechanics</small><h2>Some enchants alter combat semantics, not just damage.</h2></div><p>These mechanics have dedicated behavior and are documented according to that behavior instead of being reduced to a generic damage proc.</p></div>
           <div class="enchant-mechanics-grid" data-guide-enchant-specialized></div>
         </section>
 
         <section class="guide-section" id="semantics">
-          <div class="guide-section-head"><div><small>04 / Name vs behavior</small><h2>Names do not grant mechanics the code does not have.</h2></div><p>A professional reference should describe the current implementation, not fill semantic gaps with genre assumptions.</p></div>
+          <div class="guide-section-head"><div><small>04 / Name vs behavior</small><h2>Names do not grant mechanics that are not defined.</h2></div><p>A reliable reference describes verified behavior instead of filling semantic gaps with genre assumptions.</p></div>
           <div class="guide-table-wrap"><table class="guide-table"><caption>Enchant names whose current behavior is intentionally conservative</caption><thead><tr><th>Enchant</th><th>Current behavior</th><th>Clarification</th></tr></thead><tbody data-guide-enchant-conservative></tbody></table></div>
-          <div class="enchant-semantic-note"><strong>Why this matters</strong><p>For example, a name that sounds like fire, frost, momentum or disruption is not documentation for a damage-over-time, slow, movement or crowd-control mechanic. Those behaviors only become part of the guide when they exist in the authoritative implementation.</p></div>
+          <div class="enchant-semantic-note"><strong>Why this matters</strong><p>For example, a name that sounds like fire, frost, momentum or disruption is not documentation for a damage-over-time, slow, movement or crowd-control mechanic. Those behaviors only become part of the guide when current evidence supports them.</p></div>
         </section>
 
         <section class="guide-section" id="retired">
-          <div class="guide-section-head"><div><small>05 / Retired identities</small><h2>Retirement is part of the compatibility contract.</h2></div><p>Removing an active mechanic does not make its identifier free real estate. Historical IDs stay classified so old items, backups and documentation cannot silently acquire a different meaning later.</p></div>
+          <div class="guide-section-head"><div><small>05 / Retired identities</small><h2>Retirement is part of the compatibility contract.</h2></div><p>Removing an active mechanic does not make its identity available for an unrelated effect. Historical identities stay classified so older items and references cannot silently acquire a different meaning later.</p></div>
           <div class="enchant-retired-grid" data-guide-enchant-retired></div>
         </section>
 
         <section class="guide-section" id="verification">
-          <div class="guide-section-head"><div><small>06 / Documentation confidence</small><h2>Source confidence is explicit.</h2></div><p>The current active PixelEnchants source was audited for incomplete functionality and the recorded repository baseline includes its regression suite. This is stronger than legacy documentation, but it is still not a substitute for an unperformed live-client pass.</p></div>
+          <div class="guide-section-head"><div><small>06 / Documentation confidence</small><h2>Source confidence is explicit.</h2></div><p>Current family rules, specialized effects, conservative semantics and retired identities are source-verified. That evidence supports this reference, but it does not substitute for a live-client pass that has not been performed.</p></div>
           <div class="enchant-verification-grid" data-guide-enchant-verification></div>
-          <div class="guide-callout is-legacy"><span aria-hidden="true"></span><div><strong>Legacy names and old YAML backups are not current behavior.</strong><p>Pixel Guides follows the active source and current compatibility decisions. An enchant appearing in an old GitBook, backup resource or stale comment does not make it active again.</p><div class="guide-callout-actions"><a class="guide-text-link" href="https://pixel-network-1.gitbook.io/home/documentation" target="_blank" rel="noopener">Open legacy reference ↗</a></div></div></div>
+          <div class="guide-callout is-legacy"><span aria-hidden="true"></span><div><strong>Legacy names and old documentation are not current behavior.</strong><p>An enchant appearing in the old GitBook or another stale reference does not make it part of the current catalogue again.</p><div class="guide-callout-actions"><a class="guide-text-link" href="https://pixel-network-1.gitbook.io/home/documentation" target="_blank" rel="noopener">Open legacy reference ↗</a></div></div></div>
         </section>
       </article>
     </div>
