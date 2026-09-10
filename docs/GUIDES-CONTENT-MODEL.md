@@ -32,25 +32,20 @@ What changed and when. It must not become permanent documentation for the result
 
 The previous GitBook at `https://pixel-network-1.gitbook.io/home/documentation` is an **incomplete legacy reference**.
 
-It may be used to:
-
-- recover old topic/category names;
-- identify mechanics that need investigation;
-- recover useful explanatory structure;
-- compare historical intent with the current implementation.
+It may be used to recover topic/category names, identify mechanics that need investigation, recover useful explanatory structure, and compare historical intent with the current implementation.
 
 It must **not** be used as authoritative evidence for a current numeric value, unlock rule, reward, item effect, command behavior, compatibility rule or live feature state.
 
-Migration rule:
+Migration sequence:
 
 1. identify a candidate topic from legacy documentation;
 2. locate the current implementation/configuration/approved source of truth;
-3. classify every factual claim as `verified`, `planned`, `unknown` or `deprecated`;
-4. move only verified current behavior into the authoritative guide;
+3. classify the evidence level and the factual state separately;
+4. move only claims supported at the stated evidence level into Pixel Guides;
 5. retain historical/legacy behavior only when it materially helps migration or version history, and label it as such;
 6. never silently copy an old value into current documentation.
 
-If legacy documentation conflicts with current evidence, current verified behavior wins. If current evidence is insufficient, the value remains `unknown` and is not guessed.
+If legacy documentation conflicts with current evidence, current verified evidence wins. If current evidence is insufficient, the value remains `unknown` and is not guessed.
 
 ## Data ownership
 
@@ -69,16 +64,31 @@ Do not create a guide-domain file merely to duplicate data that is already canon
 
 A guide renderer should read canonical data and create DOM through `textContent`, `createElement`, `append`, and `replaceChildren`. Do not generate guide HTML from untrusted strings.
 
-## Verification states
+## Evidence-qualified verification
 
-Detailed guide data must distinguish at least:
+The word `verified` is not sufficient on its own for new Guides. Documentation must state **what kind of evidence was actually obtained**.
 
-- `verified`: traced to the current production/source-of-truth implementation or approved configuration;
-- `planned`: approved direction but not currently live;
+Evidence levels, from narrower to stronger observation:
+
+- `source-verified`: traced through the current authoritative source/configuration and regression coverage; no live-runtime observation is implied;
+- `server-verified`: the relevant server-side runtime/configuration/log path was observed in addition to source evidence; client presentation may still be unverified;
+- `live-client-verified`: the player-facing behavior was exercised in a real client against the intended runtime;
+- `reconciled-reference`: source and live/current configuration were compared and the canonical target/reference was established, but one or more staged changes may still await deployment.
+
+Factual state is a separate axis:
+
+- `current`: supported behavior/reference for the stated evidence level;
+- `staged`: implemented/reconciled but not yet deployed at the last verification;
+- `planned`: approved direction but not implemented/current;
 - `unknown`: insufficient evidence; do not invent a value;
-- `deprecated`: historical behavior retained only for migration/history context.
+- `deprecated` / `retired`: historical identity intentionally retained for compatibility/history but not active behavior.
 
-Do not present `planned` or `unknown` information as live gameplay.
+A Guide must never upgrade evidence silently. Examples:
+
+- green source tests do not equal a live-client observation;
+- a source-ready fix does not become `current live` until deployment is established;
+- a live configuration catalogue can be `reconciled-reference` even when a later source fix that uses it is still staged;
+- an old GitBook statement never upgrades an `unknown` fact.
 
 ## Duplication policy
 
@@ -112,6 +122,12 @@ A detailed guide should generally contain:
 
 Do not pad guides with repeated marketing copy.
 
+## Public-disclosure boundary
+
+A fact can be verified and still be inappropriate to publish. Public Guide data must additionally be classified for disclosure.
+
+Do not publish concealed discovery trees, secret combinations, anti-abuse thresholds, private operational procedures or other information whose secrecy is intentionally part of the product/security model. Explain the existence and semantics of such systems without leaking their protected inputs.
+
 ## Security boundary
 
 Guides are public content. Never place in guide data or source files:
@@ -130,9 +146,14 @@ Guides are public content. Never place in guide data or source files:
 - External links use explicit `https:` validation and `rel="noopener"` when opening a new tab.
 - No inline scripts, inline event handlers, inline styles, `javascript:` URLs or HTML parsing sinks.
 - Guide pages inherit the same CSP/security validation as the rest of PixelWeb.
+- Guide pages default to `connect-src 'self'`; a broader network permission requires a documented feature-level reason.
 
-## Initial rollout
+## Current rollout
 
-The Guides landing/index is the stable documentation entry point. Detailed guides are promoted from overview links only after their current facts are verified and wired to canonical data.
+`guides.html` is the stable documentation entry point. Detailed pages are promoted only after their evidence level and disclosure boundary are known.
 
-The first detailed implementation is `guide-worlds.html`, whose stage table and route facts render from `data/network.js` rather than duplicating World values in the guide source.
+Current pattern examples:
+
+- `guide-talismans.html`: server-verified mechanics with a separately disclosed client-QA gap;
+- `guide-enchantments.html`: source-verified mechanics/tests without claiming a live-client pass;
+- `guide-nexus.html`: reconciled catalogue/reference with staged deployment work called out separately.
