@@ -11,8 +11,8 @@ public directories.
 CSS dependencies are resolved recursively as part of the same allowlist. A local resource that
 exists only behind ``url(...)`` or a quoted ``@import`` cannot silently disappear from the Pages
 artifact, and CSS is not allowed to pull an undeclared repository directory into publication.
-Symlinks are rejected at the source boundary so an allowlisted path cannot dereference content
-from an undeclared or external location during artifact construction.
+Symlinks and protocol-relative resource references are rejected at the source boundary so an
+allowlisted path/reference cannot silently dereference or redirect outside the approved model.
 """
 from __future__ import annotations
 
@@ -104,6 +104,8 @@ def local_root_reference(raw: str) -> str | None:
     value = raw.strip()
     if not value or value.startswith(("#", "mailto:", "tel:")):
         return None
+    if value.startswith("//"):
+        raise ValueError(f"protocol-relative public-page reference is not allowed ({raw})")
     parts = urlsplit(value)
     if parts.scheme or parts.netloc or not parts.path:
         return None
@@ -138,6 +140,10 @@ def css_local_target(source: Path, raw: str) -> tuple[Path, Path] | None:
         return None
 
     parts = urlsplit(value)
+    if not parts.scheme and parts.netloc:
+        raise ValueError(
+            f"{source.relative_to(ROOT)}: protocol-relative CSS URL is not allowed ({raw})"
+        )
     if parts.scheme or parts.netloc or not parts.path:
         return None
 
@@ -239,7 +245,11 @@ def main() -> int:
         parser.feed(page.read_text(encoding="utf-8"))
         parser.close()
         for raw in parser.references:
-            candidate = local_root_reference(raw)
+            try:
+                candidate = local_root_reference(raw)
+            except ValueError as exc:
+                print(f"Public-site build failed: {page_name}: {exc}")
+                return 1
             if candidate:
                 root_files.add(candidate)
 
