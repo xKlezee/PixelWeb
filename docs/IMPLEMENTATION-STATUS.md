@@ -15,7 +15,7 @@ This document records the current release-candidate architecture and gates witho
 - `SECURITY.md` documents public/private boundaries, credential incident handling and the future authenticated-backend boundary.
 - `scripts/security_scan.py` scans committed text for common secret material.
 - `scripts/validate_site.py` validates top-level HTML integrity, CSP/transport rules, local references and sitemap/publication contracts. Indexable pages must expose exactly one absolute HTTPS canonical URL matching the page URL declared by `sitemap.xml`; missing, duplicate, mismatched and non-sitemap canonicals fail validation.
-- `scripts/validate_runtime_contracts.py` validates deferred media, direct style-assignment policy, navigation invariants, Guide fragments and Guide-library coverage.
+- `scripts/validate_runtime_contracts.py` validates deferred media, direct style-assignment policy, navigation invariants, local same-page/cross-page fragment targets and Guide-library coverage.
 - `scripts/validate_accessibility.py` checks document structure, image alternatives and accessible naming of visible form controls.
 - `scripts/validate_player_facing_copy.py` keeps known repository-test/database/wiring/deployment implementation terminology out of browser-public player documentation while allowing legitimate evidence labels, formulas, stat keys and player commands.
 - `scripts/validate_media_integrity.py` protects the four approved Nexus boss PNGs by byte size, dimensions and exact Git blob SHA.
@@ -43,7 +43,7 @@ This document records the current release-candidate architecture and gates witho
 - Keyboard opening, focus handling and Escape remain separate supported paths.
 - `security-hardening.css` carries the 981 px fine-pointer hover-only rule and is required on canonical public pages.
 - Detailed `guide-*.html` fallbacks mark exactly `guides.html` as `aria-current="page"` in the global navbar.
-- Same-page Guide fragment links must point to IDs that actually exist.
+- Every local fragment anchor must resolve to an existing `id` in its same-page or cross-page top-level HTML target; Guide anchors are included in this global contract rather than handled as a special case.
 - The primary `guides.html` library must contain exactly one `data-guide-entry` for every current `guide-*.html` detail page, with no duplicate or orphan primary entries.
 - First keyboard focus exposes a Skip to content path on standard pages.
 - Play and Forum dialogs retain focus containment, Escape close and trigger-focus restoration.
@@ -162,7 +162,7 @@ The `_site/` pipeline is prepared but is **not yet the live GitHub Pages source*
 
 ### Source/static review
 
-The current candidate has been reviewed at source level for DOM safety, CSP structure, canonical crawl metadata, canonical data relationships, external destinations, Guide/publication boundaries, local dependencies, media loading, navigation contracts and structural accessibility.
+The current candidate has been reviewed at source level for DOM safety, CSP structure, canonical crawl metadata, canonical data relationships, external destinations, Guide/publication boundaries, local dependencies, local fragment-link integrity, media loading, navigation contracts and structural accessibility.
 
 This review is not a substitute for successful validator execution or browser rendering.
 
