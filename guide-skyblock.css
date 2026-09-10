@@ -1,0 +1,128 @@
+/* Pixel Network — Skyblock source-qualified reference */
+
+.skyblock-capability-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 10px;
+}
+.skyblock-capability {
+  min-width: 0;
+  min-height: 112px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 17px;
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 15px;
+  background: linear-gradient(145deg, rgba(143,178,255,.025), rgba(255,255,255,.008));
+}
+.skyblock-capability-index {
+  color: #72809a;
+  font: 760 8px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: .1em;
+}
+.skyblock-capability h3 {
+  margin: 20px 0 0;
+  color: #e4e7ed;
+  font-size: 15px;
+  letter-spacing: -.02em;
+}
+
+.skyblock-foundation-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 12px;
+}
+.skyblock-foundation-card,
+.skyblock-partial-card {
+  min-width: 0;
+  padding: 21px;
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 16px;
+  background: rgba(255,255,255,.012);
+}
+.skyblock-foundation-card small,
+.skyblock-partial-card small {
+  display: block;
+  color: #8ca5d9;
+  font-size: 8px;
+  font-weight: 830;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.skyblock-foundation-card h3,
+.skyblock-partial-card h3 {
+  margin: 9px 0 7px;
+  color: #e7e9ee;
+  font-size: 18px;
+  letter-spacing: -.025em;
+}
+.skyblock-foundation-card p,
+.skyblock-partial-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 10.5px;
+  line-height: 1.68;
+}
+
+.skyblock-partial-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 12px;
+}
+.skyblock-partial-card {
+  border-style: dashed;
+  border-color: rgba(222,181,101,.13);
+  background: rgba(222,181,101,.018);
+}
+.skyblock-partial-card small { color: #c6a96f; }
+
+.skyblock-rules {
+  border-top: 1px solid rgba(255,255,255,.065);
+  border-bottom: 1px solid rgba(255,255,255,.065);
+}
+.skyblock-rule {
+  display: grid;
+  grid-template-columns: 42px minmax(0,1fr);
+  gap: 18px;
+  align-items: start;
+  padding: 17px 0;
+}
+.skyblock-rule + .skyblock-rule { border-top: 1px solid rgba(255,255,255,.05); }
+.skyblock-rule span {
+  color: #78849b;
+  font: 760 8px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.skyblock-rule p {
+  max-width: 720px;
+  margin: 0;
+  color: #a8abb3;
+  font-size: 11px;
+  line-height: 1.68;
+}
+
+.skyblock-status-banner {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto;
+  gap: 22px;
+  align-items: center;
+  margin-top: 24px;
+  padding: 17px 19px;
+  border: 1px solid rgba(222,181,101,.11);
+  border-radius: 15px;
+  background: linear-gradient(90deg, rgba(222,181,101,.024), rgba(255,255,255,.006));
+}
+.skyblock-status-banner p { margin: 0; color: var(--muted); font-size: 10.5px; line-height: 1.65; }
+.skyblock-status-banner strong { color: #d4bb89; font-size: 10px; text-transform: uppercase; letter-spacing: .08em; white-space: nowrap; }
+
+@media (max-width: 900px) {
+  .skyblock-capability-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .skyblock-foundation-grid,
+  .skyblock-partial-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 560px) {
+  .skyblock-capability-grid { grid-template-columns: 1fr; }
+  .skyblock-capability { min-height: 96px; }
+  .skyblock-status-banner { grid-template-columns: 1fr; }
+}
