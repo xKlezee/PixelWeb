@@ -21,7 +21,7 @@
     ['Core documented stats', Array.isArray(guide.coreStats) ? guide.coreStats.length : '—'],
     ['Mitigation cap', guide.mitigation?.cap ?? '—'],
     ['Evidence', 'Source verified'],
-    ['Mining stats', 'Separate audit']
+    ['Mining stats', 'Separate reference']
   ]);
 
   const statsBody = document.querySelector('[data-guide-core-stats]');
@@ -31,9 +31,9 @@
       const identity = el('td');
       identity.append(el('strong', 'guide-table-title', stat.name || '—'), el('code', 'stats-key', stat.key || ''));
       const family = el('td', '', stat.family || '—');
-      const backing = el('td', '', stat.backing || '—');
+      const role = el('td', '', stat.role || '—');
       const meaning = el('td', '', stat.meaning || '');
-      tr.append(identity, family, backing, meaning);
+      tr.append(identity, family, role, meaning);
       return tr;
     }));
   }
@@ -52,8 +52,16 @@
       const article = el('article', 'stats-family-card');
       article.dataset.documentation = family.documentation || '';
 
+      const statusLabels = {
+        'source-verified': 'Source verified',
+        'partial-reference': 'Partial reference',
+        'separate-audit-required': 'Separate reference'
+      };
       const head = el('div', 'stats-family-head');
-      head.append(el('span', 'stats-family-category', family.category || 'Equipment'), el('span', 'stats-family-status', String(family.documentation || 'reference').replaceAll('-', ' ')));
+      head.append(
+        el('span', 'stats-family-category', family.category || 'Equipment'),
+        el('span', 'stats-family-status', statusLabels[family.documentation] || 'Reference')
+      );
 
       const chips = el('div', 'stats-family-chips');
       if (Array.isArray(family.primary) && family.primary.length) {
@@ -77,10 +85,10 @@
   }
 
   const excludedHost = document.querySelector('[data-guide-excluded-stats]');
-  if (excludedHost && Array.isArray(guide.excludedRegistryExamples)) {
-    excludedHost.replaceChildren(...guide.excludedRegistryExamples.map(item => {
+  if (excludedHost && Array.isArray(guide.excludedCoverage)) {
+    excludedHost.replaceChildren(...guide.excludedCoverage.map(item => {
       const article = el('article', 'stats-exclusion');
-      article.append(el('code', '', item.name || 'stat'), el('p', '', item.reason || ''));
+      article.append(el('strong', 'guide-table-title', item.name || 'Scope boundary'), el('p', '', item.reason || ''));
       return article;
     }));
   }
@@ -88,14 +96,26 @@
   const verificationHost = document.querySelector('[data-guide-stats-verification]');
   if (verificationHost) {
     const current = el('article', 'verification-card is-verified');
-    current.append(el('small', '', 'Core semantics'), el('h3', '', 'Source verified'), el('p', '', 'The published core stat meanings are tied to current producer/consumer paths rather than a registry name alone.'));
+    current.append(
+      el('small', '', 'Core semantics'),
+      el('h3', '', 'Source verified'),
+      el('p', '', 'The published stat meanings are supported by current gameplay behavior rather than a name or historical list alone.')
+    );
 
-    const deploy = el('article', 'verification-card is-pending');
-    deploy.append(el('small', '', 'Recent combat fixes'), el('h3', '', 'Deployment-sensitive'), el('p', '', 'Recent source-ready combat corrections are not described as live until their deployment is independently established.'));
+    const scope = el('article', 'verification-card is-verified');
+    scope.append(
+      el('small', '', 'Publication scope'),
+      el('h3', '', 'Combat & equipment'),
+      el('p', '', 'This page covers the core combat/equipment stat model and its relationships without extending that evidence to separate systems.')
+    );
 
     const mining = el('article', 'verification-card is-pending');
-    mining.append(el('small', '', 'Mining stats'), el('h3', '', 'Dedicated audit required'), el('p', '', 'Mining-specific stats remain outside this page until their complete producer-to-consumer coverage is re-verified.'));
+    mining.append(
+      el('small', '', 'Mining stats'),
+      el('h3', '', 'Separate reference'),
+      el('p', '', 'Mining-specific stats remain outside this page until their dedicated documentation is ready and independently supported.')
+    );
 
-    verificationHost.replaceChildren(current, deploy, mining);
+    verificationHost.replaceChildren(current, scope, mining);
   }
 })();
