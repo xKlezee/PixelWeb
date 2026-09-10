@@ -11,13 +11,13 @@ The site presents the network's gameplay model, progression worlds, Nexus endgam
 - Detailed `guide-*.html` pages use a denser documentation-specific interface and canonical public data rather than duplicating exact gameplay values.
 - `data/network.js` owns the currently shared verified public network facts used across overview and guide surfaces.
 - The old GitBook documentation is retained only as an incomplete legacy migration reference. It is not the current source of truth.
-- The community Forum remains a non-persistent preview until live account services are introduced.
+- Community is centered on Discord and Guides; the former Forum surface is retired.
 
 ## Security boundary
 
 Sensitive infrastructure, credentials, administrative tooling and private operational documentation are not part of this repository.
 
-The static frontend is not an authorization boundary. Future Login, profiles, persistent Forum, moderation and private APIs must use server-side identity/authorization and the requirements documented under `docs/` before they are treated as production features.
+The static frontend is not an authorization boundary. Future Login, profiles, moderation and private APIs must use server-side identity/authorization and the requirements documented under `docs/` before they are treated as production features.
 
 ## Quality gates
 

@@ -1,10 +1,8 @@
 # Responsive QA — PixelWeb
 
-This document separates **static/code verification** from **browser-render verification**. A viewport is not marked visually PASS merely because its CSS appears correct.
+This document separates **static/code review** from **browser-render verification**. A viewport is never marked visually PASS only because its source appears correct.
 
 ## Required viewport matrix
-
-The release matrix is:
 
 | Width | Primary purpose | Static review | Browser render |
 |---:|---|---|---|
@@ -14,206 +12,167 @@ The release matrix is:
 | 430 px | large mobile | reviewed | pending |
 | 390 px | compact mobile | reviewed | pending |
 
-Browser-render status remains pending until the hardening branch can be opened in a real browser with DevTools console/network inspection. Static review must not be presented as visual PASS.
+Also required: one short-height landscape window and 200% browser zoom.
 
-## Static invariants reviewed
+## Global navigation
 
-### Global public navigation
+- Desktop navigation remains active above 980 px; mobile navigation takes over at 980 px and below.
+- Explore / Development / Community keep the fine-pointer hover contract on desktop and explicit click/touch behavior on mobile.
+- Keyboard focus, ArrowDown and Escape remain independent supported paths.
+- Store and Discord remain reachable from the mobile menu while Play remains directly available in the header.
+- Detailed `guide-*.html` pages keep Guides selected in the canonical navigation.
+- A first-focus Skip to content route is generated for standard pages.
+- Category pages now expose a contextual sibling-navigation rail directly below the global navigation:
+  - Explore → Gameplay / Systems / Worlds / Skyblock / Nexus;
+  - Development → Development / Changelog;
+  - Community → Community / Guides.
+- The current sibling and its owning top-level group use the Pixel Blue active treatment. Active state must remain understandable through text/shape/contrast and not rely on color alone.
+- The contextual rail is horizontally scrollable rather than wrapping into a tall second navigation on narrow screens.
+- Home, Store and About do not create an empty contextual rail because they are not sibling members of those category groups.
 
-- desktop navigation remains active above 980 px;
-- mobile navigation takes over at 980 px and below;
-- mobile menu uses viewport-bounded height with its own vertical scrolling;
-- the brand and action area have explicit compact rules at 560 px and below;
-- a single canonical runtime navigation model owns Explore, Development, Community, Guides and About destinations;
-- detailed `guide-*.html` pages keep Guides selected in the canonical navigation;
-- Store and Discord are available in the mobile menu while Play remains directly accessible in the header;
-- on fine-pointer desktop layouts, Explore / Development / Community are hover targets rather than pointer-click toggles; their buttons do not receive pointer events, preventing a click from pinning one dropdown open over another;
-- the dropdown remains open while the pointer stays anywhere inside its owning navigation group, including the dropdown itself;
-- the structural dropdown includes an 8 px hover bridge between the top-level control and the absolute-positioned menu so normal downward pointer travel does not cross a dead gap;
-- leaving the owning navigation group collapses the pointer-opened dropdown; entering another group makes that group authoritative and prevents stacked pointer-open menus;
-- touch/mobile keeps explicit button toggling because hover is not available;
-- keyboard navigation remains available independently of the desktop pointer rule through focus, ArrowDown and Escape handling;
-- keyboard Escape closes open navigation groups/mobile navigation;
-- dropdown controls expose `aria-expanded` and `aria-controls`;
-- a global first-focus **Skip to content** link is generated for standard pages, targets the real `<main>` region, makes that region programmatically focusable when required, and moves focus after activation rather than only scrolling visually.
+## Typography
 
-### Shared content layouts
+The current source uses a locally resolved compact grotesk stack rather than downloading a third-party webfont. Browser QA must confirm:
 
-- page hero grids collapse before their fixed minimum columns can overflow;
-- content/detail/metric grids collapse to one column on mobile;
-- CTA blocks stack on mobile;
-- long text containers use `minmax(0, 1fr)` where grid shrinkage is required;
-- body-level horizontal overflow is not relied on as a substitute for intentional horizontal scrollers.
+- heavy headings retain readable counters and do not clip at large sizes;
+- negative heading tracking does not cause collisions;
+- uppercase utility labels remain legible at 390 px and 200% zoom;
+- fallback rendering remains acceptable when Inter Tight / Inter are not installed;
+- navigation dimensions do not shift significantly between platform font fallbacks.
 
-### Home
+## Shared content layouts
 
-- hero collapses to one column below 980 px;
-- immersive story has reduced mobile height and hides the desktop scroll hint;
-- world gallery becomes a two-column compact gallery below 980 px;
-- closing/status/store sections collapse below 980 px;
-- Story progress is a native `<progress>` element instead of transform-based inline styling;
-- the immersive MP4 has no initial `src`, uses `preload="none"`, and is hydrated through `IntersectionObserver` approximately 600 px before the story approaches the viewport;
-- if `IntersectionObserver` is unavailable, the video falls back to hydration without breaking the story;
-- the scroll scrub waits for valid `loadedmetadata`/duration before seeking;
-- direct chapter interaction also hydrates the video when motion is allowed;
-- with `prefers-reduced-motion: reduce`, the video is intentionally not hydrated or downloaded and the textual story remains usable against the static background.
+- Hero grids collapse before minimum columns can overflow.
+- Content/detail/metric grids collapse to one column on mobile where intended.
+- CTA blocks stack on mobile.
+- Long text containers remain shrink-safe.
+- Page-level horizontal overflow must never be used to hide layout failure; only intentional rails/tables may scroll horizontally.
 
-### Worlds
+## Home
 
-- four world cards are intentionally horizontally scrollable below the full four-column breakpoint;
-- the route is four Worlds only; `worlds-stage8-media.css` overrides the older five-column base rule with four columns/four colors;
-- the mobile progress route becomes vertical below 700 px;
-- five boss encounters become a one-column editorial strip below 980 px instead of an uneven 2+2+1 grid;
-- individual card content uses shrink-safe grid columns.
+- Hero collapses to one column below 980 px.
+- Immersive story has reduced mobile height and hides the desktop scroll hint.
+- World gallery becomes a compact mobile grid below 980 px.
+- Closing/status/store sections collapse below 980 px.
+- The immersive MP4 remains deferred (`preload="none"`) and should not be requested before the story approaches its hydration margin.
+- Reduced-motion mode must not hydrate/download the immersive MP4 during normal page use.
+- Home no longer presents or links the retired Forum surface.
 
-**Consolidation note:** `worlds-stage8.css` still contains an older five-stage progress definition that is overridden by `worlds-stage8-media.css`. It is not currently the effective rule, but should be merged out only after browser render verification of the current four-world implementation.
+## Worlds
 
-### Nexus
+- The four-world route remains four Worlds only.
+- World cards may use intentional horizontal scrolling at compact widths.
+- The mobile progress route becomes vertical below 700 px.
+- Boss presentation collapses cleanly below 980 px.
+- Individual card content remains shrink-safe.
 
-- hero, access block and instance grid collapse below 980 px;
-- difficulty ladder changes 4 → 2 → 1 columns;
-- long instance copy no longer relies on desktop minimum heights after collapse;
-- **fixed in this hardening branch:** Abyss + Astral no longer inherit a 4:3 *combined* container on tablet/mobile. Each unchanged 1448×1086 PNG keeps its own 4:3 panel side by side with `object-fit: contain`, preventing responsive cropping;
-- approved Raphael, Azazel, Abyss and Astral source PNG bytes are not recompressed, resized, converted or replaced as a performance shortcut.
+## Nexus
 
-### Systems
+- Hero, access block and instance grid collapse below 980 px.
+- Difficulty ladder changes 4 → 2 → 1 columns.
+- Raphael, Azazel, Abyss and Astral remain the approved original 1448×1086 PNGs without recompression/conversion.
+- Abyss + Astral must display as two complete independent 4:3 images without crop or stretch.
 
-- progression spine changes from horizontal to vertical below 980 px;
-- route links and quest panel collapse to one column below 700 px;
-- supporting rows collapse from three-column editorial rows to one column below 700 px;
-- full-width mobile route controls are applied below 430 px.
+## Systems
 
-### Guides / documentation
+- Progression spine changes from horizontal to vertical below 980 px.
+- Route links and quest panels collapse appropriately below 700 px.
+- Supporting rows collapse from editorial multi-column layouts to one column at narrow widths.
 
-- desktop Guides uses a documentation-specific two-column layout with a sticky 250 px sidebar and shrink-safe article column;
-- at 1040 px the sidebar narrows and guide tables remain intentionally horizontally scrollable rather than forcing unreadable cell wrapping;
-- at 820 px and below, the sidebar stops being sticky and becomes a horizontal section-navigation rail above the document;
-- at 620 px and below, guide facts, detailed route stages and result rows collapse to one column;
-- at 390 px the guide shell uses tighter side gutters without removing focus or touch-target space;
-- reference tables have an explicit overflow container and minimum readable table width;
-- Guide pages do not load heavy Nexus boss artwork when the page's purpose is mechanical reference;
-- Guides search filters existing entries only; hidden results are removed from layout with the native `hidden` state;
-- exact gameplay values in detailed guides are rendered from canonical public data where a shared canonical value already exists;
-- Guide evidence badges retain text labels and a shape marker so status is not communicated by color alone.
+## Guides
 
-#### Progression guide
+- Desktop Guides retains the documentation-specific sticky-sidebar layout.
+- At tablet widths the sidebar becomes a horizontal navigation rail above the document.
+- Guide tables remain intentionally horizontally scrollable rather than forcing unreadable wrapping.
+- Guide search remains usable at 390/430 px and 200% zoom.
+- Evidence/state labels remain readable and are not communicated only by color.
+- Dynamically rendered canonical facts must appear without leaving empty structural gaps after scripts load.
 
-- the three-layer progression rail is three columns on wide layouts and collapses to one column at 900 px;
-- Nexus encounter milestone cards also collapse 3 → 1 at 900 px, avoiding compressed difficulty labels;
-- the current-access note changes from split label/value layout to one column below 560 px;
-- the World/Nexus gate table stays inside the shared horizontally scrollable guide-table container rather than forcing page-level overflow;
-- caps and access milestones are rendered from `data/network.js`, so responsive variants do not maintain duplicate values in markup;
-- publication-boundary cards remain readable as a one-column sequence on tablet/mobile.
+## About / Owners
 
-#### Skyblock guide
+About now uses username-synchronized interactive Minecraft models rather than repository-pinned founder portraits.
 
-- current-capability cards change 3 → 2 → 1 columns at 900 px and 560 px;
-- source-foundation and partial-feature grids collapse from two columns to one at 900 px;
-- the partial-state banner stacks below 560 px so the status label cannot squeeze explanatory copy;
-- team-management content stays visually separated from the current-capability grid at every breakpoint;
-- the public Skyblock overview uses the existing global `path-grid`, `detail-grid` and `next-destination` responsive rules rather than adding a parallel layout system.
+Static expectations:
 
-### About / Owners
+- both owner profiles keep equal structural weight;
+- owner layouts collapse to one column below 900 px;
+- the viewer frame reduces height below 560 px without clipping the model;
+- each viewer is keyboard focusable and exposes an accessible instruction label;
+- ArrowLeft/ArrowRight rotate yaw, ArrowUp/ArrowDown adjust pitch, and Home restores that owner's own initial orientation;
+- pointer dragging rotates the model without causing page scroll while the drag is active;
+- the canvas uses nearest-neighbor style rendering for Minecraft texture fidelity;
+- live texture lookup is keyed by `Klezee` and `PxlMads` usernames, so a future skin change is not tied to a repository image update;
+- the no-JavaScript fallback also uses username-based remote renders rather than the old pinned WebP portraits;
+- provider failure must leave a readable status rather than a broken empty frame.
 
-- the owner intro collapses below 900 px;
-- both owner profiles use the same single-column relationship below 900 px;
-- PxlMads remains mirrored inward while preserving equal profile structure;
-- portrait heights and copy padding reduce below 560 px.
+Browser/network QA must additionally verify that the skin provider returns CORS-compatible textures, the canvas is not tainted before drawing, both users resolve correctly, and the provider cache behavior does not imply instant refresh in product copy.
 
-### Global Play modal
+## Community
 
-- dialog width is bounded to the viewport;
-- dialog height is bounded with internal scrolling;
-- below 620 px it becomes bottom-aligned, uses reduced padding and stacks footer actions;
-- focus trapping, Escape close and focus restoration remain implemented in JavaScript;
-- no runtime inline styles are required.
+- Community presents Discord and Guides as the active community destinations.
+- No visible Forum navigation, preview card, account/post UI or Forum copy should remain.
+- `forum.html` is retained only as a `noindex` compatibility redirect to Community for old bookmarks/links; it is not a product destination and remains excluded from the sitemap.
 
-### Forum
+## Play modal
 
-- Forum remains explicitly `noindex` while it is a local preview rather than persistent authentication/community infrastructure;
-- sidebar collapses below 860 px;
-- dense top navigation is reduced below 640 px;
-- post/modal spacing is reduced below 640 px;
-- auth and post overlays have their own vertical scrolling and switch to top alignment on short (`max-height: 700px`) viewports, preventing a centered modal from becoming unreachable in landscape/short windows;
-- the initial preview dialog now exposes `aria-modal`, a labelled title and descriptive preview copy;
-- initial focus enters the active display-name field when the entry dialog is visible;
-- Tab/Shift+Tab are trapped inside the entry dialog while the application is hidden;
-- after entering the preview, focus moves to the post-title field;
-- visible product copy remains explicitly preview/local, including preview-profile creation, planned account linking and local preview posting;
-- display name/title/message lengths are bounded in HTML and re-enforced in `app.js` so DOM manipulation does not silently widen the preview contract;
-- post dialogs trap focus, close with Escape and restore focus to the triggering post card;
-- reduced-motion disables meaningful animation/transition duration.
+- Dialog width and height remain viewport-bounded.
+- Narrow layouts stack footer actions.
+- Focus trapping, Escape close and focus restoration remain implemented without runtime inline styles.
 
-### Crawl / error surfaces
+## Crawl / error surfaces
 
-- the current deployment is a GitHub Pages **project site** under `/PixelWeb/`; the repository-level `PixelWeb/robots.txt` is therefore not treated as authoritative because standards-compliant crawlers request `/robots.txt` at the host root;
-- `robots.txt` documents that hosting boundary and must not be described as a security or privacy control;
-- `sitemap.xml` contains only indexable public product/Guide pages under the current project-site base URL;
-- Forum preview and the branded 404 are excluded from the sitemap and declare `noindex` at page level;
-- files published through GitHub Pages remain public whether or not a crawler is asked to ignore them;
-- `404.html` uses the same strict CSP/referrer policy and maintained site destinations rather than becoming an unstyled dead end;
-- Home exposes canonical and Open Graph/Twitter metadata using the existing official Pixel Network logo; no social-preview image was generated or recompressed.
+- The deployment remains a GitHub Pages project site under `/PixelWeb/`.
+- `sitemap.xml` contains only indexable product/Guide pages.
+- `forum.html` and `404.html` remain excluded from the sitemap and declare `noindex`.
+- The legacy Forum redirect must resolve to Community without creating a redirect loop.
+- `404.html` must keep the maintained CSP/referrer policy and usable site exits.
 
-## Automated structural guards prepared
+## Automated structural guards
 
-The Quality Gate now has separate responsibilities rather than treating every concern as one script:
+The Quality Gate keeps separate responsibilities:
 
-- `security_scan.py`: obvious committed-secret patterns;
-- `validate_media_integrity.py`: exact byte size, 1448×1086 dimensions and Git blob SHA for the four approved Nexus PNGs;
-- `node --check`: JavaScript syntax across repository JS files;
-- `validate_public_data.js`: canonical gameplay/public-data relationships, approved public destinations, static external-link consistency and Worlds media-origin policy;
-- `validate_site.py`: CSP, unsafe HTML/JS patterns, local references, HTTPS/protocol-relative policy and sitemap/index consistency;
-- `validate_runtime_contracts.py`: deferred-media references and direct/ordinary runtime inline-style mutations;
-- `validate_accessibility.py`: document language, viewport, title, exactly one `<main>`, descriptions for indexable pages and explicit `alt` on static images;
-- `build_public_site.py`: fail-closed reference-driven `_site/` construction with CSS dependency traversal and symlink/protocol-relative rejection;
-- `validate_public_bundle.py`: independent staged-artifact boundary, file-type, reference, CSS dependency, symlink and project-site path validation.
+- `security_scan.py` — committed-secret patterns;
+- `validate_media_integrity.py` — exact Nexus boss PNG integrity;
+- `node --check` — JavaScript syntax;
+- `validate_public_data.js` — canonical public-data relationships and approved destinations/media;
+- `validate_site.py` — CSP, HTML/JS safety patterns, local references, HTTPS policy and sitemap/index consistency;
+- `validate_social_metadata.py` — indexed-page title/description/social metadata consistency;
+- `validate_runtime_contracts.py` — deferred media, navigation, fragment targets and Guide-library contracts;
+- `validate_accessibility.py` — structural accessibility checks;
+- `build_public_site.py` — explicit `_site/` construction;
+- `validate_public_bundle.py` — staged artifact boundary validation.
 
-Manual workflow dispatch requires an explicit candidate branch, tag or SHA, so the workflow definition on `main` can validate the actual candidate tree rather than silently checking a different ref. Pull-request runs validate the PR event SHA; the former redundant hardening-branch push trigger has been removed.
-
-These checks are **configured but not reported as PASS** while the GitHub account billing lock prevents the Actions job from starting. The current execution environment also cannot resolve `github.com` for a local clone, so browser/runtime validation remains a separate pending gate.
+These checks are configured but must not be reported as PASS unless they actually execute. The known account-level Actions startup issue is separate from code quality.
 
 ## Browser verification checklist
 
-When a browser preview of this exact branch is available, every required viewport must be checked for:
-
-1. no unexpected horizontal page scroll;
-2. on desktop fine-pointer devices, Explore / Development / Community open on pointer hover without requiring click;
-3. pointer-clicking the top-level desktop group area does not pin a dropdown open;
-4. pointer movement from a top-level group into its dropdown crosses no dead gap or flicker zone;
-5. leaving a desktop navigation group fully collapses its dropdown, and switching directly between groups never leaves two dropdowns visibly stacked;
-6. touch/mobile can still open and close navigation groups without relying on hover;
-7. keyboard focus / ArrowDown / Escape remain usable independently of pointer-only behavior;
-8. dropdowns do not render outside the viewport;
-9. the first keyboard focus exposes the Skip to content link and activating it moves both scroll position and focus to `<main>`;
-10. Play modal is fully reachable with mouse, touch and keyboard;
-11. Forum entry and post modal remain fully reachable at short heights;
-12. Forum entry dialog keeps Tab/Shift+Tab inside the modal until preview entry;
-13. Forum display-name/post limits match the visible maxlength behavior and no preview action implies persistence/account availability;
-14. focus indicators are visible and not clipped;
-15. Escape closes modal/menu layers in the expected order;
-16. no image is stretched or unintentionally cropped;
-17. Abyss + Astral display both complete source images side by side;
-18. Worlds rail scroll-snap does not trap page scrolling;
-19. 4-world progress geometry is aligned with four rendered steps;
-20. owner portraits keep equal visual footprint and PxlMads faces inward;
-21. Home immersive video does not cause layout shifts;
-22. Home initial network waterfall does **not** request `Video_Perfecto_Con_Fondo_Negro.mp4` before the immersive section approaches the hydration margin;
-23. reduced-motion mode makes no request for the immersive MP4 during normal page use;
-24. Guides sidebar stays usable at desktop heights and the horizontal guide navigation remains touch-scrollable on tablet/mobile;
-25. Guide tables can be horizontally inspected without producing page-level horizontal overflow;
-26. Guides search remains usable at 390/430 px and at 200% browser zoom;
-27. Progression layer rail and Nexus milestone cards collapse without clipped copy or compressed status values;
-28. Skyblock current-capability and partial-feature sections remain visually distinct at 390/430 px;
-29. dynamically rendered Guide facts/cards appear after scripts load with no empty structural gaps;
-30. reduced-motion produces a stable, usable page;
-31. browser console has zero uncaught errors and zero CSP violations caused by first-party code;
-32. Network panel shows no insecure HTTP subresources;
-33. Guide pages make no unexpected external `connect-src` requests;
-34. images marked lazy are not fetched eagerly without reason;
-35. canonical/Open Graph metadata resolves to the expected public GitHub Pages URL on Home;
-36. unknown routes render the branded 404 without broken local resources;
-37. page remains usable at 200% browser zoom.
+1. No unexpected page-level horizontal scrolling at 1440 / 1024 / 768 / 430 / 390 px.
+2. Explore / Development / Community desktop hover behavior opens/closes without sticky pointer-click state.
+3. Mobile/touch navigation still opens explicitly at 980 px and below.
+4. Keyboard focus, ArrowDown and Escape remain usable in global navigation.
+5. Contextual sibling navigation appears only for the correct category and marks the current page in Pixel Blue.
+6. Contextual rail remains reachable by touch/trackpad horizontal scrolling on compact screens.
+7. Skip to content moves both scroll position and focus to `<main>`.
+8. Play modal is fully reachable and escapable with mouse, touch and keyboard.
+9. Focus indicators are visible and unclipped.
+10. Typography remains readable without clipping/collision, including at 200% zoom.
+11. Images are not stretched or unintentionally cropped.
+12. Abyss + Astral both display complete source images side by side.
+13. Worlds route remains visually aligned to exactly four Worlds.
+14. About shows equal owner-card visual weight.
+15. Klezee and PxlMads skin textures both resolve by username.
+16. Dragging each skin viewer rotates smoothly without text selection/page-drag artifacts.
+17. Arrow-key rotation and Home reset work for both viewers; PxlMads resets to its own mirrored initial angle.
+18. Skin-provider failure degrades to a readable viewer state.
+19. The retired Forum is absent from visible navigation/content, and direct `forum.html` access redirects to Community.
+20. Home immersive media causes no initial layout shift and remains deferred.
+21. Reduced-motion mode remains stable and avoids unnecessary immersive-video loading.
+22. Guide sidebar/rail, search and tables remain usable on compact screens.
+23. Browser console shows zero uncaught first-party errors and zero first-party CSP violations.
+24. Network panel shows no insecure HTTP subresources.
+25. Unknown routes render the branded 404 without broken local resources.
+26. Short-height landscape remains usable for navigation, Play modal, Guide rails and owner viewers.
 
 ## Release rule
 
-Do not merge the hardening branch solely because the static responsive review is clean. The final visual/browser matrix is a separate release gate. Static review can prove contradictory CSS, unsafe fixed geometry and missing breakpoints; it cannot prove the rendered result across browsers.
+Static/source review is not browser proof. Do not merge a substantial visual/interaction branch only because the source diff looks coherent; the final browser matrix remains a separate gate.

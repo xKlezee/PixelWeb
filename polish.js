@@ -38,7 +38,6 @@
   };
 
   const changelogLanding = safeLocalPage(network?.changelog?.landing, 'changelog.html');
-  const forumLanding = safeLocalPage(network?.community?.forumLanding, 'forum.html');
   const guidesLanding = safeLocalPage(network?.community?.guidesLanding, 'guides.html');
   const isGuideDetailPage = /^guide-[A-Za-z0-9._-]+\.html$/.test(currentPage);
   const isCurrentLocalDestination = href => currentPage === href || (isGuideDetailPage && href === guidesLanding);
@@ -147,9 +146,8 @@
     {
       label: 'Community',
       items: [
-        ['community.html', 'Community', 'Discord, Guides and Forum.'],
-        [guidesLanding, 'Guides', 'Detailed player reference and mechanics.'],
-        [forumLanding, 'Forum', 'Long-form discussion preview.']
+        ['community.html', 'Community', 'Discord and network resources.'],
+        [guidesLanding, 'Guides', 'Detailed player reference and mechanics.']
       ]
     }
   ];
@@ -185,6 +183,46 @@
     fragment.appendChild(about);
 
     navLinks.replaceChildren(fragment);
+  }
+
+  /* A contextual sibling rail mirrors the information architecture used by mature
+     network sites: global family first, then one-click movement inside that family. */
+  const currentNavigationGroup = canonicalNavigation.find(groupData =>
+    groupData.items.some(([href]) => isCurrentLocalDestination(safeLocalPage(href, 'index.html')))
+  );
+
+  if (nav && main && currentNavigationGroup) {
+    const sectionNav = document.createElement('nav');
+    sectionNav.className = 'section-subnav';
+    sectionNav.setAttribute('aria-label', `${currentNavigationGroup.label} sections`);
+
+    const inner = document.createElement('div');
+    inner.className = 'shell section-subnav-inner';
+
+    const label = document.createElement('span');
+    label.className = 'section-subnav-label';
+    label.textContent = currentNavigationGroup.label;
+    inner.appendChild(label);
+
+    const links = document.createElement('div');
+    links.className = 'section-subnav-links';
+
+    currentNavigationGroup.items.forEach(([href, title]) => {
+      const safeHref = safeLocalPage(href, 'index.html');
+      const link = document.createElement('a');
+      link.href = safeHref;
+      link.textContent = title;
+      if (isCurrentLocalDestination(safeHref)) {
+        link.classList.add('is-current');
+        link.setAttribute('aria-current', 'page');
+      }
+      links.appendChild(link);
+    });
+
+    inner.appendChild(links);
+    sectionNav.appendChild(inner);
+    nav.insertAdjacentElement('afterend', sectionNav);
+    document.body.classList.add('has-section-subnav');
   }
 
   /* Navigation groups: hover is convenient on desktop, click/keyboard is authoritative. */

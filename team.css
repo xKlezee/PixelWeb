@@ -24,7 +24,7 @@
 
 .owner-stack { display:grid; gap:24px; }
 .owner-profile {
-  --owner-accent: var(--yellow);
+  --owner-accent: var(--pixel-blue,#64a8ff);
   display:grid;
   grid-template-columns:minmax(300px,.76fr) minmax(0,1.24fr);
   min-height:430px;
@@ -36,7 +36,7 @@
   cursor:default;
 }
 
-/* Mirrored layout keeps the exact same 38/62 portrait-to-copy relationship. */
+/* Mirrored layout keeps the exact same 38/62 model-to-copy relationship. */
 .owner-profile.visual {
   grid-template-columns:minmax(0,1.24fr) minmax(300px,.76fr);
 }
@@ -47,11 +47,11 @@
   position:relative;
   min-height:430px;
   display:flex;
-  align-items:flex-end;
+  align-items:center;
   justify-content:center;
   overflow:hidden;
   background:
-    radial-gradient(90% 72% at 50% 88%, color-mix(in srgb,var(--owner-accent) 12%, transparent), transparent 67%),
+    radial-gradient(90% 72% at 50% 88%,color-mix(in srgb,var(--owner-accent) 12%,transparent),transparent 67%),
     linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,0) 44%),
     #0d0f12;
   border-right:1px solid rgba(255,255,255,.045);
@@ -73,26 +73,87 @@
 .owner-portrait::after {
   content:'';
   position:absolute;
-  left:12%;right:12%;bottom:24px;height:28px;
-  background:radial-gradient(ellipse at center,rgba(0,0,0,.5),transparent 72%);
+  left:12%;right:12%;bottom:30px;height:28px;
+  background:radial-gradient(ellipse at center,rgba(0,0,0,.52),transparent 72%);
   filter:blur(8px);
 }
-.owner-skin {
+
+.skin-viewer {
+  position:relative;
+  z-index:2;
+  width:100%;
+  min-height:430px;
+  display:grid;
+  place-items:center;
+  outline:none;
+  cursor:grab;
+  touch-action:none;
+  user-select:none;
+}
+.skin-viewer.is-dragging { cursor:grabbing; }
+.skin-viewer canvas {
+  display:block;
+  width:min(92%,390px);
+  height:auto;
+  max-height:390px;
+  object-fit:contain;
+  image-rendering:pixelated;
+  filter:drop-shadow(0 18px 20px rgba(0,0,0,.42));
+  opacity:.15;
+  transform:translateY(-2px);
+  transition:opacity 220ms ease,filter 220ms ease;
+}
+.skin-viewer.is-ready canvas { opacity:1; }
+.skin-viewer:focus-visible {
+  outline:2px solid color-mix(in srgb,var(--owner-accent) 84%,white);
+  outline-offset:-10px;
+  border-radius:22px;
+}
+.skin-viewer-ui {
+  position:absolute;
+  left:50%;
+  bottom:20px;
+  transform:translateX(-50%);
+  max-width:calc(100% - 38px);
+  min-height:30px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  padding:7px 10px;
+  border:1px solid rgba(255,255,255,.065);
+  border-radius:999px;
+  background:rgba(10,12,15,.78);
+  box-shadow:0 8px 22px rgba(0,0,0,.22);
+  color:#868b95;
+  font-size:9px;
+  line-height:1.2;
+  font-weight:750;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+  white-space:nowrap;
+  pointer-events:none;
+}
+.skin-live-dot {
+  width:6px;
+  height:6px;
+  flex:0 0 6px;
+  border-radius:50%;
+  background:#59606a;
+  box-shadow:0 0 0 3px rgba(255,255,255,.025);
+}
+.skin-viewer.is-ready .skin-live-dot {
+  background:var(--owner-accent);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--owner-accent) 12%,transparent),0 0 10px color-mix(in srgb,var(--owner-accent) 45%,transparent);
+}
+.skin-viewer.is-error .skin-live-dot { background:#d37b7b; }
+.owner-skin-fallback {
   position:relative;
   z-index:2;
   width:min(86%,360px);
   max-height:390px;
   object-fit:contain;
   object-position:center bottom;
-  image-rendering:auto;
-  filter:drop-shadow(0 18px 20px rgba(0,0,0,.38));
-  transform:translateY(8px) scale(1.04);
-  transform-origin:center bottom;
-}
-
-/* PxlMads is mirrored so the skin faces inward toward the profile copy. */
-.owner-profile.visual .owner-skin {
-  transform:translateY(8px) scaleX(-1) scale(1.04);
 }
 
 .owner-copy {
@@ -120,9 +181,9 @@
 .owner-role {
   color:var(--owner-accent);
   padding:8px 10px;
-  border:1px solid color-mix(in srgb,var(--owner-accent) 22%, transparent);
+  border:1px solid color-mix(in srgb,var(--owner-accent) 22%,transparent);
   border-radius:999px;
-  background:color-mix(in srgb,var(--owner-accent) 7%, transparent);
+  background:color-mix(in srgb,var(--owner-accent) 7%,transparent);
 }
 .owner-copy h2 {
   margin:0;
@@ -191,15 +252,27 @@
   .owner-profile.visual { grid-template-columns:1fr; }
   .owner-profile.visual .owner-portrait { order:1; border-left:0; }
   .owner-profile.visual .owner-copy { order:2; }
-  .owner-portrait { min-height:330px; border-right:0; border-bottom:1px solid rgba(255,255,255,.045); }
-  .owner-skin { width:min(72%,320px); max-height:310px; }
+  .owner-portrait { min-height:340px; border-right:0; border-bottom:1px solid rgba(255,255,255,.045); }
+  .skin-viewer { min-height:340px; }
+  .skin-viewer canvas { width:min(76%,340px); max-height:315px; }
 }
 
 @media (max-width:560px) {
   .owner-profile { border-radius:22px; }
-  .owner-portrait { min-height:285px; }
-  .owner-skin { width:min(78%,285px); max-height:270px; }
+  .owner-portrait,
+  .skin-viewer { min-height:300px; }
+  .skin-viewer canvas { width:min(80%,300px); max-height:275px; }
+  .skin-viewer-ui {
+    bottom:14px;
+    max-width:calc(100% - 28px);
+    font-size:8px;
+    letter-spacing:.055em;
+  }
   .owner-copy { padding:30px 25px 32px; }
   .owner-copy h2 { font-size:48px; }
   .owner-summary { font-size:14px; }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .skin-viewer canvas { transition:none; }
 }

@@ -10,7 +10,7 @@ Do not switch the Pages source until all of the following are true:
 
 1. The GitHub account billing/startup block is resolved.
 2. `PixelWeb Quality Gate` can start a real GitHub-hosted runner.
-3. A manual dispatch against the exact hardening candidate ref completes successfully.
+3. A manual dispatch against the exact candidate ref completes successfully.
 4. `scripts/validate_public_data.js` passes against the exact candidate data model and approved external-origin contract.
 5. `scripts/build_public_site.py` builds `_site/` successfully.
 6. `scripts/validate_public_bundle.py` passes against that exact `_site/` output.
@@ -23,7 +23,7 @@ The deployment artifact must be `_site/`, produced by `scripts/build_public_site
 The artifact intentionally contains:
 
 - sitemap-declared public HTML pages;
-- the explicitly `noindex` Forum and 404 surfaces;
+- the explicitly `noindex` legacy `forum.html` compatibility redirect and branded `404.html` surface;
 - root CSS/JavaScript/media referenced by those pages;
 - local dependencies recursively reachable from included CSS through `url(...)` or quoted `@import`, provided those dependencies remain inside declared public roots;
 - the explicitly declared runtime-loaded `play-modal.css`;
@@ -59,7 +59,7 @@ It must not publish repository/security/engineering material such as:
 4. Give the deployment job only the permissions required by GitHub Pages (`pages: write` and `id-token: write`) while keeping the validation/build job read-only.
 5. Configure the `github-pages` environment and use GitHub's Pages deployment protection model rather than granting broad repository write access.
 6. Change the repository Pages source to **GitHub Actions** only after the artifact workflow exists on `main` and has been reviewed.
-7. Deploy once, then verify the live URL, all navigation, 404 handling, Guide routes, Nexus media, Home deferred media, CSS/font/media dependencies, CSP console state and network waterfall.
+7. Deploy once, then verify the live URL, all navigation, 404 handling, legacy Forum redirect, Guide routes, Nexus media, Home deferred media, CSS/font/media dependencies, CSP console state and network waterfall.
 8. Confirm operational repository paths such as `/PixelWeb/docs/` and `/PixelWeb/scripts/` are no longer part of the deployed artifact.
 9. Keep the previous deployment configuration documented until the first artifact deployment is confirmed healthy, but do not run two competing Pages deployment methods indefinitely.
 
@@ -69,4 +69,4 @@ If the first artifact deployment is unhealthy, fix the artifact/workflow and red
 
 ## Authentication boundary
 
-This migration improves **publication hygiene** only. It does not make the static site an authentication/security backend. Login, persistent profiles, persistent Forum, moderation APIs and secrets still require the server-side/header-capable architecture defined in `AUTH-SECURITY-REQUIREMENTS.md` and `CSP-PLAN.md`.
+This migration improves **publication hygiene** only. It does not make the static site an authentication/security backend. Login, persistent profiles, moderation APIs, future persistent community features and secrets still require the server-side/header-capable architecture defined in `AUTH-SECURITY-REQUIREMENTS.md` and `CSP-PLAN.md`.

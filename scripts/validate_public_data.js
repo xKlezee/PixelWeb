@@ -202,7 +202,6 @@ for (const [label, value, expected] of [
 validateStaticExternalNavigation(data);
 
 for (const [label, value] of [
-  ['Forum landing', data.community?.forumLanding],
   ['Guides landing', data.community?.guidesLanding],
   ['Changelog landing', data.changelog?.landing],
   ['Store landing', data.store?.landing]
@@ -337,10 +336,6 @@ for (const instance of instances) {
     `${instance?.name || 'Unnamed instance'} difficulties must declare unlock milestones`
   );
 }
-
-check(data.community?.forum?.mode === 'preview', 'Forum must remain explicitly marked preview until persistent auth exists');
-check(data.community?.forum?.persistent === false, 'preview Forum must not claim persistence');
-check(data.community?.forum?.accountSystemAvailable === false, 'preview Forum must not claim an account system');
 
 const skyblock = data.skyblock || {};
 const skyblockFeatures = Array.isArray(skyblock.features) ? skyblock.features : [];
