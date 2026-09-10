@@ -52,6 +52,10 @@
 
 .index-list-spaced { margin-top: 18px; }
 
+/* Guide overview links target the document header rather than a .guide-section. Give that
+   anchor the same safe offset so global navigation never obscures the destination. */
+.guides-document-header[id] { scroll-margin-top: 110px; }
+
 /* Desktop pointer contract: top-level nav groups are hover targets, not click toggles.
    The rule starts above the 980px mobile-navigation breakpoint so narrow layouts keep
    explicit click/touch interaction even when a fine pointer is attached. */
