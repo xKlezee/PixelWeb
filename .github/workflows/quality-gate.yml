@@ -31,7 +31,7 @@ jobs:
           persist-credentials: false
 
       - name: Validate Python guard syntax
-        run: python3 -m py_compile scripts/security_scan.py scripts/validate_site.py scripts/validate_accessibility.py scripts/validate_media_integrity.py scripts/validate_runtime_contracts.py
+        run: python3 -m py_compile scripts/security_scan.py scripts/validate_site.py scripts/validate_accessibility.py scripts/validate_media_integrity.py scripts/validate_runtime_contracts.py scripts/build_public_site.py scripts/validate_public_bundle.py
 
       - name: Scan committed files for obvious secrets
         run: python3 scripts/security_scan.py
@@ -54,3 +54,9 @@ jobs:
 
       - name: Validate accessibility structure
         run: python3 scripts/validate_accessibility.py
+
+      - name: Build allowlisted public site artifact
+        run: python3 scripts/build_public_site.py
+
+      - name: Validate public artifact boundary
+        run: python3 scripts/validate_public_bundle.py
