@@ -1,2 +1,10 @@
 User-agent: *
-Disallow: /
+Allow: /
+Disallow: /docs/
+Disallow: /scripts/
+Disallow: /.github/
+Disallow: /.env.example
+Disallow: /README.md
+Disallow: /SECURITY.md
+
+Sitemap: https://xklezee.github.io/PixelWeb/sitemap.xml
