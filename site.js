@@ -10,11 +10,17 @@
     return node;
   };
 
-  const safeHttpUrl = value => {
-    if (!value) return null;
+  // Same-origin URLs may follow the page's local development scheme. Any external
+  // browser destination must be HTTPS; data files cannot widen that boundary to HTTP.
+  const safePublicUrl = value => {
+    const raw = String(value ?? '').trim();
+    if (!raw) return null;
     try {
-      const url = new URL(String(value), window.location.href);
-      return ['http:', 'https:'].includes(url.protocol) ? url.href : null;
+      const url = new URL(raw, window.location.href);
+      const sameOrigin = url.origin === window.location.origin;
+      if (sameOrigin && ['http:', 'https:'].includes(url.protocol)) return url.href;
+      if (window.location.protocol === 'file:' && url.protocol === 'file:') return url.href;
+      return url.protocol === 'https:' ? url.href : null;
     } catch {
       return null;
     }
@@ -48,8 +54,14 @@
     node.setAttribute('aria-valuenow', String(bounded));
   });
   $$('[data-store-url]').forEach(link => {
-    const storeUrl = safeHttpUrl(network?.store?.url);
-    if (storeUrl) link.href = storeUrl;
+    const storeUrl = safePublicUrl(network?.store?.url);
+    if (storeUrl) {
+      link.href = storeUrl;
+      link.removeAttribute('aria-disabled');
+      return;
+    }
+    link.removeAttribute('href');
+    link.setAttribute('aria-disabled', 'true');
   });
 
   const toast = $('#toast');
@@ -74,9 +86,17 @@
     navToggle?.setAttribute('aria-expanded', 'false');
   }));
 
-  const serverIp = network?.server?.ip || 'pixelboxxx.minehut.gg';
+  // There is deliberately no concrete fallback here. The public data model owns the
+  // server address; if it is unavailable, the UI fails closed instead of drifting.
+  const serverIp = String(network?.server?.ip ?? '').trim();
+  const hasServerIp = Boolean(serverIp);
 
   async function copyServerIp(button = null) {
+    if (!hasServerIp) {
+      showToast('Server address unavailable');
+      return;
+    }
+
     try {
       await navigator.clipboard.writeText(serverIp);
     } catch {
@@ -211,7 +231,13 @@
   playDialog.append(dialogHeader, intro, steps, dialogFooter);
   playModal.append(backdrop, playDialog);
   document.body.appendChild(playModal);
-  $$('[data-play-ip]', playModal).forEach(node => { node.textContent = serverIp; });
+  $$('[data-play-ip]', playModal).forEach(node => { node.textContent = hasServerIp ? serverIp : 'Unavailable'; });
+  $$('[data-copy-server-ip]', playModal).forEach(button => {
+    if (!hasServerIp) {
+      button.disabled = true;
+      button.setAttribute('aria-disabled', 'true');
+    }
+  });
 
   let lastPlayTrigger = null;
   let closeModalTimer = null;
@@ -314,7 +340,7 @@
       if (active) {
         const img = $('img[data-src]', panel);
         if (img?.dataset.src) {
-          const source = safeHttpUrl(img.dataset.src);
+          const source = safePublicUrl(img.dataset.src);
           if (source) img.src = source;
           img.removeAttribute('data-src');
         }
@@ -336,6 +362,10 @@
 
   async function fetchStatus() {
     if (!statusText && !playerCount && !statusDot) return;
+    if (!hasServerIp) {
+      paintStatus(false);
+      return;
+    }
     try {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), 5000);
@@ -355,7 +385,7 @@
   const scheduleStatus = () => {
     if (!statusText && !playerCount && !statusDot) return;
     fetchStatus();
-    setInterval(fetchStatus, 120000);
+    if (hasServerIp) setInterval(fetchStatus, 120000);
   };
 
   if ('requestIdleCallback' in window) {
