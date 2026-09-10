@@ -138,11 +138,15 @@ def require_exact(
     return value
 
 
-def validate_page(page_name: str, public_url: str, failures: list[str]) -> None:
+def validate_page(
+    page_name: str,
+    public_url: str,
+    failures: list[str],
+) -> tuple[str | None, str | None]:
     page = ROOT / page_name
     if not page.is_file() or page.is_symlink():
         failures.append(f"{page_name}: sitemap target must exist as a regular file")
-        return
+        return None, None
 
     parser = MetadataParser()
     parser.feed(page.read_text(encoding="utf-8"))
@@ -212,15 +216,40 @@ def validate_page(page_name: str, public_url: str, failures: list[str]) -> None:
     if og_description is not None and twitter_description is not None and twitter_description != og_description:
         failures.append(f"{page_name}: twitter:description must match og:description")
 
+    return title, description
+
+
+def validate_unique_page_identity(
+    label: str,
+    owners: dict[str, list[str]],
+    failures: list[str],
+) -> None:
+    for value, pages in sorted(owners.items()):
+        if len(pages) > 1:
+            failures.append(
+                f"sitemap-indexed pages must have unique {label}; {value!r} is shared by "
+                + ", ".join(sorted(pages))
+            )
+
 
 def main() -> int:
     failures: list[str] = []
     urls = sitemap_urls(failures)
+    title_owners: dict[str, list[str]] = defaultdict(list)
+    description_owners: dict[str, list[str]] = defaultdict(list)
 
     for public_url in urls:
         page_name = filename_for_public_url(public_url, failures)
-        if page_name is not None:
-            validate_page(page_name, public_url, failures)
+        if page_name is None:
+            continue
+        title, description = validate_page(page_name, public_url, failures)
+        if title is not None:
+            title_owners[title].append(page_name)
+        if description is not None:
+            description_owners[description].append(page_name)
+
+    validate_unique_page_identity("document titles", title_owners, failures)
+    validate_unique_page_identity("meta descriptions", description_owners, failures)
 
     if failures:
         print("Social metadata validation failed:")
@@ -230,7 +259,8 @@ def main() -> int:
 
     print(
         f"Social metadata passed for {len(urls)} sitemap-indexed pages: "
-        "canonical Open Graph URLs, titles, descriptions, Twitter cards and the official social image are consistent."
+        "canonical Open Graph URLs, unique page identities, aligned descriptions, "
+        "Twitter cards and the official social image are consistent."
     )
     return 0
 
