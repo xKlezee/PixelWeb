@@ -3,34 +3,34 @@
     evidence: {
       level: 'source-verified',
       state: 'partial',
-      summary: 'Island lifecycle, persistence and economy-backed progression have current source paths. Team-management controls remain explicitly partial and are not presented as available.'
+      summary: 'Persistent island play, upgrades, banking and Skyblock quests have current source support. Collaboration remains explicitly partial and is not presented as generally available.'
     },
     foundations: [
       {
-        name: 'Island lifecycle',
-        label: 'Source-backed',
-        detail: 'Skyblock has dedicated world lifecycle paths for creating, restoring and saving island worlds rather than treating islands as temporary frontend state.'
+        name: 'Persistent island',
+        label: 'Current foundation',
+        detail: 'Your island is a persistent gameplay space that can be created, restored and saved rather than a temporary activity that disappears between sessions.'
       },
       {
-        name: 'Persistent island data',
-        label: 'Source-backed',
-        detail: 'The Skyblock data layer owns persistence for island, player and bank state through its own database path.'
+        name: 'Saved island progress',
+        label: 'Current foundation',
+        detail: 'Island progress, player-specific island state and island-bank state are designed to persist as part of the Skyblock experience.'
       },
       {
-        name: 'Economy-backed progression',
-        label: 'Source-backed',
-        detail: 'Island upgrades and island-bank operations use the active economy boundary, including explicit success and compensation paths.'
+        name: 'Upgrades & banking',
+        label: 'Current foundation',
+        detail: 'Island upgrades and the island bank connect Skyblock progression to Pixel’s economy instead of existing as disconnected menu counters.'
       },
       {
         name: 'Skyblock quests',
         label: 'Current public system',
-        detail: 'Skyblock quests are maintained as a current quest surface and remain separate from the four-World progression route.'
+        detail: 'Skyblock quests provide island-focused objectives and remain separate from the four-World progression route.'
       }
     ],
     publicationRules: [
-      'A menu label is not treated as a working feature when its click or command route is missing.',
-      'Substantial manager logic is not described as player-available until the manager is instantiated and reachable.',
-      'Coming Soon actions remain visibly partial instead of being rewritten as launch-ready marketing.'
+      'Current means a capability belongs to the player-facing Skyblock experience, not simply that an idea or internal foundation exists.',
+      'Partial means the area is real but the complete player flow is not yet available enough to advertise as a finished feature.',
+      'Planned or Coming Soon behavior stays labelled that way until it reaches the same availability standard as the current feature set.'
     ]
   });
 })();
