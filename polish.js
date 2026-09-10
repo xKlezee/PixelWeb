@@ -63,10 +63,15 @@
   let skipLink = null;
   if (main) {
     if (!main.id) main.id = 'main-content';
+    if (!main.hasAttribute('tabindex')) main.tabIndex = -1;
+
     skipLink = document.createElement('a');
     skipLink.className = 'skip-link';
     skipLink.href = `#${main.id}`;
     skipLink.textContent = 'Skip to content';
+    skipLink.addEventListener('click', () => {
+      requestAnimationFrame(() => main.focus({ preventScroll: true }));
+    });
   }
 
   /* Reading progress only. Scroll handlers must not mutate page geometry. */
