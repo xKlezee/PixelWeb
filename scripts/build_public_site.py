@@ -7,10 +7,15 @@ Public HTML is derived from the canonical sitemap plus explicitly noindex runtim
 root CSS/JS/media is copied only when referenced by those pages, with a tiny explicit list for
 known runtime-loaded root resources. Browser-public ``assets/`` and ``data/`` remain deliberate
 public directories.
+
+CSS dependencies are resolved recursively as part of the same allowlist. A local resource that
+exists only behind ``url(...)`` or a quoted ``@import`` cannot silently disappear from the Pages
+artifact, and CSS is not allowed to pull an undeclared repository directory into publication.
 """
 from __future__ import annotations
 
 import html.parser
+import re
 import shutil
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -28,6 +33,15 @@ PUBLIC_DIRECTORIES = {"assets", "data"}
 PUBLIC_DYNAMIC_ROOT_FILES = {"play-modal.css"}
 REFERENCE_ATTRS = {"href", "src", "poster", "data-src", "data-poster"}
 SRCSET_ATTRS = {"srcset", "data-srcset"}
+CSS_COMMENT_RE = re.compile(r"/\*.*?\*/", re.DOTALL)
+CSS_URL_RE = re.compile(
+    r"url\(\s*(?:\"([^\"]*)\"|'([^']*)'|([^)]*?))\s*\)",
+    re.IGNORECASE | re.DOTALL,
+)
+CSS_IMPORT_RE = re.compile(
+    r"@import\s+(?:\"([^\"]+)\"|'([^']+)')",
+    re.IGNORECASE,
+)
 
 
 class ReferenceParser(html.parser.HTMLParser):
@@ -95,6 +109,95 @@ def local_root_reference(raw: str) -> str | None:
     return path
 
 
+def css_references(text: str) -> list[str]:
+    """Return URL-bearing CSS values without treating comments as dependencies."""
+    clean = CSS_COMMENT_RE.sub("", text)
+    references: list[str] = []
+
+    for match in CSS_URL_RE.finditer(clean):
+        value = next((group for group in match.groups() if group is not None), "").strip()
+        if value:
+            references.append(value)
+
+    # url(...) imports are already covered above. This catches @import "file.css".
+    for match in CSS_IMPORT_RE.finditer(clean):
+        value = next((group for group in match.groups() if group is not None), "").strip()
+        if value:
+            references.append(value)
+
+    return references
+
+
+def css_local_target(source: Path, raw: str) -> tuple[Path, Path] | None:
+    value = raw.strip()
+    if not value or value.startswith("#"):
+        return None
+
+    parts = urlsplit(value)
+    if parts.scheme or parts.netloc or not parts.path:
+        return None
+
+    path = unquote(parts.path)
+    if path.startswith("/"):
+        raise ValueError(
+            f"{source.relative_to(ROOT)}: root-relative CSS URL is invalid for the /PixelWeb/ project site ({raw})"
+        )
+
+    target = (source.parent / path).resolve()
+    try:
+        relative = target.relative_to(ROOT.resolve())
+    except ValueError as exc:
+        raise ValueError(
+            f"{source.relative_to(ROOT)}: CSS dependency escapes repository root ({raw})"
+        ) from exc
+    return target, relative
+
+
+def resolve_css_dependencies(root_files: set[str]) -> None:
+    """Expand root_files with local root dependencies reachable from included CSS."""
+    queue = [ROOT / name for name in root_files if Path(name).suffix.lower() == ".css"]
+    seen: set[Path] = set()
+
+    while queue:
+        source = queue.pop()
+        source = source.resolve()
+        if source in seen:
+            continue
+        seen.add(source)
+
+        if not source.is_file():
+            raise FileNotFoundError(f"CSS dependency source is missing: {source.relative_to(ROOT)}")
+
+        try:
+            text = source.read_text(encoding="utf-8")
+        except UnicodeError as exc:
+            raise ValueError(f"CSS dependency is not valid UTF-8: {source.relative_to(ROOT)}") from exc
+
+        for raw in css_references(text):
+            resolved = css_local_target(source, raw)
+            if resolved is None:
+                continue
+            target, relative = resolved
+            if not target.is_file():
+                raise FileNotFoundError(
+                    f"{source.relative_to(ROOT)}: local CSS dependency is missing ({raw})"
+                )
+
+            if relative.parts and relative.parts[0] in PUBLIC_DIRECTORIES:
+                continue
+
+            if len(relative.parts) != 1:
+                raise ValueError(
+                    f"{source.relative_to(ROOT)}: CSS dependency is outside declared public roots ({relative.as_posix()})"
+                )
+
+            name = relative.name
+            if name not in root_files:
+                root_files.add(name)
+            if target.suffix.lower() == ".css" and target not in seen:
+                queue.append(target)
+
+
 def main() -> int:
     try:
         public_pages = sitemap_pages() | PUBLIC_NOINDEX_PAGES
@@ -121,6 +224,12 @@ def main() -> int:
             candidate = local_root_reference(raw)
             if candidate:
                 root_files.add(candidate)
+
+    try:
+        resolve_css_dependencies(root_files)
+    except (FileNotFoundError, ValueError) as exc:
+        print(f"Public-site build failed: {exc}")
+        return 1
 
     copied = 0
     for name in sorted(root_files, key=str.lower):
