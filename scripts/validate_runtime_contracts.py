@@ -50,7 +50,7 @@ class DeferredMediaParser(html.parser.HTMLParser):
         self.urls: list[tuple[str, str, int]] = []
         self.stylesheets: set[str] = set()
         self.ids: set[str] = set()
-        self.same_page_fragments: list[tuple[str, int]] = []
+        self.anchor_hrefs: list[tuple[str, int]] = []
 
     def handle_starttag(self, tag: str, attrs) -> None:
         line, _ = self.getpos()
@@ -81,8 +81,8 @@ class DeferredMediaParser(html.parser.HTMLParser):
 
         if tag == "a":
             href = str(attrs_dict.get("href") or "").strip()
-            if href.startswith("#") and len(href) > 1:
-                self.same_page_fragments.append((unquote(href[1:]), line))
+            if href:
+                self.anchor_hrefs.append((href, line))
 
     def handle_startendtag(self, tag: str, attrs) -> None:
         self.handle_starttag(tag, attrs)
@@ -119,6 +119,49 @@ def validate_deferred_url(page: Path, attr: str, raw: str, line: int, failures: 
         failures.append(f"{page.name}:{line}: deferred {attr} target is missing ({value})")
 
 
+def validate_local_anchor_fragments(
+    page_name: str,
+    parser: DeferredMediaParser,
+    page_parsers: dict[str, DeferredMediaParser],
+    failures: list[str],
+) -> None:
+    root = ROOT.resolve()
+
+    for href, line in parser.anchor_hrefs:
+        parts = urlsplit(href)
+        if parts.scheme or parts.netloc or not parts.fragment:
+            continue
+
+        fragment = unquote(parts.fragment)
+        if not fragment:
+            continue
+
+        if not parts.path:
+            target_name = page_name
+        else:
+            target = (ROOT / unquote(parts.path).lstrip("/")).resolve()
+            try:
+                target.relative_to(root)
+            except ValueError:
+                # Repository-root escape is already rejected by validate_site.py.
+                continue
+
+            if target.parent != root or target.suffix.lower() != ".html":
+                continue
+            target_name = target.name
+
+        target_parser = page_parsers.get(target_name)
+        if target_parser is None:
+            # Missing local files are already rejected by validate_site.py.
+            continue
+
+        if fragment not in target_parser.ids:
+            failures.append(
+                f"{page_name}:{line}: local fragment link points to missing target "
+                f"{target_name}#{fragment}"
+            )
+
+
 def validate_guide_navigation_current_state(page_name: str, failures: list[str]) -> None:
     if not page_name.startswith("guide-") or not page_name.endswith(".html"):
         return
@@ -136,21 +179,6 @@ def validate_guide_navigation_current_state(page_name: str, failures: list[str])
             f"{page_name}: Guide navbar must mark exactly guides.html as aria-current=page "
             f"(found: {rendered})"
         )
-
-
-def validate_guide_fragments(
-    page_name: str,
-    parser: DeferredMediaParser,
-    failures: list[str],
-) -> None:
-    if not page_name.startswith("guide-") or not page_name.endswith(".html"):
-        return
-
-    for fragment, line in parser.same_page_fragments:
-        if fragment not in parser.ids:
-            failures.append(
-                f"{page_name}:{line}: in-page Guide link points to missing id '#{fragment}'"
-            )
 
 
 def validate_guide_library_coverage(failures: list[str]) -> None:
@@ -174,7 +202,11 @@ def validate_guide_library_coverage(failures: list[str]) -> None:
             continue
         targets.append(entry_targets[0])
 
-    actual_guides = sorted(path.name for path in ROOT.glob("guide-*.html") if path.is_file() and not path.is_symlink())
+    actual_guides = sorted(
+        path.name
+        for path in ROOT.glob("guide-*.html")
+        if path.is_file() and not path.is_symlink()
+    )
     duplicate_targets = sorted({target for target in targets if targets.count(target) > 1})
     if duplicate_targets:
         failures.append(
@@ -210,14 +242,16 @@ def validate_guide_library_coverage(failures: list[str]) -> None:
         )
 
 
-def validate_navigation_contract(page_parsers: dict[str, DeferredMediaParser], failures: list[str]) -> None:
+def validate_navigation_contract(
+    page_parsers: dict[str, DeferredMediaParser],
+    failures: list[str],
+) -> None:
     for page_name, parser in page_parsers.items():
         if page_name not in NAVIGATION_PAGE_EXCEPTIONS and "security-hardening.css" not in parser.stylesheets:
             failures.append(
                 f"{page_name}: canonical public navigation must load security-hardening.css"
             )
         validate_guide_navigation_current_state(page_name, failures)
-        validate_guide_fragments(page_name, parser, failures)
 
     if not NAV_HARDENING_PATH.exists():
         failures.append("security-hardening.css: missing desktop navigation hardening layer")
@@ -246,6 +280,9 @@ def main() -> int:
         for attr, value, line in parser.urls:
             validate_deferred_url(page, attr, value, line, failures)
 
+    for page_name, parser in page_parsers.items():
+        validate_local_anchor_fragments(page_name, parser, page_parsers, failures)
+
     validate_navigation_contract(page_parsers, failures)
     validate_guide_library_coverage(failures)
 
@@ -265,7 +302,8 @@ def main() -> int:
 
     print(
         f"Runtime contracts passed for {len(HTML_FILES)} HTML pages and "
-        f"{len(JS_FILES)} JavaScript files, including desktop navigation and Guide library behavior."
+        f"{len(JS_FILES)} JavaScript files, including local fragment targets, desktop navigation "
+        "and Guide library behavior."
     )
     return 0
 
