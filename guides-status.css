@@ -1,0 +1,83 @@
+/* Pixel Network — evidence-qualified Guide status tokens.
+   Evidence labels must communicate provenance without relying on color alone. */
+
+.guide-status.is-verified,
+.guide-status.is-server,
+.guide-status.is-source,
+.guide-status.is-reconciled,
+.guide-status.is-overview,
+.guide-status.is-pending {
+  position: relative;
+  gap: 7px;
+}
+
+.guide-status.is-verified::before,
+.guide-status.is-server::before,
+.guide-status.is-source::before,
+.guide-status.is-reconciled::before,
+.guide-status.is-overview::before,
+.guide-status.is-pending::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  flex: 0 0 5px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: .72;
+}
+
+.guide-status.is-verified {
+  border-color: rgba(143,178,255,.18);
+  background: rgba(143,178,255,.042);
+  color: #b7cbf7;
+}
+
+.guide-status.is-server {
+  border-color: rgba(126,196,218,.17);
+  background: rgba(126,196,218,.035);
+  color: #abd4e0;
+}
+
+.guide-status.is-source {
+  border-color: rgba(164,158,225,.17);
+  background: rgba(164,158,225,.035);
+  color: #c0bce7;
+}
+
+.guide-status.is-reconciled {
+  border-color: rgba(222,181,101,.17);
+  background: rgba(222,181,101,.03);
+  color: #d6bd87;
+}
+
+.guide-status.is-overview {
+  border-color: rgba(255,255,255,.08);
+  background: rgba(255,255,255,.018);
+  color: #a5aab4;
+}
+
+.guide-status.is-pending {
+  border-style: dashed;
+  border-color: rgba(255,255,255,.075);
+  background: transparent;
+  color: #818792;
+}
+
+.guide-status-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 16px;
+}
+
+@media (max-width: 430px) {
+  .guide-status.is-verified,
+  .guide-status.is-server,
+  .guide-status.is-source,
+  .guide-status.is-reconciled,
+  .guide-status.is-overview,
+  .guide-status.is-pending {
+    white-space: normal;
+    text-align: left;
+  }
+}
