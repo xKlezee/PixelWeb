@@ -4,9 +4,14 @@
   const freezeItems = items => Object.freeze(items.map(item => Object.freeze({
     ...item,
     textures: Object.freeze({ ...(item.textures || {}) }),
+    animationMetadata: Object.freeze({ ...(item.animationMetadata || {}) }),
     armorLayers: Object.freeze([...(item.armorLayers || [])]),
     guiRotation: Object.freeze([...(item.guiRotation || [30, 135, 0])])
   })));
+
+  const modelRoot = 'data/marketplace/nexo/models/01_loot_box/loot_box_rotation_01/loot_box_luminite/custom_mads';
+  const textureRoot = 'assets/marketplace/nexo/textures/01_loot_box/loot_box_rotation_01/loot_box_luminite';
+  const metadataRoot = 'data/marketplace/nexo/animation/01_loot_box/loot_box_rotation_01/loot_box_luminite';
 
   const luminiteItems = freezeItems([
     {
@@ -19,12 +24,15 @@
       itemModelComponent: null,
       registeredBy: '01_loot_box_r1_armor.yml',
       sourceModelRef: 'market_skins:01_loot_box/loot_box_rotation_01/loot_box_luminite/custom_mads/r1_loot_box_luminite_helmet_3d',
-      model: 'assets/marketplace/nexo/pack/assets/market_skins/models/01_loot_box/loot_box_rotation_01/loot_box_luminite/custom_mads/r1_loot_box_luminite_helmet_3d.json',
+      model: `${modelRoot}/r1_loot_box_luminite_helmet_3d.json`,
       textures: {
-        '1': 'assets/marketplace/nexo/pack/assets/market_skins/textures/01_loot_box/loot_box_rotation_01/loot_box_luminite/animations/animated_6.png',
-        '2': 'assets/marketplace/nexo/pack/assets/market_skins/textures/01_loot_box/loot_box_rotation_01/loot_box_luminite/armor_textures/helmet.png'
+        '1': `${textureRoot}/animations/animated_6.png`,
+        '2': `${textureRoot}/armor_textures/helmet.png`
       },
-      primaryTexture: 'assets/marketplace/nexo/pack/assets/market_skins/textures/01_loot_box/loot_box_rotation_01/loot_box_luminite/armor_textures/helmet.png',
+      animationMetadata: {
+        '1': `${metadataRoot}/animated_6.json`
+      },
+      primaryTexture: `${textureRoot}/armor_textures/helmet.png`,
       armorLayers: [],
       elementCount: 52,
       guiRotation: [30, 135, 0]
@@ -39,11 +47,12 @@
       itemModelComponent: null,
       registeredBy: '01_loot_box_r1_armor.yml',
       sourceModelRef: 'market_skins:01_loot_box/loot_box_rotation_01/loot_box_luminite/custom_mads/r1_loot_box_luminite_helmet_2d',
-      model: 'assets/marketplace/nexo/pack/assets/market_skins/models/01_loot_box/loot_box_rotation_01/loot_box_luminite/custom_mads/r1_loot_box_luminite_helmet_2d.json',
+      model: `${modelRoot}/r1_loot_box_luminite_helmet_2d.json`,
       textures: {
-        '1': 'assets/marketplace/nexo/pack/assets/market_skins/textures/01_loot_box/loot_box_rotation_01/loot_box_luminite/armor_textures/r1_loot_box_luminite_helmet_2d.png'
+        '1': `${textureRoot}/armor_textures/r1_loot_box_luminite_helmet_2d.png`
       },
-      primaryTexture: 'assets/marketplace/nexo/pack/assets/market_skins/textures/01_loot_box/loot_box_rotation_01/loot_box_luminite/armor_textures/r1_loot_box_luminite_helmet_2d.png',
+      animationMetadata: {},
+      primaryTexture: `${textureRoot}/armor_textures/r1_loot_box_luminite_helmet_2d.png`,
       armorLayers: [],
       elementCount: 4,
       guiRotation: [30, 135, 0]
@@ -58,14 +67,15 @@
       itemModelComponent: 'nexo:r1_loot_box_chestplate',
       registeredBy: '01_loot_box_r1_armor.yml',
       sourceModelRef: 'market_skins:01_loot_box/loot_box_rotation_01/loot_box_luminite/custom_mads/r1_loot_box_luminite_chestplate',
-      model: 'assets/marketplace/nexo/pack/assets/market_skins/models/01_loot_box/loot_box_rotation_01/loot_box_luminite/custom_mads/r1_loot_box_luminite_chestplate.json',
+      model: `${modelRoot}/r1_loot_box_luminite_chestplate.json`,
       textures: {
-        '2': 'assets/marketplace/nexo/pack/assets/market_skins/textures/01_loot_box/loot_box_rotation_01/loot_box_luminite/armor_textures/luminite_set_chestplate.png'
+        '2': `${textureRoot}/armor_textures/luminite_set_chestplate.png`
       },
-      primaryTexture: 'assets/marketplace/nexo/pack/assets/market_skins/textures/01_loot_box/loot_box_rotation_01/loot_box_luminite/armor_textures/luminite_set_chestplate.png',
+      animationMetadata: {},
+      primaryTexture: `${textureRoot}/armor_textures/luminite_set_chestplate.png`,
       armorLayers: [
-        'assets/marketplace/nexo/pack/assets/market_skins/textures/01_loot_box/loot_box_rotation_01/loot_box_luminite/armor_layers/luminite_set_armor_layer_1.png',
-        'assets/marketplace/nexo/pack/assets/market_skins/textures/01_loot_box/loot_box_rotation_01/loot_box_luminite/armor_layers/luminite_set_armor_layer_2.png'
+        `${textureRoot}/armor_layers/luminite_set_armor_layer_1.png`,
+        `${textureRoot}/armor_layers/luminite_set_armor_layer_2.png`
       ],
       elementCount: 6,
       guiRotation: [30, 135, 0]
@@ -80,14 +90,15 @@
       itemModelComponent: 'nexo:r1_loot_box_leggings',
       registeredBy: '01_loot_box_r1_armor.yml',
       sourceModelRef: 'market_skins:01_loot_box/loot_box_rotation_01/loot_box_luminite/custom_mads/r1_loot_box_luminite_leggings',
-      model: 'assets/marketplace/nexo/pack/assets/market_skins/models/01_loot_box/loot_box_rotation_01/loot_box_luminite/custom_mads/r1_loot_box_luminite_leggings.json',
+      model: `${modelRoot}/r1_loot_box_luminite_leggings.json`,
       textures: {
-        '1': 'assets/marketplace/nexo/pack/assets/market_skins/textures/01_loot_box/loot_box_rotation_01/loot_box_luminite/armor_textures/luminite_set_leggings.png'
+        '1': `${textureRoot}/armor_textures/luminite_set_leggings.png`
       },
-      primaryTexture: 'assets/marketplace/nexo/pack/assets/market_skins/textures/01_loot_box/loot_box_rotation_01/loot_box_luminite/armor_textures/luminite_set_leggings.png',
+      animationMetadata: {},
+      primaryTexture: `${textureRoot}/armor_textures/luminite_set_leggings.png`,
       armorLayers: [
-        'assets/marketplace/nexo/pack/assets/market_skins/textures/01_loot_box/loot_box_rotation_01/loot_box_luminite/armor_layers/luminite_set_armor_layer_1.png',
-        'assets/marketplace/nexo/pack/assets/market_skins/textures/01_loot_box/loot_box_rotation_01/loot_box_luminite/armor_layers/luminite_set_armor_layer_2.png'
+        `${textureRoot}/armor_layers/luminite_set_armor_layer_1.png`,
+        `${textureRoot}/armor_layers/luminite_set_armor_layer_2.png`
       ],
       elementCount: 5,
       guiRotation: [30, 135, 0]
@@ -102,14 +113,15 @@
       itemModelComponent: 'nexo:r1_loot_box_boots',
       registeredBy: '01_loot_box_r1_armor.yml',
       sourceModelRef: 'market_skins:01_loot_box/loot_box_rotation_01/loot_box_luminite/custom_mads/r1_loot_box_luminite_boots',
-      model: 'assets/marketplace/nexo/pack/assets/market_skins/models/01_loot_box/loot_box_rotation_01/loot_box_luminite/custom_mads/r1_loot_box_luminite_boots.json',
+      model: `${modelRoot}/r1_loot_box_luminite_boots.json`,
       textures: {
-        '2': 'assets/marketplace/nexo/pack/assets/market_skins/textures/01_loot_box/loot_box_rotation_01/loot_box_luminite/armor_textures/luminite_set_boots.png'
+        '2': `${textureRoot}/armor_textures/luminite_set_boots.png`
       },
-      primaryTexture: 'assets/marketplace/nexo/pack/assets/market_skins/textures/01_loot_box/loot_box_rotation_01/loot_box_luminite/armor_textures/luminite_set_boots.png',
+      animationMetadata: {},
+      primaryTexture: `${textureRoot}/armor_textures/luminite_set_boots.png`,
       armorLayers: [
-        'assets/marketplace/nexo/pack/assets/market_skins/textures/01_loot_box/loot_box_rotation_01/loot_box_luminite/armor_layers/luminite_set_armor_layer_1.png',
-        'assets/marketplace/nexo/pack/assets/market_skins/textures/01_loot_box/loot_box_rotation_01/loot_box_luminite/armor_layers/luminite_set_armor_layer_2.png'
+        `${textureRoot}/armor_layers/luminite_set_armor_layer_1.png`,
+        `${textureRoot}/armor_layers/luminite_set_armor_layer_2.png`
       ],
       elementCount: 4,
       guiRotation: [30, 135, 0]
