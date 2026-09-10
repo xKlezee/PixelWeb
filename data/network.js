@@ -194,13 +194,13 @@
       partialFeatures: [
         {
           name: 'Island team management',
-          status: 'Partially implemented',
-          detail: 'Invite, accept, deny, leave and kick foundations exist in source, but the player-facing command and menu wiring is not complete.'
+          status: 'Partial',
+          detail: 'Collaboration controls are not yet presented as a complete player feature. Current Skyblock progression does not depend on them.'
         },
         {
           name: 'Member promotion',
-          status: 'Coming soon',
-          detail: 'The promotion surface exists as a placeholder and is not documented as an available player action.'
+          status: 'Planned',
+          detail: 'Member promotion is not currently available as a documented player action.'
         }
       ]
     },
