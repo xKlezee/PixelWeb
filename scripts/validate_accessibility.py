@@ -7,6 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 HTML_FILES = sorted(ROOT.glob("*.html"))
+VALID_TH_SCOPES = {"col", "row", "colgroup", "rowgroup"}
 
 
 class AccessibilityParser(html.parser.HTMLParser):
@@ -21,6 +22,7 @@ class AccessibilityParser(html.parser.HTMLParser):
         self.labels_for: set[str] = set()
         self.element_ids: set[str] = set()
         self.text_controls: list[tuple[str, str, str, str, int]] = []
+        self.table_headers: list[tuple[str, int]] = []
         self._in_title = False
         self._title_parts: list[str] = []
 
@@ -43,6 +45,8 @@ class AccessibilityParser(html.parser.HTMLParser):
             self.main_count += 1
         elif tag == "img" and "alt" not in attrs_dict:
             self.images_without_alt.append(line)
+        elif tag == "th":
+            self.table_headers.append((str(attrs_dict.get("scope") or "").strip().lower(), line))
         elif tag == "title":
             self._in_title = True
         elif tag == "meta":
@@ -104,6 +108,22 @@ def validate_text_controls(page: Path, parser: AccessibilityParser, failures: li
         )
 
 
+def validate_table_headers(page: Path, parser: AccessibilityParser, failures: list[str]) -> None:
+    for scope, line in parser.table_headers:
+        if scope in VALID_TH_SCOPES:
+            continue
+        if not scope:
+            failures.append(
+                f"{page.name}:{line}: <th> requires an explicit scope attribute "
+                "(col, row, colgroup or rowgroup)"
+            )
+            continue
+        failures.append(
+            f"{page.name}:{line}: <th> has invalid scope={scope!r}; expected one of "
+            f"{', '.join(sorted(VALID_TH_SCOPES))}"
+        )
+
+
 def main() -> int:
     failures: list[str] = []
 
@@ -129,6 +149,7 @@ def main() -> int:
             failures.append(f"{page.name}:{line}: <img> must declare alt, including alt=\"\" for decorative images")
 
         validate_text_controls(page, parser, failures)
+        validate_table_headers(page, parser, failures)
 
     if failures:
         print("Accessibility structure validation failed:")
