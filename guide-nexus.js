@@ -42,17 +42,32 @@
   }
 
   if (milestoneHost) {
-    const preferredOrder = [nexus.unlock || 'Prestige IV', 'Prestige VII', 'Legacy I', 'Legacy II'];
-    const grouped = new Map(preferredOrder.map(value => [value, []]));
+    const milestoneOrder = [];
+    const addMilestone = value => {
+      const milestone = String(value ?? '').trim();
+      if (milestone && !milestoneOrder.includes(milestone)) milestoneOrder.push(milestone);
+    };
 
+    addMilestone(nexus.unlockMilestone || nexus.unlock);
+    instances.forEach(instance => {
+      (instance.difficulties || []).forEach(difficulty => addMilestone(difficulty.unlock));
+    });
+
+    const grouped = new Map(milestoneOrder.map(value => [value, []]));
     instances.forEach(instance => {
       (instance.difficulties || []).forEach(difficulty => {
-        if (!grouped.has(difficulty.unlock)) grouped.set(difficulty.unlock, []);
-        grouped.get(difficulty.unlock).push(`${instance.name} · ${difficulty.name}`);
+        const milestone = String(difficulty.unlock ?? '').trim();
+        if (!milestone) return;
+        if (!grouped.has(milestone)) {
+          milestoneOrder.push(milestone);
+          grouped.set(milestone, []);
+        }
+        grouped.get(milestone).push(`${instance.name} · ${difficulty.name}`);
       });
     });
 
-    const stages = [...grouped.entries()].map(([milestone, unlocks], index) => {
+    const stages = milestoneOrder.map((milestone, index) => {
+      const unlocks = grouped.get(milestone) || [];
       const article = el('article', 'guide-world-stage');
       const head = el('div', 'guide-world-stage-head');
       head.append(el('span', '', `MILESTONE ${String(index + 1).padStart(2, '0')}`), el('strong', '', milestone));
