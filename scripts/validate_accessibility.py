@@ -18,6 +18,9 @@ class AccessibilityParser(html.parser.HTMLParser):
         self.robots: str = ""
         self.main_count = 0
         self.images_without_alt: list[int] = []
+        self.labels_for: set[str] = set()
+        self.element_ids: set[str] = set()
+        self.text_controls: list[tuple[str, str, str, str, int]] = []
         self._in_title = False
         self._title_parts: list[str] = []
 
@@ -29,6 +32,10 @@ class AccessibilityParser(html.parser.HTMLParser):
         tag = tag.lower()
         attrs_dict = dict(attrs)
         line, _ = self.getpos()
+
+        element_id = str(attrs_dict.get("id") or "").strip()
+        if element_id:
+            self.element_ids.add(element_id)
 
         if tag == "html":
             self.lang = str(attrs_dict.get("lang") or "").strip() or None
@@ -47,6 +54,21 @@ class AccessibilityParser(html.parser.HTMLParser):
                 self.description = content or None
             elif name == "robots":
                 self.robots = content.lower()
+        elif tag == "label":
+            target = str(attrs_dict.get("for") or "").strip()
+            if target:
+                self.labels_for.add(target)
+        elif tag in {"input", "textarea"}:
+            input_type = str(attrs_dict.get("type") or "text").strip().lower()
+            if tag == "input" and input_type == "hidden":
+                return
+            self.text_controls.append((
+                tag,
+                element_id,
+                str(attrs_dict.get("aria-label") or "").strip(),
+                str(attrs_dict.get("aria-labelledby") or "").strip(),
+                line,
+            ))
 
     def handle_endtag(self, tag: str) -> None:
         if tag.lower() == "title":
@@ -55,6 +77,31 @@ class AccessibilityParser(html.parser.HTMLParser):
     def handle_data(self, data: str) -> None:
         if self._in_title:
             self._title_parts.append(data)
+
+
+def validate_text_controls(page: Path, parser: AccessibilityParser, failures: list[str]) -> None:
+    for tag, element_id, aria_label, aria_labelledby, line in parser.text_controls:
+        if aria_label:
+            continue
+
+        if aria_labelledby:
+            referenced_ids = [token for token in aria_labelledby.split() if token]
+            missing = [token for token in referenced_ids if token not in parser.element_ids]
+            if not referenced_ids or missing:
+                detail = ", ".join(missing) if missing else "no ids"
+                failures.append(
+                    f"{page.name}:{line}: <{tag}> aria-labelledby references missing target(s): {detail}"
+                )
+            continue
+
+        if element_id and element_id in parser.labels_for:
+            continue
+
+        control = f"#{element_id}" if element_id else f"<{tag}>"
+        failures.append(
+            f"{page.name}:{line}: text control {control} requires an associated <label>, "
+            "aria-label or valid aria-labelledby"
+        )
 
 
 def main() -> int:
@@ -80,6 +127,8 @@ def main() -> int:
 
         for line in parser.images_without_alt:
             failures.append(f"{page.name}:{line}: <img> must declare alt, including alt=\"\" for decorative images")
+
+        validate_text_controls(page, parser, failures)
 
     if failures:
         print("Accessibility structure validation failed:")
