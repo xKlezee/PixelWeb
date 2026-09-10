@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta name="theme-color" content="#0b0c0e"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https: data:; media-src 'self' https:; font-src 'self' https: data:; connect-src 'self'; frame-src 'none'; worker-src 'none'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests"/>
+  <meta name="referrer" content="strict-origin-when-cross-origin"/>
+  <meta name="description" content="Explore Pixel Network Marketplace collections and inspect their Minecraft models in an interactive live viewer."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:site_name" content="Pixel Network"/>
+  <meta property="og:title" content="Marketplace — Pixel Network"/>
+  <meta property="og:description" content="Explore Pixel Network Marketplace collections and inspect their Minecraft models in an interactive live viewer."/>
+  <meta property="og:url" content="https://xklezee.github.io/PixelWeb/marketplace.html"/>
+  <meta property="og:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/>
+  <meta property="og:image:alt" content="Pixel Network logo"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:title" content="Marketplace — Pixel Network"/>
+  <meta name="twitter:description" content="Explore Pixel Network Marketplace collections and inspect their Minecraft models in an interactive live viewer."/>
+  <meta name="twitter:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/>
+  <title>Marketplace — Pixel Network</title>
+  <link rel="canonical" href="https://xklezee.github.io/PixelWeb/marketplace.html"/>
+  <link rel="icon" href="LOGO%20OFICIAL.png"/>
+  <link rel="stylesheet" href="site.css"/>
+  <link rel="stylesheet" href="polish.css"/>
+  <link rel="stylesheet" href="phase1.css"/>
+  <link rel="stylesheet" href="marketplace.css"/>
+  <link rel="stylesheet" href="security-hardening.css"/>
+  <script src="data/network.js" defer></script>
+  <script src="data/marketplace.js" defer></script>
+  <script src="site.js" defer></script>
+  <script src="polish.js" defer></script>
+  <script src="marketplace.js" defer></script>
+</head>
+<body>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <nav class="site-nav" aria-label="Main navigation"><div class="shell nav-inner">
+    <a class="brand" href="index.html"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a>
+    <div class="nav-links" id="navLinks"><div class="nav-group"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div><a href="marketplace.html" aria-current="page">Marketplace</a><div class="nav-group"><button type="button" aria-haspopup="true">Development</button><div class="nav-dropdown"><a href="development.html"><strong>Development</strong><span>Current status, roadmap and product scale.</span></a><a href="changelog.html"><strong>Changelog</strong><span>Player-facing release notes.</span></a></div></div><div class="nav-group"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="community.html"><strong>Community</strong><span>Discord and network resources.</span></a><a href="guides.html"><strong>Guides</strong><span>Detailed player reference and mechanics.</span></a></div></div><a href="team.html">About</a></div>
+    <div class="nav-actions"><a class="button quiet nav-discord" href="https://discord.gg/7KzWpezTNZ" target="_blank" rel="noopener">Discord</a><a class="button quiet nav-store" href="store.html">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
+  </div></nav>
+
+  <nav class="marketplace-subnav" aria-label="Marketplace sections" data-marketplace-subnav><div class="shell">
+    <span class="marketplace-subnav-label">Marketplace</span>
+    <div class="marketplace-subnav-links"><a class="is-current" href="#overview" aria-current="location">Overview</a><a href="#loot-boxes">Loot Boxes</a><a href="#rotation-01">Rotation 01</a><a href="#luminite">Luminite</a></div>
+  </div></nav>
+
+  <main id="main-content" data-marketplace-root>
+    <section class="page-hero" id="overview"><div class="shell"><div class="breadcrumbs"><a href="index.html">Pixel Network</a><span>/</span><span>Marketplace</span></div><div class="page-hero-grid"><div><div class="eyebrow">Marketplace</div><h1>Collections you can inspect, not just thumbnails.</h1><div class="marketplace-hero-note">Rendered from Pixel's Minecraft model assets</div></div><p>Marketplace is a separate Pixel Network category for cosmetic collections. The current catalogue follows the same acquisition → rotation → collection structure used by the game content, with interactive Minecraft-model inspection where a registered item exposes a model.</p></div></div></section>
+
+    <section class="content-section" id="loot-boxes"><div class="shell">
+      <div class="content-head reveal"><div><div class="content-eyebrow">Catalogue hierarchy</div><h2>The web follows the content structure instead of flattening it.</h2></div><p>Items are grouped by how they belong together. The first imported source is the Luminite armor collection from Loot Box Rotation 01.</p></div>
+      <div class="marketplace-route reveal">
+        <div class="marketplace-route-step"><small>Marketplace</small><strong>Loot Boxes</strong></div>
+        <div class="marketplace-route-step" id="rotation-01"><small>Rotation</small><strong>Rotation 01</strong></div>
+        <div class="marketplace-route-step active"><small>Collection</small><strong>Luminite</strong></div>
+        <div class="marketplace-route-step"><small>Registered items</small><strong>5 armor models</strong></div>
+      </div>
+    </div></section>
+
+    <section class="content-section" id="luminite"><div class="shell">
+      <div class="content-head reveal"><div><div class="content-eyebrow">Luminite · Rotation 01</div><h2>Live Minecraft model viewer.</h2></div><p>Select a registered piece, then drag the model to rotate it. The renderer reads the same cuboid geometry, element rotations, UV coordinates and resource-pack textures carried by the imported Nexo model.</p></div>
+
+      <div class="marketplace-shell reveal">
+        <div class="marketplace-viewer-card">
+          <div class="marketplace-viewer-head"><div><small>Selected model</small><strong data-active-name>Helmet</strong></div><span class="marketplace-live-badge">Live model</span></div>
+          <div class="marketplace-model-stage is-loading" data-model-stage tabindex="0" aria-label="Interactive Minecraft item model. Drag to rotate, use arrow keys to rotate, plus or minus to zoom, and Home to reset.">
+            <canvas width="900" height="700" data-model-canvas aria-hidden="true">Interactive Minecraft item model</canvas>
+            <span class="marketplace-model-status" data-model-status aria-live="polite">Loading Nexo model…</span>
+            <div class="marketplace-viewer-controls" aria-label="Model controls"><button type="button" data-viewer-control="left" aria-label="Rotate left">←</button><button type="button" data-viewer-control="right" aria-label="Rotate right">→</button><button type="button" data-viewer-control="zoom-out" aria-label="Zoom out">−</button><button type="button" data-viewer-control="zoom-in" aria-label="Zoom in">+</button><button type="button" data-viewer-control="reset" aria-label="Reset model view">↺</button></div>
+          </div>
+        </div>
+
+        <aside class="marketplace-detail-card" aria-label="Selected item details">
+          <div class="content-eyebrow">Luminite collection</div>
+          <h2 data-active-name>Helmet</h2>
+          <div class="marketplace-variant" data-active-variant>3D</div>
+          <p class="marketplace-detail-copy">This catalogue entry is published because it is registered by the current Nexo item configuration. Visual resources that exist only in the pack are not treated as available Marketplace items.</p>
+          <div class="marketplace-facts">
+            <div class="marketplace-fact"><span>Slot</span><strong data-active-slot>HEAD</strong></div>
+            <div class="marketplace-fact"><span>Base material</span><strong data-active-material>CHAINMAIL_HELMET</strong></div>
+            <div class="marketplace-fact"><span>Geometry</span><strong data-active-geometry>52 cuboids</strong></div>
+            <div class="marketplace-fact"><span>Set relation</span><strong data-active-set>Individual model</strong></div>
+          </div>
+          <div class="marketplace-detail-tip">Drag with mouse/touch. Arrow keys rotate. + / − zoom. Home resets the original inventory-model orientation.</div>
+        </aside>
+      </div>
+
+      <div class="content-head reveal"><div><div class="content-eyebrow">Items</div><h2>Registered Luminite pieces.</h2></div><p>Helmet 3D, Helmet 2D, Chestplate, Leggings and Boots are the five entries backed by the imported Nexo item file.</p></div>
+      <div class="marketplace-item-grid reveal" data-marketplace-items aria-label="Luminite Marketplace items"></div>
+    </div></section>
+
+    <section class="content-section"><div class="shell">
+      <div class="marketplace-source-note reveal"><div><div class="content-eyebrow">Publication rule</div><h3>Pack asset ≠ Marketplace item.</h3></div><p>The resource pack contains additional Luminite artwork, but this page deliberately publishes only entries that have a corresponding Nexo item definition. That keeps the website aligned with the actual game-content registry as future rotations are imported.</p></div>
+      <div class="next-destination reveal"><div><small>Related</small><h3>Store and Marketplace remain separate surfaces.</h3><p>Marketplace documents cosmetic collections and models. Purchases and current commercial offers remain on the Store surface.</p></div><a class="button primary" href="store.html">Open Store</a></div>
+    </div></section>
+  </main>
+
+  <footer class="site-footer"><div class="shell site-footer-inner"><span>Pixel Network · Marketplace</span><span><a href="store.html">Store</a> · <a href="gameplay.html">Gameplay</a> · <a href="community.html">Community</a> · <a href="index.html">Home</a></span></div></footer>
+</body>
+</html>
