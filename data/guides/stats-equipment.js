@@ -5,22 +5,22 @@
       verifiedAsOf: '2026-09-07',
       liveClient: 'not-asserted',
       scope: 'core combat and equipment semantics',
-      exclusions: ['mining-specific PixelStats', 'unverified registry-only stats']
+      exclusions: ['mining-specific stats', 'candidate stats without current gameplay evidence']
     },
     coreStats: [
       {
         key: 'attack_damage',
         name: 'Attack Damage',
         family: 'Melee weapons',
-        backing: 'Weapon attribute / combat pipeline',
-        meaning: 'The declared damage basis for a progression melee weapon before later combat modifiers and target mitigation.',
+        role: 'Melee damage basis',
+        meaning: 'The damage basis for a progression melee weapon before later combat modifiers and target mitigation.',
         status: 'source-verified'
       },
       {
         key: 'attack_speed',
         name: 'Attack Speed',
         family: 'Melee weapons',
-        backing: 'Weapon attribute',
+        role: 'Attack cadence',
         meaning: 'Controls weapon attack cadence and therefore matters together with damage-per-hit when comparing sustained melee output.',
         status: 'source-verified'
       },
@@ -28,23 +28,23 @@
         key: 'projectile_damage',
         name: 'Projectile Damage',
         family: 'Bows',
-        backing: 'Progression projectile pipeline',
-        meaning: 'The progression damage basis carried by an eligible bow shot before the target-side mitigation step.',
+        role: 'Ranged damage basis',
+        meaning: 'The progression damage basis carried by an eligible bow shot before target mitigation.',
         status: 'source-verified'
       },
       {
         key: 'defense',
         name: 'Defense',
         family: 'Defensive equipment',
-        backing: 'Mitigation pipeline',
-        meaning: 'The armour input used by Pixel mitigation. More Defense increases reduction with diminishing returns relative to the target’s maximum health.',
+        role: 'Damage mitigation',
+        meaning: 'The defensive input used by Pixel mitigation. More Defense increases reduction with diminishing returns relative to the target’s maximum health.',
         status: 'source-verified'
       },
       {
         key: 'max_health',
         name: 'Max Health',
         family: 'Defensive equipment',
-        backing: 'Player health attribute',
+        role: 'Health + mitigation curve',
         meaning: 'Raises the player’s health pool and also participates in the mitigation curve, preventing Defense from behaving like an isolated linear percentage.',
         status: 'source-verified'
       },
@@ -52,8 +52,8 @@
         key: 'knockback_resistance',
         name: 'Knockback Resistance',
         family: 'Defensive equipment',
-        backing: 'Vanilla attribute',
-        meaning: 'Reduces displacement from knockback. It is a real passive attribute path and can be contributed by specialized defensive effects such as Anchor.',
+        role: 'Movement resistance',
+        meaning: 'Reduces displacement from knockback and can be supported by specialized defensive effects such as Anchor.',
         status: 'source-verified'
       }
     ],
@@ -83,14 +83,14 @@
         category: 'Melee',
         primary: ['attack_damage', 'attack_speed'],
         documentation: 'source-verified',
-        note: 'Separate melee family whose identity is extended by its own enchant mechanics rather than a fabricated stat namespace.'
+        note: 'A separate melee family whose identity is extended by its own enchant mechanics.'
       },
       {
         name: 'Bow',
         category: 'Ranged',
         primary: ['projectile_damage'],
         documentation: 'source-verified',
-        note: 'Uses the progression projectile damage path and a dedicated ranged enchant pool.'
+        note: 'Uses the ranged progression-damage model and a dedicated enchant pool.'
       },
       {
         name: 'Armor',
@@ -104,64 +104,64 @@
         category: 'Offhand / defense',
         primary: ['defense', 'knockback_resistance'],
         documentation: 'source-verified',
-        note: 'Offhand resolution is intentional; shield enchant identity is read from the actual offhand and duplicate enchant IDs are guarded.'
+        note: 'Shield behavior includes the equipped offhand and avoids double-counting the same enchantment across held items.'
       },
       {
         name: 'Elytra',
         category: 'Equipment',
         primary: ['defense'],
         documentation: 'partial-reference',
-        note: 'The equipment family exists with its own enchant pool. This guide only documents the core stat semantics supported by current evidence.'
+        note: 'Elytra has its own equipment identity. This page documents only the core stat semantics supported by current evidence.'
       },
       {
         name: 'Wands',
         category: 'Ability equipment',
         primary: [],
         documentation: 'separate-audit-required',
-        note: 'Wand behavior is not flattened into the melee/ranged stat model. A dedicated Wand reference should own ability-specific semantics.'
+        note: 'Wand abilities are not flattened into the melee/ranged stat model and need their own dedicated reference.'
       },
       {
         name: 'Mining tools',
         category: 'Mining',
         primary: [],
         documentation: 'separate-audit-required',
-        note: 'Mining-specific PixelStats are intentionally excluded until their producer-to-consumer coverage is audited as its own system.'
+        note: 'Mining-specific stats remain outside this guide until their dedicated reference is ready.'
       }
     ],
     layeredMechanics: [
       {
         name: 'Penetration',
-        owner: 'Enchant / combat snapshot',
-        relation: 'Modifies how a hit interacts with mitigation. It is documented as combat behavior rather than pretending every modifier is a stored base equipment stat.'
+        owner: 'Enchantments',
+        relation: 'Changes how a qualifying hit interacts with mitigation. It is a combat mechanic rather than another stored base equipment stat.'
       },
       {
         name: 'Lifesteal',
-        owner: 'Enchant / Talisman effect',
-        relation: 'Heals from qualifying damage under the owning system’s rules. It is not interchangeable with Max Health or Defense.'
+        owner: 'Enchantments / Talismans',
+        relation: 'Heals from qualifying damage under the rules of the effect that grants it. It is not interchangeable with Max Health or Defense.'
       },
       {
         name: 'Boss-conditional damage',
-        owner: 'Enchant / Talisman effect',
+        owner: 'Enchantments / Talismans',
         relation: 'Applies only in its intended target context. The condition is part of the mechanic, not a universal Attack Damage increase.'
       },
       {
         name: 'Area damage',
-        owner: 'Enchant effect',
+        owner: 'Enchantments',
         relation: 'A bounded secondary-target mechanic such as Pulse; it does not redefine the base Attack Damage stat.'
       }
     ],
-    excludedRegistryExamples: [
-      {
-        name: 'oxygen_bonus',
-        reason: 'A previous registry/consumer audit found a backing-versus-consumer contradiction. It stays out of the public current-stat table until that path is re-verified.'
-      },
-      {
-        name: 'step_height',
-        reason: 'A previous registry/consumer audit found a backing-versus-consumer contradiction. It stays out of the public current-stat table until that path is re-verified.'
-      },
+    excludedCoverage: [
       {
         name: 'Mining-specific stats',
-        reason: 'Current continuity explicitly reserves these for a dedicated producer-to-consumer audit rather than assuming the registry alone proves gameplay behavior.'
+        reason: 'Mining has its own stat surface and remains outside this combat/equipment reference until that dedicated coverage is ready.'
+      },
+      {
+        name: 'Candidate stats',
+        reason: 'A stat name is not published as current merely because it exists in an older list or definition; current gameplay evidence must support it.'
+      },
+      {
+        name: 'Historical planning values',
+        reason: 'Older planning material can help identify topics to revisit, but it does not override the current documented stat model.'
       }
     ]
   };
