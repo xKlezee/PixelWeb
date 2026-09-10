@@ -7,12 +7,16 @@ A configured control is not a passed control. Record the actual result for the e
 ## Repository / automated gate
 
 - The exact candidate HEAD is recorded before validation.
-- `PixelWeb Quality Gate` starts a real runner and executes its steps.
+- Manual dispatch is started with the exact candidate branch/tag/SHA in `target_ref`.
+- `PixelWeb Quality Gate` starts a real runner and exposes repository steps.
+- Python syntax compilation completes for every committed validator.
 - `python3 scripts/security_scan.py` completes successfully.
+- `python3 scripts/validate_media_integrity.py` completes successfully.
 - `node --check` completes successfully for every repository JavaScript file in scope.
 - `python3 scripts/validate_site.py` completes successfully.
-- A workflow startup failure with no runner/steps is classified as infrastructure/startup failure, not as a passing or failing validator result.
-- No check is weakened, skipped or removed merely to obtain green status.
+- `python3 scripts/validate_accessibility.py` completes successfully.
+- A workflow startup failure with no runner/steps is classified as infrastructure/account startup failure, not as a passing or failing validator result.
+- The current account-level billing lock is resolved separately; no check is weakened, skipped or removed merely to obtain green status.
 
 ## Navigation and page integrity
 
@@ -21,8 +25,10 @@ A configured control is not a passed control. Record the actual result for the e
 - External `_blank` links include `rel="noopener"`.
 - No duplicate IDs exist within a page.
 - Keyboard navigation remains usable after removal of inline handlers.
-- Canonical navigation remains consistent across overview pages and detailed `guide-*.html` pages.
+- Canonical runtime navigation remains consistent across overview pages and detailed `guide-*.html` pages.
 - Guides remains reachable from global Community navigation.
+- First keyboard focus exposes the global Skip to content link on standard pages.
+- Activating Skip to content moves both viewport and keyboard focus to the actual `<main>` region.
 
 ## Dynamic rendering
 
@@ -50,22 +56,45 @@ A configured control is not a passed control. Record the actual result for the e
 ## Media integrity
 
 - `assets/nexus/raphael.png`, `azazel.png`, `abyss.png` and `astral.png` remain original PNG assets unless the owner explicitly requests a source-asset change.
+- `validate_media_integrity.py` confirms each approved file's expected byte size, 1448×1086 dimensions and exact Git blob SHA.
 - No automatic AVIF/WebP conversion, recompression or resolution reduction is introduced for those approved boss images.
 - Performance improvements use loading, decoding, priority and layout behavior instead of silently changing the originals.
 - Abyss + Astral render as two independent source images in the dual encounter.
+- The deliberate logical Abyss/Astral filename inversion documented in `data/nexus-media.js` is not "corrected" without visual/source verification.
+
+## Home loading behavior
+
+- `Video_Perfecto_Con_Fondo_Negro.mp4` has no eager `src` in the initial Home HTML.
+- The video retains `preload="none"` and a local `data-src` hydration source.
+- Normal-motion browsing does not request the MP4 until the immersive section approaches its configured hydration margin or the user directly activates a story chapter.
+- Scroll scrubbing never seeks before valid metadata/duration is available.
+- `prefers-reduced-motion: reduce` does not hydrate/request the MP4 during normal use.
+- Deferring the MP4 does not collapse the story layout or hide textual content.
+
+## Crawl / publication behavior
+
+- `sitemap.xml` contains all indexable top-level public product/Guide pages and excludes `noindex` pages.
+- Forum preview and `404.html` retain page-level `noindex`.
+- `robots.txt` does not contain a blanket `Disallow: /`.
+- On the current `https://xklezee.github.io/PixelWeb/` project-site deployment, repository-level `PixelWeb/robots.txt` is **not** treated as the authoritative host robots policy; crawlers request `/robots.txt` at the host root.
+- No privacy/security claim relies on crawler exclusion. Files deployed through GitHub Pages are treated as public.
+- Home canonical/Open Graph/Twitter URLs resolve to the intended current public base.
+- Unknown routes render the branded 404 without broken local resources.
 
 ## Browser behavior
 
 - Home, Gameplay, Worlds, Nexus, Systems, Skyblock, Store, Community, Forum, Development, Changelog, About/Team and every detailed Guide load without uncaught console errors.
 - Reduced-motion behavior still works.
-- Modal/dialog focus and Escape behavior still work.
+- Play modal focus trap, Escape close and focus restoration work.
+- Forum entry dialog receives initial focus, traps Tab/Shift+Tab while active and remains scroll-reachable on short viewports.
+- Forum post modal focus and Escape behavior work and restore focus to the source card.
 - Mobile navigation opens/closes and returns focus correctly.
 - Guide sidebars/section rails remain navigable by keyboard and touch.
 - Guide search works at mobile widths and 200% zoom.
 
 ## Responsive widths
 
-Verify at minimum **1440, 1024, 768, 430 and 390 CSS px**.
+Verify at minimum **1440, 1024, 768, 430 and 390 CSS px** plus at least one short-height landscape window.
 
 At every width check:
 
@@ -84,6 +113,8 @@ Do not mark a viewport PASS from CSS inspection alone. Browser-render verificati
 - Focus indicators are visible and not clipped.
 - Interactive controls have usable pointer/touch target size.
 - Status/evidence meaning is not communicated by color alone.
+- Every static `<img>` exposes an explicit `alt`, including `alt=""` when truly decorative.
+- Each top-level page has exactly one `<main>` landmark.
 - Page remains usable at 200% browser zoom.
 - Reduced-motion mode removes nonessential animation without hiding content.
 - Keyboard users can reach and dismiss menus/modals without a pointer.
@@ -94,7 +125,7 @@ Do not mark a viewport PASS from CSS inspection alone. Browser-render verificati
 - No `.env`, private key, credential file, local database, runtime log or private operational report is tracked.
 - Public data files contain only intentionally PUBLIC information.
 - Guide pages keep `connect-src 'self'` unless a documented feature-level exception is approved.
-- No security claim relies on DevTools blocking, minification, obfuscation or repository privacy.
+- No security claim relies on DevTools blocking, minification, obfuscation, `robots.txt` or repository privacy.
 - No future authentication UI is treated as secure without server-side authorization/session controls.
 
 ## Final merge gate
