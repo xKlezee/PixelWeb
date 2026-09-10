@@ -3,8 +3,23 @@
   const rows = [...document.querySelectorAll('[data-guide-entry]')];
   const empty = document.querySelector('[data-guide-empty]');
   const count = document.querySelector('[data-guide-count]');
+  const library = document.querySelector('.guides-library');
 
   if (!(search instanceof HTMLInputElement) || !rows.length) return;
+
+  if (library) {
+    if (!library.id) library.id = 'guideLibrary';
+    search.setAttribute('aria-controls', library.id);
+  }
+  if (count) {
+    count.setAttribute('role', 'status');
+    count.setAttribute('aria-live', 'polite');
+    count.setAttribute('aria-atomic', 'true');
+  }
+  if (empty) {
+    empty.setAttribute('role', 'status');
+    empty.setAttribute('aria-live', 'polite');
+  }
 
   const normalize = value => String(value || '')
     .normalize('NFD')
