@@ -1,5 +1,30 @@
-/* PixelWeb security hardening helpers.
-   Loaded by site.js so runtime behavior does not require inline styles. */
+/* PixelWeb security/accessibility hardening helpers.
+   Loaded statically by hardened public pages so runtime behavior does not require inline styles. */
+
+.skip-link {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 10000;
+  max-width: calc(100vw - 20px);
+  padding: 10px 14px;
+  border: 1px solid rgba(246,201,69,.45);
+  border-radius: 10px;
+  background: #111317;
+  color: #f4f4f1;
+  font-size: 13px;
+  font-weight: 780;
+  text-decoration: none;
+  box-shadow: 0 10px 28px rgba(0,0,0,.46);
+  transform: translateY(calc(-100% - 20px));
+  transition: transform 140ms ease;
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline: 2px solid var(--yellow);
+  outline-offset: 2px;
+}
 
 .clipboard-fallback {
   position: fixed;
@@ -88,3 +113,7 @@ progress.progress-track::-moz-progress-bar {
 .immersive-progress > progress::-webkit-progress-bar { background: transparent; }
 .immersive-progress > progress::-webkit-progress-value { background: var(--yellow); }
 .immersive-progress > progress::-moz-progress-bar { background: var(--yellow); }
+
+@media (prefers-reduced-motion: reduce) {
+  .skip-link { transition: none; }
+}
