@@ -24,7 +24,7 @@ Browser-render status remains pending until the hardening branch can be opened i
 - mobile navigation takes over at 980 px and below;
 - mobile menu uses viewport-bounded height with its own vertical scrolling;
 - the brand and action area have explicit compact rules at 560 px and below;
-- a single canonical runtime navigation model now owns Explore, Development, Community, Guides and About destinations;
+- a single canonical runtime navigation model owns Explore, Development, Community, Guides and About destinations;
 - detailed `guide-*.html` pages keep Guides selected in the canonical navigation;
 - Store and Discord are available in the mobile menu while Play remains directly accessible in the header;
 - keyboard Escape closes open navigation groups/mobile navigation;
@@ -80,7 +80,25 @@ Browser-render status remains pending until the hardening branch can be opened i
 - reference tables have an explicit overflow container and minimum readable table width;
 - Guide pages do not load heavy Nexus boss artwork when the page's purpose is mechanical reference;
 - Guides search filters existing entries only; hidden results are removed from layout with the native `hidden` state;
-- exact gameplay values in detailed guides are rendered from canonical public data where a shared canonical value already exists.
+- exact gameplay values in detailed guides are rendered from canonical public data where a shared canonical value already exists;
+- Guide evidence badges retain text labels and a shape marker so status is not communicated by color alone.
+
+#### Progression guide
+
+- the three-layer progression rail is three columns on wide layouts and collapses to one column at 900 px;
+- Nexus encounter milestone cards also collapse 3 → 1 at 900 px, avoiding compressed difficulty labels;
+- the current-access note changes from split label/value layout to one column below 560 px;
+- the World/Nexus gate table stays inside the shared horizontally scrollable guide-table container rather than forcing page-level overflow;
+- caps and access milestones are rendered from `data/network.js`, so responsive variants do not maintain duplicate values in markup;
+- publication-boundary cards remain readable as a one-column sequence on tablet/mobile.
+
+#### Skyblock guide
+
+- current-capability cards change 3 → 2 → 1 columns at 900 px and 560 px;
+- source-foundation and partial-feature grids collapse from two columns to one at 900 px;
+- the partial-state banner stacks below 560 px so the status label cannot squeeze explanatory copy;
+- team-management content stays visually separated from the current-capability grid at every breakpoint;
+- the public Skyblock overview uses the existing global `path-grid`, `detail-grid` and `next-destination` responsive rules rather than adding a parallel layout system.
 
 ### About / Owners
 
@@ -125,12 +143,15 @@ When a browser preview of this exact branch is available, every required viewpor
 14. Guides sidebar stays usable at desktop heights and the horizontal guide navigation remains touch-scrollable on tablet/mobile;
 15. Guide tables can be horizontally inspected without producing page-level horizontal overflow;
 16. Guides search remains usable at 390/430 px and at 200% browser zoom;
-17. reduced-motion produces a stable, usable page;
-18. browser console has zero uncaught errors and zero CSP violations caused by first-party code;
-19. Network panel shows no insecure HTTP subresources;
-20. Guide pages make no unexpected external `connect-src` requests;
-21. images marked lazy are not fetched eagerly without reason;
-22. page remains usable at 200% browser zoom.
+17. Progression layer rail and Nexus milestone cards collapse without clipped copy or compressed status values;
+18. Skyblock current-capability and partial-feature sections remain visually distinct at 390/430 px;
+19. dynamically rendered Guide facts/cards appear after scripts load with no empty structural gaps;
+20. reduced-motion produces a stable, usable page;
+21. browser console has zero uncaught errors and zero CSP violations caused by first-party code;
+22. Network panel shows no insecure HTTP subresources;
+23. Guide pages make no unexpected external `connect-src` requests;
+24. images marked lazy are not fetched eagerly without reason;
+25. page remains usable at 200% browser zoom.
 
 ## Release rule
 
