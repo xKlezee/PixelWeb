@@ -74,7 +74,7 @@
   const bagHost = document.querySelector('[data-guide-talisman-bag]');
   appendFacts(bagHost, [
     ['Equipped slots', guide.bag?.slots],
-    ['Commit model', 'On bag close']
+    ['Changes apply', 'When the Bag closes']
   ]);
 
   const rarityHost = document.querySelector('[data-guide-talisman-rarity]');
@@ -102,10 +102,18 @@
   const verificationHost = document.querySelector('[data-guide-talisman-verification]');
   if (verificationHost) {
     const server = el('article', 'verification-card is-verified');
-    server.append(el('small', '', 'Server'), el('h3', '', 'Verified'), el('p', '', `Server-side mechanics were re-verified on ${guide.verification?.verifiedAsOf || 'the recorded validation date'}.`));
+    server.append(
+      el('small', '', 'Evidence'),
+      el('h3', '', 'Server verified'),
+      el('p', '', `Talisman mechanics and persistent collection behavior were server-verified on ${guide.verification?.verifiedAsOf || 'the recorded verification date'}.`)
+    );
 
     const client = el('article', 'verification-card is-pending');
-    client.append(el('small', '', 'Client presentation'), el('h3', '', 'Validation pending'), el('p', '', 'The remaining checks are sensory or interaction-level and require a real Minecraft client.'));
+    client.append(
+      el('small', '', 'Client presentation'),
+      el('h3', '', 'Validation pending'),
+      el('p', '', 'Visual, audio and interaction feel still require a real Minecraft client pass.')
+    );
 
     verificationHost.replaceChildren(server, client);
   }
