@@ -73,9 +73,7 @@
 
   const bagHost = document.querySelector('[data-guide-talisman-bag]');
   appendFacts(bagHost, [
-    ['Slots', guide.bag?.slots],
-    ['GUI range', guide.bag?.guiRange],
-    ['Jewelry reserve', guide.bag?.jewelrySlots],
+    ['Equipped slots', guide.bag?.slots],
     ['Commit model', 'On bag close']
   ]);
 
