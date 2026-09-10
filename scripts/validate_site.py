@@ -1,0 +1,457 @@
+#!/usr/bin/env python3
+"""Dependency-free static integrity, publication and browser-safety checks for PixelWeb.
+
+This validator encodes security and publication invariants rather than style preferences.
+A change that weakens the CSP, reintroduces inline executable/style content, breaks local
+references, adds unsafe DOM sinks, introduces insecure or protocol-relative external resources,
+reintroduces explicitly retired public claims, or breaks the public crawl/canonical/index contract
+fails before deployment.
+"""
+from __future__ import annotations
+
+import html.parser
+import re
+import xml.etree.ElementTree as ET
+from pathlib import Path
+from urllib.parse import unquote, urlsplit
+
+ROOT = Path(__file__).resolve().parents[1]
+HTML_FILES = sorted(ROOT.glob("*.html"))
+JS_FILES = sorted(path for path in ROOT.rglob("*.js") if ".git" not in path.parts)
+CSS_FILES = sorted(path for path in ROOT.rglob("*.css") if ".git" not in path.parts)
+SITE_BASE_URL = "https://xklezee.github.io/PixelWeb/"
+ROBOTS_PATH = ROOT / "robots.txt"
+SITEMAP_PATH = ROOT / "sitemap.xml"
+ERROR_PAGE_PATH = ROOT / "404.html"
+
+REQUIRED_CSP_DIRECTIVES = {
+    "default-src": {"'self'"},
+    "base-uri": {"'self'"},
+    "object-src": {"'none'"},
+    "script-src": {"'self'"},
+    "style-src": {"'self'"},
+    "frame-src": {"'none'"},
+    "worker-src": {"'none'"},
+    "form-action": {"'self'"},
+}
+FORBIDDEN_CSP_TOKENS = {"'unsafe-inline'", "'unsafe-eval'", "'wasm-unsafe-eval'"}
+SELF_ONLY_CONNECT_SRC = {"'self'"}
+STATUS_CONNECT_SRC = {"'self'", "https://api.mcsrvstat.us"}
+LIVE_STATUS_IDS = {"serverStatusText", "playerCount", "serverStatusDot"}
+
+# Retired product copy is guarded explicitly when its reappearance would overclaim a
+# feature state. These strings are not generic wording bans; they are known stale claims.
+FORBIDDEN_PUBLIC_COPY = {
+    "Personal and collaborative island progression.": (
+        "Skyblock collaboration is currently partial; use the canonical personal-island "
+        "description instead"
+    ),
+}
+
+# Some public values must have exactly one source owner. Other surfaces render them from
+# that owner instead of embedding a second literal that can drift later.
+CANONICAL_LITERAL_OWNERS = {
+    "pixelboxxx.minehut.gg": Path("data/network.js"),
+}
+
+# PixelWeb intentionally avoids string-to-DOM parsing and runtime inline-style mutation.
+# This keeps data rendering safe by construction and makes a strict CSP sustainable.
+HTML_SINK_RE = re.compile(r"\.(?:innerHTML|outerHTML)\s*=|insertAdjacentHTML\s*\(|document\.write\s*\(")
+INLINE_STYLE_JS_RE = re.compile(r"\.style(?:\.|\[)|setAttribute\s*\(\s*['\"]style['\"]")
+DYNAMIC_CODE_RE = re.compile(r"\b(?:eval\s*\(|new\s+Function\s*\(|setTimeout\s*\(\s*['\"]|setInterval\s*\(\s*['\"])")
+INSECURE_HTTP_RE = re.compile(r"(?i)\bhttp://")
+CSS_COMMENT_RE = re.compile(r"/\*.*?\*/", re.DOTALL)
+PROTOCOL_RELATIVE_CSS_RE = re.compile(
+    r"(?:url\(\s*['\"]?|@import\s+['\"])//",
+    re.IGNORECASE,
+)
+
+
+class PageParser(html.parser.HTMLParser):
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.refs: list[tuple[str, str, int]] = []
+        self.blank_without_noopener: list[tuple[str, int]] = []
+        self.inline_handlers: list[tuple[str, str, int]] = []
+        self.inline_styles: list[tuple[str, int]] = []
+        self.duplicate_ids: list[tuple[str, int]] = []
+        self.dangerous_urls: list[tuple[str, str, int]] = []
+        self.insecure_http_urls: list[tuple[str, str, int]] = []
+        self.protocol_relative_urls: list[tuple[str, str, int]] = []
+        self.inline_scripts: list[int] = []
+        self.canonical_links: list[tuple[str, int]] = []
+        self.csp: str | None = None
+        self.robots_meta: str | None = None
+        self.has_referrer_policy = False
+        self.has_live_status_surface = False
+        self._ids: set[str] = set()
+        self._inline_script_line: int | None = None
+        self._inline_script_has_content = False
+
+    def _record_resource_url(self, attr: str, value: str, line: int) -> None:
+        raw = str(value).strip()
+        if not raw:
+            return
+        lowered = raw.lower()
+        if lowered.startswith("javascript:"):
+            self.dangerous_urls.append((attr, raw, line))
+        if lowered.startswith("http://"):
+            self.insecure_http_urls.append((attr, raw, line))
+        if raw.startswith("//"):
+            self.protocol_relative_urls.append((attr, raw, line))
+
+    def handle_starttag(self, tag: str, attrs):
+        attrs_dict = dict(attrs)
+        line, _ = self.getpos()
+        tag = tag.lower()
+
+        element_id = attrs_dict.get("id")
+        if element_id:
+            if element_id in self._ids:
+                self.duplicate_ids.append((element_id, line))
+            self._ids.add(element_id)
+            if element_id in LIVE_STATUS_IDS:
+                self.has_live_status_surface = True
+
+        for attr, value in attrs:
+            attr_lower = attr.lower()
+            if attr_lower.startswith("on") and value:
+                self.inline_handlers.append((tag, attr, line))
+            if attr_lower == "style" and value is not None:
+                self.inline_styles.append((tag, line))
+            if attr_lower in {"href", "src", "action", "formaction", "xlink:href", "poster"} and value:
+                self._record_resource_url(attr_lower, value, line)
+
+        if tag == "meta":
+            http_equiv = str(attrs_dict.get("http-equiv") or "").lower()
+            name = str(attrs_dict.get("name") or "").lower()
+            content = str(attrs_dict.get("content") or "")
+            if http_equiv == "content-security-policy" and content:
+                self.csp = content
+            if name == "referrer" and content:
+                self.has_referrer_policy = True
+            if name == "robots" and content:
+                self.robots_meta = content.lower()
+
+        if tag == "link":
+            rel = {token.lower() for token in str(attrs_dict.get("rel") or "").split()}
+            href = str(attrs_dict.get("href") or "").strip()
+            if "canonical" in rel and href:
+                self.canonical_links.append((href, line))
+
+        if tag in {"a", "link"} and attrs_dict.get("href"):
+            self.refs.append(("href", attrs_dict["href"], line))
+        if tag in {"script", "img", "source", "video", "audio", "iframe"} and attrs_dict.get("src"):
+            self.refs.append(("src", attrs_dict["src"], line))
+        if tag == "video" and attrs_dict.get("poster"):
+            self.refs.append(("poster", attrs_dict["poster"], line))
+        if tag in {"source", "img"} and attrs_dict.get("srcset"):
+            for item in attrs_dict["srcset"].split(","):
+                candidate = item.strip().split(" ", 1)[0]
+                if candidate:
+                    self._record_resource_url("srcset", candidate, line)
+                    self.refs.append(("srcset", candidate, line))
+
+        if tag == "a" and attrs_dict.get("target") == "_blank":
+            rel = {token.lower() for token in (attrs_dict.get("rel") or "").split()}
+            if "noopener" not in rel:
+                self.blank_without_noopener.append((attrs_dict.get("href", ""), line))
+
+        if tag == "script" and not attrs_dict.get("src"):
+            self._inline_script_line = line
+            self._inline_script_has_content = False
+
+    def handle_startendtag(self, tag: str, attrs):
+        self.handle_starttag(tag, attrs)
+
+    def handle_data(self, data: str):
+        if self._inline_script_line is not None and data.strip():
+            self._inline_script_has_content = True
+
+    def handle_endtag(self, tag: str):
+        if tag.lower() == "script" and self._inline_script_line is not None:
+            if self._inline_script_has_content:
+                self.inline_scripts.append(self._inline_script_line)
+            self._inline_script_line = None
+            self._inline_script_has_content = False
+
+
+def parse_csp(value: str) -> dict[str, set[str]]:
+    directives: dict[str, set[str]] = {}
+    for chunk in value.split(";"):
+        tokens = chunk.strip().split()
+        if not tokens:
+            continue
+        directives[tokens[0].lower()] = {token.lower() for token in tokens[1:]}
+    return directives
+
+
+def local_target(raw: str) -> Path | None:
+    raw = raw.strip()
+    if not raw or raw.startswith(("#", "mailto:", "tel:")):
+        return None
+    parts = urlsplit(raw)
+    if parts.scheme or parts.netloc:
+        return None
+    path = unquote(parts.path)
+    if not path:
+        return None
+    return (ROOT / path.lstrip("/")).resolve()
+
+
+def is_guide_page(page: Path) -> bool:
+    return page.name == "guides.html" or page.name.startswith("guide-")
+
+
+def page_public_url(page: Path) -> str:
+    if page.name == "index.html":
+        return SITE_BASE_URL
+    return f"{SITE_BASE_URL}{page.name}"
+
+
+def scan_text_file_for_insecure_http(path: Path, failures: list[str]) -> None:
+    text = path.read_text(encoding="utf-8")
+    for line_number, line in enumerate(text.splitlines(), start=1):
+        if INSECURE_HTTP_RE.search(line):
+            failures.append(
+                f"{path.relative_to(ROOT)}:{line_number}: insecure absolute HTTP URL detected"
+            )
+
+
+def scan_css_file_for_protocol_relative_urls(path: Path, failures: list[str]) -> None:
+    text = CSS_COMMENT_RE.sub("", path.read_text(encoding="utf-8"))
+    for line_number, line in enumerate(text.splitlines(), start=1):
+        if PROTOCOL_RELATIVE_CSS_RE.search(line):
+            failures.append(
+                f"{path.relative_to(ROOT)}:{line_number}: protocol-relative CSS resource URL detected"
+            )
+
+
+def scan_publication_invariants(paths: list[Path], failures: list[str]) -> None:
+    for path in paths:
+        text = path.read_text(encoding="utf-8")
+        relative = path.relative_to(ROOT)
+
+        for stale_copy, explanation in FORBIDDEN_PUBLIC_COPY.items():
+            if stale_copy in text:
+                failures.append(f"{relative}: retired public claim detected — {explanation}")
+
+        for literal, owner in CANONICAL_LITERAL_OWNERS.items():
+            if literal not in text:
+                continue
+            if relative != owner:
+                failures.append(
+                    f"{relative}: canonical literal '{literal}' must be owned only by {owner}"
+                )
+
+
+def validate_crawl_contract(
+    page_robots: dict[str, str | None],
+    page_canonicals: dict[str, list[tuple[str, int]]],
+    failures: list[str],
+) -> None:
+    if not ROBOTS_PATH.exists():
+        failures.append("robots.txt: missing public crawl policy")
+        return
+    if not SITEMAP_PATH.exists():
+        failures.append("sitemap.xml: missing public sitemap")
+        return
+    if not ERROR_PAGE_PATH.exists():
+        failures.append("404.html: missing branded error page")
+
+    robots_lines = [line.strip() for line in ROBOTS_PATH.read_text(encoding="utf-8").splitlines()]
+    if "Allow: /" not in robots_lines:
+        failures.append("robots.txt: must explicitly allow the public site root")
+    if "Disallow: /" in robots_lines:
+        failures.append("robots.txt: must not block the entire public site")
+    expected_sitemap_line = f"Sitemap: {SITE_BASE_URL}sitemap.xml"
+    if expected_sitemap_line not in robots_lines:
+        failures.append(f"robots.txt: missing canonical sitemap line ({expected_sitemap_line})")
+
+    try:
+        sitemap_root = ET.fromstring(SITEMAP_PATH.read_text(encoding="utf-8"))
+    except (ET.ParseError, UnicodeError) as exc:
+        failures.append(f"sitemap.xml: invalid XML ({exc})")
+        return
+
+    namespace = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+    locations = [
+        (node.text or "").strip()
+        for node in sitemap_root.findall("sm:url/sm:loc", namespace)
+        if (node.text or "").strip()
+    ]
+    if not locations:
+        failures.append("sitemap.xml: contains no URL locations")
+        return
+    if len(locations) != len(set(locations)):
+        failures.append("sitemap.xml: contains duplicate URL locations")
+
+    location_set = set(locations)
+    for location in locations:
+        if not location.startswith(SITE_BASE_URL):
+            failures.append(f"sitemap.xml: URL is outside canonical site base ({location})")
+
+    for page in HTML_FILES:
+        robots = page_robots.get(page.name) or ""
+        noindex = "noindex" in {token.strip() for token in robots.split(",") if token.strip()}
+        public_url = page_public_url(page)
+        canonicals = page_canonicals.get(page.name, [])
+
+        if noindex and public_url in location_set:
+            failures.append(f"sitemap.xml: noindex page must not be listed ({page.name})")
+
+        if not noindex:
+            if public_url not in location_set:
+                failures.append(f"sitemap.xml: indexable page missing ({page.name})")
+
+            if not canonicals:
+                failures.append(f"{page.name}: indexable page missing rel=canonical")
+            elif len(canonicals) > 1:
+                lines = ", ".join(str(line) for _, line in canonicals)
+                failures.append(
+                    f"{page.name}: indexable page must declare exactly one rel=canonical "
+                    f"(found {len(canonicals)} at lines {lines})"
+                )
+            else:
+                canonical_url, line = canonicals[0]
+                canonical_parts = urlsplit(canonical_url)
+                if canonical_parts.scheme != "https" or not canonical_parts.netloc:
+                    failures.append(
+                        f"{page.name}:{line}: canonical must be an absolute HTTPS URL ({canonical_url})"
+                    )
+                if canonical_url != public_url:
+                    failures.append(
+                        f"{page.name}:{line}: canonical must match sitemap public URL "
+                        f"({public_url}), found {canonical_url}"
+                    )
+                if canonical_url not in location_set:
+                    failures.append(
+                        f"{page.name}:{line}: canonical URL is not present in sitemap.xml ({canonical_url})"
+                    )
+
+    if "noindex" not in (page_robots.get("404.html") or ""):
+        failures.append("404.html: error page must declare noindex")
+    if "noindex" not in (page_robots.get("forum.html") or ""):
+        failures.append("forum.html: preview forum must remain noindex until persistence/auth is real")
+
+
+def main() -> int:
+    failures: list[str] = []
+    page_robots: dict[str, str | None] = {}
+    page_canonicals: dict[str, list[tuple[str, int]]] = {}
+
+    if not HTML_FILES:
+        failures.append("No top-level HTML files found.")
+
+    for page in HTML_FILES:
+        parser = PageParser()
+        parser.feed(page.read_text(encoding="utf-8"))
+        parser.close()
+        page_robots[page.name] = parser.robots_meta
+        page_canonicals[page.name] = parser.canonical_links
+        csp: dict[str, set[str]] = {}
+
+        if not parser.csp:
+            failures.append(f"{page.name}: missing Content-Security-Policy meta")
+        else:
+            csp = parse_csp(parser.csp)
+            for directive, required_values in REQUIRED_CSP_DIRECTIVES.items():
+                values = csp.get(directive)
+                if values is None:
+                    failures.append(f"{page.name}: CSP missing required directive {directive}")
+                    continue
+                missing = required_values - values
+                if missing:
+                    failures.append(
+                        f"{page.name}: CSP {directive} missing {', '.join(sorted(missing))}"
+                    )
+            for directive, values in csp.items():
+                forbidden = values & FORBIDDEN_CSP_TOKENS
+                if forbidden:
+                    failures.append(
+                        f"{page.name}: CSP {directive} contains forbidden token(s): "
+                        f"{', '.join(sorted(forbidden))}"
+                    )
+
+        expected_connect_src = STATUS_CONNECT_SRC if parser.has_live_status_surface else SELF_ONLY_CONNECT_SRC
+        if csp.get("connect-src") != expected_connect_src:
+            expected_label = "'self' https://api.mcsrvstat.us" if parser.has_live_status_surface else "'self'"
+            failures.append(
+                f"{page.name}: connect-src must be exactly {expected_label} for this page's runtime surface"
+            )
+
+        ref_values = {raw for _, raw, _ in parser.refs}
+        if parser.has_live_status_surface and "site.js" not in ref_values:
+            failures.append(f"{page.name}: live status surface requires site.js")
+
+        if is_guide_page(page):
+            if "guides.css" not in ref_values:
+                failures.append(f"{page.name}: Guide page must load guides.css")
+            if "data/network.js" not in ref_values:
+                failures.append(f"{page.name}: Guide page must load canonical data/network.js")
+
+        if not parser.has_referrer_policy:
+            failures.append(f"{page.name}: missing referrer policy meta")
+
+        for element_id, line in parser.duplicate_ids:
+            failures.append(f"{page.name}:{line}: duplicate id '{element_id}'")
+        for href, line in parser.blank_without_noopener:
+            failures.append(f"{page.name}:{line}: target=_blank missing rel=noopener ({href})")
+        for tag, attr, line in parser.inline_handlers:
+            failures.append(f"{page.name}:{line}: inline event handler {tag}[{attr}] is not CSP-ready")
+        for tag, line in parser.inline_styles:
+            failures.append(f"{page.name}:{line}: inline style on <{tag}> violates strict style-src")
+        for line in parser.inline_scripts:
+            failures.append(f"{page.name}:{line}: inline script is blocked by script-src 'self'")
+        for attr, value, line in parser.dangerous_urls:
+            failures.append(f"{page.name}:{line}: dangerous javascript: URL in {attr} ({value})")
+        for attr, value, line in parser.insecure_http_urls:
+            failures.append(f"{page.name}:{line}: external {attr} must use HTTPS ({value})")
+        for attr, value, line in parser.protocol_relative_urls:
+            failures.append(f"{page.name}:{line}: protocol-relative {attr} URL is not allowed ({value})")
+
+        for attr, raw, line in parser.refs:
+            target = local_target(raw)
+            if target is None:
+                continue
+            try:
+                target.relative_to(ROOT.resolve())
+            except ValueError:
+                failures.append(f"{page.name}:{line}: {attr} escapes repository root ({raw})")
+                continue
+            if not target.exists():
+                failures.append(f"{page.name}:{line}: missing local {attr} target ({raw})")
+
+    for js_file in JS_FILES:
+        text = js_file.read_text(encoding="utf-8")
+        relative = js_file.relative_to(ROOT)
+        if DYNAMIC_CODE_RE.search(text):
+            failures.append(f"{relative}: dynamic code execution pattern detected")
+        if HTML_SINK_RE.search(text):
+            failures.append(f"{relative}: HTML parsing sink detected")
+        if INLINE_STYLE_JS_RE.search(text):
+            failures.append(f"{relative}: runtime inline-style mutation detected")
+        scan_text_file_for_insecure_http(js_file, failures)
+
+    for css_file in CSS_FILES:
+        scan_text_file_for_insecure_http(css_file, failures)
+        scan_css_file_for_protocol_relative_urls(css_file, failures)
+
+    scan_publication_invariants([*HTML_FILES, *JS_FILES], failures)
+    validate_crawl_contract(page_robots, page_canonicals, failures)
+
+    if failures:
+        print("Static site validation failed:")
+        for failure in failures:
+            print(f"  {failure}")
+        return 1
+
+    print(
+        f"Static site validation passed for {len(HTML_FILES)} HTML pages, "
+        f"{len(JS_FILES)} JavaScript files and {len(CSS_FILES)} CSS files."
+    )
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

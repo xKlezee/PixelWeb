@@ -53,7 +53,8 @@
     community: {
       discordUrl: 'https://discord.gg/7KzWpezTNZ',
       forumLanding: 'forum.html',
-      documentationUrl: 'https://pixel-network-1.gitbook.io/home/documentation/',
+      guidesLanding: 'guides.html',
+      legacyDocumentationUrl: 'https://pixel-network-1.gitbook.io/home/documentation',
       forum: {
         mode: 'preview',
         persistent: false,
@@ -66,7 +67,10 @@
       maxLevel: 300,
       maxPrestige: 10,
       maxLegacy: 4,
-      verified: true
+      evidence: 'reconciled-reference',
+      state: 'current',
+      verified: false,
+      verifiedScope: 'Public caps and access milestones are maintained here; reset, reward and persistence semantics remain intentionally unpublished until independently re-verified.'
     },
     content: {
       currentWorlds: 4,
@@ -176,17 +180,28 @@
       ]
     },
     skyblock: {
-      verified: true,
+      evidence: 'source-verified',
+      state: 'partial',
+      verified: false,
       features: [
         'Own island',
         'Island progression',
-        'Invite friends',
-        'Build together',
-        'Visit other islands',
-        'Improve the island',
-        'Skyblock quests',
-        'Personal storage',
-        'Personal vaults'
+        'Island persistence',
+        'Island upgrades',
+        'Island bank',
+        'Skyblock quests'
+      ],
+      partialFeatures: [
+        {
+          name: 'Island team management',
+          status: 'Partial',
+          detail: 'Collaboration controls are not yet presented as a complete player feature. Current Skyblock progression does not depend on them.'
+        },
+        {
+          name: 'Member promotion',
+          status: 'Planned',
+          detail: 'Member promotion is not currently available as a documented player action.'
+        }
       ]
     },
     store: {

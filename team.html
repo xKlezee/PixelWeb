@@ -4,13 +4,28 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <meta name="theme-color" content="#0b0c0e"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https: data:; media-src 'self' https:; font-src 'self' https: data:; connect-src 'self'; frame-src 'none'; worker-src 'none'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests"/>
+  <meta name="referrer" content="strict-origin-when-cross-origin"/>
   <meta name="description" content="Meet the two owners behind Pixel Network and the disciplines they lead."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:site_name" content="Pixel Network"/>
+  <meta property="og:title" content="About — Pixel Network"/>
+  <meta property="og:description" content="Meet the two owners behind Pixel Network and the disciplines they lead."/>
+  <meta property="og:url" content="https://xklezee.github.io/PixelWeb/team.html"/>
+  <meta property="og:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/>
+  <meta property="og:image:alt" content="Pixel Network logo"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:title" content="About — Pixel Network"/>
+  <meta name="twitter:description" content="Meet the two owners behind Pixel Network and the disciplines they lead."/>
+  <meta name="twitter:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/>
   <title>About — Pixel Network</title>
+  <link rel="canonical" href="https://xklezee.github.io/PixelWeb/team.html"/>
   <link rel="icon" href="LOGO%20OFICIAL.png"/>
   <link rel="stylesheet" href="site.css"/>
   <link rel="stylesheet" href="polish.css"/>
   <link rel="stylesheet" href="phase1.css"/>
   <link rel="stylesheet" href="team.css"/>
+  <link rel="stylesheet" href="security-hardening.css"/>
   <script src="data/network.js" defer></script>
   <script src="site.js" defer></script>
   <script src="polish.js" defer></script>
@@ -20,8 +35,8 @@
 
   <nav class="site-nav" aria-label="Main navigation"><div class="shell nav-inner">
     <a class="brand" href="index.html"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a>
-    <div class="nav-links" id="navLinks"><div class="nav-group"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal and collaborative island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div><a href="development.html">Development</a><div class="nav-group"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="community.html"><strong>Community</strong><span>Discord, Forum, docs and changelog.</span></a><a href="forum.html"><strong>Forum</strong><span>Long-form discussion.</span></a></div></div><a href="team.html" aria-current="page">About</a></div>
-    <div class="nav-actions"><a class="button quiet nav-store" href="https://pixelboxx.tebex.io/" target="_blank" rel="noopener">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
+    <div class="nav-links" id="navLinks"><div class="nav-group"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div><div class="nav-group"><button type="button" aria-haspopup="true">Development</button><div class="nav-dropdown"><a href="development.html"><strong>Development</strong><span>Current status, roadmap and product scale.</span></a><a href="changelog.html"><strong>Changelog</strong><span>Player-facing release notes.</span></a></div></div><div class="nav-group"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="community.html"><strong>Community</strong><span>Discord, Guides and Forum.</span></a><a href="guides.html"><strong>Guides</strong><span>Detailed player reference and mechanics.</span></a><a href="forum.html"><strong>Forum</strong><span>Long-form discussion preview.</span></a></div></div><a href="team.html" aria-current="page">About</a></div>
+    <div class="nav-actions"><a class="button quiet nav-discord" href="https://discord.gg/7KzWpezTNZ" target="_blank" rel="noopener">Discord</a><a class="button quiet nav-store" href="store.html">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
   </div></nav>
 
   <main>
@@ -44,6 +59,6 @@
     </div></section>
   </main>
 
-  <footer style="padding:34px 0 48px;border-top:1px solid rgba(255,255,255,.075)"><div class="shell" style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:#777b83;font-size:12px"><span>Pixel Network · About</span><span><a href="development.html">Development</a> · <a href="community.html">Community</a> · <a href="index.html">Home</a></span></div></footer>
+  <footer class="site-footer"><div class="shell site-footer-inner"><span>Pixel Network · About</span><span><a href="development.html">Development</a> · <a href="community.html">Community</a> · <a href="index.html">Home</a></span></div></footer>
 </body>
 </html>

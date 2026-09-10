@@ -6,6 +6,50 @@
   const encounterHost = document.querySelector('[data-nexus-encounters]');
   const ladderHost = document.querySelector('[data-nexus-ladder]');
 
+  const el = (tag, className = '', text = null) => {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== null && text !== undefined) node.textContent = String(text);
+    return node;
+  };
+
+  const milestoneOrder = [];
+  const addMilestone = value => {
+    const milestone = String(value || '').trim();
+    if (milestone && !milestoneOrder.includes(milestone)) milestoneOrder.push(milestone);
+  };
+
+  addMilestone(nexus.unlockMilestone || nexus.unlock);
+  encounters.forEach(instance => {
+    (instance.difficulties || []).forEach(difficulty => addMilestone(difficulty.unlock));
+  });
+
+  const finalMilestone = milestoneOrder[milestoneOrder.length - 1] || '—';
+  const encounterCount = network.content?.instanceEncounters ?? encounters.length;
+  const bossCount = network.content?.instanceBosses ?? '—';
+
+  document.querySelectorAll('[data-nexus-final-unlock]').forEach(node => {
+    node.textContent = finalMilestone;
+  });
+  document.querySelectorAll('[data-nexus-summary-counts]').forEach(node => {
+    node.textContent = `${encounterCount} Instances · ${bossCount} bosses`;
+  });
+
+  const safeImageUrl = source => {
+    if (!source) return '';
+    const value = String(source).trim();
+    if (/^(?:assets\/|\.\/|\.\.\/)/.test(value)) return value;
+    try {
+      const url = new URL(value, location.href);
+      const sameOrigin = url.origin === location.origin;
+      if (sameOrigin && ['http:', 'https:'].includes(url.protocol)) return url.href;
+      if (location.protocol === 'file:' && url.protocol === 'file:') return url.href;
+      return url.protocol === 'https:' ? url.href : '';
+    } catch {
+      return '';
+    }
+  };
+
   const mediaFor = name => {
     const normalized = String(name || '').toLowerCase();
     if (normalized === 'raphael') return [media.raphael].filter(Boolean);
@@ -28,48 +72,81 @@
   };
 
   const renderVisual = (visual, label = '') => {
-    if (!visual?.source) return '';
-    return `<figure class="nexus-boss-art">
-      <img src="${visual.source}" alt="${visual.alt}" width="1448" height="1086" loading="lazy" decoding="async">
-      ${label ? `<figcaption>${label}</figcaption>` : ''}
-    </figure>`;
+    const source = safeImageUrl(visual?.source);
+    if (!source) return null;
+    const figure = el('figure', 'nexus-boss-art');
+    const img = el('img');
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.fetchPriority = 'low';
+    if (/^https:\/\//i.test(source)) img.referrerPolicy = 'no-referrer';
+    img.src = source;
+    img.alt = visual?.alt || `${label || 'Nexus encounter'} concept visual`;
+    // Preserve the approved original image relationship: every boss source is 1448×1086 (4:3).
+    img.width = 1448;
+    img.height = 1086;
+    figure.appendChild(img);
+    if (label) figure.appendChild(el('figcaption', '', label));
+    return figure;
   };
 
   const renderMedia = instance => {
     const visuals = mediaFor(instance.name);
-    if (!visuals.length) return '<div class="nexus-instance-media is-fallback" aria-hidden="true"></div>';
-    if (visuals.length === 1) {
-      return `<div class="nexus-instance-media">${renderVisual(visuals[0])}</div>`;
+    if (!visuals.length) {
+      const fallback = el('div', 'nexus-instance-media is-fallback');
+      fallback.setAttribute('aria-hidden', 'true');
+      return fallback;
     }
-    return `<div class="nexus-instance-media nexus-instance-media--dual">
-      ${renderVisual(visuals[0], 'Abyss')}
-      ${renderVisual(visuals[1], 'Astral')}
-    </div>`;
+
+    const wrap = el('div', visuals.length === 1 ? 'nexus-instance-media' : 'nexus-instance-media nexus-instance-media--dual');
+    if (visuals.length === 1) {
+      const figure = renderVisual(visuals[0]);
+      if (figure) wrap.appendChild(figure);
+      return wrap;
+    }
+
+    const first = renderVisual(visuals[0], 'Abyss');
+    const second = renderVisual(visuals[1], 'Astral');
+    if (first) wrap.appendChild(first);
+    if (second) wrap.appendChild(second);
+    return wrap;
   };
 
   if (encounterHost) {
-    encounterHost.innerHTML = encounters.map((instance, index) => `
-      <article class="nexus-instance-card" data-accent="${accentFor(instance.name)}">
-        ${renderMedia(instance)}
-        <div class="nexus-instance-body">
-          <div class="nexus-instance-topline"><span>0${index + 1} / INSTANCE</span><small>${instance.format}</small></div>
-          <h3>${instance.name}</h3>
-          <p>${instance.name === 'Abyss + Astral'
-            ? 'A dual-boss encounter that joins the endgame ladder later and reaches the final current difficulty at Legacy II.'
-            : `${instance.name} opens at Easy with the Nexus threshold, then advances through Medium and Hard as the account reaches later milestones.`}</p>
-          <div class="nexus-difficulty-chips">${(instance.difficulties || []).map(item => `<span><b>${item.name}</b>${item.unlock}</span>`).join('')}</div>
-          <div class="nexus-instance-path">${difficultyCopy(instance)}</div>
-        </div>
-      </article>`).join('');
+    encounterHost.replaceChildren(...encounters.map((instance, index) => {
+      const article = el('article', 'nexus-instance-card');
+      article.dataset.accent = accentFor(instance.name);
+      article.appendChild(renderMedia(instance));
+
+      const body = el('div', 'nexus-instance-body');
+      const topline = el('div', 'nexus-instance-topline');
+      topline.append(el('span', '', `${String(index + 1).padStart(2, '0')} / INSTANCE`), el('small', '', instance.format || ''));
+      body.append(topline, el('h3', '', instance.name || 'Nexus encounter'));
+
+      const difficulties = Array.isArray(instance.difficulties) ? instance.difficulties : [];
+      const firstDifficulty = difficulties[0];
+      const lastDifficulty = difficulties[difficulties.length - 1];
+      let description = 'Difficulty access follows the canonical account milestones for this encounter.';
+      if (firstDifficulty && lastDifficulty) {
+        description = instance.name === 'Abyss + Astral'
+          ? `This dual-boss encounter enters the ladder at ${firstDifficulty.name} · ${firstDifficulty.unlock} and currently extends through ${lastDifficulty.name} · ${lastDifficulty.unlock}.`
+          : `${instance.name} begins at ${firstDifficulty.name} · ${firstDifficulty.unlock} and expands through later account milestones to ${lastDifficulty.name} · ${lastDifficulty.unlock}.`;
+      }
+      body.appendChild(el('p', '', description));
+
+      const chips = el('div', 'nexus-difficulty-chips');
+      difficulties.forEach(item => {
+        const chip = el('span');
+        chip.append(el('b', '', item.name || ''), document.createTextNode(item.unlock || ''));
+        chips.appendChild(chip);
+      });
+      body.append(chips, el('div', 'nexus-instance-path', difficultyCopy(instance)));
+      article.appendChild(body);
+      return article;
+    }));
   }
 
   if (ladderHost) {
-    const milestoneOrder = [
-      nexus.unlock || 'Prestige IV',
-      'Prestige VII',
-      'Legacy I',
-      'Legacy II'
-    ];
     const stageNames = ['Threshold', 'Expansion', 'Legacy', 'Apex'];
     const grouped = new Map(milestoneOrder.map(milestone => [milestone, []]));
 
@@ -80,12 +157,18 @@
       });
     });
 
-    ladderHost.innerHTML = milestoneOrder.map((milestone, index) => {
-      const unlocked = grouped.get(milestone) || [];
-      return `<article class="nexus-ladder-stage">
-        <div class="nexus-ladder-marker"><span>0${index + 1}</span></div>
-        <div class="nexus-ladder-copy"><small>${stageNames[index]}</small><h3>${milestone}</h3><div class="nexus-ladder-unlocks">${unlocked.map(item => `<span>${item}</span>`).join('')}</div></div>
-      </article>`;
-    }).join('');
+    ladderHost.replaceChildren(...milestoneOrder.map((milestone, index) => {
+      const article = el('article', 'nexus-ladder-stage');
+      const marker = el('div', 'nexus-ladder-marker');
+      marker.appendChild(el('span', '', String(index + 1).padStart(2, '0')));
+
+      const copy = el('div', 'nexus-ladder-copy');
+      copy.append(el('small', '', stageNames[index] || `Stage ${index + 1}`), el('h3', '', milestone));
+      const unlocks = el('div', 'nexus-ladder-unlocks');
+      (grouped.get(milestone) || []).forEach(item => unlocks.appendChild(el('span', '', item)));
+      copy.appendChild(unlocks);
+      article.append(marker, copy);
+      return article;
+    }));
   }
 })();

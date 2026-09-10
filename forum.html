@@ -5,57 +5,61 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="robots" content="noindex,nofollow,noarchive"/>
 <meta name="theme-color" content="#0b0c0e"/>
-<title>Community Forum — Pixel Network</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https: data:; font-src 'self' https: data:; connect-src 'self'; frame-src 'none'; worker-src 'none'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests"/>
+<meta name="referrer" content="strict-origin-when-cross-origin"/>
+<meta name="description" content="Preview the future Pixel Network community Forum without persistent accounts or stored credentials."/>
+<title>Community Forum Preview — Pixel Network</title>
 <link rel="stylesheet" href="style.css"/>
 <link rel="stylesheet" href="forum-stage2.css"/>
+<link rel="stylesheet" href="forum-hardening.css"/>
 </head>
 <body>
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <div id="auth-overlay" class="auth-overlay">
-  <div class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="forum-preview-title">
+  <div class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="forum-preview-title" aria-describedby="forum-preview-description">
     <div class="auth-logo">
       <div class="auth-logo-dot" aria-hidden="true"></div>
       <span class="font-special" id="forum-preview-title">PIXEL NETWORK</span>
     </div>
     <p class="auth-tagline font-special">COMMUNITY FORUM · PREVIEW</p>
-    <p class="font-special" style="font-size:11px;line-height:1.7;color:#777;text-align:center;margin:14px 0 18px;max-width:430px">Preview sessions are local and temporary. No account credentials are required or stored.</p>
+    <p class="font-special forum-preview-copy" id="forum-preview-description">Preview sessions are local and temporary. No account credentials are required or stored.</p>
 
     <div class="auth-tabs" role="tablist" aria-label="Forum preview entry">
-      <button class="auth-tab active" id="tab-login" role="tab" aria-selected="true" aria-controls="panel-login" tabindex="0" onclick="switchTab('login')">
+      <button class="auth-tab active" id="tab-login" role="tab" aria-selected="true" aria-controls="panel-login" tabindex="0">
         <span class="font-special">ENTER</span>
       </button>
-      <button class="auth-tab" id="tab-signup" role="tab" aria-selected="false" aria-controls="panel-signup" tabindex="-1" onclick="switchTab('signup')">
-        <span class="font-special">NEW PROFILE</span>
+      <button class="auth-tab" id="tab-signup" role="tab" aria-selected="false" aria-controls="panel-signup" tabindex="-1">
+        <span class="font-special">NEW PREVIEW PROFILE</span>
       </button>
     </div>
 
     <div id="panel-login" class="auth-panel active" role="tabpanel" aria-labelledby="tab-login">
       <div class="field-group">
         <label class="field-lbl font-special" for="login-email">DISPLAY NAME</label>
-        <input type="text" id="login-email" class="field-input font-special" placeholder="Guest" autocomplete="off"/>
+        <input type="text" id="login-email" class="field-input font-special" placeholder="Guest" autocomplete="off" maxlength="32"/>
       </div>
-      <button class="btn-primary font-special" onclick="doLogin()">ENTER FORUM</button>
+      <button class="btn-primary font-special" id="btn-login" type="button">ENTER FORUM</button>
     </div>
 
     <div id="panel-signup" class="auth-panel" role="tabpanel" aria-labelledby="tab-signup" hidden>
       <div class="field-group">
         <label class="field-lbl font-special" for="su-username">DISPLAY NAME</label>
-        <input type="text" id="su-username" class="field-input font-special" placeholder="YourName" autocomplete="off"/>
+        <input type="text" id="su-username" class="field-input font-special" placeholder="YourName" autocomplete="off" maxlength="32"/>
       </div>
-      <button class="btn-primary font-special" onclick="doSignup()">CREATE PROFILE</button>
+      <button class="btn-primary font-special" id="btn-signup" type="button">START PREVIEW PROFILE</button>
     </div>
   </div>
 </div>
 
-<div id="app" class="app" style="display:none">
+<div id="app" class="app" hidden>
   <header class="topnav">
     <div class="topnav-inner">
       <a href="index.html" class="topnav-brand" aria-label="Back to Pixel Network">
         <div class="brand-dot" aria-hidden="true"></div>
         <span class="font-special brand-name">PIXEL NETWORK</span>
-        <span class="brand-tag font-special">FORUM</span>
+        <span class="brand-tag font-special">FORUM · PREVIEW</span>
       </a>
       <div class="topnav-right">
         <a href="index.html" class="nav-link font-special" aria-label="Back to main site">← MAIN SITE</a>
@@ -65,7 +69,7 @@
           </div>
           <span class="font-special" id="nav-username">...</span>
         </div>
-        <button class="btn-ghost font-special" onclick="doLogout()">EXIT</button>
+        <button class="btn-ghost font-special" id="btn-logout" type="button">EXIT</button>
       </div>
     </div>
   </header>
@@ -79,8 +83,8 @@
         <div class="profile-rank-badge font-special" id="profile-rank-badge">MEMBER</div>
         <div class="profile-username font-special" id="profile-username">LOADING...</div>
         <div class="profile-actions">
-          <button class="btn-link-mc font-special" id="btn-link-mc" onclick="generateLinkCode()">ACCOUNT LINKING</button>
-          <div class="link-code-box" id="link-code-box" style="display:none"></div>
+          <button class="btn-link-mc font-special" id="btn-link-mc" type="button" aria-label="Account linking is planned and unavailable in this preview">ACCOUNT LINKING · PLANNED</button>
+          <div class="link-code-box" id="link-code-box" hidden></div>
         </div>
       </div>
 
@@ -91,20 +95,20 @@
 
     <main class="forum-main">
       <div class="create-post-box" id="create-post-box">
-        <div class="create-post-header"><span class="font-special">NEW POST</span></div>
+        <div class="create-post-header"><span class="font-special">NEW POST · LOCAL PREVIEW</span></div>
         <label class="field-lbl font-special" for="post-title">TITLE</label>
-        <input type="text" id="post-title" class="create-input font-special" placeholder="Post title" autocomplete="off"/>
+        <input type="text" id="post-title" class="create-input font-special" placeholder="Post title" autocomplete="off" maxlength="120"/>
         <label class="field-lbl font-special" for="post-body">MESSAGE</label>
-        <textarea id="post-body" class="create-textarea font-special" placeholder="Write something for the community..."></textarea>
+        <textarea id="post-body" class="create-textarea font-special" placeholder="Write something for the community..." maxlength="4000"></textarea>
         <div class="create-footer">
           <span class="cooldown-info font-special" id="cooldown-info" aria-live="polite"></span>
-          <button class="btn-submit font-special" id="btn-submit" onclick="submitPost()">PUBLISH</button>
+          <button class="btn-submit font-special" id="btn-submit" type="button">ADD PREVIEW POST</button>
         </div>
       </div>
 
       <div class="posts-header">
         <span class="posts-count font-special" id="posts-count">LOADING...</span>
-        <button class="btn-refresh font-special" onclick="loadPosts()">REFRESH</button>
+        <button class="btn-refresh font-special" id="btn-refresh" type="button">REFRESH</button>
       </div>
 
       <div id="posts-feed" class="posts-feed" aria-live="polite">
@@ -118,5 +122,6 @@
 </div>
 
 <script src="app.js"></script>
+<script src="forum-a11y.js"></script>
 </body>
 </html>

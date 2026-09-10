@@ -1,0 +1,279 @@
+/* Pixel Network — Talisman Codex guide
+   Documentation-specific components only. Shared guide typography/layout lives in guides.css. */
+
+.talisman-state-flow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 18px;
+  overflow: hidden;
+  background: rgba(10,12,15,.56);
+}
+.talisman-state {
+  min-width: 0;
+  min-height: 184px;
+  display: grid;
+  grid-template-columns: 32px minmax(0,1fr);
+  gap: 14px;
+  align-content: start;
+  padding: 22px 18px;
+  position: relative;
+}
+.talisman-state + .talisman-state { border-left: 1px solid rgba(255,255,255,.055); }
+.talisman-state-marker {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(143,178,255,.13);
+  border-radius: 9px;
+  background: rgba(143,178,255,.025);
+  color: #91a8d8;
+  font: 800 8px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.talisman-state-copy h3 {
+  margin: 3px 0 9px;
+  font-size: 17px;
+  letter-spacing: -.025em;
+}
+.talisman-state-copy p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 10.5px;
+  line-height: 1.62;
+}
+.talisman-state-display {
+  display: block;
+  margin-top: 5px;
+  color: #747c8a;
+  font: 700 9px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: .08em;
+}
+.talisman-state[data-state='obtained'] .talisman-state-marker {
+  border-color: rgba(143,178,255,.26);
+  background: rgba(143,178,255,.055);
+  color: #bed0fa;
+}
+
+.guide-table-title { color: #e2e5ea; font-weight: 760; }
+.guide-disclosure {
+  min-height: 26px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 8px;
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 999px;
+  background: rgba(255,255,255,.018);
+  color: #9a9faa;
+  font-size: 7.5px;
+  font-weight: 850;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.guide-disclosure.is-public {
+  border-color: rgba(143,178,255,.14);
+  color: #a9bee9;
+}
+.guide-disclosure.is-partial {
+  border-color: rgba(246,201,69,.14);
+  color: #cfbd82;
+}
+.guide-disclosure.is-concealed {
+  border-color: rgba(190,148,193,.14);
+  color: #c8a9ca;
+}
+
+.talisman-bag-note {
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.talisman-rarity-ladder {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+.talisman-rarity-chip {
+  min-height: 30px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 10px;
+  border: 1px solid rgba(255,255,255,.065);
+  border-radius: 999px;
+  background: rgba(255,255,255,.018);
+  color: #a3a8b2;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: .05em;
+}
+.talisman-rarity-chip[data-rank='6'],
+.talisman-rarity-chip[data-rank='7'] {
+  border-color: rgba(143,178,255,.15);
+  background: rgba(143,178,255,.028);
+  color: #adc3f0;
+}
+
+.talisman-pipeline {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  border-top: 1px solid rgba(255,255,255,.065);
+  border-bottom: 1px solid rgba(255,255,255,.065);
+}
+.talisman-pipeline-stage {
+  min-width: 0;
+  padding: 24px 22px;
+}
+.talisman-pipeline-stage + .talisman-pipeline-stage { border-left: 1px solid rgba(255,255,255,.055); }
+.talisman-pipeline-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.talisman-pipeline-head > span {
+  color: #7181a2;
+  font: 800 8px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.talisman-pipeline-head h3 {
+  margin: 0;
+  font-size: 16px;
+  letter-spacing: -.02em;
+}
+.talisman-pipeline-stage p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.64;
+}
+.talisman-pipeline-value {
+  display: inline-flex;
+  margin-top: 13px;
+  padding: 5px 8px;
+  border: 1px solid rgba(143,178,255,.12);
+  border-radius: 7px;
+  background: rgba(143,178,255,.025);
+  color: #a9bfe9;
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.verification-grid {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 14px;
+}
+.verification-card {
+  min-width: 0;
+  padding: 22px;
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 16px;
+  background: rgba(255,255,255,.015);
+}
+.verification-card small {
+  color: #778196;
+  font-size: 8px;
+  font-weight: 850;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.verification-card h3 {
+  margin: 9px 0 7px;
+  font-size: 19px;
+  letter-spacing: -.025em;
+}
+.verification-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 10.5px;
+  line-height: 1.64;
+}
+.verification-card.is-verified {
+  border-color: rgba(143,178,255,.13);
+  background: rgba(143,178,255,.02);
+}
+.verification-card.is-pending {
+  border-color: rgba(246,201,69,.12);
+  background: rgba(246,201,69,.018);
+}
+
+.verification-pending {
+  list-style: none;
+  margin: 20px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 8px 18px;
+}
+.verification-pending li {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 8px minmax(0,1fr);
+  gap: 9px;
+  align-items: start;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.55;
+}
+.verification-dot {
+  width: 5px;
+  height: 5px;
+  margin-top: 5px;
+  border-radius: 50%;
+  background: #b39a69;
+  opacity: .72;
+}
+
+.talisman-secret-policy {
+  margin-top: 20px;
+  padding: 22px;
+  border: 1px solid rgba(190,148,193,.10);
+  border-radius: 16px;
+  background: rgba(190,148,193,.018);
+}
+.talisman-secret-policy strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+.talisman-secret-policy p {
+  margin: 0;
+  max-width: 760px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+@media (max-width: 980px) {
+  .talisman-state-flow,
+  .talisman-pipeline { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .talisman-state:nth-child(3),
+  .talisman-pipeline-stage:nth-child(3) { border-left: 0; }
+  .talisman-state:nth-child(n+3),
+  .talisman-pipeline-stage:nth-child(n+3) { border-top: 1px solid rgba(255,255,255,.055); }
+}
+
+@media (max-width: 700px) {
+  .talisman-state-flow,
+  .talisman-pipeline,
+  .verification-grid,
+  .verification-pending { grid-template-columns: 1fr; }
+  .talisman-state,
+  .talisman-pipeline-stage { min-height: 0; }
+  .talisman-state + .talisman-state,
+  .talisman-pipeline-stage + .talisman-pipeline-stage {
+    border-left: 0;
+    border-top: 1px solid rgba(255,255,255,.055);
+  }
+}
+
+@media (max-width: 430px) {
+  .talisman-state { padding: 19px 16px; }
+  .talisman-pipeline-stage,
+  .verification-card,
+  .talisman-secret-policy { padding: 19px; }
+  .guide-disclosure { white-space: normal; text-align: center; }
+}

@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta name="theme-color" content="#0b0c0e"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https: data:; media-src 'self' https:; font-src 'self' https: data:; connect-src 'self'; frame-src 'none'; worker-src 'none'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests"/>
+  <meta name="referrer" content="strict-origin-when-cross-origin"/>
+  <meta name="description" content="Pixel Network Guides is the evidence-qualified player reference for progression, worlds, combat, Nexus, Skyblock and supporting systems."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:site_name" content="Pixel Network"/>
+  <meta property="og:title" content="Guides — Pixel Network"/>
+  <meta property="og:description" content="Pixel Network Guides is the evidence-qualified player reference for progression, worlds, combat, Nexus, Skyblock and supporting systems."/>
+  <meta property="og:url" content="https://xklezee.github.io/PixelWeb/guides.html"/>
+  <meta property="og:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/>
+  <meta property="og:image:alt" content="Pixel Network logo"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:title" content="Guides — Pixel Network"/>
+  <meta name="twitter:description" content="Pixel Network Guides is the evidence-qualified player reference for progression, worlds, combat, Nexus, Skyblock and supporting systems."/>
+  <meta name="twitter:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/>
+  <title>Guides — Pixel Network</title>
+  <link rel="canonical" href="https://xklezee.github.io/PixelWeb/guides.html"/>
+  <link rel="icon" href="LOGO%20OFICIAL.png"/>
+  <link rel="stylesheet" href="site.css"/>
+  <link rel="stylesheet" href="polish.css"/>
+  <link rel="stylesheet" href="phase1.css"/>
+  <link rel="stylesheet" href="guides.css"/>
+  <link rel="stylesheet" href="guides-status.css"/>
+  <link rel="stylesheet" href="security-hardening.css"/>
+  <script src="data/network.js" defer></script>
+  <script src="guides.js" defer></script>
+  <script src="site.js" defer></script>
+  <script src="polish.js" defer></script>
+</head>
+<body>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <nav class="site-nav" aria-label="Main navigation"><div class="shell nav-inner">
+    <a class="brand" href="index.html"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a>
+    <div class="nav-links" id="navLinks">
+      <div class="nav-group"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div>
+      <div class="nav-group"><button type="button" aria-haspopup="true">Development</button><div class="nav-dropdown"><a href="development.html"><strong>Development</strong><span>Current status, roadmap and product scale.</span></a><a href="changelog.html"><strong>Changelog</strong><span>Player-facing release notes.</span></a></div></div>
+      <div class="nav-group contains-current"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="community.html"><strong>Community</strong><span>Discord, Guides and Forum.</span></a><a href="guides.html" aria-current="page"><strong>Guides</strong><span>Detailed player reference and mechanics.</span></a><a href="forum.html"><strong>Forum</strong><span>Long-form discussion preview.</span></a></div></div>
+      <a href="team.html">About</a>
+    </div>
+    <div class="nav-actions"><a class="button quiet nav-discord" href="https://discord.gg/7KzWpezTNZ" target="_blank" rel="noopener">Discord</a><a class="button quiet nav-store" href="store.html">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
+  </div></nav>
+
+  <main class="guides-main">
+    <div class="guides-topbar"><div class="shell guides-topbar-inner"><div class="guides-breadcrumbs"><a href="index.html">Pixel Network</a><span>/</span><span>Guides</span></div><span class="guides-top-status">Evidence-qualified documentation</span></div></div>
+
+    <div class="guides-layout">
+      <aside class="guides-sidebar" aria-label="Guide sections">
+        <div class="guides-sidebar-brand"><small>Pixel reference</small><strong>Guides</strong><span>Player-facing mechanics, instructions and evidence-qualified reference material.</span></div>
+        <nav class="guides-sidebar-nav">
+          <div class="guides-nav-group"><small>Start</small><a href="#overview">Overview</a><a href="#library">Guide library</a></div>
+          <div class="guides-nav-group"><small>Categories</small><a href="#progression">Progression</a><a href="#worlds-endgame">Worlds & Endgame</a><a href="#systems">Systems</a><a href="#skyblock">Skyblock</a></div>
+          <div class="guides-nav-group"><small>Reference</small><a href="#verification">Verification model</a><a class="guides-legacy-link" href="https://pixel-network-1.gitbook.io/home/documentation" target="_blank" rel="noopener">Legacy GitBook ↗</a></div>
+        </nav>
+      </aside>
+
+      <article class="guides-document">
+        <header class="guides-document-header" id="overview">
+          <div class="eyebrow">Player documentation</div>
+          <h1>Pixel Guides.</h1>
+          <p class="guides-document-lead">This is the detailed reference layer of Pixel Network. The rest of the website explains the experience; Guides explain how systems work, how to use them, and exactly what level of evidence supports each published claim.</p>
+          <div class="guides-document-meta"><span>Java Edition</span><span>Evidence stated explicitly</span><span>Feature state stated separately</span><span>No invented mechanics</span></div>
+          <div class="guides-search-wrap"><label class="guides-search-label" for="guideSearch">Find a guide</label><input class="guides-search" id="guideSearch" type="search" autocomplete="off" placeholder="Search progression, worlds, stats, talismans, enchantments…" data-guide-search/><div class="guides-search-meta"><span data-guide-count>8 entries</span><span>·</span><span><kbd>Esc</kbd> clears search</span></div></div>
+          <div class="guide-callout is-legacy"><span aria-hidden="true"></span><div><strong>Legacy documentation is a historical reference, not the source of truth.</strong><p>The previous GitBook is incomplete and may describe older behavior. It can identify useful topics, but a concrete mechanic or value only belongs in a current Guide when current evidence supports it.</p><div class="guide-callout-actions"><a class="guide-text-link" href="https://pixel-network-1.gitbook.io/home/documentation" target="_blank" rel="noopener">Open legacy GitBook ↗</a></div></div></div>
+        </header>
+
+        <section class="guide-section" id="library">
+          <div class="guide-section-head"><div><small>Index</small><h2>Guide library</h2></div><p>Evidence and feature state are separate. Orientation/current references are distinguished from source/server evidence so a status label never claims more than was actually established.</p></div>
+          <div class="guide-status-legend" aria-label="Guide evidence and reference legend"><span class="guide-status is-overview">Orientation reference</span><span class="guide-status is-overview">Current public reference</span><span class="guide-status is-server">Server verified</span><span class="guide-status is-source">Source verified</span><span class="guide-status is-reconciled">Reconciled reference</span><span class="guide-status is-pending">Partial / pending state</span></div>
+          <div class="guides-library">
+            <article class="guide-row" data-guide-entry data-guide-title="Getting Started" data-guide-category="orientation basics"><span class="guide-row-meta">Orientation</span><h3>Getting Started</h3><p>Understand the main Pixel experience, its major destinations and where a new player should begin.</p><div class="guide-row-action"><a class="guide-status is-overview" href="guide-getting-started.html">Orientation reference</a></div></article>
+            <article class="guide-row" data-guide-entry data-guide-title="Levels Prestige Legacy" data-guide-category="progression account"><span class="guide-row-meta">Progression</span><h3>Levels, Prestige & Legacy</h3><p>Current caps, World access milestones, Nexus difficulty gates and the explicit boundary around lifecycle details that are not yet published.</p><div class="guide-row-action"><a class="guide-status is-reconciled" href="guide-progression.html">Reconciled reference</a></div></article>
+            <article class="guide-row" data-guide-entry data-guide-title="Worlds Gates Bosses" data-guide-category="worlds progression bosses"><span class="guide-row-meta">World route</span><h3>Worlds & Gates</h3><p>The four current Worlds, their progression roles and the transition logic between each stage.</p><div class="guide-row-action"><a class="guide-status is-overview" href="guide-worlds.html">Current public reference</a></div></article>
+            <article class="guide-row" data-guide-entry data-guide-title="Nexus Instances" data-guide-category="endgame bosses instances"><span class="guide-row-meta">Endgame</span><h3>Nexus & Instances</h3><p>Reconciled encounter catalogue plus current account-based access and difficulty milestones, with boss-specific phase behavior kept outside this reference.</p><div class="guide-row-action"><a class="guide-status is-reconciled" href="guide-nexus.html">Reconciled reference</a></div></article>
+            <article class="guide-row" data-guide-entry data-guide-title="Skyblock" data-guide-category="skyblock islands quests"><span class="guide-row-meta">Island play</span><h3>Skyblock</h3><p>Source-verified island persistence, progression, upgrades and quests, with incomplete collaboration controls separated from the current feature set.</p><div class="guide-row-action"><a class="guide-status is-source" href="guide-skyblock.html">Source verified · partial</a></div></article>
+            <article class="guide-row" data-guide-entry data-guide-title="Stats Equipment Combat" data-guide-category="systems equipment combat stats"><span class="guide-row-meta">Equipment</span><h3>Stats, equipment & combat</h3><p>Core combat stats, mitigation, equipment-family roles and the boundary between base stats and layered mechanics.</p><div class="guide-row-action"><a class="guide-status is-source" href="guide-stats-equipment.html">Source verified</a></div></article>
+            <article class="guide-row" data-guide-entry data-guide-title="Talisman Codex" data-guide-category="systems collection talismans"><span class="guide-row-meta">Collection</span><h3>Talisman Codex</h3><p>Collection states, acquisition paths, equipped effects and advanced Talisman interactions without exposing concealed discovery requirements.</p><div class="guide-row-action"><a class="guide-status is-server" href="guide-talismans.html">Server verified</a></div></article>
+            <article class="guide-row" data-guide-entry data-guide-title="Enchantments" data-guide-category="systems equipment enchantments"><span class="guide-row-meta">Equipment</span><h3>Enchantments</h3><p>Family compatibility, specialized mechanics, current effect semantics and retired enchant identities.</p><div class="guide-row-action"><a class="guide-status is-source" href="guide-enchantments.html">Source verified</a></div></article>
+          </div>
+          <p class="guides-empty" data-guide-empty hidden>No guide matches that search yet. Try a broader system or category name.</p>
+        </section>
+
+        <section class="guide-section" id="progression">
+          <div class="guide-section-head"><div><small>Category 01</small><h2>Progression</h2></div><p>Account growth has a dedicated reference for current caps and access milestones without inventing reset or reward semantics that are not yet established.</p></div>
+          <div class="guide-reference-grid">
+            <article class="guide-reference-item"><small>Reconciled reference</small><h3>Levels, Prestige & Legacy</h3><p>The three account layers, four-World access route and Nexus milestone gates are documented from one shared public data model.</p><a class="guide-text-link" href="guide-progression.html">Open Progression reference →</a></article>
+            <article class="guide-reference-item"><small>Current public reference</small><h3>Worlds & Gates</h3><p>Boss-clear context and the four current Worlds stay in their dedicated route guide rather than being duplicated here.</p><a class="guide-text-link" href="guide-worlds.html">Open Worlds guide →</a></article>
+            <article class="guide-reference-item"><small>Overview</small><h3>Systems</h3><p>Use the product overview for the relationship between progression, equipment, collections and supporting systems.</p><a class="guide-text-link" href="systems.html">Open Systems →</a></article>
+          </div>
+        </section>
+
+        <section class="guide-section" id="worlds-endgame">
+          <div class="guide-section-head"><div><small>Category 02</small><h2>Worlds & Endgame</h2></div><p>World progression and Nexus are connected, but they are not the same content layer. Nexus remains a separate endgame destination, never a fifth World.</p></div>
+          <div class="guide-reference-grid">
+            <article class="guide-reference-item"><small>Current public reference</small><h3>Worlds & Gates</h3><p>The detailed four-World route, World Boss roles and gate conditions are maintained inside Guides.</p><a class="guide-text-link" href="guide-worlds.html">Open Worlds guide →</a></article>
+            <article class="guide-reference-item"><small>Reconciled reference</small><h3>Nexus & Instances</h3><p>The current encounter catalogue, Nexus access model and difficulty milestones are documented here; boss-specific phase behavior remains outside this reference.</p><a class="guide-text-link" href="guide-nexus.html">Open Nexus reference →</a></article>
+            <article class="guide-reference-item"><small>History</small><h3>Changelog</h3><p>Use release notes to understand what changed, not as permanent mechanics documentation.</p><a class="guide-text-link" href="changelog.html">Open Changelog →</a></article>
+          </div>
+        </section>
+
+        <section class="guide-section" id="systems">
+          <div class="guide-section-head"><div><small>Category 03</small><h2>Systems</h2></div><p>System guides are published with a clear evidence level and a defined mechanics boundary.</p></div>
+          <div class="guide-reference-grid">
+            <article class="guide-reference-item"><small>Source verified</small><h3>Stats & Equipment</h3><p>Core combat stats, mitigation and equipment-family semantics are documented from current gameplay evidence; mining-specific stats remain explicitly outside this reference.</p><a class="guide-text-link" href="guide-stats-equipment.html">Open Stats guide →</a></article>
+            <article class="guide-reference-item"><small>Server verified</small><h3>Talisman Codex</h3><p>Collection state, acquisition rules, the Talisman Bag and advanced effect ordering have a dedicated reference with remaining client presentation checks called out separately.</p><a class="guide-text-link" href="guide-talismans.html">Open Talisman guide →</a></article>
+            <article class="guide-reference-item"><small>Source verified</small><h3>Enchantments</h3><p>Family pools, specialized effects, conservative proc semantics and retired identities are documented according to current verified behavior.</p><a class="guide-text-link" href="guide-enchantments.html">Open Enchantments guide →</a></article>
+          </div>
+        </section>
+
+        <section class="guide-section" id="skyblock">
+          <div class="guide-section-head"><div><small>Category 04</small><h2>Skyblock</h2></div><p>Skyblock stays independent from the main World route. Its evidence is source-verified while its product state remains partial because collaboration controls are not yet available as a complete player feature.</p></div>
+          <div class="guide-reference-grid">
+            <article class="guide-reference-item"><small>Source verified · partial</small><h3>Skyblock Guide</h3><p>Persistent island lifecycle, progression, upgrades, banking and quests are documented as current capabilities.</p><a class="guide-text-link" href="guide-skyblock.html">Open Skyblock guide →</a></article>
+            <article class="guide-reference-item"><small>Partial</small><h3>Team management</h3><p>Collaboration controls are not yet documented as a complete player feature, and current Skyblock progression does not depend on them. Member promotion remains planned rather than available.</p></article>
+            <article class="guide-reference-item"><small>Overview</small><h3>Skyblock landing</h3><p>The product page follows the same boundary and does not advertise incomplete collaboration controls as current features.</p><a class="guide-text-link" href="skyblock.html">Open Skyblock overview →</a></article>
+          </div>
+        </section>
+
+        <section class="guide-section" id="verification">
+          <div class="guide-section-head"><div><small>Documentation contract</small><h2>Verification states exactly what was established.</h2></div><p>Evidence level and feature state are separate. One kind of evidence does not silently become another, and an unfinished feature is not presented as available merely because part of it exists.</p></div>
+          <div class="guide-reference-grid">
+            <article class="guide-reference-item"><small>Evidence</small><h3>Source / server / live-client</h3><p>Labels identify whether a claim is supported by current source evidence, observed server behavior or a real player-client validation.</p></article>
+            <article class="guide-reference-item"><small>State</small><h3>Current / partial / staged</h3><p>Completion is tracked independently from evidence. A source-verified subsystem can still be partial when its player-facing experience is incomplete.</p></article>
+            <article class="guide-reference-item"><small>Reference</small><h3>Orientation / current public data</h3><p>Reference labels identify navigational or current public material without upgrading it to a stronger source/server/live-client evidence claim.</p></article>
+            <article class="guide-reference-item"><small>Unknown</small><h3>No evidence means no value</h3><p>If available evidence cannot establish a mechanic, requirement or number, the Guide leaves it unpublished instead of guessing.</p></article>
+          </div>
+          <div class="guide-callout"><span aria-hidden="true"></span><div><strong>One fact, one source.</strong><p>A requirement, unlock, reward, stat or mechanic gets one canonical data owner. Other pages may explain the concept, but they do not maintain independent copies of the same value.</p></div></div>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer"><div class="shell site-footer-inner"><span>Pixel Network · Java Edition</span><span><a href="store.html">Store</a> · <a href="guides.html">Guides</a> · <a href="community.html">Community</a> · <a href="development.html">Development</a> · <a href="team.html">About</a></span></div></footer>
+</body>
+</html>

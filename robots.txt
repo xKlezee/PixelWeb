@@ -1,2 +1,13 @@
+# PixelWeb currently publishes as a GitHub Pages project site at:
+# https://xklezee.github.io/PixelWeb/
+#
+# Standard crawlers request robots.txt from the host root
+# (https://xklezee.github.io/robots.txt), so this repository-level file is
+# NOT an authoritative crawl policy on the default project-site URL.
+# Page-level meta robots directives remain the publication control used by
+# PixelWeb until a custom/root domain deployment makes this file authoritative.
+
 User-agent: *
-Disallow: /
+Allow: /
+
+Sitemap: https://xklezee.github.io/PixelWeb/sitemap.xml

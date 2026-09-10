@@ -1,43 +1,83 @@
 (() => {
+  const network = window.PIXEL_NETWORK_PUBLIC || {};
   const worldsMedia = window.PIXEL_WORLDS_MEDIA || {};
   const nexusMedia = window.PIXEL_NEXUS_MEDIA || {};
   const worldHost = document.querySelector('[data-home-world-media]');
   const nexusHost = document.querySelector('[data-home-nexus-media]');
 
+  const el = (tag, className = '', text = null) => {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== null && text !== undefined) node.textContent = String(text);
+    return node;
+  };
+
   const sizedImage = (source, width = 720) => {
-    if (!source || /^(?:assets\/|\.\/|\.\.\/)/.test(source)) return source || '';
+    if (!source) return '';
+    const value = String(source).trim();
+    if (/^(?:assets\/|\.\/|\.\.\/)/.test(value)) return value;
     try {
-      const url = new URL(source, location.href);
-      url.searchParams.set('width', String(width));
-      url.searchParams.set('dpr', '1');
-      url.searchParams.set('quality', '84');
+      const url = new URL(value, location.href);
+      const sameOrigin = url.origin === location.origin;
+      if (!sameOrigin && url.protocol !== 'https:') return '';
+      if (sameOrigin && !['http:', 'https:'].includes(url.protocol)) {
+        if (!(location.protocol === 'file:' && url.protocol === 'file:')) return '';
+      }
+      if (url.protocol === 'https:') {
+        url.searchParams.set('width', String(width));
+        url.searchParams.set('dpr', '1');
+        url.searchParams.set('quality', '84');
+      }
       return url.toString();
     } catch {
-      return source;
+      return '';
     }
   };
 
-  if (worldHost) {
-    const worlds = [
-      ['overworld', 'Overworld'],
-      ['pirate', 'Pirate Kingdom'],
-      ['nether', 'Nether'],
-      ['winter', 'Winter']
-    ];
+  const markBelowFoldImage = img => {
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.fetchPriority = 'low';
+  };
 
-    worldHost.innerHTML = worlds.map(([id, name]) => {
-      const visual = worldsMedia[id] || {};
-      if (!visual.source) return '';
-      return `<figure class="home-world-shot" data-world="${id}">
-        <img src="${sizedImage(visual.source)}" alt="${visual.alt || `${name} landscape`}" width="720" height="405" loading="lazy" decoding="async">
-        <figcaption>${name}</figcaption>
-      </figure>`;
-    }).join('');
+  if (worldHost) {
+    const worlds = Array.isArray(network.worlds) ? network.worlds : [];
+    const figures = worlds.flatMap(world => {
+      const visual = worldsMedia[world.id] || {};
+      const source = sizedImage(visual.source);
+      if (!source) return [];
+
+      const figure = el('figure', 'home-world-shot');
+      figure.dataset.world = world.id || '';
+      const img = el('img');
+      markBelowFoldImage(img);
+      if (/^https:\/\//i.test(source)) img.referrerPolicy = 'no-referrer';
+      img.src = source;
+      img.alt = visual.alt || `${world.name || 'Pixel Network world'} landscape`;
+      img.width = 720;
+      img.height = 405;
+      figure.append(img, el('figcaption', '', world.name || 'World'));
+      return [figure];
+    });
+    worldHost.replaceChildren(...figures);
   }
 
-  if (nexusHost && nexusMedia.hero?.source) {
-    nexusHost.innerHTML = `<figure class="home-nexus-shot">
-      <img src="${nexusMedia.hero.source}" alt="${nexusMedia.hero.alt || 'Nexus threshold'}" width="960" height="720" loading="lazy" decoding="async">
-    </figure>`;
+  if (nexusHost) {
+    const source = sizedImage(nexusMedia.hero?.source, 960);
+    if (!source) {
+      nexusHost.replaceChildren();
+      return;
+    }
+
+    const figure = el('figure', 'home-nexus-shot');
+    const img = el('img');
+    markBelowFoldImage(img);
+    if (/^https:\/\//i.test(source)) img.referrerPolicy = 'no-referrer';
+    img.src = source;
+    img.alt = nexusMedia.hero?.alt || 'Nexus threshold';
+    img.width = 960;
+    img.height = 720;
+    figure.appendChild(img);
+    nexusHost.replaceChildren(figure);
   }
 })();

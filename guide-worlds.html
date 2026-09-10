@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta name="theme-color" content="#0b0c0e"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https: data:; media-src 'self' https:; font-src 'self' https: data:; connect-src 'self'; frame-src 'none'; worker-src 'none'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests"/>
+  <meta name="referrer" content="strict-origin-when-cross-origin"/>
+  <meta name="description" content="Current Pixel Network reference to the four Worlds, World Bosses, mine counts and progression gates leading toward Nexus."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:site_name" content="Pixel Network"/>
+  <meta property="og:title" content="Worlds & Gates Guide — Pixel Network"/>
+  <meta property="og:description" content="Current Pixel Network reference to the four Worlds, World Bosses, mine counts and progression gates leading toward Nexus."/>
+  <meta property="og:url" content="https://xklezee.github.io/PixelWeb/guide-worlds.html"/>
+  <meta property="og:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/>
+  <meta property="og:image:alt" content="Pixel Network logo"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:title" content="Worlds & Gates Guide — Pixel Network"/>
+  <meta name="twitter:description" content="Current Pixel Network reference to the four Worlds, World Bosses, mine counts and progression gates leading toward Nexus."/>
+  <meta name="twitter:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/>
+  <title>Worlds & Gates Guide — Pixel Network</title>
+  <link rel="canonical" href="https://xklezee.github.io/PixelWeb/guide-worlds.html"/>
+  <link rel="icon" href="LOGO%20OFICIAL.png"/>
+  <link rel="stylesheet" href="site.css"/>
+  <link rel="stylesheet" href="polish.css"/>
+  <link rel="stylesheet" href="phase1.css"/>
+  <link rel="stylesheet" href="guides.css"/>
+  <link rel="stylesheet" href="security-hardening.css"/>
+  <script src="data/network.js" defer></script>
+  <script src="guide-worlds.js" defer></script>
+  <script src="site.js" defer></script>
+  <script src="polish.js" defer></script>
+</head>
+<body>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <nav class="site-nav" aria-label="Main navigation"><div class="shell nav-inner">
+    <a class="brand" href="index.html"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a>
+    <div class="nav-links" id="navLinks"><div class="nav-group"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div><div class="nav-group"><button type="button" aria-haspopup="true">Development</button><div class="nav-dropdown"><a href="development.html"><strong>Development</strong><span>Current status, roadmap and product scale.</span></a><a href="changelog.html"><strong>Changelog</strong><span>Player-facing release notes.</span></a></div></div><div class="nav-group contains-current"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="community.html"><strong>Community</strong><span>Discord, Guides and Forum.</span></a><a href="guides.html" aria-current="page"><strong>Guides</strong><span>Detailed player reference and mechanics.</span></a><a href="forum.html"><strong>Forum</strong><span>Long-form discussion preview.</span></a></div></div><a href="team.html">About</a></div>
+    <div class="nav-actions"><a class="button quiet nav-discord" href="https://discord.gg/7KzWpezTNZ" target="_blank" rel="noopener">Discord</a><a class="button quiet nav-store" href="store.html">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
+  </div></nav>
+
+  <main class="guides-main">
+    <div class="guides-topbar"><div class="shell guides-topbar-inner"><div class="guides-breadcrumbs"><a href="index.html">Pixel Network</a><span>/</span><a href="guides.html">Guides</a><span>/</span><span>Worlds & Gates</span></div><span class="guides-top-status">Current public reference</span></div></div>
+
+    <div class="guides-layout">
+      <aside class="guides-sidebar" aria-label="Worlds guide sections">
+        <div class="guides-sidebar-brand"><small>Guide</small><strong>Worlds & Gates</strong><span>The current World route and the progression conditions between stages.</span></div>
+        <nav class="guides-sidebar-nav">
+          <div class="guides-nav-group"><small>On this page</small><a href="#overview">Overview</a><a href="#route">World route</a><a href="#reference">Exact reference</a><a href="#nexus-boundary">Nexus boundary</a><a href="#verification">Verification</a></div>
+          <div class="guides-nav-group"><small>Related</small><a href="worlds.html">Worlds overview</a><a href="guide-nexus.html">Nexus & Instances</a><a href="guides.html">All Guides</a></div>
+        </nav>
+      </aside>
+
+      <article class="guides-document">
+        <header class="guides-document-header" id="overview">
+          <div class="eyebrow">World progression</div>
+          <h1>Worlds & Gates.</h1>
+          <p class="guides-document-lead">Pixel Network currently has <strong><span data-network="content.currentWorlds">—</span> Worlds</strong> in its main progression route. This guide documents each stage's World Boss role, mine count and access condition using the current public data model.</p>
+          <div class="guides-document-meta"><span>Current public reference · September 2026</span><span><span data-network="content.currentWorlds">—</span> current Worlds</span><span>Nexus documented separately</span></div>
+          <div class="guide-facts" data-guide-worlds-summary aria-label="World progression summary"></div>
+        </header>
+
+        <section class="guide-section" id="route"><div class="guide-section-head"><div><small>01 / Route</small><h2>The current World progression.</h2></div><p>Each World keeps its own role and World Boss. The transition condition is documented on the stage it leads away from.</p></div><div class="guide-world-route" data-guide-worlds-route></div></section>
+
+        <section class="guide-section" id="reference"><div class="guide-section-head"><div><small>02 / Reference</small><h2>Exact stage table.</h2></div><p>These values come from PixelWeb's shared public data, so the guide does not maintain a second independent copy of the numbers and gates.</p></div><div class="guide-table-wrap"><table class="guide-table"><caption>Current World progression reference</caption><thead><tr><th scope="col">Stage</th><th scope="col">World</th><th scope="col">Mines</th><th scope="col">World Boss</th><th scope="col">Access</th><th scope="col">Next gate</th></tr></thead><tbody data-guide-worlds-table></tbody></table></div><div class="guide-callout"><span aria-hidden="true"></span><div><strong>Pirate Kingdom contains one optional encounter.</strong><p>Kraken is an optional Pirate Kingdom encounter. HollowKeeper is the progression World Boss used by the gate into Nether; the optional encounter does not replace that role.</p></div></div></section>
+
+        <section class="guide-section" id="nexus-boundary"><div class="guide-section-head"><div><small>03 / Boundary</small><h2>Winter ends the World route. Nexus is not another World.</h2></div><p>The website deliberately keeps the two concepts separate because they use different progression models.</p></div><div class="guide-prose"><p><strong>Winter is the final current World.</strong> Viking closes Winter's World Boss arc. The following endgame destination is Nexus, but its access is an account milestone rather than another World transition.</p><p>Nexus access is documented as a permanent <strong><span data-network="nexus.unlock">—</span></strong> unlock. Defeating Viking is not an additional Nexus access requirement. Instance difficulty then expands later through account progression.</p></div><div class="guide-callout"><span aria-hidden="true"></span><div><strong>Continue in the Nexus guide area.</strong><p>Boss encounters and difficulty milestones after the World route belong to Nexus documentation rather than being appended to this World table.</p><div class="guide-callout-actions"><a class="guide-text-link" href="guide-nexus.html">Open Nexus guide →</a></div></div></div></section>
+
+        <section class="guide-section" id="verification"><div class="guide-section-head"><div><small>04 / Reference boundary</small><h2>What this guide claims.</h2></div><p>Old GitBook material can identify topics worth checking, but it does not override the current World route.</p></div><div class="guide-reference-grid"><article class="guide-reference-item"><small>Current reference</small><h3>World order</h3><p data-guide-worlds-order>—</p></article><article class="guide-reference-item"><small>Current reference</small><h3>Boss and gate roles</h3><p>The required World Boss and next-gate relationship come from the shared current World model.</p></article><article class="guide-reference-item"><small>Separate system</small><h3>Nexus</h3><p>Nexus remains endgame and is not counted as another World stage.</p></article></div><div class="guide-callout is-legacy"><span aria-hidden="true"></span><div><strong>Legacy GitBook status.</strong><p>The older documentation is useful as historical reference only. If it conflicts with the current World model, the old value is not carried forward unless current evidence supports it.</p><div class="guide-callout-actions"><a class="guide-text-link" href="https://pixel-network-1.gitbook.io/home/documentation" target="_blank" rel="noopener">Open legacy reference ↗</a></div></div></div></section>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer"><div class="shell site-footer-inner"><span>Pixel Network · Java Edition</span><span><a href="store.html">Store</a> · <a href="guides.html">Guides</a> · <a href="community.html">Community</a> · <a href="development.html">Development</a> · <a href="team.html">About</a></span></div></footer>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta name="theme-color" content="#0b0c0e"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https: data:; media-src 'self' https:; font-src 'self' https: data:; connect-src 'self'; frame-src 'none'; worker-src 'none'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests"/>
+  <meta name="referrer" content="strict-origin-when-cross-origin"/>
+  <meta name="description" content="Pixel Network source-verified guide to enchantment families, item limits, specialized mechanics, current semantics and retired enchant identities."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:site_name" content="Pixel Network"/>
+  <meta property="og:title" content="Enchantments Guide — Pixel Network"/>
+  <meta property="og:description" content="Pixel Network source-verified guide to enchantment families, item limits, specialized mechanics, current semantics and retired enchant identities."/>
+  <meta property="og:url" content="https://xklezee.github.io/PixelWeb/guide-enchantments.html"/>
+  <meta property="og:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/>
+  <meta property="og:image:alt" content="Pixel Network logo"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:title" content="Enchantments Guide — Pixel Network"/>
+  <meta name="twitter:description" content="Pixel Network source-verified guide to enchantment families, item limits, specialized mechanics, current semantics and retired enchant identities."/>
+  <meta name="twitter:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/>
+  <title>Enchantments Guide — Pixel Network</title>
+  <link rel="canonical" href="https://xklezee.github.io/PixelWeb/guide-enchantments.html"/>
+  <link rel="icon" href="LOGO%20OFICIAL.png"/>
+  <link rel="stylesheet" href="site.css"/>
+  <link rel="stylesheet" href="polish.css"/>
+  <link rel="stylesheet" href="phase1.css"/>
+  <link rel="stylesheet" href="guides.css"/>
+  <link rel="stylesheet" href="guide-enchantments.css"/>
+  <link rel="stylesheet" href="security-hardening.css"/>
+  <script src="data/network.js" defer></script>
+  <script src="data/guides/enchantments.js" defer></script>
+  <script src="guide-enchantments.js" defer></script>
+  <script src="site.js" defer></script>
+  <script src="polish.js" defer></script>
+</head>
+<body>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <nav class="site-nav" aria-label="Main navigation"><div class="shell nav-inner">
+    <a class="brand" href="index.html"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a>
+    <div class="nav-links" id="navLinks">
+      <div class="nav-group"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div>
+      <div class="nav-group"><button type="button" aria-haspopup="true">Development</button><div class="nav-dropdown"><a href="development.html"><strong>Development</strong><span>Current status, roadmap and product scale.</span></a><a href="changelog.html"><strong>Changelog</strong><span>Player-facing release notes.</span></a></div></div>
+      <div class="nav-group contains-current"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="community.html"><strong>Community</strong><span>Discord, Guides and Forum.</span></a><a href="guides.html" aria-current="page"><strong>Guides</strong><span>Detailed player reference and mechanics.</span></a><a href="forum.html"><strong>Forum</strong><span>Long-form discussion preview.</span></a></div></div>
+      <a href="team.html">About</a>
+    </div>
+    <div class="nav-actions"><a class="button quiet nav-discord" href="https://discord.gg/7KzWpezTNZ" target="_blank" rel="noopener">Discord</a><a class="button quiet nav-store" href="store.html">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
+  </div></nav>
+
+  <main class="guides-main">
+    <div class="guides-topbar"><div class="shell guides-topbar-inner"><div class="guides-breadcrumbs"><a href="index.html">Pixel Network</a><span>/</span><a href="guides.html">Guides</a><span>/</span><span>Enchantments</span></div><span class="guides-top-status">Source verified · live-client claim not asserted</span></div></div>
+
+    <div class="guides-layout">
+      <aside class="guides-sidebar" aria-label="Enchantments guide sections">
+        <div class="guides-sidebar-brand"><small>Guide</small><strong>Enchantments</strong><span>Compatibility boundaries, family identity and the actual semantics behind each mechanic.</span></div>
+        <nav class="guides-sidebar-nav">
+          <div class="guides-nav-group"><small>On this page</small><a href="#overview">Overview</a><a href="#rules">Core rules</a><a href="#families">Equipment families</a><a href="#specialized">Specialized mechanics</a><a href="#semantics">Name vs behavior</a><a href="#retired">Retired identities</a><a href="#verification">Verification</a></div>
+          <div class="guides-nav-group"><small>Related</small><a href="guide-talismans.html">Talisman Codex</a><a href="systems.html">Systems overview</a><a href="guides.html">All Guides</a></div>
+        </nav>
+      </aside>
+
+      <article class="guides-document">
+        <header class="guides-document-header" id="overview">
+          <div class="eyebrow">Equipment reference</div>
+          <h1>Enchantments.</h1>
+          <p class="guides-document-lead">Pixel's enchantment system is built around equipment families, stable enchant identity and a shared combat model. This guide documents what the mechanics actually do rather than inferring behavior from their names.</p>
+          <div class="guides-document-meta"><span>Current source audited</span><span><span data-network="content.enchantments">—</span> public catalogue entries</span><span>Retired identities stay retired</span></div>
+          <div class="guide-facts" data-guide-enchant-summary aria-label="Enchantments summary"></div>
+        </header>
+
+        <section class="guide-section" id="rules">
+          <div class="guide-section-head"><div><small>01 / System contract</small><h2>Compatibility is deliberate, not accidental.</h2></div><p>Equipment families own their allowed pool, while combat effects follow the same damage and mitigation rules instead of creating separate interpretations of a hit.</p></div>
+          <div class="enchant-principles" data-guide-enchant-principles></div>
+          <div class="enchant-cap-rule"><div class="enchant-cap-number" data-guide-enchant-cap>—</div><div class="enchant-cap-copy"><strong>Global enchant cap per item</strong><p>The cap applies across the equipment model. A family can expose characteristic and shared enchantments, but an item cannot accumulate an unbounded list simply because several systems recognize it.</p></div></div>
+        </section>
+
+        <section class="guide-section" id="families">
+          <div class="guide-section-head"><div><small>02 / Equipment families</small><h2>One enchant system, several mechanical identities.</h2></div><p>Sword, Axe and Spear are distinct melee families. Bow, Elytra and Shield preserve their own rules instead of inheriting whatever happens to fit a sword.</p></div>
+          <div class="guide-table-wrap"><table class="guide-table"><caption>Current family-level enchant model</caption><thead><tr><th scope="col">Family</th><th scope="col">Characteristic identity</th><th scope="col">Shared / dedicated pool</th><th scope="col">Design contract</th></tr></thead><tbody data-guide-enchant-families></tbody></table></div>
+          <div class="guide-callout"><span aria-hidden="true"></span><div><strong>Shield enchantments use the equipped offhand.</strong><p>The same enchantment is not counted twice merely because held items overlap in what they provide.</p></div></div>
+        </section>
+
+        <section class="guide-section" id="specialized">
+          <div class="guide-section-head"><div><small>03 / Specialized mechanics</small><h2>Some enchants alter combat semantics, not just damage.</h2></div><p>These mechanics have dedicated behavior and are documented according to that behavior instead of being reduced to a generic damage proc.</p></div>
+          <div class="enchant-mechanics-grid" data-guide-enchant-specialized></div>
+        </section>
+
+        <section class="guide-section" id="semantics">
+          <div class="guide-section-head"><div><small>04 / Name vs behavior</small><h2>Names do not grant mechanics that are not defined.</h2></div><p>A reliable reference describes verified behavior instead of filling semantic gaps with genre assumptions.</p></div>
+          <div class="guide-table-wrap"><table class="guide-table"><caption>Enchant names whose current behavior is intentionally conservative</caption><thead><tr><th scope="col">Enchant</th><th scope="col">Current behavior</th><th scope="col">Clarification</th></tr></thead><tbody data-guide-enchant-conservative></tbody></table></div>
+          <div class="enchant-semantic-note"><strong>Why this matters</strong><p>For example, a name that sounds like fire, frost, momentum or disruption is not documentation for a damage-over-time, slow, movement or crowd-control mechanic. Those behaviors only become part of the guide when current evidence supports them.</p></div>
+        </section>
+
+        <section class="guide-section" id="retired">
+          <div class="guide-section-head"><div><small>05 / Retired identities</small><h2>Retirement is part of the compatibility contract.</h2></div><p>Removing an active mechanic does not make its identity available for an unrelated effect. Historical identities stay classified so older items and references cannot silently acquire a different meaning later.</p></div>
+          <div class="enchant-retired-grid" data-guide-enchant-retired></div>
+        </section>
+
+        <section class="guide-section" id="verification">
+          <div class="guide-section-head"><div><small>06 / Documentation confidence</small><h2>Source confidence is explicit.</h2></div><p>Current family rules, specialized effects, conservative semantics and retired identities are source-verified. That evidence supports this reference, but it does not substitute for a live-client pass that has not been performed.</p></div>
+          <div class="enchant-verification-grid" data-guide-enchant-verification></div>
+          <div class="guide-callout is-legacy"><span aria-hidden="true"></span><div><strong>Legacy names and old documentation are not current behavior.</strong><p>An enchant appearing in the old GitBook or another stale reference does not make it part of the current catalogue again.</p><div class="guide-callout-actions"><a class="guide-text-link" href="https://pixel-network-1.gitbook.io/home/documentation" target="_blank" rel="noopener">Open legacy reference ↗</a></div></div></div>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer"><div class="shell site-footer-inner"><span>Pixel Network · Java Edition</span><span><a href="store.html">Store</a> · <a href="guides.html">Guides</a> · <a href="community.html">Community</a> · <a href="development.html">Development</a> · <a href="team.html">About</a></span></div></footer>
+</body>
+</html>

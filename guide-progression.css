@@ -1,0 +1,110 @@
+/* Pixel Network — Progression reference */
+
+.progression-layer-rail {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border: 1px solid rgba(255,255,255,.065);
+  border-radius: 18px;
+  overflow: hidden;
+  background: rgba(255,255,255,.012);
+}
+
+.progression-layer {
+  min-width: 0;
+  position: relative;
+  padding: 25px 24px 27px;
+}
+.progression-layer + .progression-layer { border-left: 1px solid rgba(255,255,255,.06); }
+.progression-layer-index {
+  display: block;
+  margin-bottom: 28px;
+  color: rgba(143,178,255,.55);
+  font: 780 10px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: .08em;
+}
+.progression-layer small,
+.progression-boundary-card small,
+.progression-milestone-card small {
+  display: block;
+  color: #7f899d;
+  font-size: 8px;
+  font-weight: 830;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.progression-layer h3,
+.progression-boundary-card h3,
+.progression-milestone-card h3 {
+  margin: 8px 0 8px;
+  color: #e7e9ee;
+  font-size: 20px;
+  letter-spacing: -.025em;
+}
+.progression-layer p,
+.progression-boundary-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 10.5px;
+  line-height: 1.68;
+}
+
+.progression-milestone-grid,
+.progression-boundary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 12px;
+}
+.progression-milestone-card,
+.progression-boundary-card {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 16px;
+  background: rgba(255,255,255,.014);
+}
+.progression-milestone-card {
+  background: linear-gradient(145deg, rgba(143,178,255,.028), rgba(255,255,255,.009));
+}
+.progression-milestone-list { margin-top: 16px; border-top: 1px solid rgba(255,255,255,.055); }
+.progression-milestone-row {
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  border-bottom: 1px solid rgba(255,255,255,.045);
+  color: var(--muted);
+  font-size: 9.5px;
+}
+.progression-milestone-row strong { color: #cad8f8; font-size: 9px; white-space: nowrap; }
+.progression-boundary-card { border-style: dashed; }
+.progression-boundary-card small { color: #9c8761; }
+.guide-table tr.is-nexus-row td { background: rgba(143,178,255,.025); }
+.guide-table tr.is-nexus-row td:first-child { color: #9eb8f2; }
+
+.progression-access-note {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto;
+  gap: 22px;
+  align-items: center;
+  margin-top: 18px;
+  padding: 17px 19px;
+  border: 1px solid rgba(143,178,255,.09);
+  border-radius: 14px;
+  background: rgba(143,178,255,.018);
+}
+.progression-access-note span { color: var(--muted); font-size: 10.5px; line-height: 1.6; }
+.progression-access-note strong { color: #d7e1f8; font-size: 11px; text-align: right; }
+
+@media (max-width: 900px) {
+  .progression-layer-rail,
+  .progression-milestone-grid,
+  .progression-boundary-grid { grid-template-columns: 1fr; }
+  .progression-layer + .progression-layer { border-left: 0; border-top: 1px solid rgba(255,255,255,.06); }
+}
+
+@media (max-width: 560px) {
+  .progression-layer { padding: 21px 18px; }
+  .progression-access-note { grid-template-columns: 1fr; }
+  .progression-access-note strong { text-align: left; }
+}

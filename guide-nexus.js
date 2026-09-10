@@ -1,0 +1,89 @@
+(() => {
+  const network = window.PIXEL_NETWORK_PUBLIC || {};
+  const nexus = network.nexus || {};
+  const instances = Array.isArray(nexus.instances) ? nexus.instances : [];
+  const summaryHost = document.querySelector('[data-guide-nexus-summary]');
+  const encountersBody = document.querySelector('[data-guide-nexus-encounters]');
+  const milestoneHost = document.querySelector('[data-guide-nexus-milestones]');
+
+  const el = (tag, className = '', text = null) => {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== null && text !== undefined) node.textContent = String(text);
+    return node;
+  };
+
+  if (summaryHost) {
+    const facts = [
+      ['Access', nexus.unlock ?? '—'],
+      ['Access model', nexus.accessModel ?? '—'],
+      ['Instance encounters', network.content?.instanceEncounters ?? instances.length],
+      ['Individual bosses', network.content?.instanceBosses ?? '—']
+    ];
+    summaryHost.replaceChildren(...facts.map(([label, value]) => {
+      const item = el('div', 'guide-fact');
+      item.append(el('span', '', label), el('strong', '', value));
+      return item;
+    }));
+  }
+
+  if (encountersBody) {
+    const rows = [];
+    instances.forEach(instance => {
+      (instance.difficulties || []).forEach(difficulty => {
+        const tr = document.createElement('tr');
+        [instance.name, instance.format, difficulty.name, difficulty.unlock].forEach(value => {
+          tr.appendChild(el('td', '', value ?? '—'));
+        });
+        rows.push(tr);
+      });
+    });
+    encountersBody.replaceChildren(...rows);
+  }
+
+  if (milestoneHost) {
+    const milestoneOrder = [];
+    const addMilestone = value => {
+      const milestone = String(value ?? '').trim();
+      if (milestone && !milestoneOrder.includes(milestone)) milestoneOrder.push(milestone);
+    };
+
+    addMilestone(nexus.unlockMilestone || nexus.unlock);
+    instances.forEach(instance => {
+      (instance.difficulties || []).forEach(difficulty => addMilestone(difficulty.unlock));
+    });
+
+    const grouped = new Map(milestoneOrder.map(value => [value, []]));
+    instances.forEach(instance => {
+      (instance.difficulties || []).forEach(difficulty => {
+        const milestone = String(difficulty.unlock ?? '').trim();
+        if (!milestone) return;
+        if (!grouped.has(milestone)) {
+          milestoneOrder.push(milestone);
+          grouped.set(milestone, []);
+        }
+        grouped.get(milestone).push(`${instance.name} · ${difficulty.name}`);
+      });
+    });
+
+    const stages = milestoneOrder.map((milestone, index) => {
+      const unlocks = grouped.get(milestone) || [];
+      const article = el('article', 'guide-world-stage');
+      const head = el('div', 'guide-world-stage-head');
+      head.append(el('span', '', `MILESTONE ${String(index + 1).padStart(2, '0')}`), el('strong', '', milestone));
+
+      const facts = el('dl', 'guide-definition-list');
+      unlocks.forEach((unlock, unlockIndex) => {
+        facts.append(
+          el('dt', '', unlockIndex === 0 ? 'Unlocks' : 'Also'),
+          el('dd', '', unlock)
+        );
+      });
+      if (!unlocks.length) facts.append(el('dt', '', 'Unlocks'), el('dd', '', 'No current encounter unlock recorded.'));
+
+      article.append(head, facts);
+      return article;
+    });
+    milestoneHost.replaceChildren(...stages);
+  }
+})();

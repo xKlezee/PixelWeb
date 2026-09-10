@@ -1,0 +1,133 @@
+/* PixelWeb security/accessibility hardening helpers.
+   Loaded statically by hardened public pages so runtime behavior does not require inline styles. */
+
+.skip-link {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 10000;
+  max-width: calc(100vw - 20px);
+  padding: 10px 14px;
+  border: 1px solid rgba(246,201,69,.45);
+  border-radius: 10px;
+  background: #111317;
+  color: #f4f4f1;
+  font-size: 13px;
+  font-weight: 780;
+  text-decoration: none;
+  box-shadow: 0 10px 28px rgba(0,0,0,.46);
+  transform: translateY(calc(-100% - 20px));
+  transition: transform 140ms ease;
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline: 2px solid var(--yellow);
+  outline-offset: 2px;
+}
+
+.clipboard-fallback {
+  position: fixed;
+  left: -10000px;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.site-footer {
+  padding: 34px 0 48px;
+  border-top: 1px solid rgba(255,255,255,.075);
+}
+
+.site-footer-inner {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  color: #777b83;
+  font-size: 12px;
+}
+
+.index-list-spaced { margin-top: 18px; }
+
+/* Guide overview links target the document header rather than a .guide-section. Give that
+   anchor the same safe offset so global navigation never obscures the destination. */
+.guides-document-header[id] { scroll-margin-top: 110px; }
+
+/* Desktop pointer contract: top-level nav groups are hover targets, not click toggles.
+   The rule starts above the 980px mobile-navigation breakpoint so narrow layouts keep
+   explicit click/touch interaction even when a fine pointer is attached. */
+@media (min-width: 981px) and (hover: hover) and (pointer: fine) {
+  .nav-group > button {
+    pointer-events: none;
+    cursor: default;
+  }
+}
+
+/* Native progress elements avoid CSP-sensitive runtime style mutations. */
+.scroll-progress {
+  width: 100%;
+  border: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  transform: none;
+  background: transparent;
+  color: var(--yellow);
+  will-change: auto;
+}
+.scroll-progress::-webkit-progress-bar { background: transparent; }
+.scroll-progress::-webkit-progress-value {
+  background: linear-gradient(90deg, rgba(246,201,69,.40), var(--yellow));
+  box-shadow: 0 0 12px rgba(246,201,69,.13);
+}
+.scroll-progress::-moz-progress-bar {
+  background: linear-gradient(90deg, rgba(246,201,69,.40), var(--yellow));
+  box-shadow: 0 0 12px rgba(246,201,69,.13);
+}
+
+progress.progress-track {
+  display: block;
+  width: 100%;
+  height: 9px;
+  border: 0;
+  border-radius: 999px;
+  overflow: hidden;
+  appearance: none;
+  -webkit-appearance: none;
+  background: #090a0c;
+  color: var(--yellow);
+  box-shadow: inset 3px 3px 8px rgba(0,0,0,.5);
+}
+progress.progress-track::-webkit-progress-bar {
+  border-radius: 999px;
+  background: #090a0c;
+  box-shadow: inset 3px 3px 8px rgba(0,0,0,.5);
+}
+progress.progress-track::-webkit-progress-value {
+  border-radius: 999px;
+  background: var(--yellow);
+}
+progress.progress-track::-moz-progress-bar {
+  border-radius: 999px;
+  background: var(--yellow);
+}
+
+.immersive-progress > progress {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  color: var(--yellow);
+}
+.immersive-progress > progress::-webkit-progress-bar { background: transparent; }
+.immersive-progress > progress::-webkit-progress-value { background: var(--yellow); }
+.immersive-progress > progress::-moz-progress-bar { background: var(--yellow); }
+
+@media (prefers-reduced-motion: reduce) {
+  .skip-link { transition: none; }
+}

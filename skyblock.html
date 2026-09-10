@@ -4,12 +4,27 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <meta name="theme-color" content="#0b0c0e"/>
-  <meta name="description" content="Build, improve and share your own island through Pixel Network's collaborative Skyblock progression."/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https: data:; media-src 'self' https:; font-src 'self' https: data:; connect-src 'self'; frame-src 'none'; worker-src 'none'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests"/>
+  <meta name="referrer" content="strict-origin-when-cross-origin"/>
+  <meta name="description" content="Build and progress a persistent island through Pixel Network's source-verified Skyblock foundation, with incomplete collaboration controls kept explicitly partial."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:site_name" content="Pixel Network"/>
+  <meta property="og:title" content="Skyblock — Pixel Network"/>
+  <meta property="og:description" content="Build and progress a persistent island through Pixel Network's source-verified Skyblock foundation, with incomplete collaboration controls kept explicitly partial."/>
+  <meta property="og:url" content="https://xklezee.github.io/PixelWeb/skyblock.html"/>
+  <meta property="og:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/>
+  <meta property="og:image:alt" content="Pixel Network logo"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:title" content="Skyblock — Pixel Network"/>
+  <meta name="twitter:description" content="Build and progress a persistent island through Pixel Network's source-verified Skyblock foundation, with incomplete collaboration controls kept explicitly partial."/>
+  <meta name="twitter:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/>
   <title>Skyblock — Pixel Network</title>
+  <link rel="canonical" href="https://xklezee.github.io/PixelWeb/skyblock.html"/>
   <link rel="icon" href="LOGO%20OFICIAL.png"/>
   <link rel="stylesheet" href="site.css"/>
   <link rel="stylesheet" href="polish.css"/>
   <link rel="stylesheet" href="phase1.css"/>
+  <link rel="stylesheet" href="security-hardening.css"/>
   <script src="data/network.js" defer></script>
   <script src="site.js" defer></script>
   <script src="polish.js" defer></script>
@@ -18,34 +33,40 @@
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <nav class="site-nav" aria-label="Main navigation"><div class="shell nav-inner">
     <a class="brand" href="index.html"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a>
-    <div class="nav-links" id="navLinks"><div class="nav-group"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html" aria-current="page"><strong>Skyblock</strong><span>Personal and collaborative island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div><a href="development.html">Development</a><div class="nav-group"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="community.html"><strong>Community</strong><span>Discord, Forum, docs and changelog.</span></a><a href="forum.html"><strong>Forum</strong><span>Long-form discussion.</span></a></div></div><a href="team.html">About</a></div>
-    <div class="nav-actions"><a class="button quiet nav-store" href="https://pixelboxx.tebex.io/" target="_blank" rel="noopener">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
+    <div class="nav-links" id="navLinks">
+      <div class="nav-group"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html" aria-current="page"><strong>Skyblock</strong><span>Personal island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div>
+      <div class="nav-group"><button type="button" aria-haspopup="true">Development</button><div class="nav-dropdown"><a href="development.html"><strong>Development</strong><span>Current status, roadmap and product scale.</span></a><a href="changelog.html"><strong>Changelog</strong><span>Player-facing release notes.</span></a></div></div>
+      <div class="nav-group"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="community.html"><strong>Community</strong><span>Discord, Guides and Forum.</span></a><a href="guides.html"><strong>Guides</strong><span>Detailed player reference and mechanics.</span></a><a href="forum.html"><strong>Forum</strong><span>Long-form discussion preview.</span></a></div></div>
+      <a href="team.html">About</a>
+    </div>
+    <div class="nav-actions"><a class="button quiet nav-discord" href="https://discord.gg/7KzWpezTNZ" target="_blank" rel="noopener">Discord</a><a class="button quiet nav-store" href="store.html">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
   </div></nav>
 
   <main>
-    <section class="page-hero"><div class="shell"><div class="breadcrumbs"><a href="index.html">Pixel Network</a><span>/</span><span>Skyblock</span></div><div class="page-hero-grid"><div><div class="eyebrow">Skyblock</div><h1>Your island. Your pace. Shared when you want it.</h1></div><p>Skyblock gives players a personal progression path built around owning, improving and sharing an island. It sits alongside the main world journey for players who prefer building and cooperation over PvP.</p></div></div></section>
+    <section class="page-hero"><div class="shell"><div class="breadcrumbs"><a href="index.html">Pixel Network</a><span>/</span><span>Skyblock</span></div><div class="page-hero-grid"><div><div class="eyebrow">Skyblock</div><h1>Your island. Built to persist.</h1></div><p>Skyblock is Pixel's personal island-progression route: create a lasting space, improve it over time, use island-focused economy systems and follow objectives designed for this mode. Collaboration controls are being completed separately and are not presented as fully available yet.</p></div></div></section>
 
     <section class="content-section"><div class="shell">
-      <div class="content-head reveal"><div><div class="content-eyebrow">Personal progression</div><h2>A place that keeps becoming more yours.</h2></div><p>Your island has its own progression. The focus is deliberately simple: build it, improve it and decide how much of that experience you want to share with other players.</p></div>
+      <div class="content-head reveal"><div><div class="content-eyebrow">Island foundation</div><h2>A persistent place with its own progression.</h2></div><p>Your island is a lasting gameplay space that can be created, restored and improved over time. Its progression is built around developing that space rather than treating Skyblock as a temporary activity.</p></div>
       <div class="path-grid">
-        <article class="path-card reveal"><span class="path-label">Your island</span><h3>Build and improve over time.</h3><p>The island is persistent personal space with its own progression. Building is not treated as a temporary side activity.</p><div class="path-list"><span>Own Island</span><span>Island Progression</span><span>Building</span><span>Upgrades</span></div></article>
-        <article class="path-card reveal"><span class="path-label">Together</span><h3>Invite friends into the same space.</h3><p>Friends can be invited to build together, while island visits make personal spaces part of the wider community rather than private menus.</p><div class="path-list"><span>Invite Friends</span><span>Build Together</span><span>Visit Islands</span></div></article>
+        <article class="path-card reveal"><span class="path-label">Your island</span><h3>Build, save and improve.</h3><p>Your island persists as part of the mode, so building and progression can continue across sessions instead of restarting as a disposable activity.</p><div class="path-list"><span>Own Island</span><span>Persistent World</span><span>Island Progression</span><span>Upgrades</span></div></article>
+        <article class="path-card reveal"><span class="path-label">Progression</span><h3>Economy and objectives with a Skyblock purpose.</h3><p>Island upgrades, bank operations and Skyblock quests give the mode its own progression surface without turning it into another copy of the four-World route.</p><div class="path-list"><span>Island Upgrades</span><span>Island Bank</span><span>Skyblock Quests</span></div></article>
       </div>
     </div></section>
 
     <section class="content-section"><div class="shell">
-      <div class="content-head reveal"><div><div class="content-eyebrow">Progress without PvP</div><h2>A parallel route through Pixel.</h2></div><p>Skyblock has its own quests for island-focused progression. Quest content also exists in the BattlePass; neither should be confused with a universal questline driving the four-world progression.</p></div>
+      <div class="content-head reveal"><div><div class="content-eyebrow">Current product boundary</div><h2>Finished foundations, transparent partial features.</h2></div><p>Pixel only presents a capability as available when players can use it as a complete feature. Collaboration controls remain partial and are kept separate from the current Skyblock progression experience.</p></div>
       <div class="detail-grid">
-        <article class="detail-card reveal"><small>Objectives</small><h3>Skyblock quests</h3><p>Skyblock quests give island-focused players structured goals tied directly to their own progression path. BattlePass quests exist separately as part of seasonal progression.</p></article>
-        <article class="detail-card reveal"><small>Ownership</small><h3>Personal storage</h3><p>Island progression includes its own storage layer for resources accumulated through the Skyblock experience.</p></article>
-        <article class="detail-card reveal"><small>Account utility</small><h3>Personal vaults</h3><p>Vaults remain available as personal account storage alongside the island's own storage.</p></article>
-        <article class="detail-card reveal"><small>Social play</small><h3>Visit other islands</h3><p>Players can move beyond their own island and see how others choose to build and progress.</p></article>
+        <article class="detail-card reveal"><small>Persistence</small><h3>Persistent island worlds</h3><p>Create, restore and save behavior makes the island a continuing part of the Skyblock experience.</p></article>
+        <article class="detail-card reveal"><small>Economy</small><h3>Upgrades and island bank</h3><p>Island upgrades and banking give resources a clear role in developing the island over time.</p></article>
+        <article class="detail-card reveal"><small>Objectives</small><h3>Skyblock quests</h3><p>Skyblock quests are a current objective surface for island-focused progression and remain separate from the main World journey.</p></article>
+        <article class="detail-card reveal"><small>Partial</small><h3>Team controls</h3><p>Collaboration controls are not yet presented as a complete player feature, and member promotion remains planned rather than available.</p></article>
       </div>
 
-      <div class="next-destination reveal"><div><small>Another path</small><h3>Prefer combat, world progression and bosses?</h3><p>The main gameplay journey moves through four worlds before opening the Nexus.</p></div><a class="button primary" href="gameplay.html">Explore Gameplay</a></div>
+      <div class="next-destination reveal"><div><small>Detailed reference</small><h3>Need the exact current/partial boundary?</h3><p>The Skyblock Guide separates current island capabilities from collaboration controls that are still partial or planned.</p></div><a class="button primary" href="guide-skyblock.html">Open Skyblock Guide</a></div>
+      <div class="next-destination reveal"><div><small>Another path</small><h3>Prefer combat, world progression and bosses?</h3><p>The main gameplay journey moves through four Worlds before opening the separate Nexus endgame.</p></div><a class="button quiet" href="gameplay.html">Explore Gameplay</a></div>
     </div></section>
   </main>
 
-  <footer style="padding:34px 0 48px;border-top:1px solid rgba(255,255,255,.075)"><div class="shell" style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:#777b83;font-size:12px"><span>Pixel Network · Skyblock</span><span><a href="gameplay.html">Gameplay</a> · <a href="community.html">Community</a> · <a href="team.html">About</a></span></div></footer>
+  <footer class="site-footer"><div class="shell site-footer-inner"><span>Pixel Network · Skyblock</span><span><a href="guides.html">Guides</a> · <a href="gameplay.html">Gameplay</a> · <a href="community.html">Community</a> · <a href="team.html">About</a></span></div></footer>
 </body>
 </html>

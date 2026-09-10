@@ -2,15 +2,86 @@
   const nav = document.querySelector('.site-nav');
   const navLinks = document.getElementById('navLinks');
   const navToggle = document.getElementById('navToggle');
+  const main = document.querySelector('main');
   const mobileNav = matchMedia('(max-width: 980px)');
   const network = window.PIXEL_NETWORK_PUBLIC || {};
   const currentPage = location.pathname.split('/').pop() || 'index.html';
 
+  // Local development may use HTTP on the same origin. Any external destination supplied
+  // by public data must be HTTPS so a content update cannot silently weaken transport.
+  const safePublicUrl = (value, fallback = null) => {
+    const raw = String(value ?? '').trim();
+    if (!raw) return fallback;
+    try {
+      const url = new URL(raw, location.href);
+      const sameOrigin = url.origin === location.origin;
+      if (sameOrigin && ['http:', 'https:'].includes(url.protocol)) return url.href;
+      if (location.protocol === 'file:' && url.protocol === 'file:') return url.href;
+      return url.protocol === 'https:' ? url.href : fallback;
+    } catch {
+      return fallback;
+    }
+  };
+
+  const safeLocalPage = (value, fallback) => {
+    if (!value) return fallback;
+    const candidate = String(value).trim();
+    if (/^[A-Za-z0-9._-]+\.html$/.test(candidate)) return candidate;
+    try {
+      const url = new URL(candidate, location.href);
+      if (url.origin !== location.origin || !url.pathname.endsWith('.html')) return fallback;
+      const file = url.pathname.split('/').pop();
+      return /^[A-Za-z0-9._-]+\.html$/.test(file || '') ? file : fallback;
+    } catch {
+      return fallback;
+    }
+  };
+
+  const changelogLanding = safeLocalPage(network?.changelog?.landing, 'changelog.html');
+  const forumLanding = safeLocalPage(network?.community?.forumLanding, 'forum.html');
+  const guidesLanding = safeLocalPage(network?.community?.guidesLanding, 'guides.html');
+  const isGuideDetailPage = /^guide-[A-Za-z0-9._-]+\.html$/.test(currentPage);
+  const isCurrentLocalDestination = href => currentPage === href || (isGuideDetailPage && href === guidesLanding);
+
+  const appendNavCopy = (link, title, description) => {
+    const strong = document.createElement('strong');
+    strong.textContent = title;
+    const span = document.createElement('span');
+    span.textContent = description;
+    link.replaceChildren(strong, span);
+  };
+
+  const createLocalTextLink = (href, label) => {
+    const link = document.createElement('a');
+    link.href = safeLocalPage(href, 'index.html');
+    link.textContent = label;
+    if (isCurrentLocalDestination(link.getAttribute('href'))) link.setAttribute('aria-current', 'page');
+    return link;
+  };
+
+  /* Keyboard users get a stable first-focus route past global navigation. */
+  let skipLink = null;
+  if (main) {
+    if (!main.id) main.id = 'main-content';
+    if (!main.hasAttribute('tabindex')) main.tabIndex = -1;
+
+    skipLink = document.createElement('a');
+    skipLink.className = 'skip-link';
+    skipLink.href = `#${main.id}`;
+    skipLink.textContent = 'Skip to content';
+    skipLink.addEventListener('click', () => {
+      requestAnimationFrame(() => main.focus({ preventScroll: true }));
+    });
+  }
+
   /* Reading progress only. Scroll handlers must not mutate page geometry. */
-  const progress = document.createElement('div');
+  const progress = document.createElement('progress');
   progress.className = 'scroll-progress';
+  progress.max = 1;
+  progress.value = 0;
   progress.setAttribute('aria-hidden', 'true');
-  document.body.prepend(progress);
+  if (skipLink) document.body.prepend(skipLink, progress);
+  else document.body.prepend(progress);
 
   const root = document.documentElement;
   let maxScroll = 1;
@@ -23,7 +94,7 @@
   const updateScrollProgress = () => {
     scheduled = false;
     const y = window.scrollY || root.scrollTop || 0;
-    progress.style.transform = `scaleX(${Math.min(1, Math.max(0, y / maxScroll))})`;
+    progress.value = Math.min(1, Math.max(0, y / maxScroll));
   };
 
   const requestUpdate = () => {
@@ -53,65 +124,73 @@
   measureScrollRange();
   updateScrollProgress();
 
-  /*
-   * Global navigation normalization.
-   * Changelog belongs to Development; Community stays focused on social/reference destinations.
-   * This is generated once here so older static page markup cannot drift apart.
-   */
-  const changelogLanding = network?.changelog?.landing || 'changelog.html';
-  const developmentLanding = 'development.html';
+  /* One canonical navigation model for every public-site page. Static HTML remains a
+     no-JS fallback, but runtime navigation never depends on legacy page-specific markup. */
+  const canonicalNavigation = [
+    {
+      label: 'Explore',
+      items: [
+        ['gameplay.html', 'Gameplay', 'The main player journey.'],
+        ['systems.html', 'Systems', 'Progression, collection and equipment.'],
+        ['worlds.html', 'Worlds', 'The current world progression.'],
+        ['skyblock.html', 'Skyblock', 'Personal island progression.'],
+        ['nexus.html', 'Nexus', 'Endgame access and instance progression.']
+      ]
+    },
+    {
+      label: 'Development',
+      items: [
+        ['development.html', 'Development', 'Current status, roadmap and product scale.'],
+        [changelogLanding, 'Changelog', 'Player-facing release notes.']
+      ]
+    },
+    {
+      label: 'Community',
+      items: [
+        ['community.html', 'Community', 'Discord, Guides and Forum.'],
+        [guidesLanding, 'Guides', 'Detailed player reference and mechanics.'],
+        [forumLanding, 'Forum', 'Long-form discussion preview.']
+      ]
+    }
+  ];
 
-  const existingDevelopmentGroup = Array.from(document.querySelectorAll('.nav-group')).find(group =>
-    group.querySelector(':scope > button')?.textContent.trim() === 'Development'
-  );
+  const createNavLink = ([href, title, description]) => {
+    const link = document.createElement('a');
+    link.href = safeLocalPage(href, 'index.html');
+    appendNavCopy(link, title, description);
+    if (isCurrentLocalDestination(link.getAttribute('href'))) link.setAttribute('aria-current', 'page');
+    return link;
+  };
 
-  if (!existingDevelopmentGroup && navLinks) {
-    const directDevelopment = Array.from(navLinks.children).find(child =>
-      child.matches?.('a') && child.getAttribute('href')?.endsWith(developmentLanding)
-    );
-
-    if (directDevelopment) {
+  if (navLinks) {
+    const fragment = document.createDocumentFragment();
+    canonicalNavigation.forEach(groupData => {
       const group = document.createElement('div');
-      group.className = 'nav-group nav-development';
+      group.className = 'nav-group';
 
       const button = document.createElement('button');
       button.type = 'button';
       button.setAttribute('aria-haspopup', 'true');
-      button.textContent = 'Development';
+      button.textContent = groupData.label;
 
       const menu = document.createElement('div');
       menu.className = 'nav-dropdown';
+      groupData.items.forEach(item => menu.appendChild(createNavLink(item)));
 
-      const developmentLink = document.createElement('a');
-      developmentLink.href = developmentLanding;
-      developmentLink.innerHTML = '<strong>Development</strong><span>Current status, roadmap and product scale.</span>';
-      if (currentPage === developmentLanding) developmentLink.setAttribute('aria-current', 'page');
-
-      const changelogLink = document.createElement('a');
-      changelogLink.href = changelogLanding;
-      changelogLink.innerHTML = '<strong>Changelog</strong><span>Player-facing release notes.</span>';
-      if (currentPage === changelogLanding) changelogLink.setAttribute('aria-current', 'page');
-
-      menu.append(developmentLink, changelogLink);
       group.append(button, menu);
-      directDevelopment.replaceWith(group);
-    }
-  }
+      fragment.appendChild(group);
+    });
 
-  const communityGroup = Array.from(document.querySelectorAll('.nav-group')).find(group =>
-    group.querySelector(':scope > button')?.textContent.trim() === 'Community'
-  );
-  if (communityGroup) {
-    const menu = communityGroup.querySelector(':scope > .nav-dropdown');
-    menu?.querySelectorAll(`a[href$="${changelogLanding}"]`).forEach(link => link.remove());
-    const communityDescription = menu?.querySelector('a[href$="community.html"] span');
-    if (communityDescription) communityDescription.textContent = 'Discord, Forum and documentation.';
+    const about = createLocalTextLink('team.html', 'About');
+    fragment.appendChild(about);
+
+    navLinks.replaceChildren(fragment);
   }
 
   /* Navigation groups: hover is convenient on desktop, click/keyboard is authoritative. */
   const groups = [...document.querySelectorAll('.nav-group')];
 
-  const closeGroup = (group) => {
+  const closeGroup = group => {
     const button = group?.querySelector(':scope > button');
     group?.classList.remove('is-open');
     button?.setAttribute('aria-expanded', 'false');
@@ -123,7 +202,7 @@
     });
   };
 
-  const openGroup = (group) => {
+  const openGroup = group => {
     if (!group) return;
     const button = group.querySelector(':scope > button');
     closeGroups(group);
@@ -136,14 +215,12 @@
     const menu = group.querySelector(':scope > .nav-dropdown');
     if (!button || !menu) return;
 
-    const menuId = menu.id || `nav-menu-${index + 1}`;
+    const menuId = `nav-menu-${index + 1}`;
     menu.id = menuId;
     button.setAttribute('aria-controls', menuId);
     button.setAttribute('aria-expanded', 'false');
 
-    if (menu.querySelector('[aria-current="page"]')) {
-      group.classList.add('contains-current');
-    }
+    if (menu.querySelector('[aria-current="page"]')) group.classList.add('contains-current');
 
     button.addEventListener('click', event => {
       event.preventDefault();
@@ -188,63 +265,91 @@
     });
   });
 
-  /* PixelWeb explains the commercial model before handing off to the official Store. */
+  /* Canonical desktop actions: Discord, Store, Play, menu toggle. */
   const navActions = nav?.querySelector('.nav-actions');
-  const desktopStore = navActions?.querySelector('.nav-store');
-  const storeLanding = network?.store?.landing || 'store.html';
-  if (desktopStore && !desktopStore.hasAttribute('data-store-direct')) {
+  const storeLanding = safeLocalPage(network?.store?.landing, 'store.html');
+  const discordUrl = safePublicUrl(network?.community?.discordUrl);
+
+  const configureDiscordLink = link => {
+    if (!link) return;
+    link.textContent = 'Discord';
+    link.setAttribute('aria-label', 'Join Pixel Network on Discord');
+    if (discordUrl) {
+      link.href = discordUrl;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      link.removeAttribute('aria-disabled');
+      return;
+    }
+    link.removeAttribute('href');
+    link.removeAttribute('target');
+    link.removeAttribute('rel');
+    link.setAttribute('aria-disabled', 'true');
+  };
+
+  if (navActions) {
+    let desktopDiscord = navActions.querySelector('.nav-discord');
+    if (!desktopDiscord) {
+      desktopDiscord = document.createElement('a');
+      desktopDiscord.className = 'button quiet nav-discord';
+      navActions.prepend(desktopDiscord);
+    }
+    configureDiscordLink(desktopDiscord);
+
+    let desktopStore = navActions.querySelector('.nav-store');
+    if (!desktopStore) {
+      desktopStore = document.createElement('a');
+      desktopStore.className = 'button quiet nav-store';
+      const playButton = navActions.querySelector('.nav-play');
+      navActions.insertBefore(desktopStore, playButton || navToggle || null);
+    }
+    desktopStore.textContent = 'Store';
     desktopStore.href = storeLanding;
     desktopStore.removeAttribute('target');
     desktopStore.removeAttribute('rel');
+    desktopStore.toggleAttribute('aria-current', currentPage === storeLanding);
     if (currentPage === storeLanding) desktopStore.setAttribute('aria-current', 'page');
   }
 
-  /* Discord is a permanent direct-access action beside Store and Play on desktop. */
-  const discordUrl = network?.community?.discordUrl || 'https://discord.gg/7KzWpezTNZ';
-  let desktopDiscord = navActions?.querySelector('.nav-discord');
-  if (navActions && !desktopDiscord) {
-    desktopDiscord = document.createElement('a');
-    desktopDiscord.className = 'button quiet nav-discord';
-    desktopDiscord.textContent = 'Discord';
-    desktopDiscord.setAttribute('aria-label', 'Join Pixel Network on Discord');
-    navActions.insertBefore(desktopDiscord, desktopStore || navToggle || null);
-  }
-  if (desktopDiscord) {
-    desktopDiscord.href = discordUrl;
-    desktopDiscord.target = '_blank';
-    desktopDiscord.rel = 'noopener';
-  }
-
   /* Store and Discord remain available inside the mobile menu while Play stays in the header. */
-  if (navLinks && !navLinks.querySelector('.nav-mobile-discord')) {
+  if (navLinks) {
     const mobileDiscord = document.createElement('a');
     mobileDiscord.className = 'nav-mobile-store nav-mobile-discord';
-    mobileDiscord.href = discordUrl;
-    mobileDiscord.target = '_blank';
-    mobileDiscord.rel = 'noopener';
-    mobileDiscord.textContent = 'Discord';
+    configureDiscordLink(mobileDiscord);
     navLinks.appendChild(mobileDiscord);
-  }
 
-  if (navLinks && desktopStore && !navLinks.querySelector('.nav-mobile-store-link')) {
     const mobileStore = document.createElement('a');
     mobileStore.className = 'nav-mobile-store nav-mobile-store-link';
-    mobileStore.href = desktopStore.href;
-    if (desktopStore.target) mobileStore.target = desktopStore.target;
-    if (desktopStore.rel) mobileStore.rel = desktopStore.rel;
-    if (desktopStore.getAttribute('aria-current') === 'page') mobileStore.setAttribute('aria-current', 'page');
+    mobileStore.href = storeLanding;
     mobileStore.textContent = 'Store';
+    if (currentPage === storeLanding) mobileStore.setAttribute('aria-current', 'page');
     navLinks.appendChild(mobileStore);
   }
 
-  /* Keep public destination links synchronized with data/network.js. */
-  document.querySelectorAll('[data-discord-url]').forEach(link => {
-    link.href = discordUrl;
-  });
-  const docsUrl = network?.community?.documentationUrl;
-  if (docsUrl) {
-    document.querySelectorAll('[data-docs-url]').forEach(link => { link.href = docsUrl; });
+  /* The global footer follows one model as well. Page-specific static HTML remains a
+     no-JS fallback; with JavaScript enabled every public page exposes the same exits. */
+  const footerInner = document.querySelector('.site-footer .site-footer-inner');
+  if (footerInner) {
+    const brand = document.createElement('span');
+    brand.textContent = 'Pixel Network · Java Edition';
+
+    const destinations = document.createElement('span');
+    [
+      ['store.html', 'Store'],
+      [guidesLanding, 'Guides'],
+      ['community.html', 'Community'],
+      ['development.html', 'Development'],
+      ['team.html', 'About']
+    ].forEach(([href, label], index) => {
+      if (index) destinations.appendChild(document.createTextNode(' · '));
+      destinations.appendChild(createLocalTextLink(href, label));
+    });
+
+    footerInner.replaceChildren(brand, destinations);
   }
+
+  /* Keep the public Discord destination synchronized with data/network.js. */
+  document.querySelectorAll('[data-discord-url]').forEach(link => configureDiscordLink(link));
 
   const closeMobileNav = () => {
     navLinks?.classList.remove('open');
@@ -253,11 +358,22 @@
     closeGroups();
   };
 
-  navToggle?.addEventListener('click', () => {
-    const open = navToggle.getAttribute('aria-expanded') === 'true';
-    document.body.classList.toggle('nav-open', open && mobileNav.matches);
-    if (!open) closeGroups();
-  });
+  /* site.js keeps a basic no-polish fallback. When this canonical layer is present,
+     capture the toggle click before that fallback listener so one controller owns all
+     menu state and aria/body classes regardless of listener registration order. */
+  navToggle?.addEventListener('click', event => {
+    event.stopImmediatePropagation();
+    if (!mobileNav.matches || !navLinks) {
+      closeMobileNav();
+      return;
+    }
+
+    const willOpen = !navLinks.classList.contains('open');
+    navLinks.classList.toggle('open', willOpen);
+    navToggle.setAttribute('aria-expanded', String(willOpen));
+    document.body.classList.toggle('nav-open', willOpen);
+    if (!willOpen) closeGroups();
+  }, { capture: true });
 
   navLinks?.addEventListener('click', event => {
     if (!mobileNav.matches || !event.target.closest('a')) return;
@@ -298,13 +414,17 @@
   const prefetched = new Set();
   const prefetch = href => {
     if (!href || prefetched.has(href)) return;
-    const url = new URL(href, location.href);
-    if (url.origin !== location.origin || !url.pathname.endsWith('.html')) return;
-    prefetched.add(href);
-    const link = document.createElement('link');
-    link.rel = 'prefetch';
-    link.href = url.href;
-    document.head.appendChild(link);
+    try {
+      const url = new URL(href, location.href);
+      if (url.origin !== location.origin || !url.pathname.endsWith('.html')) return;
+      prefetched.add(href);
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.href = url.href;
+      document.head.appendChild(link);
+    } catch {
+      // Invalid destinations are ignored instead of being prefetched.
+    }
   };
 
   document.querySelectorAll('a[href]').forEach(link => {
