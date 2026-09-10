@@ -9,9 +9,12 @@ This file records the branch state without upgrading controls or gameplay claims
 - Defensive `.gitignore` for environment files, credentials, keys, generated output, logs, IDE files and local reports.
 - `SECURITY.md` with public/private disclosure boundaries and credential-incident handling.
 - Dependency-free committed-secret scanner.
-- Dependency-free static HTML/JavaScript integrity validator.
+- Dependency-free static HTML/JavaScript/CSS integrity and browser-safety validator.
 - GitHub Actions quality gate with read-only repository permissions and a commit-pinned official checkout action.
 - Strict CSP-ready frontend rules: no inline scripts, inline handlers, inline styles, `javascript:` URLs, HTML parsing sinks or runtime inline-style mutation accepted by the validator.
+- Absolute external HTTP resources are rejected; external runtime destinations are expected to use HTTPS.
+- `connect-src` follows per-page least privilege: pages without a live status surface are self-only; pages that expose live Minecraft status may additionally connect only to `https://api.mcsrvstat.us`.
+- Selected canonical public literals and retired public claims are guarded so known drift cannot silently return.
 - Explicit pre-auth security requirements for Login, profiles, persistent Forum, moderation and private APIs.
 - Explicit classification of browser-delivered public data versus future private/backend data.
 - Forum remains preview-only; no persistent account/session/backend behavior is implied.
@@ -19,8 +22,11 @@ This file records the branch state without upgrading controls or gameplay claims
 ### Public data and documentation architecture
 
 - `data/network.js` remains the canonical owner for shared public network facts.
+- Overview pages increasingly render exact shared values from canonical data rather than preserving literal fallback copies in HTML.
+- Store rank/category presentation is generated from the canonical Store model instead of maintaining a second manual catalogue.
+- Nexus access/count/milestone presentation is derived from the canonical Nexus/Instance definitions rather than a manually maintained ladder.
 - Detailed guide-domain files hold only system-specific material and do not duplicate shared numeric gates when a canonical value already exists.
-- Guides render dynamic content with `textContent`, `createElement`, `append` and `replaceChildren` rather than string-to-DOM parsing.
+- Guides and hardened overview renderers use `textContent`, `createElement`, `append` and `replaceChildren` rather than string-to-DOM parsing.
 - Evidence level and factual feature state are modeled separately.
 - Evidence taxonomy: `source-verified`, `server-verified`, `live-client-verified`, `reconciled-reference`.
 - Factual states include `current`, `partial`, `staged`, `planned`, `unknown` and `deprecated/retired`.
@@ -31,8 +37,8 @@ This file records the branch state without upgrading controls or gameplay claims
 
 | Guide | Evidence / state | Publication boundary |
 |---|---|---|
-| Getting Started | Verified guide | Orientation only |
-| Worlds & Gates | Verified guide | Four Worlds only; Nexus remains separate |
+| Getting Started | Orientation reference | Orientation only; delegates exact mechanics to owning Guides |
+| Worlds & Gates | Current public reference | Four Worlds only; Nexus remains separate |
 | Nexus & Instances | Reconciled reference | Staged/deployment-sensitive work stays qualified |
 | Talisman Codex | Server verified | Secret requirement trees and protected discovery inputs are not published |
 | Enchantments | Source verified | No live-client claim |
@@ -52,13 +58,17 @@ The approved Nexus boss PNGs are preserved as their original repository blobs. T
 
 ### Static/code review
 
-The new Progression and Skyblock guide renderers follow the same DOM-safe construction pattern as the other hardened Guides. Their local references, CSP model and responsive breakpoints have been statically reviewed and are included automatically by `scripts/validate_site.py` because it scans every top-level HTML file plus root/data JavaScript.
+The current guide and overview renderers follow the hardened DOM-safe construction model. Repository references, CSP structure, known publication invariants and transport policy have been statically reviewed. `scripts/validate_site.py` discovers every top-level HTML page plus all repository JavaScript and CSS files automatically, so newly added files enter the applicable checks without maintaining a separate filename list.
+
+The validator also verifies exact `connect-src` scope from the page's runtime surface: Home and Community currently expose live status and may use the Minecraft status API; all other current pages are required to remain self-only for network connections.
+
+This static review does not substitute for a successful automated run or browser-render validation.
 
 ### GitHub Actions quality gate
 
 **Infrastructure/startup failure — validator result not obtained.**
 
-The quality workflow is triggering on both branch pushes and the pull request, but the observed jobs fail before any step executes: GitHub reports an empty step list and no assigned runner. Therefore the failed check must **not** be interpreted as a failure from `security_scan.py`, `node --check` or `validate_site.py`; none of those stages ran in the observed job.
+The quality workflow is triggering on both branch pushes and the pull request, but the observed jobs fail before any step executes: GitHub reports an empty/null step list and no assigned runner. Therefore the failed check must **not** be interpreted as a failure from `security_scan.py`, `node --check` or `validate_site.py`; none of those stages ran in the observed job.
 
 The checkout action reference itself has been independently verified as the official commit-pinned `actions/checkout` v7.0.1 release. Do not weaken the workflow or remove checks merely to obtain a green badge. The Actions startup condition must be resolved separately, then the exact branch HEAD must be rerun.
 
