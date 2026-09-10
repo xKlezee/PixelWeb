@@ -21,6 +21,7 @@
   const DEG = Math.PI / 180;
   const TAU = Math.PI * 2;
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const CATALOG_ROTATION = Object.freeze([0, 90 * DEG, 0]);
   const FACE_NORMALS = Object.freeze({
     north: [0, 0, -1], south: [0, 0, 1], west: [-1, 0, 0],
     east: [1, 0, 0], up: [0, 1, 0], down: [0, -1, 0]
@@ -142,18 +143,17 @@
   };
 
   class MinecraftModelRenderer {
-    constructor(canvas, { preview = false, phase = 0 } = {}) {
+    constructor(canvas, { preview = false } = {}) {
       this.canvas = canvas;
       this.ctx = canvas.getContext('2d', { alpha: true });
       this.preview = preview;
-      this.phase = phase;
       this.item = null;
       this.model = null;
       this.textures = new Map();
       this.preparedElements = [];
       this.center = [0, 0, 0];
       this.extent = 16;
-      this.baseRotation = [30 * DEG, 135 * DEG, 0];
+      this.baseRotation = [...CATALOG_ROTATION];
       this.currentYaw = 0;
       this.currentPitch = 0;
       this.targetYaw = 0;
@@ -170,16 +170,16 @@
       this.item = item;
       this.ready = false;
       this.dirty = true;
+      this.zoom = this.preview ? 1.05 : 1;
       this.canvas.closest('[data-model-stage], .marketplace-item-preview')?.classList.add('is-loading');
       try {
         const assets = await loadItemAssets(item);
         if (this.item !== item) return;
         this.model = assets.model;
         this.textures = assets.textures;
-        this.baseRotation = (Array.isArray(item.guiRotation) ? item.guiRotation : [30, 135, 0])
-          .map(value => Number(value || 0) * DEG);
+        this.baseRotation = [...CATALOG_ROTATION];
         this.prepareModel();
-        const initialYaw = Number.isFinite(pose?.yaw) ? pose.yaw : (this.preview ? this.phase : 0);
+        const initialYaw = Number.isFinite(pose?.yaw) ? pose.yaw : 0;
         const initialPitch = Number.isFinite(pose?.pitch) ? pose.pitch : 0;
         this.currentYaw = initialYaw;
         this.targetYaw = initialYaw;
@@ -334,32 +334,15 @@
 
     tick(deltaSeconds, now) {
       if (!this.ready) return;
-      if (this.preview && !reducedMotion) {
-        this.currentYaw = wrapAngle(this.currentYaw + deltaSeconds * 0.42);
-        this.targetYaw = this.currentYaw;
-        this.anchorYaw = this.currentYaw;
+      const easing = 1 - Math.pow(0.0008, Math.min(deltaSeconds, 0.05));
+      const nextYaw = lerpAngle(this.currentYaw, this.targetYaw, easing);
+      const nextPitch = this.currentPitch + (this.targetPitch - this.currentPitch) * easing;
+      if (Math.abs(wrapAngle(nextYaw - this.currentYaw)) > 0.0001 || Math.abs(nextPitch - this.currentPitch) > 0.0001) {
+        this.currentYaw = nextYaw;
+        this.currentPitch = nextPitch;
         this.dirty = true;
-      } else {
-        const easing = 1 - Math.pow(0.0008, Math.min(deltaSeconds, 0.05));
-        const nextYaw = lerpAngle(this.currentYaw, this.targetYaw, easing);
-        const nextPitch = this.currentPitch + (this.targetPitch - this.currentPitch) * easing;
-        if (Math.abs(wrapAngle(nextYaw - this.currentYaw)) > 0.0001 || Math.abs(nextPitch - this.currentPitch) > 0.0001) {
-          this.currentYaw = nextYaw;
-          this.currentPitch = nextPitch;
-          this.dirty = true;
-        }
       }
       if (this.dirty || (!reducedMotion && this.hasAnimatedTexture())) this.render(now);
-    }
-
-    setPointerTarget(normalizedX, normalizedY) {
-      this.targetYaw = this.anchorYaw - normalizedX * 0.58;
-      this.targetPitch = clamp(this.anchorPitch - normalizedY * 0.30, -0.62, 0.62);
-    }
-
-    resetPointerTarget() {
-      this.targetYaw = this.anchorYaw;
-      this.targetPitch = this.anchorPitch;
     }
 
     nudge(yawDelta, pitchDelta = 0) {
@@ -374,7 +357,54 @@
     }
   }
 
+  const bindDragRotation = (surface, renderer) => {
+    const interaction = {
+      pointerId: null,
+      lastX: 0,
+      lastY: 0,
+      travel: 0,
+      suppressClick: false
+    };
+
+    surface.addEventListener('pointerdown', event => {
+      if (event.pointerType === 'mouse' && event.button !== 0) return;
+      interaction.pointerId = event.pointerId;
+      interaction.lastX = event.clientX;
+      interaction.lastY = event.clientY;
+      interaction.travel = 0;
+      interaction.suppressClick = false;
+      surface.classList.add('is-dragging');
+      surface.setPointerCapture?.(event.pointerId);
+    });
+
+    surface.addEventListener('pointermove', event => {
+      if (event.pointerId !== interaction.pointerId || !renderer.ready) return;
+      const dx = event.clientX - interaction.lastX;
+      const dy = event.clientY - interaction.lastY;
+      interaction.lastX = event.clientX;
+      interaction.lastY = event.clientY;
+      interaction.travel += Math.abs(dx) + Math.abs(dy);
+      renderer.nudge(dx * 0.010, dy * 0.0065);
+    });
+
+    const endDrag = event => {
+      if (event.pointerId !== interaction.pointerId) return;
+      interaction.pointerId = null;
+      interaction.suppressClick = interaction.travel > 4;
+      surface.classList.remove('is-dragging');
+      if (surface.hasPointerCapture?.(event.pointerId)) surface.releasePointerCapture(event.pointerId);
+      if (interaction.suppressClick) {
+        setTimeout(() => { interaction.suppressClick = false; }, 0);
+      }
+    };
+
+    surface.addEventListener('pointerup', endDrag);
+    surface.addEventListener('pointercancel', endDrag);
+    return interaction;
+  };
+
   const mainRenderer = new MinecraftModelRenderer(mainCanvas);
+  bindDragRotation(stage, mainRenderer);
 
   const selectItem = async (item, pose = null) => {
     activeNameNodes.forEach(node => { node.textContent = item.name; });
@@ -394,7 +424,7 @@
     stage.classList.remove('is-loading');
   };
 
-  const createItemButton = (item, index) => {
+  const createItemButton = item => {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'marketplace-item-card';
@@ -419,14 +449,16 @@
     copy.append(eyebrow, name);
     button.append(preview, copy);
 
-    const renderer = new MinecraftModelRenderer(previewCanvas, {
-      preview: true,
-      phase: (index / Math.max(1, items.length)) * TAU
-    });
+    const renderer = new MinecraftModelRenderer(previewCanvas, { preview: true });
     previewRenderers.set(item.id, renderer);
     renderer.setItem(item);
+    const interaction = bindDragRotation(preview, renderer);
 
-    button.addEventListener('click', () => {
+    button.addEventListener('click', event => {
+      if (interaction.suppressClick) {
+        event.preventDefault();
+        return;
+      }
       selectItem(item, renderer.getPose());
     });
     return button;
@@ -434,60 +466,12 @@
 
   itemList.replaceChildren(...items.map(createItemButton));
 
-  stage.addEventListener('pointermove', event => {
-    if (!mainRenderer.ready || event.pointerType === 'touch') return;
-    const rect = stage.getBoundingClientRect();
-    if (!rect.width || !rect.height) return;
-    const nx = clamp(((event.clientX - rect.left) / rect.width) * 2 - 1, -1, 1);
-    const ny = clamp(((event.clientY - rect.top) / rect.height) * 2 - 1, -1, 1);
-    mainRenderer.setPointerTarget(nx, ny);
-  });
-
-  stage.addEventListener('pointerleave', event => {
-    if (event.pointerType !== 'touch') mainRenderer.resetPointerTarget();
-  });
-
-  let touchPointerId = null;
-  let touchLastX = 0;
-  let touchLastY = 0;
-  stage.addEventListener('pointerdown', event => {
-    if (event.pointerType !== 'touch') return;
-    touchPointerId = event.pointerId;
-    touchLastX = event.clientX;
-    touchLastY = event.clientY;
-    stage.setPointerCapture?.(event.pointerId);
-  });
-  stage.addEventListener('pointermove', event => {
-    if (event.pointerType !== 'touch' || event.pointerId !== touchPointerId) return;
-    const dx = event.clientX - touchLastX;
-    const dy = event.clientY - touchLastY;
-    touchLastX = event.clientX;
-    touchLastY = event.clientY;
-    mainRenderer.nudge(-dx * 0.010, -dy * 0.0065);
-  });
-  const endTouch = event => {
-    if (event.pointerId !== touchPointerId) return;
-    touchPointerId = null;
-    if (stage.hasPointerCapture?.(event.pointerId)) stage.releasePointerCapture(event.pointerId);
-  };
-  stage.addEventListener('pointerup', endTouch);
-  stage.addEventListener('pointercancel', endTouch);
-
   stage.addEventListener('wheel', event => {
     if (!mainRenderer.ready) return;
     event.preventDefault();
     mainRenderer.zoom = clamp(mainRenderer.zoom + (event.deltaY < 0 ? 0.07 : -0.07), 0.78, 1.55);
     mainRenderer.dirty = true;
   }, { passive: false });
-
-  stage.addEventListener('keydown', event => {
-    if (event.key === 'ArrowLeft') mainRenderer.nudge(10 * DEG);
-    else if (event.key === 'ArrowRight') mainRenderer.nudge(-10 * DEG);
-    else if (event.key === 'ArrowUp') mainRenderer.nudge(0, 7 * DEG);
-    else if (event.key === 'ArrowDown') mainRenderer.nudge(0, -7 * DEG);
-    else return;
-    event.preventDefault();
-  });
 
   const frame = now => {
     const deltaSeconds = lastFrameTime ? Math.min((now - lastFrameTime) / 1000, 0.05) : 0;
