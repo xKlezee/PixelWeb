@@ -31,9 +31,13 @@ Only content that is plausibly part of the initial viewport may receive high fet
 
 The four approved Nexus PNG files are each roughly 2.1 MB. That size is intentionally accepted because the originals are a product requirement. They therefore must remain below the initial viewport and low-priority unless a future design explicitly makes one of them the LCP image.
 
+The Nexus renderer currently assigns `loading=lazy`, `decoding=async`, `fetchPriority=low` and intrinsic 1448×1086 dimensions to those images. Preserve that loading contract unless browser waterfall evidence justifies a different priority for a specific viewport.
+
 The Home immersive MP4 is roughly 1.1 MB and is now explicitly deferred. The HTML contains no initial `src`, uses `preload=none`, and stores the local source in `data-src`. `immersive.js` hydrates the source with `IntersectionObserver` only when the story approaches the viewport (currently a 600 px root margin), then waits for metadata before scroll scrubbing can seek through the video. Under `prefers-reduced-motion: reduce`, the video is not hydrated at all; the section remains readable over its intentional dark fallback surface.
 
 This behavior is a performance contract. Do not restore an eager `src` to the Home story merely to simplify the script.
+
+The current official root logo (`LOGO OFICIAL.png`) is approximately 388 KB and is reused throughout the site, including small navigation presentation. The original is not to be altered speculatively. A smaller navigation/favicon derivative may be evaluated later **only** with visual inspection and while retaining the official original unchanged; this is an investigation item, not permission to silently recompress or replace the brand asset.
 
 ## External media
 
@@ -46,6 +50,8 @@ Rules:
 - failure must degrade to an intentional visual fallback rather than break layout;
 - self-hosting an owned original asset is preferred later when an authoritative source file is available;
 - do not copy third-party commercial artwork into the repository.
+
+The Worlds visual rail currently requests only its first landscape immediately. Later landscapes use deferred `data-src` / `data-srcset` hydration through `IntersectionObserver`, responsive 640/960/1280 variants and low fetch priority. Local boss artwork is lightweight SVG and lazy-loaded. Do not replace that strategy with eager loading without browser-network evidence.
 
 ## Layout stability
 
@@ -81,6 +87,7 @@ Target guardrails for the public static site on a representative mobile profile:
 - no unexpected eager request for all four Nexus boss PNG files from pages where they are below the fold
 - no Home immersive MP4 request during the initial viewport before the story approaches the viewport
 - no immersive MP4 request at all when the user requests reduced motion
+- no eager request for all deferred Worlds landscape variants
 - no duplicate download of identical local media under different repository paths
 - all four approved Nexus PNGs pass byte-level media integrity checks
 
