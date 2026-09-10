@@ -10,9 +10,12 @@ This file records the branch state without upgrading controls or gameplay claims
 - `SECURITY.md` with public/private disclosure boundaries and credential-incident handling.
 - Dependency-free committed-secret scanner.
 - Dependency-free static HTML/JavaScript/CSS integrity and browser-safety validator.
+- Dependency-free runtime-contract validator for deferred media references and direct inline-style assignment.
 - Separate dependency-free structural accessibility validator.
+- Dedicated byte-level media-integrity validator for the four approved Nexus PNGs.
 - GitHub Actions quality gate with read-only repository permissions and commit-pinned official `actions/checkout`.
-- Strict CSP-ready frontend rules: no inline scripts, inline handlers, inline styles, `javascript:` URLs, string-to-DOM parsing sinks or runtime inline-style mutation accepted by the site validator.
+- Strict CSP-ready frontend rules: no inline scripts, inline handlers, inline styles, `javascript:` URLs, string-to-DOM parsing sinks or runtime inline-style mutation accepted by the validation layers.
+- Deferred media URLs in `data-src`, `data-poster` and `data-srcset` are validated as HTTPS external URLs or existing repository-local paths.
 - Absolute external HTTP resources are rejected; external runtime destinations are expected to use HTTPS.
 - `connect-src` follows per-page least privilege: pages without a live status surface are self-only; pages that expose live Minecraft status may additionally connect only to `https://api.mcsrvstat.us`.
 - Selected canonical public literals and retired public claims are guarded so known drift cannot silently return.
@@ -28,7 +31,7 @@ This file records the branch state without upgrading controls or gameplay claims
 - Home has a canonical URL plus Open Graph/Twitter metadata using the existing official Pixel Network logo.
 - `validate_site.py` checks sitemap consistency, prevents `noindex` pages from being listed and keeps the repository-level `robots.txt` from regressing to a blanket `Disallow: /` policy.
 - **GitHub Pages boundary:** the current site is a project site at `https://xklezee.github.io/PixelWeb/`. Standards-compliant crawlers request `robots.txt` from the host root (`https://xklezee.github.io/robots.txt`), so `PixelWeb/robots.txt` is not an authoritative crawl policy on this default URL. Page-level `meta robots` directives are the effective per-page publication control until a custom/root domain deployment makes a repository-level robots file authoritative.
-- The repository-level `robots.txt` now documents that limitation instead of pretending that hiding `docs/` or `scripts/` from crawler discovery protects them. Any file deployed through Pages must still be treated as public.
+- The repository-level `robots.txt` documents that limitation instead of pretending that hiding `docs/` or `scripts/` from crawler discovery protects them. Any file deployed through Pages must still be treated as public.
 
 ### Accessibility and interaction foundation
 
@@ -37,16 +40,18 @@ This file records the branch state without upgrading controls or gameplay claims
 - The skip target is the real `<main>` region and is made programmatically focusable when required; activation moves focus instead of only scrolling visually.
 - Navigation dropdowns expose `aria-expanded` and `aria-controls`, support keyboard opening/closing and Escape behavior.
 - The Play modal retains focus trapping, Escape close and focus restoration without inline styles.
-- Forum entry dialog now has labelled/described modal semantics, initial focus and Tab/Shift+Tab focus containment while the preview application is hidden.
+- Forum entry dialog has labelled/described modal semantics, initial focus and Tab/Shift+Tab focus containment while the preview application is hidden.
 - Forum post dialogs trap focus, close with Escape and restore focus to the triggering post card.
 - `validate_accessibility.py` checks document language, viewport, title, exactly one `<main>`, non-empty descriptions on indexable pages and explicit `alt` on static images.
 
 ### Performance foundation
 
 - Approved Raphael, Azazel, Abyss and Astral PNGs remain the original repository blobs; they are not recompressed, resized, converted or replaced.
+- `validate_media_integrity.py` enforces each approved PNG's exact byte size, 1448×1086 dimensions and Git blob SHA.
 - Nexus heavy images remain below initial-load priority and use lazy/asynchronous image behavior where rendered.
 - Home immersive MP4 no longer has an initial `src`; it uses `preload="none"` plus `data-src`.
 - The MP4 is hydrated through `IntersectionObserver` shortly before the immersive story approaches the viewport, with a functional fallback where the observer API is unavailable.
+- Its deferred `data-src` path is now covered by `validate_runtime_contracts.py` so lazy hydration cannot hide a broken local media reference from repository validation.
 - Scroll scrubbing waits for valid video metadata/duration before seeking.
 - `prefers-reduced-motion: reduce` intentionally prevents MP4 hydration/download while retaining the textual story and stable background.
 - Current repository inventory contains one immersive MP4, not a duplicate second Home copy.
@@ -85,9 +90,9 @@ The public Skyblock model and landing page no longer advertise collaboration con
 
 ## Branch state
 
-The hardening branch was reconciled with the current `main` after the Quality Gate workflow had to be installed on the default branch for manual-dispatch visibility. The reconciliation used a merge commit whose resulting tree was the existing hardening tree, so no frontend content from `main` replaced branch work.
+The hardening branch is periodically reconciled with `main` when Quality Gate-only commits are installed on the default branch for manual-dispatch visibility. Reconciliation uses a merge commit whose resulting tree remains the hardening candidate tree, so frontend content from `main` does not replace branch work.
 
-After reconciliation the branch was `behind_by: 0` relative to the then-current `main`. Future work must still re-check both refs before write/merge operations because another session may advance either branch.
+After each such reconciliation, `behind_by` is checked against the then-current `main`. Future work must still re-check both refs before write/merge operations because another session may advance either branch.
 
 ## Verification state
 
@@ -101,9 +106,9 @@ This source review does **not** substitute for successful execution of the repos
 
 **Account-level startup block — validator result not obtained.**
 
-The observed GitHub Actions jobs did not reach repository steps. GitHub reported that the job was not started because the account is locked due to a billing issue. Therefore failed workflow runs must not be interpreted as failures from `security_scan.py`, Python compilation, `node --check`, `validate_site.py` or `validate_accessibility.py`; those stages did not execute.
+Observed GitHub Actions jobs have not reached repository steps. GitHub reported that the job was not started because the account is locked due to a billing issue. Therefore failed workflow runs must not be interpreted as failures from `security_scan.py`, Python compilation, `validate_media_integrity.py`, `node --check`, `validate_site.py`, `validate_runtime_contracts.py` or `validate_accessibility.py`; those stages have not been observed executing on the final candidate.
 
-The same Quality Gate definition is intentionally kept on `main` and on the hardening branch. Moving the frontend work to `main` would not bypass an account-level Actions billing lock and is not used as a substitute for validation.
+The same Quality Gate definition is intentionally kept on `main` and on the hardening branch. Manual dispatch requires an explicit `target_ref`, allowing the workflow surfaced from `main` to validate the actual candidate branch/tag/SHA. Moving the frontend work to `main` would not bypass an account-level Actions billing lock and is not used as a substitute for validation.
 
 ### Local execution / browser-render QA
 
