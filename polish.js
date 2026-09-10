@@ -358,11 +358,22 @@
     closeGroups();
   };
 
-  navToggle?.addEventListener('click', () => {
-    const open = navToggle.getAttribute('aria-expanded') === 'true';
-    document.body.classList.toggle('nav-open', open && mobileNav.matches);
-    if (!open) closeGroups();
-  });
+  /* site.js keeps a basic no-polish fallback. When this canonical layer is present,
+     capture the toggle click before that fallback listener so one controller owns all
+     menu state and aria/body classes regardless of listener registration order. */
+  navToggle?.addEventListener('click', event => {
+    event.stopImmediatePropagation();
+    if (!mobileNav.matches || !navLinks) {
+      closeMobileNav();
+      return;
+    }
+
+    const willOpen = !navLinks.classList.contains('open');
+    navLinks.classList.toggle('open', willOpen);
+    navToggle.setAttribute('aria-expanded', String(willOpen));
+    document.body.classList.toggle('nav-open', willOpen);
+    if (!willOpen) closeGroups();
+  }, { capture: true });
 
   navLinks?.addEventListener('click', event => {
     if (!mobileNav.matches || !event.target.closest('a')) return;
