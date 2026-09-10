@@ -42,6 +42,9 @@
   if (mitigationFormula) mitigationFormula.textContent = guide.mitigation?.formula || '—';
   const mitigationPrinciple = document.querySelector('[data-guide-mitigation-principle]');
   if (mitigationPrinciple) mitigationPrinciple.textContent = guide.mitigation?.principle || '';
+  document.querySelectorAll('[data-guide-mitigation-cap]').forEach(node => {
+    node.textContent = String(guide.mitigation?.cap ?? '—');
+  });
 
   const familyHost = document.querySelector('[data-guide-equipment-families]');
   if (familyHost && Array.isArray(guide.equipmentFamilies)) {
