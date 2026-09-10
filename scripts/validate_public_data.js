@@ -30,6 +30,8 @@ const WORLD_IMAGE_STORAGE_PATH_PREFIX = '/~/files/v0/b/gitbook-x-prod.appspot.co
 const HTML_COMMENT_RE = /<!--[\s\S]*?-->/g;
 const ANCHOR_HREF_RE = /<a\b[^>]*\bhref\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/gi;
 const NON_NAVIGATION_PREFIXES = ['#', 'mailto:', 'tel:'];
+const SKYBLOCK_INTERNAL_COPY_RE = /\b(?:source|wiring|command|manager|database|implementation|class)\b/i;
+const SKYBLOCK_PARTIAL_STATES = new Set(['Partial', 'Planned']);
 
 const fail = message => failures.push(message);
 const check = (condition, message) => {
@@ -344,12 +346,28 @@ const skyblock = data.skyblock || {};
 const skyblockFeatures = Array.isArray(skyblock.features) ? skyblock.features : [];
 const skyblockPartial = Array.isArray(skyblock.partialFeatures) ? skyblock.partialFeatures : [];
 check(skyblock.evidence === 'source-verified', 'current Skyblock evidence must remain source-verified');
-check(skyblock.state === 'partial', 'Skyblock must remain partial until player-facing team wiring is re-verified');
+check(skyblock.state === 'partial', 'Skyblock must remain partial until collaboration controls are re-verified as player-available');
 check(skyblockPartial.length > 0, 'partial Skyblock state must declare its incomplete features');
 check(unique(skyblockFeatures), 'current Skyblock features must be unique');
 check(
   !skyblockFeatures.some(feature => /invite|team management|promotion|co-op|collabor/i.test(feature)),
   'incomplete Skyblock collaboration controls must not appear in the current feature list'
+);
+check(
+  unique(skyblockPartial.map(item => item?.name)),
+  'partial Skyblock feature names must be unique'
+);
+check(
+  skyblockPartial.every(item => SKYBLOCK_PARTIAL_STATES.has(item?.status)),
+  'partial Skyblock feature status must use the player-facing Partial/Planned taxonomy'
+);
+check(
+  skyblockPartial.every(item => typeof item?.detail === 'string' && item.detail.trim()),
+  'partial Skyblock features must have non-empty player-facing descriptions'
+);
+check(
+  skyblockPartial.every(item => !SKYBLOCK_INTERNAL_COPY_RE.test(item?.detail || '')),
+  'partial Skyblock public descriptions must not expose source/wiring/command/manager/database implementation details'
 );
 
 const ranks = Array.isArray(data.store?.ranks) ? data.store.ranks : [];
