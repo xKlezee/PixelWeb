@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import html.parser
+import re
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
@@ -36,6 +37,15 @@ PUBLIC_NOINDEX_PAGES = {"forum.html", "404.html"}
 PUBLIC_DYNAMIC_ROOT_FILES = {"play-modal.css"}
 LOCAL_URL_ATTRS = {"href", "src", "poster", "data-src", "data-poster"}
 SRCSET_ATTRS = {"srcset", "data-srcset"}
+CSS_COMMENT_RE = re.compile(r"/\*.*?\*/", re.DOTALL)
+CSS_URL_RE = re.compile(
+    r"url\(\s*(?:\"([^\"]*)\"|'([^']*)'|([^)]*?))\s*\)",
+    re.IGNORECASE | re.DOTALL,
+)
+CSS_IMPORT_RE = re.compile(
+    r"@import\s+(?:\"([^\"]+)\"|'([^']+)')",
+    re.IGNORECASE,
+)
 
 
 class ReferenceParser(html.parser.HTMLParser):
@@ -65,25 +75,40 @@ class ReferenceParser(html.parser.HTMLParser):
         self.handle_starttag(tag, attrs)
 
 
-def local_target(page: Path, raw: str) -> Path | None:
+def local_target(source: Path, raw: str) -> Path | None:
     value = raw.strip()
     if not value or value.startswith(("#", "mailto:", "tel:")):
         return None
 
     parts = urlsplit(value)
-    if parts.scheme or parts.netloc:
+    if parts.scheme or parts.netloc or not parts.path:
         return None
 
     path = unquote(parts.path)
-    if not path:
-        return None
-
     if path.startswith("/"):
         # PixelWeb currently lives under /PixelWeb/. Root-relative URLs resolve outside
         # the project-site artifact and are intentionally forbidden.
         return PUBLIC / "__invalid_root_relative__"
 
-    return (page.parent / path).resolve()
+    return (source.parent / path).resolve()
+
+
+def css_references(text: str) -> list[str]:
+    clean = CSS_COMMENT_RE.sub("", text)
+    references: list[str] = []
+
+    for match in CSS_URL_RE.finditer(clean):
+        value = next((group for group in match.groups() if group is not None), "").strip()
+        if value:
+            references.append(value)
+
+    # url(...) imports are already covered by CSS_URL_RE. This catches @import "file.css".
+    for match in CSS_IMPORT_RE.finditer(clean):
+        value = next((group for group in match.groups() if group is not None), "").strip()
+        if value:
+            references.append(value)
+
+    return references
 
 
 def sitemap_page_names(failures: list[str]) -> set[str]:
@@ -111,6 +136,41 @@ def sitemap_page_names(failures: list[str]) -> set[str]:
             continue
         pages.add(page)
     return pages
+
+
+def validate_local_reference(
+    source: Path,
+    raw: str,
+    label: str,
+    failures: list[str],
+    referenced_root_files: set[str],
+) -> None:
+    target = local_target(source, raw)
+    if target is None:
+        return
+
+    if target.name == "__invalid_root_relative__":
+        failures.append(
+            f"{source.relative_to(PUBLIC)}: root-relative {label} is invalid for /PixelWeb/ project site ({raw})"
+        )
+        return
+
+    try:
+        relative_target = target.relative_to(PUBLIC.resolve())
+    except ValueError:
+        failures.append(
+            f"{source.relative_to(PUBLIC)}: local {label} escapes public bundle ({raw})"
+        )
+        return
+
+    if not target.exists():
+        failures.append(
+            f"{source.relative_to(PUBLIC)}: local {label} target missing from public bundle ({raw})"
+        )
+        return
+
+    if len(relative_target.parts) == 1:
+        referenced_root_files.add(relative_target.name)
 
 
 def main() -> int:
@@ -159,8 +219,8 @@ def main() -> int:
     for page in sorted(expected_html - actual_html):
         failures.append(f"{page}: declared public HTML page is missing from bundle")
 
-    # Root files outside HTML/media/public metadata should be either statically referenced
-    # by a public page or explicitly declared as a known runtime-loaded resource.
+    # Root files outside HTML/media/public metadata should be either reachable from a public
+    # HTML/CSS dependency graph or explicitly declared as a known runtime-loaded resource.
     referenced_root_files: set[str] = set(PUBLIC_DYNAMIC_ROOT_FILES)
 
     for page in sorted(PUBLIC.glob("*.html")):
@@ -169,32 +229,23 @@ def main() -> int:
         parser.close()
 
         for attr, raw, line in parser.references:
-            target = local_target(page, raw)
-            if target is None:
-                continue
+            label = f"{attr} at line {line}"
+            validate_local_reference(page, raw, label, failures, referenced_root_files)
 
-            try:
-                relative_target = target.relative_to(PUBLIC.resolve())
-            except ValueError:
-                failures.append(
-                    f"{page.name}:{line}: local {attr} escapes public bundle ({raw})"
-                )
-                continue
-
-            if target.name == "__invalid_root_relative__":
-                failures.append(
-                    f"{page.name}:{line}: root-relative {attr} is invalid for /PixelWeb/ project site ({raw})"
-                )
-                continue
-
-            if not target.exists():
-                failures.append(
-                    f"{page.name}:{line}: local {attr} target missing from public bundle ({raw})"
-                )
-                continue
-
-            if len(relative_target.parts) == 1:
-                referenced_root_files.add(relative_target.name)
+    for stylesheet in sorted(PUBLIC.rglob("*.css")):
+        try:
+            text = stylesheet.read_text(encoding="utf-8")
+        except UnicodeError:
+            failures.append(f"{stylesheet.relative_to(PUBLIC)}: CSS must be valid UTF-8")
+            continue
+        for raw in css_references(text):
+            validate_local_reference(
+                stylesheet,
+                raw,
+                "CSS dependency",
+                failures,
+                referenced_root_files,
+            )
 
     exempt_root_files = {
         ".nojekyll", "robots.txt", "sitemap.xml",
