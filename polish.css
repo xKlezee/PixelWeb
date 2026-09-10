@@ -83,6 +83,11 @@ h3,
 /* Forum is retired from the public product. Old static fallback links are hidden before
    the canonical runtime navigation replaces legacy per-page markup. */
 a[href="forum.html"] { display: none !important; }
+.nav-dropdown a[href="community.html"] > span { font-size: 0; }
+.nav-dropdown a[href="community.html"] > span::after {
+  content: 'Discord and Guides.';
+  font-size: 11px;
+}
 
 /*
  * Scroll performance contract:
