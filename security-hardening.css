@@ -53,8 +53,9 @@
 .index-list-spaced { margin-top: 18px; }
 
 /* Desktop pointer contract: top-level nav groups are hover targets, not click toggles.
-   Touch layouts keep the button interaction, while keyboard focus remains available. */
-@media (hover: hover) and (pointer: fine) {
+   The rule starts above the 980px mobile-navigation breakpoint so narrow layouts keep
+   explicit click/touch interaction even when a fine pointer is attached. */
+@media (min-width: 981px) and (hover: hover) and (pointer: fine) {
   .nav-group > button {
     pointer-events: none;
     cursor: default;
