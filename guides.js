@@ -16,10 +16,6 @@
     count.setAttribute('aria-live', 'polite');
     count.setAttribute('aria-atomic', 'true');
   }
-  if (empty) {
-    empty.setAttribute('role', 'status');
-    empty.setAttribute('aria-live', 'polite');
-  }
 
   const normalize = value => String(value || '')
     .normalize('NFD')
