@@ -16,27 +16,29 @@
     return node;
   };
 
+  const displayCap = (value, suffix = '') => value == null ? '—' : `${value}${suffix}`;
+
   const spine = [
     {
       code: '01',
       eyebrow: 'Account growth',
-      value: String(progression.maxLevel ?? 300),
+      value: displayCap(progression.maxLevel),
       title: 'Levels',
-      copy: 'The permanent account curve establishes the base layer before Prestige becomes the larger long-term progression system.'
+      copy: 'Levels are the baseline account-progression layer. Exact lifecycle semantics live in the detailed reference only when independently verified.'
     },
     {
       code: '02',
       eyebrow: 'Long-term progression',
-      value: `${progression.maxPrestige ?? 10} tiers`,
+      value: displayCap(progression.maxPrestige, ' tiers'),
       title: 'Prestige',
-      copy: 'Prestige extends the account beyond levels and becomes the main milestone layer before Legacy.'
+      copy: 'Prestige is a real milestone axis used by the current World and Nexus access model; this overview does not invent reset or reward behavior.'
     },
     {
       code: '03',
       eyebrow: 'Late progression',
-      value: `${progression.maxLegacy ?? 4} tiers`,
+      value: displayCap(progression.maxLegacy, ' tiers'),
       title: 'Legacy',
-      copy: 'Legacy continues permanent account progression after Prestige and carries the account into the later endgame.'
+      copy: 'Legacy is the late account-progression layer used by the highest currently documented Nexus difficulty milestones.'
     }
   ];
 
@@ -60,8 +62,8 @@
   if (codexHost) {
     const metrics = el('div', 'systems-codex-metrics');
     [
-      [content.worldProgressionTalismans ?? 36, 'World progression', 'The defined Codex collection.'],
-      [content.mineTalismans ?? 81, 'Mine talismans', 'A separate collection tied to mine progression.'],
+      [content.worldProgressionTalismans ?? '—', 'World progression', 'The defined Codex collection.'],
+      [content.mineTalismans ?? '—', 'Mine talismans', 'A separate collection tied to mine progression.'],
       ['+', 'Special categories', 'Secret, World Boss, Mob Hunt and seasonal collections expand independently.']
     ].forEach(([value, label, note]) => {
       const metric = el('div', 'systems-codex-metric');
@@ -80,7 +82,7 @@
   if (enchantHost) {
     enchantHost.replaceChildren(
       el('span', 'systems-feature-kicker', 'Equipment decisions'),
-      el('span', 'systems-big-number', content.enchantments ?? 27),
+      el('span', 'systems-big-number', content.enchantments ?? '—'),
       el('h3', '', 'Enchantments'),
       el('p', '', 'Custom enchantments add another decision layer to combat, mining and equipment without becoming a separate progression path.')
     );
