@@ -148,6 +148,13 @@ def validate_local_reference(
     failures: list[str],
     referenced_root_files: set[str],
 ) -> None:
+    value = raw.strip()
+    if value.startswith("//"):
+        failures.append(
+            f"{source.relative_to(PUBLIC)}: protocol-relative {label} is not allowed ({raw})"
+        )
+        return
+
     target = local_target(source, raw)
     if target is None:
         return
