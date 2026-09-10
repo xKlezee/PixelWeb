@@ -4,7 +4,7 @@ PixelWeb now enforces a restrictive CSP in every current HTML document. This fil
 
 ## Current static-site policy
 
-The public-site pages converge on this effective shape:
+The default public-page policy uses a self-only network boundary:
 
 ```text
 default-src 'self';
@@ -15,7 +15,7 @@ style-src 'self';
 img-src 'self' https: data:;
 media-src 'self' https:;
 font-src 'self' https: data:;
-connect-src 'self' https://api.mcsrvstat.us;
+connect-src 'self';
 frame-src 'none';
 worker-src 'none';
 form-action 'self';
@@ -23,7 +23,15 @@ manifest-src 'self';
 upgrade-insecure-requests;
 ```
 
-The Forum preview is stricter and currently uses `connect-src 'self'` because it does not need the external Minecraft status API.
+A page may widen `connect-src` only when its current runtime surface actually requires an external connection. At present, Home and Community expose the live Minecraft status surface and therefore use exactly:
+
+```text
+connect-src 'self' https://api.mcsrvstat.us;
+```
+
+All other current HTML pages, including Pixel Guides and the Forum preview, use exactly `connect-src 'self'`.
+
+This is enforced by `scripts/validate_site.py`. The validator detects the current live-status DOM surface, requires `site.js` when it is present, permits the Minecraft status API only for such a page, and rejects an unnecessary external `connect-src` allowance everywhere else. A future API origin therefore requires a deliberate code-and-policy revision rather than inheriting a site-wide whitelist.
 
 The policy is delivered with `<meta http-equiv="Content-Security-Policy">` because the current deployment target is a static GitHub Pages site.
 
@@ -39,7 +47,9 @@ The hardening branch now enforces the prerequisites that previously blocked a st
 - no runtime `element.style` / `setAttribute('style', ...)` mutations;
 - no `innerHTML`, `outerHTML`, `insertAdjacentHTML` or `document.write` parsing sinks in runtime JavaScript;
 - external/dynamic URLs are protocol-validated before assignment;
-- local references and CSP invariants are checked by `scripts/validate_site.py`.
+- absolute external HTTP resources are rejected;
+- local references and CSP invariants are checked by `scripts/validate_site.py`;
+- selected canonical public literals and retired product claims are guarded against duplication/reintroduction.
 
 These are security invariants, not conventions. Reintroducing them is intended to fail the quality gate.
 
@@ -66,7 +76,7 @@ Permissions-Policy: <minimum required capabilities only>
 
 HSTS should be enabled at the HTTPS-serving domain/proxy only after HTTPS and subdomain implications have been reviewed. It must not be copied blindly into development environments.
 
-The response-header CSP should replace—not weaken—the current meta baseline and should explicitly enumerate every production API origin. Any future backend, auth provider or storage origin must be added only when it is actually required.
+The response-header CSP should replace—not weaken—the current meta baseline and should explicitly enumerate every production API origin. Any future backend, auth provider or storage origin must be added only when it is actually required by the page or application surface that consumes it.
 
 ## GitHub Pages role
 
