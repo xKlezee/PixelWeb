@@ -39,10 +39,20 @@ A configured control is not a passed control. Record the actual result for the e
   - Guide → Progression / Mechanics / Tools / Armor / Specials / Boosts;
   - Community → Leaderboards / Changelog / Rules / Staff Team.
 - Progression is the first Guide item in the canonical runtime array, Guide category data and visible sublist; `guides.html` without a hash treats Progression as the default category.
+- Explore rail styling on Gameplay, Systems and Skyblock matches the established Worlds/Nexus reference: compact uppercase typography, squared geometry, dark green/stone material and Pixel Blue lower-edge current state.
 - The current contextual destination and its parent global group use the active treatment without relying on color alone for meaning.
 - The contextual rail remains horizontally usable at narrow widths and does not create page-level overflow.
-- Worlds/Nexus retain the contextual-rail height required by their immersive viewport math.
+- Worlds/Nexus retain the 50px contextual-rail height required by their immersive viewport math.
 - No visible Forum destination/copy reappears in global or contextual navigation, including before runtime navigation replacement.
+
+## Header actions
+
+- Desktop Discord uses Discord's official Symbol asset and does not display competing textual button copy.
+- The Discord symbol is not redrawn, stretched, recolored or otherwise modified by Pixel CSS.
+- The surrounding Discord control uses the intended inset/recessed Pixel material treatment and aligns at the same header scale as Store.
+- Discord remains keyboard focusable and has an accessible label.
+- The mobile navigation retains a readable Discord destination.
+- Store and Play behavior remain unchanged by the Discord restyle.
 
 ## Forum retirement
 
@@ -85,13 +95,17 @@ A configured control is not a passed control. Record the actual result for the e
 ## About / legal information
 
 - `team.html` remains the canonical About route for URL compatibility.
-- About contains FAQ, Store/Tebex boundary information, the independent Minecraft disclaimer, external-service boundary notes, copyright and attribution.
+- About contains FAQ, Store/Tebex boundary information, the independent Minecraft disclaimer, external-service boundary notes, licensing and attribution.
+- About does not duplicate owner profiles from Staff Team.
 - About does not invent prices, rank thresholds, refund promises, payment guarantees or unpublished support terms.
 - The official Store CTA resolves to the approved Tebex HTTPS destination.
 - The Minecraft disclaimer remains prominent and states that Pixel Network is not official, approved by or associated with Mojang/Microsoft.
-- No blanket Creative Commons license is presented as applying to PixelWeb.
+- About identifies the **Pixel Network Proprietary Website, Source, Content & Asset License v1.0** for Pixel-owned material.
+- `LICENSE` is the canonical repository license text and `license.html` is the public-readable copy.
+- PixelWeb is described as proprietary rather than open source.
 - Pixel-owned material and third-party material have separate rights boundaries.
-- Any future Creative Commons grant identifies the exact non-software material plus exact license/version rather than relicensing the whole site.
+- Third-party material is not presented as covered by Pixel Network's proprietary grant.
+- `license.html` is reachable from About and appears in `sitemap.xml`.
 
 ## Shared footer
 
@@ -111,6 +125,7 @@ A configured control is not a passed control. Record the actual result for the e
 - Dynamic URLs are constrained to expected scheme/origin where appropriate.
 - Contextual navigation is constructed from the same canonical runtime navigation model rather than duplicated independent data.
 - Staff Team remote skin requests remain governed by the page's existing `img-src` policy and do not require weakening script/style CSP.
+- The official Discord Symbol is loaded as an HTTPS image resource allowed by the existing `img-src` policy; script/style policy is not weakened.
 
 ## Guide content integrity
 
@@ -133,7 +148,7 @@ A configured control is not a passed control. Record the actual result for the e
 
 ## Crawl / publication behavior
 
-- `sitemap.xml` contains all indexable product/Guide pages and excludes non-indexed compatibility/error pages.
+- `sitemap.xml` contains all indexable product/Guide/About/License pages and excludes non-indexed compatibility/error pages.
 - Every sitemap-indexed page keeps one absolute HTTPS canonical matching its sitemap URL.
 - Indexed pages retain coherent source Open Graph/Twitter metadata.
 - `forum.html` and `404.html` remain outside the sitemap and `noindex`.
@@ -144,7 +159,7 @@ A configured control is not a passed control. Record the actual result for the e
 
 ## Browser behavior
 
-Verify Home, Gameplay, Worlds, Nexus, Systems, Skyblock, Store, Marketplace, Community, Leaderboards, Changelog, Rules, Staff Team, About, Guide and every detailed Guide. Direct `forum.html` and `development.html` are tested only as legacy redirects.
+Verify Home, Gameplay, Worlds, Nexus, Systems, Skyblock, Store, Marketplace, Community, Leaderboards, Changelog, Rules, Staff Team, About, License, Guide and every detailed Guide. Direct `forum.html` and `development.html` are tested only as legacy redirects.
 
 At minimum confirm:
 
@@ -152,11 +167,14 @@ At minimum confirm:
 - no first-party CSP violations;
 - global nav hover/touch/keyboard behavior works at the 980 px boundary;
 - contextual sibling rail is correct and active state follows the current page;
+- all five Explore pages match the Worlds/Nexus rail reference;
+- desktop Discord Symbol loads and its inset control does not shift header geometry;
 - Play modal focus trap/Escape/restore behavior works;
 - Guide sidebars/rails/search/tables remain usable;
 - owner skin textures resolve on Staff Team and both canvases can be rotated with pointer and keyboard;
 - owner viewer failure state remains usable;
-- About FAQ/details, Tebex link and legal sections are readable and keyboard accessible;
+- About FAQ/details, Tebex link, license link and legal sections are readable and keyboard accessible;
+- `license.html` remains readable at normal and zoomed widths;
 - the shared footer is present and readable across visual families;
 - direct `forum.html` redirects to Community and no Forum UI flashes first;
 - direct `development.html` redirects to Guide and no retired Development UI returns;
@@ -177,6 +195,7 @@ At every width check:
 - contextual rails/tables remain independently scrollable where intentional;
 - Staff Team owner viewer dimensions remain balanced with the owner copy;
 - About overview cards and policy panels collapse without becoming oversized marketing cards;
+- License legal copy remains readable;
 - footer link groups and legal copy remain readable.
 
 Do not mark a viewport PASS from CSS/source inspection alone.
