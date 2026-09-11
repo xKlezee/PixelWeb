@@ -66,11 +66,15 @@
 
 /* Discord: official Symbol.svg, left untouched, recessed into the navigation material. */
 .nav-actions .nav-discord {
+  position: relative;
   width: 40px;
   min-width: 40px;
   min-height: 40px;
   padding: 0;
   flex: 0 0 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: 2px solid #090c09;
   border-radius: 3px;
   background: linear-gradient(180deg, rgba(35,40,34,.98), rgba(18,22,18,.99));
@@ -80,6 +84,7 @@
     0 1px 0 rgba(255,255,255,.025);
   color: transparent;
   font-size: 0;
+  line-height: 0;
   text-transform: none;
   letter-spacing: 0;
   overflow: hidden;
@@ -88,10 +93,14 @@
 
 .nav-actions .nav-discord::before {
   content: '';
-  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
   width: 21px;
   height: 17px;
   background: url('https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/66e3d7f4ef6498ac018f2c55_Symbol.svg') center / contain no-repeat;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 
 .nav-actions .nav-discord:hover,
