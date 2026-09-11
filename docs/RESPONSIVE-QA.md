@@ -20,6 +20,7 @@ Also required: one short-height landscape window and 200% browser zoom.
 - Explore / Guide / Community keep the fine-pointer hover contract on desktop and explicit click/touch behavior on mobile.
 - Keyboard focus, ArrowDown and Escape remain independent supported paths.
 - Store and Discord remain reachable from the mobile menu while Play remains directly available in the header.
+- Desktop Discord uses the official Discord Symbol inside an inset Pixel material control; the symbol must remain undistorted and un-recolored.
 - Detailed `guide-*.html` pages keep Guide selected in the canonical navigation.
 - A first-focus Skip to content route is generated for standard pages.
 - Category pages expose a contextual sibling-navigation rail directly below the global navigation:
@@ -29,8 +30,9 @@ Also required: one short-height landscape window and 200% browser zoom.
 - Progression is the first Guide destination in the actual canonical model and the default state for `guides.html` without a hash.
 - The current sibling and its owning top-level group use an active treatment. Active state must remain understandable through text/shape/contrast and not rely on color alone.
 - The contextual rail is horizontally scrollable rather than wrapping into a tall second navigation on narrow screens.
-- Home, Marketplace, Store and About do not create an empty contextual rail because they are not sibling members of those category groups.
-- Worlds/Nexus preserve the rail height required by their immersive viewport math even when their colors differ from standard pages.
+- Home, Marketplace, Store, About and License do not create an empty contextual rail because they are not sibling members of those category groups.
+- The established Worlds/Nexus rail is the visual reference for all five Explore pages; Gameplay, Systems and Skyblock must match its compact uppercase typography, squared geometry, dark green/stone surface and Pixel Blue lower-edge current state.
+- Worlds/Nexus preserve the 50px rail height required by their immersive viewport math.
 
 ## Typography
 
@@ -120,8 +122,17 @@ About is an information/policy surface rather than an owner gallery.
 - Sticky section headings become static below 980 px.
 - Tebex actions wrap/stack without overflow.
 - The Minecraft disclaimer remains prominent and readable at every width.
-- Copyright/attribution and external-service notes retain readable line length.
+- Licensing/attribution and external-service notes retain readable line length.
+- The proprietary license link remains visible and usable.
 - About does not reintroduce the owner viewers or duplicate Staff Team content.
+
+## License
+
+- `license.html` uses the same information/policy presentation family as About.
+- Long legal paragraphs retain a readable line length and do not create horizontal overflow.
+- Section headings and legal copy remain readable at 390 px and 200% zoom.
+- The page remains navigable by keyboard and retains a clear route back to About.
+- The page identifies Pixel Network Proprietary Website, Source, Content & Asset License v1.0 and keeps third-party materials outside Pixel Network's grant.
 
 ## Community
 
@@ -146,7 +157,7 @@ About is an information/policy surface rather than an owner gallery.
 ## Crawl / error surfaces
 
 - The deployment remains a GitHub Pages project site under `/PixelWeb/`.
-- `sitemap.xml` contains only indexable product/Guide pages.
+- `sitemap.xml` contains indexable product/Guide/About/License pages.
 - `forum.html` and `404.html` remain excluded from the sitemap and declare `noindex`.
 - The legacy Forum redirect must resolve to Community without creating a redirect loop.
 - `development.html` remains only a legacy redirect to Guide.
@@ -176,34 +187,36 @@ These checks are configured but must not be reported as PASS unless they actuall
 2. Explore / Guide / Community desktop hover behavior opens/closes without sticky pointer-click state.
 3. Mobile/touch navigation still opens explicitly at 980 px and below.
 4. Keyboard focus, ArrowDown and Escape remain usable in global navigation.
-5. Contextual sibling navigation appears only for the correct category and marks the current page consistently.
-6. Guide shows Progression first and `guides.html` without a hash activates Progression.
-7. Contextual rail remains reachable by touch/trackpad horizontal scrolling on compact screens.
-8. Skip to content moves both scroll position and focus to `<main>`.
-9. Play modal is fully reachable and escapable with mouse, touch and keyboard.
-10. Focus indicators are visible and unclipped.
-11. Typography remains readable without clipping/collision, including at 200% zoom.
-12. Images are not stretched or unintentionally cropped.
-13. Abyss + Astral both display complete source images side by side.
-14. Worlds route remains visually aligned to exactly four Worlds.
-15. Staff Team shows equal owner-card visual weight.
-16. Klezee and PxlMads skin textures both resolve by username on Staff Team.
-17. Dragging each skin viewer rotates smoothly without text selection/page-drag artifacts.
-18. Arrow-key rotation and Home reset work for both viewers; PxlMads resets to its own mirrored initial angle.
-19. Skin-provider failure degrades to a readable viewer state.
-20. About FAQ/details are usable by keyboard and touch.
-21. About Tebex CTA opens the approved external destination with `noopener`.
-22. About Minecraft disclaimer and attribution copy remain readable at all target widths.
-23. Shared footer links, disclaimer and rights copy render correctly across standard, Guide and immersive pages.
-24. The retired Forum is absent from visible navigation/content, and direct `forum.html` access redirects to Community.
-25. The retired Development family is absent from visible navigation/content, and direct `development.html` access redirects to Guide.
-26. Home immersive media causes no initial layout shift and remains deferred.
-27. Reduced-motion mode remains stable and avoids unnecessary immersive-video loading.
-28. Guide sidebar/rail, search and tables remain usable on compact screens.
-29. Browser console shows zero uncaught first-party errors and zero first-party CSP violations.
-30. Network panel shows no insecure HTTP subresources.
-31. Unknown routes render the branded 404 without broken local resources.
-32. Short-height landscape remains usable for navigation, Play modal, Guide rails, Staff viewers and About policy sections.
+5. All five Explore pages use the Worlds/Nexus contextual-rail visual reference and mark the current page consistently.
+6. Desktop Discord renders the official Symbol in the inset control without stretching, recoloring or header shift.
+7. Guide shows Progression first and `guides.html` without a hash activates Progression.
+8. Contextual rail remains reachable by touch/trackpad horizontal scrolling on compact screens.
+9. Skip to content moves both scroll position and focus to `<main>`.
+10. Play modal is fully reachable and escapable with mouse, touch and keyboard.
+11. Focus indicators are visible and unclipped.
+12. Typography remains readable without clipping/collision, including at 200% zoom.
+13. Images are not stretched or unintentionally cropped.
+14. Abyss + Astral both display complete source images side by side.
+15. Worlds route remains visually aligned to exactly four Worlds.
+16. Staff Team shows equal owner-card visual weight.
+17. Klezee and PxlMads skin textures both resolve by username on Staff Team.
+18. Dragging each skin viewer rotates smoothly without text selection/page-drag artifacts.
+19. Arrow-key rotation and Home reset work for both viewers; PxlMads resets to its own mirrored initial angle.
+20. Skin-provider failure degrades to a readable viewer state.
+21. About FAQ/details are usable by keyboard and touch.
+22. About Tebex CTA opens the approved external destination with `noopener`.
+23. About Minecraft disclaimer, license link and attribution copy remain readable at all target widths.
+24. `license.html` is readable, keyboard navigable and does not overflow at target widths.
+25. Shared footer links, disclaimer and rights copy render correctly across standard, Guide and immersive pages.
+26. The retired Forum is absent from visible navigation/content, and direct `forum.html` access redirects to Community.
+27. The retired Development family is absent from visible navigation/content, and direct `development.html` access redirects to Guide.
+28. Home immersive media causes no initial layout shift and remains deferred.
+29. Reduced-motion mode remains stable and avoids unnecessary immersive-video loading.
+30. Guide sidebar/rail, search and tables remain usable on compact screens.
+31. Browser console shows zero uncaught first-party errors and zero first-party CSP violations.
+32. Network panel shows no insecure HTTP subresources.
+33. Unknown routes render the branded 404 without broken local resources.
+34. Short-height landscape remains usable for navigation, Play modal, Guide rails, Staff viewers, About policy sections and License text.
 
 ## Release rule
 
