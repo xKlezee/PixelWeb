@@ -13,6 +13,63 @@
     return node;
   };
 
+  const mountCoreReference = () => {
+    const documentRoot = document.querySelector('.guides-document');
+    const choosePath = document.getElementById('choose-path');
+    if (!documentRoot || !choosePath || document.getElementById('core-reference')) return;
+
+    const section = el('section', 'guide-section');
+    section.id = 'core-reference';
+
+    const head = el('div', 'guide-section-head');
+    const titleWrap = el('div');
+    titleWrap.append(el('small', '', '02 / Core reference'), el('h2', '', 'Know the server basics before going deeper.'));
+    head.append(titleWrap, el('p', '', 'Joining is only the first step. These references explain the balances and shortcuts you will see across Pixel Network.'));
+
+    const grid = el('div', 'guide-reference-grid');
+    [
+      ['Currencies', 'Coins, Pixels and Nexus Points each have a different role in the network economy.', 'guide-currencies.html', 'Open Currencies →'],
+      ['Basic Commands', 'The current player-facing shortcuts for Store, Skyblock, Bestiary and Talisman systems.', 'guide-basic-commands.html', 'Open Basic Commands →'],
+      ['Progression', 'Levels, Prestige, Legacy and the access milestones that structure the main account journey.', 'guide-progression.html', 'Open Progression →']
+    ].forEach(([name, copy, href, action], index) => {
+      const card = el('article', 'guide-reference-item');
+      card.append(el('small', '', index === 0 ? 'Economy' : index === 1 ? 'Player shortcuts' : 'Account'), el('h3', '', name), el('p', '', copy));
+      const link = el('a', 'guide-text-link', action);
+      link.href = href;
+      card.appendChild(link);
+      grid.appendChild(card);
+    });
+
+    section.append(head, grid);
+    documentRoot.insertBefore(section, choosePath);
+
+    const onThisPage = [...document.querySelectorAll('.guides-sidebar-nav .guides-nav-group')]
+      .find(group => group.querySelector('small')?.textContent.trim() === 'On this page');
+    const joinLink = onThisPage?.querySelector('a[href="#join"]');
+    if (onThisPage && !onThisPage.querySelector('a[href="#core-reference"]')) {
+      const link = el('a', '', 'Server basics');
+      link.href = '#core-reference';
+      if (joinLink?.nextSibling) onThisPage.insertBefore(link, joinLink.nextSibling);
+      else onThisPage.appendChild(link);
+    }
+
+    const renumber = [
+      ['choose-path', '03 / Choose a path'],
+      ['main-route', '04 / Main route'],
+      ['skyblock', '05 / Skyblock'],
+      ['next-guides', '06 / Go deeper']
+    ];
+    renumber.forEach(([id, label]) => {
+      const small = document.querySelector(`#${id} .guide-section-head small`);
+      if (small) small.textContent = label;
+    });
+
+    const staleSystemsLink = document.querySelector('a[href="guides.html#systems"]');
+    if (staleSystemsLink) staleSystemsLink.href = 'guides.html#mechanics';
+  };
+
+  mountCoreReference();
+
   addressHosts.forEach(node => {
     node.textContent = String(network.server?.ip || '—');
   });
@@ -62,9 +119,6 @@
 
   if (skyblockHost) {
     const features = Array.isArray(network.skyblock?.features) ? network.skyblock.features : [];
-    skyblockHost.replaceChildren(...features.map(feature => {
-      const item = el('span', 'guide-status is-live', feature);
-      return item;
-    }));
+    skyblockHost.replaceChildren(...features.map(feature => el('span', 'guide-status is-live', feature)));
   }
 })();
