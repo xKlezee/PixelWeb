@@ -59,6 +59,8 @@ The canonical navigation remains:
 
 Store, Discord and Play remain high-priority actions rather than content categories.
 
+Discord uses Discord's official Symbol inside the Pixel navigation control. The symbol itself must not be redrawn, distorted or recolored; the surrounding Pixel material may provide the recessed/inset treatment.
+
 `Progression` is the canonical first Guide category. Its position must come from the shared navigation/category model, not from CSS ordering tricks.
 
 ## Home contract
@@ -176,7 +178,8 @@ The secondary pages use the same Minecraft RPG material language while staying i
 - `rules.html` never reconstructs a ruleset from stale sources.
 - `changelog.html` is now a Community destination and no longer depends on the retired Development category.
 - `staff.html` owns the public team presentation. Klezee and PxlMads remain visually equal, retain their interactive skin viewers and are distinguished only by their published responsibility areas.
-- `team.html` remains the canonical About URL for compatibility, but About is institutional rather than a duplicate staff page. It contains FAQ, Store/Tebex boundaries, the unofficial Minecraft disclaimer, external-service notes, copyright and attribution.
+- `team.html` remains the canonical About URL for compatibility, but About is institutional rather than a duplicate staff page. It contains FAQ, Store/Tebex boundaries, the unofficial Minecraft disclaimer, external-service notes, licensing and attribution.
+- `license.html` publishes the readable Pixel Network proprietary license while `LICENSE` remains the canonical repository text.
 - `store.html` focuses on the official Store, cumulative rank path and current purchase categories without publishing unverified thresholds.
 - `404.html` uses the same material language and routes users back to maintained destinations.
 
@@ -189,7 +192,7 @@ Do not move owner profiles back into About.
 
 About must not invent refund policy, pricing, support guarantees or legal terms that are not actually published by the applicable service.
 
-The site does not apply a blanket Creative Commons license. Original Pixel Network material remains all rights reserved unless specifically marked otherwise; third-party material remains under its own terms; software should use a software-specific license if reuse rights are intentionally granted later.
+Pixel-owned website source, branding, copy, layouts and custom assets use the **Pixel Network Proprietary Website, Source, Content & Asset License v1.0** by default. The project is proprietary, not open source. Third-party material is excluded from Pixel Network's license grant and remains under the rights and terms of its respective owners.
 
 ## Detailed Guide presentation
 
@@ -220,7 +223,9 @@ All contextual rails must share:
 - the same keyboard/touch behavior;
 - the same responsive horizontal-scroll contract.
 
-The **Explore** contextual rail has one visual contract across Gameplay, Systems, Worlds, Skyblock and Nexus: the same typography, font sizing, button geometry, spacing, colors, borders and hover/current-page treatment. Worlds/Nexus retain only the established 50px rail geometry because immersive viewport calculations depend on it; `minecraft-rpg-chrome.css` must not override the rail's visual design.
+The **Explore** contextual rail has one visual contract across Gameplay, Systems, Worlds, Skyblock and Nexus. The established **Worlds/Nexus Minecraft rail is the reference design**: compact uppercase typography, squared button geometry, dark green/stone material and the Pixel Blue lower-edge active treatment. Gameplay, Systems and Skyblock must inherit that design rather than replacing Worlds/Nexus with the older generic rounded rail.
+
+`pixel-global-chrome.css` owns this shared Explore presentation. Worlds/Nexus retain their established 50px rail geometry because immersive viewport calculations depend on it.
 
 Guide may use its warm document palette, but it must not fork the sublist model. Community uses the standard shared presentation.
 
@@ -238,7 +243,7 @@ Long-form FAQ, purchase boundaries and attribution explanations belong in About 
 
 ## Shared chrome and immersive responsive behavior
 
-`minecraft-rpg-chrome.css` provides a common navigation and detail-panel treatment for the immersive Worlds/Nexus destinations while deliberately preserving their viewport math. It may style the immersive top navigation and dialogs, but the Explore contextual rail must inherit the shared Explore presentation.
+`minecraft-rpg-chrome.css` provides navigation and detail-panel treatment for the immersive Worlds/Nexus destinations while deliberately preserving their viewport math. `pixel-global-chrome.css` promotes the established Worlds/Nexus contextual-rail appearance to the other Explore destinations.
 
 Both immersive pages keep a two-level chrome contract of approximately 113px on desktop and 111px at the current responsive breakpoint. Styling work must not casually change these heights because the stage dimensions are calculated from them.
 
@@ -282,7 +287,7 @@ Player-facing copy should be concise. A typical visual section should need:
 - zero or one short paragraph;
 - one primary action.
 
-Long-form explanation belongs in detailed Guide/Changelog/About policy sections, not Home or visual destination pages.
+Long-form explanation belongs in detailed Guide/Changelog/About/License sections, not Home or visual destination pages.
 
 ## Current redesign pass
 
@@ -296,8 +301,11 @@ The draft redesign currently covers:
 - Guide landing rebuilt around the six canonical Guide categories, with Progression first in the actual model.
 - Skyblock simplified to its three current pillars plus an explicit partial-feature boundary.
 - Community, Leaderboards, Changelog and Rules aligned to the new material language.
-- Staff Team now owns the two equal owner profiles and preserves both live skin viewers.
-- About now owns FAQ, Tebex/Store boundaries, Minecraft independence, external-service notices and copyright/attribution.
+- Staff Team owns the two equal owner profiles and preserves both live skin viewers.
+- About owns FAQ, Tebex/Store boundaries, Minecraft independence, external-service notices, licensing and attribution.
+- Pixel Network Proprietary License v1.0 is published in `LICENSE` and `license.html`.
+- Explore rail styling now uses the established Worlds/Nexus presentation across all five Explore destinations.
+- Discord header action uses the official Discord Symbol inside an inset Pixel material control.
 - Store reduced to the official CTA, cumulative rank path, purchase categories and one progression boundary note.
 - Marketplace reskinned as a Minecraft collection showcase without changing its 3D runtime.
 - Detailed Guides receive a shared Minecraft RPG document skin without changing their factual content.
