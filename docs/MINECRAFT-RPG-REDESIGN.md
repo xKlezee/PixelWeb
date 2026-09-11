@@ -220,7 +220,9 @@ All contextual rails must share:
 - the same keyboard/touch behavior;
 - the same responsive horizontal-scroll contract.
 
-Presentation families may recolor the rail. Worlds/Nexus retain their established rail height because immersive viewport calculations depend on it. Guide may use the warm document palette, but it must not fork the sublist model.
+The **Explore** contextual rail has one visual contract across Gameplay, Systems, Worlds, Skyblock and Nexus: the same typography, font sizing, button geometry, spacing, colors, borders and hover/current-page treatment. Worlds/Nexus retain only the established 50px rail geometry because immersive viewport calculations depend on it; `minecraft-rpg-chrome.css` must not override the rail's visual design.
+
+Guide may use its warm document palette, but it must not fork the sublist model. Community uses the standard shared presentation.
 
 ## Shared footer contract
 
@@ -236,7 +238,7 @@ Long-form FAQ, purchase boundaries and attribution explanations belong in About 
 
 ## Shared chrome and immersive responsive behavior
 
-`minecraft-rpg-chrome.css` provides a common navigation and detail-panel treatment for the immersive Worlds/Nexus destinations while deliberately preserving their viewport math.
+`minecraft-rpg-chrome.css` provides a common navigation and detail-panel treatment for the immersive Worlds/Nexus destinations while deliberately preserving their viewport math. It may style the immersive top navigation and dialogs, but the Explore contextual rail must inherit the shared Explore presentation.
 
 Both immersive pages keep a two-level chrome contract of approximately 113px on desktop and 111px at the current responsive breakpoint. Styling work must not casually change these heights because the stage dimensions are calculated from them.
 
