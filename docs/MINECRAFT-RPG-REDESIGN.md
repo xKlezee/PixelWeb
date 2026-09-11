@@ -216,4 +216,6 @@ The draft redesign currently covers:
 - Detailed Guides receive a shared Minecraft RPG document skin without changing their factual content.
 - Shared Minecraft RPG material language added for interior and secondary pages.
 
-Production `main` remains untouched while PR #11 stays in draft.
+## Review state
+
+PR #11 remains intentionally draft. The redesign branch is for visual iteration only until the direction is approved. Production `main` and the checkpoint branch remain unchanged. No manual repository validators are part of this design-preview pass unless explicitly requested.
