@@ -3,77 +3,73 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-  <meta name="theme-color" content="#0b0c0e"/>
+  <meta name="theme-color" content="#090c0b"/>
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https: data:; media-src 'self' https:; font-src 'self' https: data:; connect-src 'self'; frame-src 'none'; worker-src 'none'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
-  <meta name="description" content="Understand Pixel Network's main progression through levels, Prestige, worlds, mining, combat, equipment and Nexus access."/>
+  <meta name="description" content="Explore Pixel Network gameplay through progression, mining, combat, equipment, Worlds and Nexus."/>
   <meta property="og:type" content="website"/>
   <meta property="og:site_name" content="Pixel Network"/>
   <meta property="og:title" content="Gameplay — Pixel Network"/>
-  <meta property="og:description" content="Understand Pixel Network's main progression through levels, Prestige, worlds, mining, combat, equipment and Nexus access."/>
+  <meta property="og:description" content="Explore Pixel Network gameplay through progression, mining, combat, equipment, Worlds and Nexus."/>
   <meta property="og:url" content="https://xklezee.github.io/PixelWeb/gameplay.html"/>
   <meta property="og:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/>
   <meta property="og:image:alt" content="Pixel Network logo"/>
-  <meta name="twitter:card" content="summary"/>
-  <meta name="twitter:title" content="Gameplay — Pixel Network"/>
-  <meta name="twitter:description" content="Understand Pixel Network's main progression through levels, Prestige, worlds, mining, combat, equipment and Nexus access."/>
-  <meta name="twitter:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/>
   <title>Gameplay — Pixel Network</title>
   <link rel="canonical" href="https://xklezee.github.io/PixelWeb/gameplay.html"/>
-  <link rel="icon" href="LOGO%20OFICIAL.png"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png"/>
   <link rel="stylesheet" href="site.css"/>
   <link rel="stylesheet" href="polish.css"/>
   <link rel="stylesheet" href="phase1.css"/>
+  <link rel="stylesheet" href="minecraft-rpg-shell.css"/>
   <link rel="stylesheet" href="security-hardening.css"/>
   <script src="data/network.js" defer></script>
   <script src="site.js" defer></script>
   <script src="polish.js" defer></script>
 </head>
-<body>
+<body class="minecraft-rpg-page">
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <nav class="site-nav" aria-label="Main navigation"><div class="shell nav-inner">
     <a class="brand" href="index.html"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a>
-    <div class="nav-links" id="navLinks">
-      <div class="nav-group"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html" aria-current="page"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div>
-      <div class="nav-group"><button type="button" aria-haspopup="true">Development</button><div class="nav-dropdown"><a href="development.html"><strong>Development</strong><span>Current status, roadmap and product scale.</span></a><a href="changelog.html"><strong>Changelog</strong><span>Player-facing release notes.</span></a></div></div>
-      <div class="nav-group"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="community.html"><strong>Community</strong><span>Discord, Guides and Forum.</span></a><a href="guides.html"><strong>Guides</strong><span>Detailed player reference and mechanics.</span></a><a href="forum.html"><strong>Forum</strong><span>Long-form discussion preview.</span></a></div></div>
-      <a href="team.html">About</a>
-    </div>
+    <div class="nav-links" id="navLinks"></div>
     <div class="nav-actions"><a class="button quiet nav-discord" href="https://discord.gg/7KzWpezTNZ" target="_blank" rel="noopener">Discord</a><a class="button quiet nav-store" href="store.html">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
   </div></nav>
 
-  <main>
-    <section class="page-hero"><div class="shell"><div class="breadcrumbs"><a href="index.html">Pixel Network</a><span>/</span><span>Gameplay</span></div><div class="page-hero-grid"><div><div class="eyebrow">Main progression</div><h1>Progression happens naturally through the systems you use.</h1></div><p>Pixel does not force a scripted sequence on new players. Levels, equipment, mining, combat, collections and World access create the journey as the account develops.</p></div></div></section>
-
-    <section class="content-section"><div class="shell">
-      <div class="content-head reveal"><div><div class="content-eyebrow">Account progression</div><h2>A readable structure without a fake checklist.</h2></div><p>The long-term model has three layers. Exact caps come from the canonical public progression model; detailed reset, reward and persistence semantics stay in the evidence-qualified Progression reference.</p></div>
-      <div class="metric-grid"><div class="metric-card reveal"><b data-network="progression.maxLevel">—</b><span>Levels</span><small>Current public level cap.</small></div><div class="metric-card reveal"><b data-network="progression.maxPrestige">—</b><span>Prestige</span><small>World and endgame access use Prestige milestones.</small></div><div class="metric-card reveal"><b data-network="progression.maxLegacy">—</b><span>Legacy</span><small>Late Nexus difficulty gates use Legacy milestones.</small></div></div>
-      <div class="next-destination reveal"><div><small>Detailed reference</small><h3>Need exact account milestones?</h3><p>Use the Progression Guide for current caps and access gates without inferring unverified lifecycle behavior.</p></div><a class="button secondary" href="guide-progression.html">Open Progression Guide</a></div>
+  <main id="main-content">
+    <section class="mc-page-hero"><div class="shell">
+      <div class="mc-page-kicker">Main experience</div>
+      <h1 class="mc-page-title">Progress.<br/>Build your way.</h1>
+      <p class="mc-page-lead">Mining, combat, equipment and collection all push the same account forward.</p>
     </div></section>
 
-    <section class="content-section"><div class="shell">
-      <div class="content-head reveal"><div><div class="content-eyebrow">What advances the account</div><h2>Different activities, one main progression.</h2></div><p>The point is not to make every activity identical. Mining, PvP, equipment and collections each create different decisions while contributing to the same account.</p></div>
-      <div class="detail-grid">
-        <article class="detail-card reveal"><small>Mining</small><h3><span data-network="content.mines">—</span> mines across the current Worlds</h3><p>Mining follows the World structure, giving resource progression a physical route instead of a detached menu loop.</p></article>
-        <article class="detail-card reveal"><small>Combat</small><h3>PvP has progression context</h3><p>Equipment, preparation and resource value affect what players are willing to risk rather than turning combat into a disconnected queue.</p></article>
-        <article class="detail-card reveal"><small>Equipment</small><h3>Builds gain specialization</h3><p>Custom enchantments, forging and item history create reasons to care about how equipment develops over time.</p></article>
-        <article class="detail-card reveal"><small>Collection</small><h3>Talismans follow advancement</h3><p>The Talisman Codex gives World progression a collectible layer with <span data-network="content.worldProgressionTalismans">—</span> currently documented World-progression talismans.</p></article>
-        <article class="detail-card reveal"><small>Worlds</small><h3>Access becomes a milestone</h3><p>Prestige and specific boss clears unlock later Worlds, turning location itself into part of account progression.</p></article>
-        <article class="detail-card reveal"><small>Endgame</small><h3>Nexus uses a separate account threshold</h3><p>Nexus becomes a distinct endgame layer after the World route. Its current access milestone and Instance difficulty gates are maintained in the Nexus reference rather than duplicated here.</p></article>
+    <section class="mc-section"><div class="shell">
+      <div class="mc-stat-strip">
+        <div class="mc-stat"><b data-network="progression.maxLevel">—</b><span>Levels</span></div>
+        <div class="mc-stat"><b data-network="progression.maxPrestige">—</b><span>Prestige</span></div>
+        <div class="mc-stat"><b data-network="progression.maxLegacy">—</b><span>Legacy</span></div>
       </div>
     </div></section>
 
-    <section class="content-section"><div class="shell">
-      <div class="content-head reveal"><div><div class="content-eyebrow">Two progression styles</div><h2>Main progression is not the only way to spend time in Pixel.</h2></div><p>Skyblock has its own island-focused systems and quests. Collaboration foundations are documented separately as partial rather than being presented here as available.</p></div>
-      <div class="path-grid">
-        <article class="path-card reveal"><span class="path-label">Main journey</span><h3>Worlds, bosses, mining and PvP.</h3><p>Advance through the four current Worlds, meet their access conditions and continue into Nexus as a separate endgame layer.</p><div class="path-list"><span><span data-network="content.currentWorlds">—</span> Worlds</span><span>World Bosses</span><span><span data-network="content.mines">—</span> Mines</span><span>Prestige milestones</span></div><a class="button primary" href="guide-worlds.html">Worlds & Gates</a></article>
-        <article class="path-card reveal"><span class="path-label">Skyblock</span><h3>Your own island progression.</h3><p>Create and persist an island, improve it through upgrades and banking, and follow Skyblock-specific quests outside the main World route.</p><div class="path-list"><span>Own Island</span><span>Persistence</span><span>Upgrades & Bank</span><span>Skyblock Quests</span></div><a class="button secondary" href="guide-skyblock.html">Skyblock Guide</a></article>
+    <section class="mc-section"><div class="shell">
+      <div class="mc-section-head"><div><small>What drives progression</small><h2>Different systems. One account.</h2></div><p>Open the detailed Guide only when you need exact mechanics.</p></div>
+      <div class="mc-feature-grid">
+        <a class="mc-feature-card" href="guide-worlds.html"><small>Mining</small><h3><span data-network="content.mines">—</span> mines</h3><p>Resources progress physically through the World route.</p></a>
+        <a class="mc-feature-card" href="guide-stats-equipment.html"><small>Combat</small><h3>Build around your gear</h3><p>Stats, preparation and equipment define how you fight.</p></a>
+        <a class="mc-feature-card" href="guide-enchantments.html"><small>Equipment</small><h3>Specialize items</h3><p>Enchantments and equipment systems shape distinct builds.</p></a>
+        <a class="mc-feature-card" href="guide-talismans.html"><small>Collection</small><h3>Talisman Codex</h3><p>Collectible progression follows your account across Worlds.</p></a>
+        <a class="mc-feature-card" href="worlds.html"><small>Worlds</small><h3>Progression becomes geography</h3><p>Prestige and bosses unlock the next destination.</p></a>
+        <a class="mc-feature-card" href="nexus.html"><small>Endgame</small><h3>Nexus</h3><p>A permanent threshold opens Instance progression.</p></a>
       </div>
+    </div></section>
 
-      <div class="next-destination reveal"><div><small>Next</small><h3>See the systems behind progression.</h3><p>Talismans, enchantments, equipment and supporting mechanics are separated by their actual role.</p></div><a class="button primary" href="systems.html">Explore Systems</a></div>
+    <section class="mc-section"><div class="shell">
+      <div class="mc-section-head"><div><small>Choose a route</small><h2>World progression or your own island.</h2></div></div>
+      <div class="mc-route-split">
+        <article class="mc-route-panel"><small>Main journey</small><h3>Worlds</h3><p>Four current Worlds, World Bosses, mining and account gates.</p><div><a class="button primary" href="worlds.html">Explore Worlds</a></div></article>
+        <article class="mc-route-panel is-nexus"><small>Alternative progression</small><h3>Skyblock</h3><p>Build, persist and improve your own island through its dedicated systems.</p><div><a class="button secondary" href="skyblock.html">Explore Skyblock</a></div></article>
+      </div>
     </div></section>
   </main>
 
-  <footer class="site-footer"><div class="shell site-footer-inner"><span>Pixel Network · Gameplay</span><span><a href="systems.html">Systems</a> · <a href="guides.html">Guides</a> · <a href="skyblock.html">Skyblock</a> · <a href="community.html">Community</a></span></div></footer>
+  <footer class="site-footer"><div class="shell site-footer-inner"><span>Pixel Network · Gameplay</span><span><a href="systems.html">Systems</a> · <a href="guides.html">Guide</a> · <a href="worlds.html">Worlds</a> · <a href="nexus.html">Nexus</a></span></div></footer>
 </body>
 </html>

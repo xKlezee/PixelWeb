@@ -1,0 +1,32 @@
+/* Small isolation layer for the first Minecraft RPG Home pass. */
+
+.minecraft-rpg-home .mc-home-hero-media.home-nexus-frame {
+  min-height: 0;
+  border: 0;
+  box-shadow: none;
+  background: #10140f;
+}
+.minecraft-rpg-home .mc-home-hero-media .home-nexus-shot {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+.minecraft-rpg-home .mc-home-hero-media .home-nexus-shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 58% center;
+}
+.minecraft-rpg-home .mc-nexus-layout > .home-nexus-frame {
+  min-height: 520px;
+  overflow: hidden;
+  border: 4px solid #070908;
+  background: #0e1110;
+  box-shadow: 10px 12px 0 rgba(0,0,0,.32), 0 30px 70px rgba(0,0,0,.28);
+}
+
+@media (max-width: 640px) {
+  .minecraft-rpg-home .mc-nexus-layout > .home-nexus-frame { min-height: 360px; }
+}

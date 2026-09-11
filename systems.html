@@ -3,103 +3,74 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-  <meta name="theme-color" content="#0b0c0e"/>
+  <meta name="theme-color" content="#090c0b"/>
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https: data:; media-src 'self' https:; font-src 'self' https: data:; connect-src 'self'; frame-src 'none'; worker-src 'none'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
-  <meta name="description" content="Explore how progression, collections, equipment, quests and supporting systems fit together across Pixel Network."/>
+  <meta name="description" content="Explore Pixel Network systems for progression, equipment, collections, quests and endgame."/>
   <meta property="og:type" content="website"/>
   <meta property="og:site_name" content="Pixel Network"/>
   <meta property="og:title" content="Systems — Pixel Network"/>
-  <meta property="og:description" content="Explore how progression, collections, equipment, quests and supporting systems fit together across Pixel Network."/>
+  <meta property="og:description" content="Explore Pixel Network systems for progression, equipment, collections, quests and endgame."/>
   <meta property="og:url" content="https://xklezee.github.io/PixelWeb/systems.html"/>
   <meta property="og:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/>
   <meta property="og:image:alt" content="Pixel Network logo"/>
-  <meta name="twitter:card" content="summary"/>
-  <meta name="twitter:title" content="Systems — Pixel Network"/>
-  <meta name="twitter:description" content="Explore how progression, collections, equipment, quests and supporting systems fit together across Pixel Network."/>
-  <meta name="twitter:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/>
   <title>Systems — Pixel Network</title>
   <link rel="canonical" href="https://xklezee.github.io/PixelWeb/systems.html"/>
-  <link rel="icon" href="LOGO%20OFICIAL.png"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png"/>
   <link rel="stylesheet" href="site.css"/>
   <link rel="stylesheet" href="polish.css"/>
   <link rel="stylesheet" href="phase1.css"/>
-  <link rel="stylesheet" href="systems-stage10.css"/>
+  <link rel="stylesheet" href="minecraft-rpg-shell.css"/>
   <link rel="stylesheet" href="security-hardening.css"/>
   <script src="data/network.js" defer></script>
-  <script src="systems-stage10.js" defer></script>
   <script src="site.js" defer></script>
   <script src="polish.js" defer></script>
 </head>
-<body>
+<body class="minecraft-rpg-page">
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <nav class="site-nav" aria-label="Main navigation"><div class="shell nav-inner">
     <a class="brand" href="index.html"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a>
-    <div class="nav-links" id="navLinks">
-      <div class="nav-group"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html" aria-current="page"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div>
-      <div class="nav-group"><button type="button" aria-haspopup="true">Development</button><div class="nav-dropdown"><a href="development.html"><strong>Development</strong><span>Current status, roadmap and product scale.</span></a><a href="changelog.html"><strong>Changelog</strong><span>Player-facing release notes.</span></a></div></div>
-      <div class="nav-group"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="community.html"><strong>Community</strong><span>Discord, Guides and Forum.</span></a><a href="guides.html"><strong>Guides</strong><span>Detailed player reference and mechanics.</span></a><a href="forum.html"><strong>Forum</strong><span>Long-form discussion preview.</span></a></div></div>
-      <a href="team.html">About</a>
-    </div>
+    <div class="nav-links" id="navLinks"></div>
     <div class="nav-actions"><a class="button quiet nav-discord" href="https://discord.gg/7KzWpezTNZ" target="_blank" rel="noopener">Discord</a><a class="button quiet nav-store" href="store.html">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
   </div></nav>
 
-  <main>
-    <section class="systems-hero">
-      <div class="shell systems-hero-inner">
-        <div class="breadcrumbs"><a href="index.html">Pixel Network</a><span>/</span><span>Systems</span></div>
-        <div class="eyebrow">System architecture</div>
-        <h1>One account.<br><span>Systems with different jobs.</span></h1>
-        <p class="systems-hero-copy">The important part is not how many mechanics Pixel has, but how they fit together. This page separates the systems that shape account progression from those that support collection, equipment, quests and social play.</p>
-      </div>
-    </section>
-
-    <section class="systems-section"><div class="shell">
-      <div class="systems-section-head reveal"><div><div class="content-eyebrow">Progression spine</div><h2>The account changes what becomes available.</h2></div><p>Levels, Prestige and Legacy form the account progression spine. Current caps and access milestones have a dedicated evidence-qualified reference; reset, reward and persistence semantics are not inferred on this overview.</p></div>
-      <div class="systems-spine" data-systems-spine></div>
-      <div class="next-destination reveal"><div><small>Detailed progression reference</small><h3>Need the current caps and access milestones?</h3><p>The Progression Guide connects Levels, Prestige and Legacy to Worlds and Nexus while keeping still-unverified lifecycle semantics explicitly unpublished.</p></div><a class="button quiet" href="guide-progression.html">Open Progression Guide</a></div>
+  <main id="main-content">
+    <section class="mc-page-hero"><div class="shell">
+      <div class="mc-page-kicker">Systems</div>
+      <h1 class="mc-page-title">Everything has a job.</h1>
+      <p class="mc-page-lead">Progression sets the route. Equipment, collections and quests add depth around it.</p>
     </div></section>
 
-    <section class="systems-section systems-section--access"><div class="shell">
-      <div class="systems-section-head reveal"><div><div class="content-eyebrow">Access paths</div><h2>Progression unlocks different kinds of content.</h2></div><p>World progression and endgame progression use account milestones, but each has its own structure and dedicated reference.</p></div>
-      <div class="systems-route-links reveal">
-        <article class="systems-route-link">
-          <small>World access</small><h3>Progression becomes geography.</h3><p>Follow the current four-World route and see the condition attached to each transition.</p>
-          <a class="systems-route-button" href="guide-worlds.html"><span>Open Worlds Guide</span><span aria-hidden="true">→</span></a>
-        </article>
-        <article class="systems-route-link">
-          <small>Endgame access</small><h3>Endgame uses its own ladder.</h3><p>See the Nexus threshold and how Instance difficulty expands after the World route ends.</p>
-          <a class="systems-route-button" href="guide-nexus.html"><span>Open Nexus Reference</span><span aria-hidden="true">→</span></a>
-        </article>
+    <section class="mc-section"><div class="shell">
+      <div class="mc-section-head"><div><small>Account spine</small><h2>Level → Prestige → Legacy</h2></div><p>The exact gates live in the Progression Guide.</p></div>
+      <div class="mc-stat-strip">
+        <div class="mc-stat"><b data-network="progression.maxLevel">—</b><span>Level cap</span></div>
+        <div class="mc-stat"><b data-network="progression.maxPrestige">—</b><span>Prestige cap</span></div>
+        <div class="mc-stat"><b data-network="progression.maxLegacy">—</b><span>Legacy cap</span></div>
       </div>
     </div></section>
 
-    <section class="systems-section"><div class="shell">
-      <div class="systems-section-head reveal"><div><div class="content-eyebrow">Core systems</div><h2>Collection, equipment and resources reinforce progression.</h2></div><p>These mechanics add depth to the account without competing with the main progression structure.</p></div>
-      <div class="systems-core-band">
-        <article class="systems-core-column systems-core-column--codex reveal" data-systems-codex></article>
-        <div class="systems-core-stack">
-          <article class="systems-core-column reveal" data-systems-enchantments></article>
-          <article class="systems-core-column reveal" data-systems-mining></article>
-        </div>
-      </div>
-      <div class="next-destination reveal"><div><small>Shared combat & equipment reference</small><h3>Need the semantics behind Pixel's core stats?</h3><p>Stats & Equipment owns the source-verified combat stat meanings, mitigation model and equipment-family boundaries without pretending mining-specific stats have already cleared their separate audit.</p></div><a class="button quiet" href="guide-stats-equipment.html">Open Stats & Equipment</a></div>
-    </div></section>
-
-    <section class="systems-section"><div class="shell">
-      <div class="systems-section-head reveal"><div><div class="content-eyebrow">Quest tracks</div><h2>Quests live inside the systems that use them.</h2></div><p>BattlePass and Skyblock each have their own quest context.</p></div>
-      <div class="systems-quest-panel reveal">
-        <article class="systems-quest"><small>BattlePass</small><h3>Seasonal activity track.</h3><p>Its quests create a secondary progression loop around ongoing activity and seasonal rewards.</p><div class="systems-quest-tags"><span>Dedicated quests</span><span>Seasonal activity</span></div></article>
-        <article class="systems-quest"><small>Skyblock</small><h3>Island-specific progression.</h3><p>Its quests belong to the island progression path and remain separate from the main World route.</p><div class="systems-quest-tags"><span>Island quests</span><span>Own progression</span></div></article>
+    <section class="mc-section"><div class="shell">
+      <div class="mc-section-head"><div><small>Core systems</small><h2>Build, collect, improve.</h2></div></div>
+      <div class="mc-system-grid">
+        <a class="mc-guide-card" href="guide-talismans.html"><small>Collection</small><h3>Talisman Codex</h3><p>Collect, equip and combine progression effects.</p></a>
+        <a class="mc-guide-card" href="guide-enchantments.html"><small>Equipment</small><h3>Enchantments</h3><p>Specialize weapons, armor and utility gear.</p></a>
+        <a class="mc-guide-card" href="guide-stats-equipment.html"><small>Combat</small><h3>Stats & Equipment</h3><p>Understand damage, defense and equipment roles.</p></a>
+        <a class="mc-guide-card" href="guide-worlds.html"><small>Resources</small><h3>Mining</h3><p>Mines progress through the current World route.</p></a>
+        <a class="mc-guide-card" href="guide-progression.html"><small>Account</small><h3>Progression</h3><p>Levels, Prestige and Legacy unlock content.</p></a>
+        <a class="mc-guide-card" href="guide-skyblock.html"><small>Alternative</small><h3>Skyblock</h3><p>Island progression, upgrades, bank and quests.</p></a>
       </div>
     </div></section>
 
-    <section class="systems-section"><div class="shell">
-      <div class="systems-section-head reveal"><div><div class="content-eyebrow">Supporting layer</div><h2>Useful depth without equal visual weight.</h2></div><p>These systems support equipment, records, social play or rewards rather than defining the primary account route.</p></div>
-      <div class="systems-support" data-systems-support></div>
+    <section class="mc-section"><div class="shell">
+      <div class="mc-section-head"><div><small>Access</small><h2>Progression opens places.</h2></div></div>
+      <div class="mc-route-split">
+        <article class="mc-route-panel"><small>World route</small><h3>Worlds</h3><p>Prestige milestones and World Bosses open the next region.</p><div><a class="button primary" href="worlds.html">Open Worlds</a></div></article>
+        <article class="mc-route-panel is-nexus"><small>Endgame</small><h3>Nexus</h3><p><strong data-network="nexus.unlock">—</strong> permanently unlocks the current Instance ladder.</p><div><a class="button secondary" href="nexus.html">Enter Nexus</a></div></article>
+      </div>
     </div></section>
   </main>
 
-  <footer class="site-footer"><div class="shell site-footer-inner"><span>Pixel Network · Systems</span><span><a href="gameplay.html">Gameplay</a> · <a href="worlds.html">Worlds</a> · <a href="nexus.html">Nexus</a> · <a href="guides.html">Guides</a></span></div></footer>
+  <footer class="site-footer"><div class="shell site-footer-inner"><span>Pixel Network · Systems</span><span><a href="gameplay.html">Gameplay</a> · <a href="guides.html">Guide</a> · <a href="worlds.html">Worlds</a> · <a href="nexus.html">Nexus</a></span></div></footer>
 </body>
 </html>

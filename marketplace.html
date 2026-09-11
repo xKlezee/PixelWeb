@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-  <meta name="theme-color" content="#0b0c0e"/>
+  <meta name="theme-color" content="#0b0f0c"/>
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https: data:; media-src 'self' https:; font-src 'self' https: data:; connect-src 'self'; frame-src 'none'; worker-src 'none'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
   <meta name="description" content="Explore Pixel Network Marketplace collections and inspect their Minecraft cosmetics in a live 3D viewer."/>
@@ -20,11 +20,13 @@
   <meta name="twitter:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/>
   <title>Marketplace — Pixel Network</title>
   <link rel="canonical" href="https://xklezee.github.io/PixelWeb/marketplace.html"/>
-  <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png"/>
   <link rel="stylesheet" href="site.css"/>
   <link rel="stylesheet" href="polish.css"/>
   <link rel="stylesheet" href="phase1.css"/>
   <link rel="stylesheet" href="marketplace.css"/>
+  <link rel="stylesheet" href="minecraft-rpg-shell.css"/>
+  <link rel="stylesheet" href="marketplace-rpg.css"/>
   <link rel="stylesheet" href="security-hardening.css"/>
   <script src="data/network.js" defer></script>
   <script src="data/marketplace.js" defer></script>
@@ -32,12 +34,18 @@
   <script src="polish.js" defer></script>
   <script src="marketplace.js" defer></script>
 </head>
-<body>
+<body class="minecraft-rpg-page marketplace-rpg-page">
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <nav class="site-nav" aria-label="Main navigation"><div class="shell nav-inner">
     <a class="brand" href="index.html"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a>
-    <div class="nav-links" id="navLinks"><div class="nav-group"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div><a href="marketplace.html" aria-current="page">Marketplace</a><div class="nav-group"><button type="button" aria-haspopup="true">Development</button><div class="nav-dropdown"><a href="development.html"><strong>Development</strong><span>Current status, roadmap and product scale.</span></a><a href="changelog.html"><strong>Changelog</strong><span>Player-facing release notes.</span></a></div></div><div class="nav-group"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="community.html"><strong>Community</strong><span>Discord and network resources.</span></a><a href="guides.html"><strong>Guides</strong><span>Detailed player reference and mechanics.</span></a></div></div><a href="team.html">About</a></div>
+    <div class="nav-links" id="navLinks">
+      <div class="nav-group"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div>
+      <a class="nav-marketplace" href="marketplace.html" aria-current="page">Marketplace</a>
+      <div class="nav-group"><button type="button" aria-haspopup="true">Guide</button><div class="nav-dropdown"><a href="guides.html#mechanics"><strong>Mechanics</strong><span>Gameplay systems and how they behave.</span></a><a href="guides.html#tools"><strong>Tools</strong><span>Tool families and supporting systems.</span></a><a href="guides.html#armor"><strong>Armor</strong><span>Defense, equipment and modifiers.</span></a><a href="guides.html#specials"><strong>Specials</strong><span>Talismans, Nexus and special systems.</span></a><a href="guides.html#boosts"><strong>Boosts</strong><span>Effects that improve performance.</span></a><a href="guides.html#progression"><strong>Progression</strong><span>Worlds, Prestige and progression routes.</span></a></div></div>
+      <div class="nav-group"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="leaderboards.html"><strong>Leaderboards</strong><span>Public rankings and progression.</span></a><a href="changelog.html"><strong>Changelog</strong><span>Player-facing release notes.</span></a><a href="rules.html"><strong>Rules</strong><span>Current player and community rules.</span></a><a href="staff.html"><strong>Staff Team</strong><span>The published Pixel Network team.</span></a></div></div>
+      <a href="team.html">About</a>
+    </div>
     <div class="nav-actions"><a class="button quiet nav-discord" href="https://discord.gg/7KzWpezTNZ" target="_blank" rel="noopener">Discord</a><a class="button quiet nav-store" href="store.html">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
   </div></nav>
 
@@ -47,22 +55,23 @@
   </div></nav>
 
   <main id="main-content" data-marketplace-root>
-    <section class="page-hero" id="overview"><div class="shell"><div class="breadcrumbs"><a href="index.html">Pixel Network</a><span>/</span><span>Marketplace</span></div><div class="page-hero-grid"><div><div class="eyebrow">Marketplace</div><h1>Cosmetics built to be seen from every angle.</h1><div class="marketplace-hero-note">Live 3D catalogue</div></div><p>Explore Pixel Network cosmetic collections through their actual in-game models. Each collection keeps its rotation and set identity while giving every piece a clean interactive presentation.</p></div></div></section>
-
-    <section class="content-section" id="loot-boxes"><div class="shell">
-      <div class="content-head reveal"><div><div class="content-eyebrow">Collections</div><h2>Loot Box Rotation 01.</h2></div><p>The first Marketplace rotation introduces the Luminite collection as a unified armor set.</p></div>
-      <div class="marketplace-route reveal">
-        <div class="marketplace-route-step"><small>Marketplace</small><strong>Loot Boxes</strong></div>
-        <div class="marketplace-route-step" id="rotation-01"><small>Rotation</small><strong>Rotation 01</strong></div>
-        <div class="marketplace-route-step active"><small>Collection</small><strong>Luminite</strong></div>
-        <div class="marketplace-route-step"><small>Pieces</small><strong>5 cosmetics</strong></div>
-      </div>
+    <section class="marketplace-hero" id="overview"><div class="shell">
+      <div class="breadcrumbs"><a href="index.html">Pixel Network</a><span>/</span><span>Marketplace</span></div>
+      <div class="eyebrow">Marketplace</div>
+      <h1>Wear the collection.<br/>Inspect every piece.</h1>
+      <p class="marketplace-hero-copy">Live Minecraft models, presented as the cosmetics players actually see in game.</p>
+      <div class="marketplace-hero-note">Live 3D catalogue</div>
     </div></section>
 
-    <section class="content-section" id="luminite"><div class="shell">
-      <div class="content-head reveal"><div><div class="content-eyebrow">Luminite · Rotation 01</div><h2>Luminite collection.</h2></div><p>Move through the pieces below and inspect each cosmetic directly in 3D.</p></div>
+    <section class="marketplace-collection-section" id="loot-boxes"><div class="shell">
+      <div class="marketplace-route reveal">
+        <div class="marketplace-route-step"><small>Category</small><strong>Loot Boxes</strong></div>
+        <div class="marketplace-route-step" id="rotation-01"><small>Rotation</small><strong>Rotation 01</strong></div>
+        <div class="marketplace-route-step active"><small>Collection</small><strong>Luminite</strong></div>
+        <div class="marketplace-route-step"><small>Set</small><strong>5 cosmetics</strong></div>
+      </div>
 
-      <div class="marketplace-shell reveal">
+      <div class="marketplace-shell reveal" id="luminite">
         <div class="marketplace-viewer-card">
           <div class="marketplace-model-stage is-loading" data-model-stage aria-label="Interactive 3D cosmetic model">
             <canvas width="900" height="700" data-model-canvas aria-hidden="true"></canvas>
@@ -70,10 +79,10 @@
         </div>
 
         <aside class="marketplace-detail-card" aria-label="Selected item details">
-          <div class="content-eyebrow">Luminite collection</div>
+          <div class="content-eyebrow">Luminite · Rotation 01</div>
           <h2 data-active-name>Helmet</h2>
           <div class="marketplace-variant" data-active-variant>3D</div>
-          <p class="marketplace-detail-copy">A cosmetic piece from the Luminite collection. Select another piece below to inspect it in the same clean model viewer.</p>
+          <p class="marketplace-detail-copy">Drag to inspect. Scroll to zoom. Choose another piece below.</p>
           <div class="marketplace-facts">
             <div class="marketplace-fact"><span>Collection</span><strong data-active-collection>Luminite</strong></div>
             <div class="marketplace-fact"><span>Rotation</span><strong data-active-rotation>Rotation 01</strong></div>
@@ -82,15 +91,13 @@
         </aside>
       </div>
 
-      <div class="content-head reveal marketplace-items-head"><div><div class="content-eyebrow">Pieces</div><h2>Choose a cosmetic.</h2></div><p>Every card is a live miniature of the model, not a flat texture preview.</p></div>
+      <div class="content-head reveal marketplace-items-head"><div><div class="content-eyebrow">Collection pieces</div><h2>Choose a cosmetic.</h2></div></div>
       <div class="marketplace-item-grid reveal" data-marketplace-items aria-label="Luminite Marketplace items"></div>
-    </div></section>
 
-    <section class="content-section"><div class="shell">
-      <div class="next-destination reveal"><div><small>Related</small><h3>Store and Marketplace remain separate surfaces.</h3><p>Marketplace is the cosmetic catalogue. Current commercial offers and purchase support remain on Store.</p></div><a class="button primary" href="store.html">Open Store</a></div>
+      <div class="marketplace-store-bridge reveal"><div><strong>Looking to purchase?</strong><p>Marketplace is the visual catalogue. Current offers remain on the official Store.</p></div><a class="button primary" href="store.html">Open Store</a></div>
     </div></section>
   </main>
 
-  <footer class="site-footer"><div class="shell site-footer-inner"><span>Pixel Network · Marketplace</span><span><a href="store.html">Store</a> · <a href="gameplay.html">Gameplay</a> · <a href="community.html">Community</a> · <a href="index.html">Home</a></span></div></footer>
+  <footer class="site-footer"><div class="shell site-footer-inner"><span>Pixel Network · Java Edition</span><span><a href="marketplace.html">Marketplace</a> · <a href="store.html">Store</a> · <a href="guides.html">Guide</a> · <a href="community.html">Community</a> · <a href="team.html">About</a></span></div></footer>
 </body>
 </html>
