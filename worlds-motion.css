@@ -1,0 +1,71 @@
+/* Pixel Network — Worlds motion tuning.
+   One deliberate wheel/trackpad gesture advances one World; visual motion is kept on a short, compositor-friendly cadence. */
+
+.worlds-region-page {
+  overscroll-behavior: none;
+}
+
+.worlds-region-stage {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.worlds-region-panel {
+  will-change: opacity;
+  transform: translateZ(0);
+  transition:
+    opacity .62s cubic-bezier(.16, 1, .3, 1),
+    visibility 0s linear .62s;
+}
+
+.worlds-region-background img {
+  transform: translateZ(0) scale(1.045);
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+  transition:
+    transform .72s cubic-bezier(.16, 1, .3, 1),
+    opacity .5s ease-out,
+    filter .5s ease-out;
+}
+
+.worlds-region-panel.is-active .worlds-region-background img {
+  transform: translateZ(0) scale(1.008);
+}
+
+.worlds-region-copy {
+  transform: translateY(18px);
+  will-change: transform, opacity;
+  transition:
+    transform .52s cubic-bezier(.16, 1, .3, 1) .055s,
+    opacity .36s ease-out .055s;
+}
+
+.worlds-region-meta {
+  transform: translateX(16px);
+  will-change: transform, opacity;
+  transition:
+    opacity .4s ease-out .08s,
+    transform .52s cubic-bezier(.16, 1, .3, 1) .08s;
+}
+
+.worlds-region-node::before,
+.worlds-region-node span,
+.worlds-region-node strong {
+  transition-duration: .18s;
+}
+
+@media (max-width: 700px) {
+  .worlds-region-stage {
+    touch-action: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .worlds-region-panel,
+  .worlds-region-background img,
+  .worlds-region-copy,
+  .worlds-region-meta {
+    transition: none;
+    will-change: auto;
+  }
+}
