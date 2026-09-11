@@ -143,6 +143,12 @@
   background: rgba(246,201,69,.075) !important;
 }
 
+.wiki-browse-group[hidden],
+.wiki-browse-subgroup[hidden],
+.wiki-browse-menu a[hidden] {
+  display: none !important;
+}
+
 @media (max-width: 980px) {
   .wiki-index-sidebar nav.wiki-browse-tree {
     grid-template-columns: repeat(2,minmax(0,1fr));
