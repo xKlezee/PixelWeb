@@ -1,0 +1,214 @@
+/* Pixel Network — canonical warm RPG identity.
+   Gold / amber / orange are the global interaction accents. World/boss artwork keeps
+   its own authored colors; shared navigation, categories and selection states do not. */
+
+:root {
+  --accent-gold: #f6c945;
+  --accent-gold-strong: #dcae27;
+  --accent-amber: #eaa52f;
+  --accent-orange: #cf731e;
+  --accent-copper: #92501c;
+  --accent-ivory: #fff1c2;
+  --accent-soft: rgba(246,201,69,.085);
+  --accent-soft-strong: rgba(234,165,47,.14);
+  --accent-line: rgba(246,201,69,.30);
+  --accent-line-strong: rgba(234,165,47,.68);
+  --accent-glow: rgba(234,165,47,.18);
+
+  /* Compatibility aliases for existing components while the visual language is warm. */
+  --pixel-blue: var(--accent-gold);
+  --pixel-blue-soft: var(--accent-soft);
+  --pixel-blue-line: var(--accent-line);
+  --mc-blue: var(--accent-gold);
+  --mc-blue-deep: #9b5f18;
+  --mc-chrome-blue: var(--accent-gold);
+  --mc-gold: #edc35a;
+  --market-blue: var(--accent-amber);
+  --wiki-blue: var(--accent-gold);
+  --wiki-blue-soft: var(--accent-soft);
+  --wiki-gold: #e5bd54;
+  --px-wiki-gold: #e7bd4b;
+  --px-wiki-gold-soft: rgba(231,189,75,.10);
+}
+
+/* Global navigation and current-location language. */
+.nav-group > button:hover,
+.nav-group > button:focus-visible,
+.nav-group.contains-current > button,
+.nav-links > a:hover,
+.nav-links > a:focus-visible,
+.nav-links > a[aria-current='page'] {
+  color: #fff2c7 !important;
+  background: linear-gradient(180deg, rgba(246,201,69,.075), rgba(207,115,30,.045)) !important;
+  box-shadow: inset 0 -2px 0 var(--accent-line-strong) !important;
+}
+
+.nav-dropdown a:hover,
+.nav-dropdown a:focus-visible,
+.nav-dropdown a[aria-current='page'] {
+  color: #fff4d0 !important;
+  background: linear-gradient(90deg, rgba(246,201,69,.105), rgba(207,115,30,.035)) !important;
+}
+
+/* Explore / section rails: selection is gold, not cool blue. */
+.minecraft-rpg-page:not(.minecraft-rpg-secondary) .section-subnav-links a:hover,
+.minecraft-rpg-page:not(.minecraft-rpg-secondary) .section-subnav-links a.is-current,
+.minecraft-rpg-page:not(.minecraft-rpg-secondary) .section-subnav-links a[aria-current='page'],
+.skyblock-rpg-page .section-subnav-links a:hover,
+.skyblock-rpg-page .section-subnav-links a.is-current,
+.skyblock-rpg-page .section-subnav-links a[aria-current='page'],
+.worlds-region-page .section-subnav-links a:hover,
+.worlds-region-page .section-subnav-links a.is-current,
+.worlds-region-page .section-subnav-links a[aria-current='page'],
+.nexus-encounter-page .section-subnav-links a:hover,
+.nexus-encounter-page .section-subnav-links a.is-current,
+.nexus-encounter-page .section-subnav-links a[aria-current='page'] {
+  color: #fff3c5 !important;
+  background: linear-gradient(180deg, rgba(246,201,69,.085), rgba(207,115,30,.035)) !important;
+  box-shadow: inset 0 -2px 0 var(--accent-line-strong) !important;
+}
+
+.section-subnav-label,
+.mc-page-kicker,
+.mc-section-head small,
+.mc-section-kicker,
+.content-eyebrow,
+.eyebrow {
+  color: #e7bd4b;
+}
+
+/* Guide / Wiki: categories, side navigation, callouts and active references share one palette. */
+.guides-main,
+.guide-rpg-page {
+  --wiki-blue: var(--accent-gold);
+  --wiki-blue-soft: var(--accent-soft);
+  --wiki-gold: #e5bd54;
+  --px-wiki-gold: #e7bd4b;
+  --px-wiki-gold-soft: rgba(231,189,75,.10);
+}
+
+.guides-nav-group a:hover,
+.guides-nav-group a:focus-visible,
+.guides-nav-group a[aria-current='page'],
+.wiki-index-sidebar a:hover,
+.wiki-index-sidebar a:focus-visible,
+.wiki-index-sidebar a[aria-current='page'] {
+  color: #fff3c5 !important;
+  border-color: var(--accent-gold) !important;
+  background: linear-gradient(90deg, rgba(246,201,69,.105), rgba(207,115,30,.018) 86%, transparent) !important;
+}
+
+.wiki-card:hover,
+.wiki-card:focus-visible,
+.guide-reference-item:hover,
+.guide-reference-item:focus-visible {
+  border-color: rgba(246,201,69,.26) !important;
+}
+
+body .guides-main .stats-layer-card {
+  border-left-color: var(--accent-amber) !important;
+  background: rgba(234,165,47,.04) !important;
+}
+
+.guides-search:focus,
+.guides-search:focus-visible {
+  border-color: #a96c1f !important;
+  box-shadow: inset 3px 3px 0 rgba(0,0,0,.28), 0 0 0 2px rgba(246,201,69,.13) !important;
+}
+
+/* Marketplace selection states use amber/gold while item artwork remains untouched. */
+.marketplace-rpg-page .marketplace-subnav a.is-current,
+.marketplace-rpg-page .marketplace-subnav a[aria-current='location'] {
+  color: #fff3c5 !important;
+  border-color: var(--accent-line) !important;
+  background: var(--accent-soft) !important;
+  box-shadow: inset 0 -2px 0 var(--accent-line-strong) !important;
+}
+.marketplace-route-step.active,
+.marketplace-item-card.is-active {
+  border-color: var(--accent-line) !important;
+  background: linear-gradient(145deg, rgba(54,42,22,.94), rgba(19,16,12,.98)) !important;
+}
+.marketplace-route-step.active strong,
+.marketplace-variant { color: #f0c65d !important; }
+.marketplace-model-stage:focus-visible,
+.marketplace-item-card:focus-visible {
+  outline-color: rgba(246,201,69,.84) !important;
+  box-shadow: inset 0 0 0 2px rgba(246,201,69,.58) !important;
+}
+
+/* Staff/About shared identity. Equal owners intentionally share the same accent. */
+.owner-profile,
+.mc-owner-card { --owner-accent: var(--accent-gold); }
+.mc-owner-visual {
+  background: radial-gradient(circle at 50% 45%, rgba(246,201,69,.10), transparent 40%), #0c100d !important;
+}
+.skin-viewer:focus-visible { outline-color: #f6c945; }
+
+.about-overview-card {
+  background:
+    radial-gradient(circle at 80% 18%, rgba(246,201,69,.085), transparent 34%),
+    linear-gradient(155deg,#302c22,#181713 72%) !important;
+}
+.about-disclaimer-panel {
+  background:
+    radial-gradient(circle at 80% 18%, rgba(234,165,47,.075), transparent 32%),
+    linear-gradient(155deg,#2a271f,#171612 72%) !important;
+}
+.about-text-link,
+.site-footer-links a:hover,
+.site-footer-links a:focus-visible { color: #edc45c !important; }
+
+/* Immersive pages: warm UI focus and dialog accents without recoloring authored media. */
+.worlds-region-stage:focus-visible,
+.nexus-encounter-stage:focus-visible {
+  box-shadow: inset 0 0 0 2px rgba(246,201,69,.62) !important;
+}
+.worlds-region-dialog-eyebrow { color: #e7bd4b !important; }
+.worlds-region-dialog-note {
+  border-left-color: var(--accent-amber) !important;
+  background: rgba(234,165,47,.045) !important;
+}
+
+/* Home: the shared identity carries into the late-loaded Minecraft home layer. */
+body.minecraft-rpg-home {
+  background:
+    radial-gradient(1100px 760px at 50% -10%, rgba(234,165,47,.075), transparent 58%),
+    linear-gradient(180deg,#0d0e0b 0%,#0a0a08 54%,#070705 100%) !important;
+}
+.minecraft-rpg-home .scroll-progress {
+  background: linear-gradient(90deg,#92501c,#eaa52f,#f6c945) !important;
+  box-shadow: 0 0 16px rgba(234,165,47,.30) !important;
+}
+.minecraft-rpg-home .nav-group > button:hover,
+.minecraft-rpg-home .nav-links > a:hover,
+.minecraft-rpg-home .nav-group.contains-current > button,
+.minecraft-rpg-home .nav-links > a[aria-current='page'] {
+  box-shadow: inset 0 -2px 0 var(--accent-line-strong) !important;
+}
+.minecraft-rpg-home .nav-dropdown a:hover { background: var(--accent-soft) !important; }
+.minecraft-rpg-home .button.primary:not(.nav-play) {
+  color: #211405 !important;
+  background: linear-gradient(180deg,#f8d365,#d99a28) !important;
+}
+.minecraft-rpg-home .mc-home-title em { color: #f1c95d !important; }
+.minecraft-rpg-home .mc-home-mark::before { background: var(--accent-gold) !important; }
+.minecraft-rpg-home .mc-path-card::before {
+  background:
+    radial-gradient(circle at 70% 24%, rgba(234,165,47,.12), transparent 32%),
+    linear-gradient(135deg, rgba(255,255,255,.045), transparent 38%) !important;
+}
+.minecraft-rpg-home .mc-path-card .mc-card-arrow,
+.minecraft-rpg-home .mc-section-link::after { color: var(--accent-gold) !important; }
+.minecraft-rpg-home .mc-market-cube::before { background: rgba(234,165,47,.19) !important; }
+.minecraft-rpg-home .mc-market-cube::after {
+  background: #f4c95b !important;
+  box-shadow: 0 0 24px rgba(234,165,47,.42) !important;
+}
+
+/* Keep Store as the strongest purchase CTA; Discord and Play remain neutral gray in header. */
+.nav-actions .nav-store,
+.nav-actions .button.quiet.nav-store {
+  border-color: #76500b !important;
+  background: linear-gradient(180deg,#f7cf57 0%,#dfaa25 54%,#b87810 100%) !important;
+}
