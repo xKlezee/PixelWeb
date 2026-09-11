@@ -3,85 +3,59 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-  <meta name="theme-color" content="#0b0c0e"/>
+  <meta name="theme-color" content="#07090c"/>
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https: data:; media-src 'self' https:; font-src 'self' https: data:; connect-src 'self'; frame-src 'none'; worker-src 'none'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
-  <meta name="description" content="Explore Pixel Network's four current worlds: Overworld, Pirate Kingdom, Nether and Winter, with their bosses, mines and progression gates."/>
+  <meta name="description" content="Explore Pixel Network's four current worlds through an immersive region selector: Overworld, Pirate Kingdom, Nether and Winter."/>
   <meta property="og:type" content="website"/>
   <meta property="og:site_name" content="Pixel Network"/>
   <meta property="og:title" content="Worlds — Pixel Network"/>
-  <meta property="og:description" content="Explore Pixel Network's four current worlds: Overworld, Pirate Kingdom, Nether and Winter, with their bosses, mines and progression gates."/>
+  <meta property="og:description" content="Explore Pixel Network's four current worlds through an immersive region selector: Overworld, Pirate Kingdom, Nether and Winter."/>
   <meta property="og:url" content="https://xklezee.github.io/PixelWeb/worlds.html"/>
   <meta property="og:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/>
   <meta property="og:image:alt" content="Pixel Network logo"/>
   <meta name="twitter:card" content="summary"/>
   <meta name="twitter:title" content="Worlds — Pixel Network"/>
-  <meta name="twitter:description" content="Explore Pixel Network's four current worlds: Overworld, Pirate Kingdom, Nether and Winter, with their bosses, mines and progression gates."/>
+  <meta name="twitter:description" content="Explore Pixel Network's four current worlds through an immersive region selector: Overworld, Pirate Kingdom, Nether and Winter."/>
   <meta name="twitter:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/>
   <title>Worlds — Pixel Network</title>
   <link rel="canonical" href="https://xklezee.github.io/PixelWeb/worlds.html"/>
-  <link rel="icon" href="LOGO%20OFICIAL.png"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png"/>
   <link rel="stylesheet" href="site.css"/>
   <link rel="stylesheet" href="polish.css"/>
   <link rel="stylesheet" href="phase1.css"/>
-  <link rel="stylesheet" href="worlds-stage8.css"/>
-  <link rel="stylesheet" href="worlds-stage8-media.css"/>
+  <link rel="stylesheet" href="worlds-regions.css"/>
   <link rel="stylesheet" href="security-hardening.css"/>
   <script src="data/network.js" defer></script>
   <script src="data/worlds-media.js" defer></script>
-  <script src="worlds-stage8.js" defer></script>
+  <script src="worlds-regions.js" defer></script>
   <script src="site.js" defer></script>
   <script src="polish.js" defer></script>
 </head>
-<body>
+<body class="worlds-region-page">
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
   <nav class="site-nav" aria-label="Main navigation"><div class="shell nav-inner">
     <a class="brand" href="index.html"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a>
     <div class="nav-links" id="navLinks">
-      <div class="nav-group"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html" aria-current="page"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div>
-      <div class="nav-group"><button type="button" aria-haspopup="true">Development</button><div class="nav-dropdown"><a href="development.html"><strong>Development</strong><span>Current status, roadmap and product scale.</span></a><a href="changelog.html"><strong>Changelog</strong><span>Player-facing release notes.</span></a></div></div>
-      <div class="nav-group"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="community.html"><strong>Community</strong><span>Discord, Guides and Forum.</span></a><a href="guides.html"><strong>Guides</strong><span>Detailed player reference and mechanics.</span></a><a href="forum.html"><strong>Forum</strong><span>Long-form discussion preview.</span></a></div></div>
+      <div class="nav-group contains-current"><button type="button" aria-haspopup="true">Explore</button><div class="nav-dropdown"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html" aria-current="page"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div>
+      <a class="nav-marketplace" href="marketplace.html">Marketplace</a>
+      <div class="nav-group"><button type="button" aria-haspopup="true">Guide</button><div class="nav-dropdown"><a href="guides.html#mechanics"><strong>Mechanics</strong><span>Gameplay systems and how they behave.</span></a><a href="guides.html#tools"><strong>Tools</strong><span>Tool families and their supporting systems.</span></a><a href="guides.html#armor"><strong>Armor</strong><span>Defense, equipment and armor modifiers.</span></a><a href="guides.html#specials"><strong>Specials</strong><span>Talismans, Nexus and specialized systems.</span></a><a href="guides.html#boosts"><strong>Boosts</strong><span>Effects and systems that improve performance.</span></a><a href="guides.html#progression"><strong>Progression</strong><span>Getting started, Worlds, Prestige and progression routes.</span></a></div></div>
+      <div class="nav-group"><button type="button" aria-haspopup="true">Community</button><div class="nav-dropdown"><a href="leaderboards.html"><strong>Leaderboards</strong><span>Public rankings and competitive progression.</span></a><a href="changelog.html"><strong>Changelog</strong><span>Player-facing release notes.</span></a><a href="rules.html"><strong>Rules</strong><span>Current player and community rules.</span></a><a href="staff.html"><strong>Staff Team</strong><span>The currently published Pixel Network team.</span></a></div></div>
       <a href="team.html">About</a>
     </div>
     <div class="nav-actions"><a class="button quiet nav-discord" href="https://discord.gg/7KzWpezTNZ" target="_blank" rel="noopener">Discord</a><a class="button quiet nav-store" href="store.html">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
   </div></nav>
 
-  <main>
-    <section class="worlds-visual-hero">
-      <div class="shell">
-        <div class="breadcrumbs"><a href="index.html">Pixel Network</a><span>/</span><span>Worlds</span></div>
-        <div class="worlds-hero-grid">
-          <div><div class="eyebrow">World progression</div><h1>Four worlds.<br><span>One route forward.</span></h1><div class="worlds-hero-meta"><span><span data-network="content.currentWorlds">—</span> world stages</span><span><span data-network="content.mines">—</span> mines</span><span><span data-network="content.worldBossEncounters">—</span> current boss encounters</span></div></div>
-          <p class="worlds-hero-copy">Overworld, Pirate Kingdom, Nether and Winter are the complete current World route. The first three transitions combine an account milestone with the required World Boss clear, while Kraken remains optional. Nexus access is handled separately through the account progression model.</p>
-        </div>
-      </div>
+  <main class="worlds-region-main" id="main-content">
+    <section class="worlds-region-stage" data-worlds-region-stage tabindex="0" aria-label="Pixel Network Worlds. Use the mouse wheel, swipe, arrow keys or the region nodes to move between Worlds.">
+      <nav class="worlds-region-rail" data-worlds-region-rail aria-label="World selection"></nav>
+      <div data-worlds-region-panels></div>
+      <div class="worlds-region-hint" aria-hidden="true">Scroll to travel</div>
+      <div class="worlds-region-counter" aria-hidden="true"><strong data-worlds-region-current>01</strong><span>/</span><span data-worlds-region-total>04</span></div>
     </section>
 
-    <section class="worlds-visual-section">
-      <div class="worlds-visual-shell">
-        <div class="worlds-intro reveal"><div><div class="content-eyebrow">The route</div><h2>See the four-World progression before reading the rules.</h2></div><p>The visual layer is data-driven. Each card represents one current World; Nexus is a separate endgame destination rather than a fifth World.</p></div>
-        <div class="worlds-card-rail" data-worlds-visual-rail aria-label="Pixel Network four-world progression"></div>
-        <div class="worlds-progress" data-worlds-progress aria-label="Progression through Pixel Network's four current worlds"></div>
-      </div>
-    </section>
-
-    <section class="content-section"><div class="shell">
-      <div class="content-head reveal"><div><div class="content-eyebrow">Gate logic</div><h2>The first three World transitions combine account progression + combat.</h2></div><p>Moving from Overworld to Pirate Kingdom, Pirate Kingdom to Nether and Nether to Winter requires both the relevant account milestone and the progression boss of the previous World.</p></div>
-      <div class="path-grid">
-        <article class="path-card reveal"><span class="path-label">World transitions</span><h3>Three gates move between the four Worlds.</h3><p>The exact requirements below come directly from the canonical World model rather than being maintained independently by this page.</p><div class="path-list"><span data-network="worlds.0.nextGate">—</span><span data-network="worlds.1.nextGate">—</span><span data-network="worlds.2.nextGate">—</span></div></article>
-        <article class="path-card reveal"><span class="path-label">After the World route</span><h3>Winter and Nexus use separate conditions.</h3><p>Viking is Winter's final World Boss, but it does not gate Nexus. Nexus becomes permanently available through its own account milestone.</p><div class="path-list"><span>World 4 is Winter</span><span>Viking closes Winter's boss arc</span><span><span data-network="nexus.unlock">—</span> unlocks Nexus</span></div></article>
-      </div>
-    </div></section>
-
-    <section class="content-section"><div class="shell">
-      <div class="content-head reveal"><div><div class="content-eyebrow">Encounter roles</div><h2><span data-network="content.worldBossEncounters">—</span> encounters across <span data-network="content.currentWorlds">—</span> Worlds.</h2></div><p>Beholder, HollowKeeper and Eldric gate later Worlds. Viking is Winter's final World Boss. Kraken remains a secondary Pirate Kingdom encounter and gates nothing.</p></div>
-      <div class="worlds-boss-strip" data-worlds-boss-strip></div>
-
-      <div class="next-destination reveal"><div><small>Endgame</small><h3>Nexus uses a separate account milestone.</h3><p>The current canonical threshold is <strong data-network="nexus.unlock">—</strong>. Nexus is a permanent endgame unlock with its own Instance difficulty ladder, and Viking is not required for access.</p></div><a class="button primary" href="guide-nexus.html">Open Nexus Reference</a></div>
-      <div class="next-destination reveal"><div><small>Detailed route</small><h3>Need the exact World reference?</h3><p>World order, mine counts, boss roles and access gates are maintained in the Worlds & Gates guide.</p></div><a class="button secondary" href="guide-worlds.html">Open Worlds & Gates</a></div>
-    </div></section>
+    <dialog class="worlds-region-dialog" data-worlds-region-dialog aria-label="World details"></dialog>
   </main>
-
-  <footer class="site-footer"><div class="shell site-footer-inner"><span>Pixel Network · Worlds</span><span><a href="systems.html">Systems</a> · <a href="guide-worlds.html">Guide</a> · <a href="nexus.html">Nexus</a> · <a href="development.html">Development</a></span></div></footer>
 </body>
 </html>
