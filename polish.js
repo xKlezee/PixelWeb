@@ -349,11 +349,13 @@
       navActions.prepend(desktopDiscord);
     }
     configureDiscordLink(desktopDiscord);
+
+    const desktopPlay = navActions.querySelector('.nav-play');
     let desktopStore = navActions.querySelector('.nav-store');
     if (!desktopStore) {
       desktopStore = document.createElement('a');
       desktopStore.className = 'button quiet nav-store';
-      navActions.insertBefore(desktopStore, navActions.querySelector('.nav-play') || navToggle || null);
+      navActions.insertBefore(desktopStore, navToggle || null);
     }
     desktopStore.textContent = 'Store';
     desktopStore.href = storeLanding;
@@ -361,6 +363,11 @@
     desktopStore.removeAttribute('rel');
     if (currentPage === storeLanding) desktopStore.setAttribute('aria-current', 'page');
     else desktopStore.removeAttribute('aria-current');
+
+    // Keep source/focus order identical to the visual desktop order.
+    navActions.insertBefore(desktopDiscord, desktopPlay || desktopStore || navToggle || null);
+    if (desktopPlay) navActions.insertBefore(desktopPlay, desktopStore || navToggle || null);
+    navActions.insertBefore(desktopStore, navToggle || null);
   }
 
   if (navLinks) {
