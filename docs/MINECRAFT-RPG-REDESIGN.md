@@ -136,6 +136,36 @@ Guide categories remain:
 
 All current Guide documents must stay reachable. A Guide may appear in more than one category when its subject genuinely crosses categories.
 
+## Secondary-page contract
+
+The secondary pages use the same Minecraft RPG material language while staying intentionally short.
+
+- `skyblock.html` presents persistence, island economy and Skyblock quests as the three current pillars; partial team controls stay clearly separated.
+- `community.html` is a portal hub for Leaderboards, Changelog, Rules and Staff Team plus Discord.
+- `leaderboards.html` never invents standings while a verified source is unavailable.
+- `rules.html` never reconstructs a ruleset from stale sources.
+- `changelog.html` is now a Community destination and no longer depends on the retired Development category.
+- `staff.html` is the compact public roster.
+- `team.html` keeps Klezee and PxlMads visually equal and preserves the interactive skin viewers.
+- `store.html` focuses on the official Store, cumulative rank path and current purchase categories without publishing unverified thresholds.
+
+## Detailed Guide presentation
+
+Detailed `guide-*.html` pages keep their current factual content, tables, evidence labels and page-specific scripts. The redesign changes presentation only.
+
+`guide-rpg.css` is loaded through the shared `guides-status.css` entry point so all current detailed Guides receive the same Minecraft RPG document skin without editing each source document independently.
+
+The guide layer may change:
+
+- sidebar material and framing;
+- page header framing;
+- table presentation;
+- callout presentation;
+- evidence badge styling;
+- spacing and visual hierarchy.
+
+It must not silently change guide facts, evidence claims, values or source boundaries.
+
 ## Existing systems that must survive the redesign
 
 Visual work must not casually rewrite or replace these runtime/data contracts:
@@ -171,13 +201,19 @@ Long-form explanation belongs in detailed Guide/Changelog pages, not Home or vis
 
 ## Current redesign pass
 
-The first branch pass currently changes only presentation and page composition:
+The draft redesign currently covers:
 
 - Home rebuilt around Minecraft-first scenes and shorter copy.
+- Worlds preserved as the production full-screen region selector.
 - Nexus converted to the same scene/slider interaction grammar as Worlds.
 - Gameplay simplified to a progression overview.
 - Systems simplified to a visual system index.
 - Guide landing rebuilt around the six canonical Guide categories.
-- Shared Minecraft RPG material language added for interior pages.
+- Skyblock simplified to its three current pillars plus an explicit partial-feature boundary.
+- Community, Leaderboards, Changelog, Rules and Staff Team aligned to the new material language.
+- About reduced to two equal owner profiles while preserving both live skin viewers.
+- Store reduced to the official CTA, cumulative rank path, purchase categories and one progression boundary note.
+- Detailed Guides receive a shared Minecraft RPG document skin without changing their factual content.
+- Shared Minecraft RPG material language added for interior and secondary pages.
 
 Production `main` remains untouched while PR #11 stays in draft.
