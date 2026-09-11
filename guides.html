@@ -3,30 +3,31 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-  <meta name="theme-color" content="#090c0b"/>
+  <meta name="theme-color" content="#0b0f0c"/>
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https: data:; media-src 'self' https:; font-src 'self' https: data:; connect-src 'self'; frame-src 'none'; worker-src 'none'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
-  <meta name="description" content="Browse Pixel Network guides by Mechanics, Tools, Armor, Specials, Boosts and Progression."/>
+  <meta name="description" content="Pixel Network Wiki — browse player guides for mechanics, tools, armor, specials, boosts and progression."/>
   <meta property="og:type" content="website"/>
   <meta property="og:site_name" content="Pixel Network"/>
-  <meta property="og:title" content="Guide — Pixel Network"/>
-  <meta property="og:description" content="Browse Pixel Network guides by Mechanics, Tools, Armor, Specials, Boosts and Progression."/>
+  <meta property="og:title" content="Guide — Pixel Network Wiki"/>
+  <meta property="og:description" content="Browse Pixel Network player guides as a compact game wiki."/>
   <meta property="og:url" content="https://xklezee.github.io/PixelWeb/guides.html"/>
   <meta property="og:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/>
   <meta property="og:image:alt" content="Pixel Network logo"/>
-  <title>Guide — Pixel Network</title>
+  <title>Guide — Pixel Network Wiki</title>
   <link rel="canonical" href="https://xklezee.github.io/PixelWeb/guides.html"/>
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png"/>
   <link rel="stylesheet" href="site.css"/>
   <link rel="stylesheet" href="polish.css"/>
   <link rel="stylesheet" href="phase1.css"/>
-  <link rel="stylesheet" href="minecraft-rpg-shell.css"/>
+  <link rel="stylesheet" href="guides.css"/>
   <link rel="stylesheet" href="security-hardening.css"/>
   <script src="data/network.js" defer></script>
   <script src="site.js" defer></script>
   <script src="polish.js" defer></script>
+  <script src="guide-wiki.js" defer></script>
 </head>
-<body class="minecraft-rpg-page">
+<body class="guide-wiki-home">
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <nav class="site-nav" aria-label="Main navigation"><div class="shell nav-inner">
     <a class="brand" href="index.html"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a>
@@ -34,66 +35,101 @@
     <div class="nav-actions"><a class="button quiet nav-discord" href="https://discord.gg/7KzWpezTNZ" target="_blank" rel="noopener">Discord</a><a class="button quiet nav-store" href="store.html">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
   </div></nav>
 
-  <main id="main-content">
-    <section class="mc-page-hero"><div class="shell">
-      <div class="mc-page-kicker">Player reference</div>
-      <h1 class="mc-page-title">Guide.</h1>
-      <p class="mc-page-lead">Choose a category. Open the exact mechanic when you need it.</p>
-    </div></section>
-
-    <section class="mc-section" id="mechanics"><div class="shell">
-      <div class="mc-section-head"><div><small>01</small><h2>Mechanics</h2></div></div>
-      <div class="mc-guide-grid">
-        <a class="mc-guide-card" href="guide-skyblock.html"><small>Island play</small><h3>Skyblock</h3><p>Persistence, upgrades, bank and quests.</p></a>
-        <a class="mc-guide-card" href="guide-enchantments.html"><small>Equipment</small><h3>Enchantments</h3><p>Compatibility and specialized effects.</p></a>
-        <a class="mc-guide-card" href="guide-stats-equipment.html"><small>Combat</small><h3>Stats & Equipment</h3><p>Core stats, mitigation and equipment roles.</p></a>
+  <main id="main-content" class="guide-wiki-main">
+    <section class="wiki-hero">
+      <div class="shell wiki-hero-inner">
+        <div>
+          <div class="wiki-kicker">Pixel Network Wiki</div>
+          <h1>Guide.</h1>
+          <p>Mechanics, equipment and progression in one player reference.</p>
+        </div>
+        <div class="wiki-search-box">
+          <label for="wikiSearch">Search the wiki</label>
+          <div class="wiki-search-control">
+            <input id="wikiSearch" data-wiki-search type="search" autocomplete="off" placeholder="Search Worlds, Talismans, Enchantments..."/>
+            <span class="wiki-search-count" data-wiki-search-count>8 articles</span>
+          </div>
+        </div>
       </div>
-    </div></section>
+    </section>
 
-    <section class="mc-section" id="tools"><div class="shell">
-      <div class="mc-section-head"><div><small>02</small><h2>Tools</h2></div></div>
-      <div class="mc-guide-grid">
-        <a class="mc-guide-card" href="guide-stats-equipment.html"><small>Tool families</small><h3>Stats & Equipment</h3><p>Equipment-family roles and stat boundaries.</p></a>
-        <a class="mc-guide-card" href="guide-enchantments.html"><small>Modifiers</small><h3>Enchantments</h3><p>Enhancements that apply to tools and gear.</p></a>
-      </div>
-    </div></section>
+    <div class="shell wiki-layout">
+      <aside class="wiki-index-sidebar" aria-label="Wiki categories">
+        <small>Browse</small>
+        <nav>
+          <a href="#mechanics">Mechanics</a>
+          <a href="#tools">Tools</a>
+          <a href="#armor">Armor</a>
+          <a href="#specials">Specials</a>
+          <a href="#boosts">Boosts</a>
+          <a href="#progression">Progression</a>
+        </nav>
+        <div class="wiki-index-meta">Current player-facing reference. Detailed articles keep source and verification boundaries visible.</div>
+      </aside>
 
-    <section class="mc-section" id="armor"><div class="shell">
-      <div class="mc-section-head"><div><small>03</small><h2>Armor</h2></div></div>
-      <div class="mc-guide-grid">
-        <a class="mc-guide-card" href="guide-stats-equipment.html"><small>Defense</small><h3>Stats & Equipment</h3><p>Health, defense, mitigation and slots.</p></a>
-        <a class="mc-guide-card" href="guide-enchantments.html"><small>Armor effects</small><h3>Enchantments</h3><p>Armor-compatible enchantment families.</p></a>
-      </div>
-    </div></section>
+      <article class="wiki-index-content">
+        <header class="wiki-index-intro">
+          <h2>Browse the wiki</h2>
+          <p>Open the subject you need. Articles can appear in more than one category when a system crosses equipment or progression boundaries.</p>
+        </header>
 
-    <section class="mc-section" id="specials"><div class="shell">
-      <div class="mc-section-head"><div><small>04</small><h2>Specials</h2></div></div>
-      <div class="mc-guide-grid">
-        <a class="mc-guide-card" href="guide-talismans.html"><small>Collection</small><h3>Talisman Codex</h3><p>Effects, affinity, synergy and Meta.</p></a>
-        <a class="mc-guide-card" href="guide-nexus.html"><small>Endgame</small><h3>Nexus & Instances</h3><p>Access and current encounter difficulties.</p></a>
-      </div>
-    </div></section>
+        <section class="wiki-category" id="mechanics" data-wiki-category>
+          <div class="wiki-category-head"><h2>Mechanics</h2><span>Core systems</span></div>
+          <div class="wiki-article-list">
+            <a class="wiki-article-link" href="guide-skyblock.html" data-wiki-entry data-search="skyblock island persistence upgrades bank quests mechanics"><strong>Skyblock</strong><p>Persistent islands, upgrades, banking and quests.</p><em>Mechanics</em></a>
+            <a class="wiki-article-link" href="guide-enchantments.html" data-wiki-entry data-search="enchantments equipment effects compatibility mechanics"><strong>Enchantments</strong><p>Families, compatibility and specialized effects.</p><em>Mechanics</em></a>
+            <a class="wiki-article-link" href="guide-stats-equipment.html" data-wiki-entry data-search="stats equipment combat defense health damage mechanics"><strong>Stats & Equipment</strong><p>Core combat stats and equipment roles.</p><em>Mechanics</em></a>
+          </div>
+        </section>
 
-    <section class="mc-section" id="boosts"><div class="shell">
-      <div class="mc-section-head"><div><small>05</small><h2>Boosts</h2></div></div>
-      <div class="mc-guide-grid">
-        <a class="mc-guide-card" href="guide-enchantments.html"><small>Equipment effects</small><h3>Enchantments</h3><p>Specialized equipment improvements.</p></a>
-        <a class="mc-guide-card" href="guide-talismans.html"><small>Passive effects</small><h3>Talisman Codex</h3><p>Equipped effects and advanced interactions.</p></a>
-      </div>
-    </div></section>
+        <section class="wiki-category" id="tools" data-wiki-category>
+          <div class="wiki-category-head"><h2>Tools</h2><span>Equipment reference</span></div>
+          <div class="wiki-article-list">
+            <a class="wiki-article-link" href="guide-stats-equipment.html" data-wiki-entry data-search="tools equipment stats weapons tool families"><strong>Stats & Equipment</strong><p>Equipment-family roles and stat boundaries.</p><em>Tools</em></a>
+            <a class="wiki-article-link" href="guide-enchantments.html" data-wiki-entry data-search="tools enchantments modifiers equipment"><strong>Enchantments</strong><p>Modifiers that apply across tools and gear.</p><em>Tools</em></a>
+          </div>
+        </section>
 
-    <section class="mc-section" id="progression"><div class="shell">
-      <div class="mc-section-head"><div><small>06</small><h2>Progression</h2></div></div>
-      <div class="mc-guide-grid">
-        <a class="mc-guide-card" href="guide-getting-started.html"><small>Start</small><h3>Getting Started</h3><p>Where the Pixel journey begins.</p></a>
-        <a class="mc-guide-card" href="guide-progression.html"><small>Account</small><h3>Levels, Prestige & Legacy</h3><p>Caps and current access milestones.</p></a>
-        <a class="mc-guide-card" href="guide-worlds.html"><small>World route</small><h3>Worlds & Gates</h3><p>Four Worlds and their transition conditions.</p></a>
-        <a class="mc-guide-card" href="guide-nexus.html"><small>Endgame</small><h3>Nexus & Instances</h3><p>Permanent access and encounter ladder.</p></a>
-        <a class="mc-guide-card" href="guide-skyblock.html"><small>Alternative</small><h3>Skyblock</h3><p>Personal island progression.</p></a>
-      </div>
-    </div></section>
+        <section class="wiki-category" id="armor" data-wiki-category>
+          <div class="wiki-category-head"><h2>Armor</h2><span>Defense & slots</span></div>
+          <div class="wiki-article-list">
+            <a class="wiki-article-link" href="guide-stats-equipment.html" data-wiki-entry data-search="armor defense health mitigation slots equipment"><strong>Stats & Equipment</strong><p>Health, defense, mitigation and equipment slots.</p><em>Armor</em></a>
+            <a class="wiki-article-link" href="guide-enchantments.html" data-wiki-entry data-search="armor enchantments defensive effects"><strong>Enchantments</strong><p>Armor-compatible enchantment families.</p><em>Armor</em></a>
+          </div>
+        </section>
+
+        <section class="wiki-category" id="specials" data-wiki-category>
+          <div class="wiki-category-head"><h2>Specials</h2><span>Advanced systems</span></div>
+          <div class="wiki-article-list">
+            <a class="wiki-article-link" href="guide-talismans.html" data-wiki-entry data-search="talisman talismans codex affinity synergy meta specials"><strong>Talisman Codex</strong><p>Effects, affinity, synergy and Meta.</p><em>Specials</em></a>
+            <a class="wiki-article-link" href="guide-nexus.html" data-wiki-entry data-search="nexus instances bosses raphael azazel abyss astral endgame specials"><strong>Nexus & Instances</strong><p>Access and current encounter difficulties.</p><em>Specials</em></a>
+          </div>
+        </section>
+
+        <section class="wiki-category" id="boosts" data-wiki-category>
+          <div class="wiki-category-head"><h2>Boosts</h2><span>Effects & improvements</span></div>
+          <div class="wiki-article-list">
+            <a class="wiki-article-link" href="guide-enchantments.html" data-wiki-entry data-search="boosts enchantments equipment effects"><strong>Enchantments</strong><p>Specialized equipment improvements.</p><em>Boosts</em></a>
+            <a class="wiki-article-link" href="guide-talismans.html" data-wiki-entry data-search="boosts talismans passive effects affinity synergy meta"><strong>Talisman Codex</strong><p>Equipped effects and advanced interactions.</p><em>Boosts</em></a>
+          </div>
+        </section>
+
+        <section class="wiki-category" id="progression" data-wiki-category>
+          <div class="wiki-category-head"><h2>Progression</h2><span>Main journey</span></div>
+          <div class="wiki-article-list">
+            <a class="wiki-article-link" href="guide-getting-started.html" data-wiki-entry data-search="getting started start beginner first steps progression"><strong>Getting Started</strong><p>Where the Pixel journey begins.</p><em>Progression</em></a>
+            <a class="wiki-article-link" href="guide-progression.html" data-wiki-entry data-search="levels prestige legacy account progression"><strong>Levels, Prestige & Legacy</strong><p>Account milestones and current access gates.</p><em>Progression</em></a>
+            <a class="wiki-article-link" href="guide-worlds.html" data-wiki-entry data-search="worlds gates overworld pirate kingdom nether winter progression"><strong>Worlds & Gates</strong><p>The four-World route and transition conditions.</p><em>Progression</em></a>
+            <a class="wiki-article-link" href="guide-nexus.html" data-wiki-entry data-search="nexus endgame instances progression"><strong>Nexus & Instances</strong><p>Permanent access and the encounter ladder.</p><em>Progression</em></a>
+            <a class="wiki-article-link" href="guide-skyblock.html" data-wiki-entry data-search="skyblock alternative progression island"><strong>Skyblock</strong><p>Personal island progression.</p><em>Progression</em></a>
+          </div>
+        </section>
+
+        <div class="wiki-empty" data-wiki-empty hidden>No matching guide was found.</div>
+      </article>
+    </div>
   </main>
 
-  <footer class="site-footer"><div class="shell site-footer-inner"><span>Pixel Network · Guide</span><span><a href="gameplay.html">Gameplay</a> · <a href="systems.html">Systems</a> · <a href="worlds.html">Worlds</a> · <a href="nexus.html">Nexus</a></span></div></footer>
+  <footer class="site-footer"><div class="shell site-footer-inner"><span>Pixel Network · Wiki</span><span><a href="gameplay.html">Gameplay</a> · <a href="systems.html">Systems</a> · <a href="worlds.html">Worlds</a> · <a href="nexus.html">Nexus</a></span></div></footer>
 </body>
 </html>
