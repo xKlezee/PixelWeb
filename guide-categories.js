@@ -79,9 +79,10 @@
     categoryGroup.replaceChildren(label, ...links);
   }
 
+  /* The old four-category layout is presentation legacy. Remove it before mounting the
+     canonical six-category Guide IA so ids such as #progression remain unique. */
   ['progression', 'worlds-endgame', 'systems', 'skyblock'].forEach(id => {
-    const legacy = documentRoot.querySelector(`#${id}`);
-    if (legacy) legacy.hidden = true;
+    documentRoot.querySelector(`#${id}`)?.remove();
   });
 
   const verification = documentRoot.querySelector('#verification');
@@ -130,4 +131,9 @@
 
   if (anchor) sections.forEach(section => documentRoot.insertBefore(section, anchor));
   else sections.forEach(section => documentRoot.appendChild(section));
+
+  const requestedId = location.hash.slice(1);
+  if (categories.some(category => category.id === requestedId)) {
+    requestAnimationFrame(() => document.getElementById(requestedId)?.scrollIntoView({ block: 'start' }));
+  }
 })();
