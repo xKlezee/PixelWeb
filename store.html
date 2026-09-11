@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="phase1.css"/>
   <link rel="stylesheet" href="minecraft-rpg-shell.css"/>
   <link rel="stylesheet" href="minecraft-rpg-secondary.css"/>
+  <link rel="stylesheet" href="store-rpg-polish.css"/>
   <link rel="stylesheet" href="security-hardening.css"/>
   <script src="data/network.js" defer></script>
   <script src="store-stage.js" defer></script>
@@ -28,11 +29,17 @@
   <nav class="site-nav" aria-label="Main navigation"><div class="shell nav-inner"><a class="brand" href="index.html"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a><div class="nav-links" id="navLinks"></div><div class="nav-actions"><a class="button quiet nav-discord" data-discord-url>Discord</a><a class="button quiet nav-store" href="store.html" aria-current="page">Store</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div></div></nav>
 
   <main>
-    <section class="mc-page-hero"><div class="shell"><div class="mc-page-kicker">Official Store</div><h1 class="mc-page-title">Support Pixel.<br>Keep progressing.</h1><p class="mc-page-lead">Purchases contribute to one lifetime support path while the game remains playable through normal progression.</p><div class="hero-actions"><a class="button primary" href="https://pixelboxx.tebex.io/" target="_blank" rel="noopener" data-store-url>Open Store</a></div></div></section>
+    <section class="mc-page-hero"><div class="shell">
+      <div class="mc-page-kicker">Official Store</div>
+      <h1 class="mc-page-title">Pixel Store</h1>
+      <p class="mc-page-lead">Open the official shop first. Ranks and purchases contribute to the same lifetime support path.</p>
+      <a class="store-shop-primary" href="https://pixelboxx.tebex.io/" target="_blank" rel="noopener" data-store-url>Open Shop</a>
+    </div></section>
 
     <section class="mc-section"><div class="shell">
+      <button class="store-rank-info-trigger" type="button" data-store-rank-info aria-haspopup="dialog" aria-controls="storeRankDialog"><span class="store-info-icon" aria-hidden="true">i</span><span>How does the rank system work?</span></button>
       <div class="mc-section-head"><div><small>Lifetime support</small><h2>One cumulative rank path.</h2></div></div>
-      <div class="mc-rank-panel"><div class="flow-line" data-store-ranks></div><div class="mc-store-note">Exact monetary thresholds stay unpublished here until the current ladder is reconfirmed. Rank upgrades remain cumulative and automatic at their milestones.</div></div>
+      <div class="mc-rank-panel"><div class="flow-line" data-store-ranks></div><div class="mc-store-note">Exact monetary thresholds stay unpublished until the current ladder is reconfirmed. Rank upgrades remain cumulative and automatic at their milestones.</div></div>
     </div></section>
 
     <section class="mc-section"><div class="shell">
@@ -44,6 +51,19 @@
       <div class="mc-store-final"><div><h2>Play first. Support when you want.</h2><p>Store purchases can accelerate parts of progression, but Pixel's core progression remains available through play.</p></div><div class="hero-actions"><a class="button primary" href="https://pixelboxx.tebex.io/" target="_blank" rel="noopener" data-store-url>Shop Now</a><button class="button secondary" type="button" data-copy-ip>Play</button></div></div>
     </div></section>
   </main>
+
+  <dialog class="store-rank-dialog" id="storeRankDialog" data-store-rank-dialog aria-labelledby="storeRankDialogTitle">
+    <div class="store-rank-dialog-shell">
+      <button class="store-rank-dialog-close" type="button" data-store-rank-close aria-label="Close rank information">×</button>
+      <div class="store-rank-dialog-copy">
+        <h2 id="storeRankDialogTitle">How do ranks work?</h2>
+        <p>Pixel uses a cumulative lifetime support path. Eligible purchases contribute toward your account's Store progression, and the rank path advances at its defined milestones.</p>
+        <p>Exact monetary thresholds are intentionally not published here until the current ladder is reconfirmed.</p>
+      </div>
+      <div class="store-rank-dialog-grid" data-store-rank-dialog-grid></div>
+      <div class="store-rank-dialog-note">The public site only shows rank information that is currently established. Unverified prices or benefits are not filled with placeholders.</div>
+    </div>
+  </dialog>
 
   <footer class="site-footer"><div class="shell site-footer-inner"><span>Pixel Network · Java Edition</span><span><a href="gameplay.html">Gameplay</a> · <a href="community.html">Community</a> · <a href="index.html">Home</a></span></div></footer>
 </body>
