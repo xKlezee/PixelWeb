@@ -124,17 +124,11 @@
 }
 
 .wiki-browse-subgroup + .wiki-browse-subgroup {
-  margin-top: 5px;
+  margin-top: 0;
 }
 
 .wiki-browse-subtitle {
-  display: block;
-  padding: 5px 8px 2px;
-  color: #6f685e;
-  font-size: 7px;
-  font-weight: 850;
-  letter-spacing: .12em;
-  text-transform: uppercase;
+  display: none;
 }
 
 .wiki-browse-menu a[aria-current='page'] {
