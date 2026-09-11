@@ -1,0 +1,109 @@
+/* Pixel Network — structural base for detailed Guide articles.
+   No promotional/card styling belongs here. */
+
+.guides-main { min-height: calc(100svh - 64px); }
+.guides-topbar { width: 100%; }
+.guides-topbar-inner {
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.guides-breadcrumbs {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.guides-breadcrumbs a { min-height: 30px; display: inline-flex; align-items: center; text-decoration: none; }
+.guides-top-status { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+
+.guides-layout {
+  margin-inline: auto;
+  display: grid;
+  align-items: start;
+}
+.guides-sidebar {
+  position: sticky;
+  align-self: start;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,.13) transparent;
+}
+.guides-sidebar-brand small,
+.guides-sidebar-brand strong,
+.guides-sidebar-brand span,
+.guides-nav-group > small { display: block; }
+.guides-nav-group a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  line-height: 1.4;
+}
+.guides-document { min-width: 0; }
+.guides-document-header { scroll-margin-top: 140px; }
+.guides-document-header h1 { margin: 0; }
+.guides-document-lead { margin-bottom: 0; }
+.guides-document-meta { display: flex; flex-wrap: wrap; }
+.guides-document-meta span { display: inline-flex; align-items: center; }
+
+.guides-search-wrap { width: 100%; }
+.guides-search-label { display: block; }
+.guides-search { width: min(680px,100%); min-height: 44px; padding: 0 13px; outline: 0; color: inherit; font: inherit; }
+.guides-search-meta { min-height: 22px; display: flex; align-items: center; gap: 7px; }
+
+.guide-section { scroll-margin-top: 145px; }
+.guide-section-head h2 { margin: 0; }
+.guide-section-head p { margin-bottom: 0; }
+.guide-prose p { margin: 0 0 15px; }
+
+.guides-library { width: 100%; }
+.guide-row {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 110px minmax(170px,.44fr) minmax(0,1fr) auto;
+  gap: 20px;
+  align-items: center;
+}
+.guide-row[hidden] { display: none !important; }
+.guide-row h3,.guide-row p { margin: 0; }
+.guide-row-action { min-width: 112px; display: flex; justify-content: flex-end; }
+.guide-status { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; white-space: nowrap; }
+
+.guide-callout { width: 100%; }
+.guide-callout > span { display: none; }
+.guide-callout strong { display: block; }
+.guide-callout p { margin: 0; }
+.guide-callout-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.guide-text-link { display: inline-flex; align-items: center; text-decoration: none; }
+
+.guide-reference-grid { display: grid; }
+.guide-reference-item { min-width: 0; }
+.guide-reference-item h3 { margin: 0; }
+.guide-reference-item p { margin-bottom: 0; }
+
+.guide-facts { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); overflow: hidden; }
+.guide-fact { min-width: 0; }
+.guide-fact span,.guide-fact strong { display: block; }
+
+.guide-table-wrap { width: 100%; overflow-x: auto; }
+.guide-table { width: 100%; min-width: 760px; border-collapse: collapse; }
+.guide-table caption { caption-side: top; }
+.guide-table th,.guide-table td { padding: 11px 12px; text-align: left; vertical-align: top; }
+
+.guides-empty { width: 100%; }
+
+@media (max-width: 820px) {
+  .guide-row { grid-template-columns: 1fr auto; gap: 8px 14px; }
+  .guide-row-meta,.guide-row p { grid-column: 1 / -1; }
+  .guide-row-action { grid-column: 2; grid-row: 1; }
+}
+
+@media (max-width: 620px) {
+  .guides-topbar-inner { align-items: flex-start; padding-block: 7px; }
+  .guides-breadcrumbs { flex-wrap: wrap; }
+  .guide-row { grid-template-columns: 1fr; }
+  .guide-row-action,.guide-row-meta,.guide-row p { grid-column: auto; grid-row: auto; }
+  .guide-row-action { justify-content: flex-start; }
+}
