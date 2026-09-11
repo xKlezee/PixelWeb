@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta name="theme-color" content="#211f1b"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https: data:; media-src 'self' https:; font-src 'self' https: data:; connect-src 'self'; frame-src 'none'; worker-src 'none'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests"/>
+  <meta name="referrer" content="strict-origin-when-cross-origin"/>
+  <meta name="description" content="Pixel Network basic commands guide with current player-facing shortcuts for Store, Skyblock, Bestiary and Talisman systems."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:site_name" content="Pixel Network"/>
+  <meta property="og:title" content="Basic Commands Guide — Pixel Network"/>
+  <meta property="og:description" content="Current player-facing Pixel Network commands and what each shortcut opens."/>
+  <meta property="og:url" content="https://xklezee.github.io/PixelWeb/guide-basic-commands.html"/>
+  <meta property="og:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/>
+  <meta property="og:image:alt" content="Pixel Network logo"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:title" content="Basic Commands Guide — Pixel Network"/>
+  <meta name="twitter:description" content="Current player-facing Pixel Network commands and what each shortcut opens."/>
+  <meta name="twitter:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/>
+  <title>Basic Commands Guide — Pixel Network</title>
+  <link rel="canonical" href="https://xklezee.github.io/PixelWeb/guide-basic-commands.html"/>
+  <link rel="icon" href="LOGO%20OFICIAL.png"/>
+  <link rel="stylesheet" href="site.css"/>
+  <link rel="stylesheet" href="polish.css"/>
+  <link rel="stylesheet" href="phase1.css"/>
+  <link rel="stylesheet" href="guides.css"/>
+  <link rel="stylesheet" href="security-hardening.css"/>
+  <script src="data/network.js" defer></script>
+  <script src="site.js" defer></script>
+  <script src="polish.js" defer></script>
+</head>
+<body>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <nav class="site-nav" aria-label="Main navigation"><div class="shell nav-inner">
+    <a class="brand" href="index.html"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a>
+    <div class="nav-links" id="navLinks" data-nav-contract="canonical-v1"><div class="nav-group"><button type="button" aria-haspopup="true" aria-expanded="false" aria-controls="nav-static-explore">Explore</button><div class="nav-dropdown" id="nav-static-explore"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div><a class="nav-marketplace" href="marketplace.html">Marketplace</a><div class="nav-group contains-current"><button type="button" aria-haspopup="true" aria-expanded="false" aria-controls="nav-static-guide">Guide</button><div class="nav-dropdown" id="nav-static-guide"><a href="guides.html#progression"><strong>Progression</strong><span>Worlds, Prestige and progression routes.</span></a><a href="guides.html#mechanics"><strong>Mechanics</strong><span>Gameplay systems and how they behave.</span></a><a href="guides.html#tools"><strong>Tools</strong><span>Tool families and their supporting systems.</span></a><a href="guides.html#armor"><strong>Armor</strong><span>Defense, equipment and armor modifiers.</span></a><a href="guides.html#specials"><strong>Specials</strong><span>Talismans, Nexus and specialized systems.</span></a><a href="guides.html#boosts"><strong>Boosts</strong><span>Effects and systems that improve performance.</span></a></div></div><div class="nav-group"><button type="button" aria-haspopup="true" aria-expanded="false" aria-controls="nav-static-community">Community</button><div class="nav-dropdown" id="nav-static-community"><a href="leaderboards.html"><strong>Leaderboards</strong><span>Public rankings and competitive progression.</span></a><a href="changelog.html"><strong>Changelog</strong><span>Player-facing release notes.</span></a><a href="rules.html"><strong>Rules</strong><span>Current player and community rules.</span></a><a href="staff.html"><strong>Staff Team</strong><span>The currently published Pixel Network team.</span></a></div></div><a href="team.html">About</a></div><div class="nav-actions"><a class="button quiet nav-discord" href="https://discord.gg/7KzWpezTNZ" target="_blank" rel="noopener" aria-label="Join Pixel Network on Discord">Discord</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><a class="button quiet nav-store" href="store.html">Store</a><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
+  </div></nav>
+
+  <main class="guides-main">
+    <div class="guides-topbar"><div class="shell guides-topbar-inner"><div class="guides-breadcrumbs"><a href="index.html">Pixel Network</a><span>/</span><a href="guides.html">Guides</a><span>/</span><span>Basic Commands</span></div><span class="guides-top-status">Player command reference</span></div></div>
+
+    <div class="guides-layout">
+      <aside class="guides-sidebar" aria-label="Basic command guide sections">
+        <div class="guides-sidebar-brand"><small>Guide</small><strong>Basic Commands</strong><span>Useful player-facing shortcuts that are current and safe to document.</span></div>
+        <nav class="guides-sidebar-nav">
+          <div class="guides-nav-group"><small>On this page</small><a href="#overview">Overview</a><a href="#store">/store</a><a href="#skyblock">/is</a><a href="#bestiary">/bestiary</a><a href="#codex">/codex</a><a href="#bag">/bag</a></div>
+          <div class="guides-nav-group"><small>Related</small><a href="guide-getting-started.html">Getting Started</a><a href="guide-currencies.html">Currencies</a><a href="guide-skyblock.html">Skyblock</a><a href="guide-talismans.html">Talisman Codex</a><a href="guides.html">All Guides</a></div>
+        </nav>
+      </aside>
+
+      <article class="guides-document">
+        <header class="guides-document-header" id="overview">
+          <div class="eyebrow">Player shortcuts</div>
+          <h1>Basic Commands.</h1>
+          <p class="guides-document-lead">This is intentionally a concise player reference, not a dump of every registered command. Staff, moderation, administration and unfinished command paths are excluded.</p>
+          <div class="guides-document-meta"><span>Player-facing only</span><span>Current source/config</span><span>Not an admin command list</span></div>
+        </header>
+
+        <section class="guide-section" id="store">
+          <div class="guide-section-head"><div><small>Store</small><h2><code>/store</code></h2></div><p>Open the current in-game Store/shop surface.</p></div>
+          <div class="guide-prose"><p>Use <strong><code>/store</code></strong> when you want the player-facing store flow. Store-facing purchases can use Pixels where that active surface defines them.</p></div>
+        </section>
+
+        <section class="guide-section" id="skyblock">
+          <div class="guide-section-head"><div><small>Skyblock</small><h2><code>/is</code></h2></div><p>Open the Skyblock island menu.</p></div>
+          <div class="guide-prose"><p>The island menu is the main entry point for current Skyblock actions. Collaboration and member-management controls remain partial, so this command reference does not promise unfinished team actions.</p></div>
+          <a class="guide-text-link" href="guide-skyblock.html">Open Skyblock guide →</a>
+        </section>
+
+        <section class="guide-section" id="bestiary">
+          <div class="guide-section-head"><div><small>Collection</small><h2><code>/bestiary</code></h2></div><p>Open the Bestiary.</p></div>
+          <div class="guide-prose"><p>The current Bestiary has active boss presentation/tracking. Categories whose gameplay trackers or content are not ready remain unavailable or Coming Soon rather than being documented as complete.</p></div>
+        </section>
+
+        <section class="guide-section" id="codex">
+          <div class="guide-section-head"><div><small>Talismans</small><h2><code>/codex</code></h2></div><p>Open the Talisman Codex.</p></div>
+          <div class="guide-prose"><p>Aliases currently registered for the same Codex surface include <strong><code>/cdx</code></strong> and <strong><code>/talismancodex</code></strong>.</p></div>
+          <a class="guide-text-link" href="guide-talismans.html">Open Talisman Codex guide →</a>
+        </section>
+
+        <section class="guide-section" id="bag">
+          <div class="guide-section-head"><div><small>Talismans</small><h2><code>/bag</code></h2></div><p>Open the Talisman Bag / jewelry equipment surface.</p></div>
+          <div class="guide-prose"><p>Current aliases include <strong><code>/talismans</code></strong>, <strong><code>/talismanbag</code></strong> and <strong><code>/jewelry</code></strong>.</p></div>
+          <div class="guide-callout"><span aria-hidden="true"></span><div><strong>Why this list is deliberately short</strong><p>A command only belongs here when its current player-facing purpose is established. Unfinished, staff-only or ambiguous command paths stay out of the basic reference until their behavior is ready to publish.</p></div></div>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer"><div class="shell site-footer-inner"><span>Pixel Network · Basic Commands</span><span><a href="store.html">Store</a> · <a href="guides.html">Guides</a> · <a href="community.html">Community</a> · <a href="team.html">About</a></span></div></footer>
+</body>
+</html>
