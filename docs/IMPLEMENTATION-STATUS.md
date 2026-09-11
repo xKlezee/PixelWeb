@@ -164,7 +164,7 @@ This is not validator execution and not browser/render proof.
 
 ### Automated execution
 
-Quality Gate run **#726** on candidate `5f07c04d05f38f0cd7a0a50a4e164f2d1bb7238f` created the `static-security` job but ended before any repository step executed (`steps: null`). This is infrastructure/account runner state, not validator PASS/FAIL.
+Recent Quality Gate runs on this branch, including run **#726**, created the `static-security` job but ended before any repository step executed (`steps: null`). This is infrastructure/account runner state, not validator PASS/FAIL.
 
 Do not claim a green Quality Gate unless a runner actually starts and executes the relevant steps.
 
