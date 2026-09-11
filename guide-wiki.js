@@ -25,11 +25,17 @@
     if (group) group.open = true;
   };
 
-  const syncBrowseSearch = (query, visibleEntries) => {
+  const syncBrowseSearch = query => {
     if (!browseGroups.length) return;
-    const visibleHrefs = new Set(visibleEntries.map(entry => entry.getAttribute('href')).filter(Boolean));
 
     browseGroups.forEach(group => {
+      const categoryId = group.dataset.wikiBrowseGroup;
+      const category = categories.find(item => item.id === categoryId);
+      const visibleHrefs = new Set(
+        [...(category?.querySelectorAll('[data-wiki-entry]:not([hidden])') || [])]
+          .map(entry => entry.getAttribute('href'))
+          .filter(Boolean)
+      );
       const articleLinks = [...group.querySelectorAll('.wiki-browse-menu a:not(.wiki-browse-overview)')];
       const subgroups = [...group.querySelectorAll('.wiki-browse-subgroup')];
 
@@ -65,7 +71,7 @@
       category.hidden = !hasVisibleEntry;
     });
 
-    syncBrowseSearch(query, visible);
+    syncBrowseSearch(query);
 
     const articles = uniqueArticleCount(visible);
     if (count) count.textContent = `${articles} ${articles === 1 ? 'article' : 'articles'}`;
