@@ -44,12 +44,12 @@ The canonical navigation remains:
   - Nexus
 - Marketplace
 - Guide
+  - Progression
   - Mechanics
   - Tools
   - Armor
   - Specials
   - Boosts
-  - Progression
 - Community
   - Leaderboards
   - Changelog
@@ -58,6 +58,8 @@ The canonical navigation remains:
 - About
 
 Store, Discord and Play remain high-priority actions rather than content categories.
+
+`Progression` is the canonical first Guide category. Its position must come from the shared navigation/category model, not from CSS ordering tricks.
 
 ## Home contract
 
@@ -153,14 +155,14 @@ Gameplay, Systems and Guide share one Minecraft RPG presentation layer rather th
 - `systems.html` acts as a visual system index.
 - `guides.html` is a category catalogue, not a technical documentation dashboard.
 
-Guide categories remain:
+Guide categories remain, in canonical order:
 
+- Progression
 - Mechanics
 - Tools
 - Armor
 - Specials
 - Boosts
-- Progression
 
 All current Guide documents must stay reachable. A Guide may appear in more than one category when its subject genuinely crosses categories.
 
@@ -173,10 +175,21 @@ The secondary pages use the same Minecraft RPG material language while staying i
 - `leaderboards.html` never invents standings while a verified source is unavailable.
 - `rules.html` never reconstructs a ruleset from stale sources.
 - `changelog.html` is now a Community destination and no longer depends on the retired Development category.
-- `staff.html` is the compact public roster.
-- `team.html` keeps Klezee and PxlMads visually equal and preserves the interactive skin viewers.
+- `staff.html` owns the public team presentation. Klezee and PxlMads remain visually equal, retain their interactive skin viewers and are distinguished only by their published responsibility areas.
+- `team.html` remains the canonical About URL for compatibility, but About is institutional rather than a duplicate staff page. It contains FAQ, Store/Tebex boundaries, the unofficial Minecraft disclaimer, external-service notes, copyright and attribution.
 - `store.html` focuses on the official Store, cumulative rank path and current purchase categories without publishing unverified thresholds.
 - `404.html` uses the same material language and routes users back to maintained destinations.
+
+### About / Staff boundary
+
+Do not move owner profiles back into About.
+
+- **Staff Team** answers “who is publicly listed and what do they work on?”
+- **About** answers “what is Pixel Network, where is authoritative information, how do Store/Tebex boundaries work, and what legal/attribution notices apply?”
+
+About must not invent refund policy, pricing, support guarantees or legal terms that are not actually published by the applicable service.
+
+The site does not apply a blanket Creative Commons license. Original Pixel Network material remains all rights reserved unless specifically marked otherwise; third-party material remains under its own terms; software should use a software-specific license if reuse rights are intentionally granted later.
 
 ## Detailed Guide presentation
 
@@ -194,6 +207,32 @@ The guide layer may change:
 - spacing and visual hierarchy.
 
 It must not silently change guide facts, evidence claims, values or source boundaries.
+
+## Shared navigation and contextual sublists
+
+`polish.js` remains the source of truth for the canonical navigation and the Explore / Guide / Community contextual rails.
+
+All contextual rails must share:
+
+- item order from the canonical model;
+- the same DOM structure;
+- the same active-state semantics;
+- the same keyboard/touch behavior;
+- the same responsive horizontal-scroll contract.
+
+Presentation families may recolor the rail. Worlds/Nexus retain their established rail height because immersive viewport calculations depend on it. Guide may use the warm document palette, but it must not fork the sublist model.
+
+## Shared footer contract
+
+The runtime footer is normalized across canonical pages and includes:
+
+- Pixel Network / Java Edition identity;
+- useful maintained destinations;
+- Rules, Staff Team and About;
+- a prominent unofficial Minecraft server disclaimer;
+- a concise copyright and third-party-rights boundary.
+
+Long-form FAQ, purchase boundaries and attribution explanations belong in About rather than being duplicated in every footer.
 
 ## Shared chrome and immersive responsive behavior
 
@@ -241,7 +280,7 @@ Player-facing copy should be concise. A typical visual section should need:
 - zero or one short paragraph;
 - one primary action.
 
-Long-form explanation belongs in detailed Guide/Changelog pages, not Home or visual destination pages.
+Long-form explanation belongs in detailed Guide/Changelog/About policy sections, not Home or visual destination pages.
 
 ## Current redesign pass
 
@@ -252,16 +291,20 @@ The draft redesign currently covers:
 - Nexus converted to the same scene/slider interaction grammar as Worlds.
 - Gameplay simplified to a progression overview.
 - Systems simplified to a visual system index.
-- Guide landing rebuilt around the six canonical Guide categories.
+- Guide landing rebuilt around the six canonical Guide categories, with Progression first in the actual model.
 - Skyblock simplified to its three current pillars plus an explicit partial-feature boundary.
-- Community, Leaderboards, Changelog, Rules and Staff Team aligned to the new material language.
-- About reduced to two equal owner profiles while preserving both live skin viewers.
+- Community, Leaderboards, Changelog and Rules aligned to the new material language.
+- Staff Team now owns the two equal owner profiles and preserves both live skin viewers.
+- About now owns FAQ, Tebex/Store boundaries, Minecraft independence, external-service notices and copyright/attribution.
 - Store reduced to the official CTA, cumulative rank path, purchase categories and one progression boundary note.
 - Marketplace reskinned as a Minecraft collection showcase without changing its 3D runtime.
 - Detailed Guides receive a shared Minecraft RPG document skin without changing their factual content.
 - 404 aligned to the same visual identity.
 - Shared Minecraft RPG material language added for Home, interior, secondary, guide and immersive chrome surfaces.
+- Shared footer expanded with useful destinations, Minecraft disclaimer and rights boundary.
 
 ## Review state
 
-PR #11 remains intentionally draft. The redesign branch is for visual iteration only until the direction is approved. Production `main` and the checkpoint branch remain unchanged. No manual repository validators are part of this design-preview pass unless explicitly requested.
+PR #11 remains intentionally draft as the historical redesign review record. The redesign principles in this document continue to govern subsequent visual iteration on `main`.
+
+Production changes after that redesign may land through later PRs, but they must preserve the contracts above unless the source-of-truth documentation is intentionally updated with the change.
