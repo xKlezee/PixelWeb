@@ -1,196 +1,189 @@
 # PixelWeb — Implementation Status
 
-This document records current source architecture and release gates without treating source inspection as runtime proof.
+This document records the current public-site architecture and remaining verification boundaries. Source inspection is not treated as browser/runtime proof.
 
 ## Release posture
 
-- The previous Guide/Store/Play/Nexus polish release is merged into `main` at `62f070c1204db67833d23725614627ab1084f8fe`.
-- `main` remains the stable/published frontend branch until the current candidate is promoted.
-- The current frontend iteration lives on `frontend/about-footer-consistency-2026-09`.
-- This branch audits HTML visual-family coverage, normalizes Guide category order, separates Staff Team from About, unifies the Explore rail around the established Worlds/Nexus design, updates Discord chrome and introduces the Pixel Network proprietary license.
-- It must not be described as browser-verified until the browser matrix has actually been executed.
+- `main` is the published GitHub Pages branch.
+- Direct fixes are deployed only after confirming the exact `main` SHA and a successful Pages deployment.
+- The owner has explicitly disabled the repository Quality Gate for the current work period because of account/payment runner issues; do not block ordinary frontend fixes on that workflow until this override is reversed.
+- Browser/render QA remains separate from source-level validation.
 
-## Current frontend iteration
+## Current information architecture
 
-### Contextual navigation
+### Primary navigation
 
-`polish.js` remains the canonical runtime navigation owner and derives the second-level contextual rail from the same navigation model.
+The canonical top-level order is:
 
-Current groups:
+1. Explore
+2. Marketplace
+3. Guide
+4. Community
+5. About
 
-- Explore → Gameplay / Systems / Worlds / Skyblock / Nexus
-- Guide → Progression / Mechanics / Tools / Armor / Specials / Boosts
-- Community → Leaderboards / Changelog / Rules / Staff Team
+Discord, Play and Store remain header actions.
 
-`Progression` is now first in the actual Guide model, not merely moved visually by CSS. `guides.html` without a hash also treats Progression as the default Guide category. `guide-categories.js` uses the same canonical order.
+### Guide
 
-The rail appears directly below global navigation only when the current page belongs to one of those groups. Home, Marketplace, Store and About do not create an empty contextual rail.
+Guide currently exposes nine first-class categories:
 
-Within Explore, **Worlds/Nexus are the visual reference**. Their established compact uppercase, squared Minecraft rail is now shared to Gameplay, Systems and Skyblock through `pixel-global-chrome.css`. The older rounded generic rail is not the canonical Explore appearance. Worlds/Nexus retain the 50px geometry required by immersive viewport calculations.
+- Getting Started
+- Currencies
+- Basic Commands
+- Progression
+- Mechanics
+- Tools
+- Armor
+- Specials
+- Boosts
 
-### Header actions
+`Getting Started` is the default Guide state. `polish.js` owns the shared top/section navigation model, while `guides.html` now contains the canonical Browse tree statically so the main Guide information architecture exists before JavaScript executes.
 
-Store, Discord and Play remain high-priority header actions. Discord now uses Discord's official unmodified Symbol asset inside an inset/recessed Pixel material control rather than a competing text-button treatment. The mobile navigation retains a readable Discord text destination.
+The current guide document set is:
 
-### HTML visual audit
+- Getting Started
+- Currencies
+- Basic Commands
+- Levels, Prestige & Legacy
+- Worlds & Gates
+- Nexus & Instances
+- Skyblock
+- Stats & Equipment
+- Talisman Codex
+- Enchantments
 
-`docs/HTML-VISUAL-AUDIT-2026-09.md` records the route-by-route audit.
+The old `guide-categories.js` renderer is retired to a compatibility stub; it no longer owns Guide category markup.
 
-No canonical user-facing HTML route remains on the old generic SaaS/neumorphic presentation as its primary visual language. Intentional presentation families remain:
+### Community
 
-- Minecraft-first Home;
-- Minecraft RPG shell/secondary pages;
-- Worlds/Nexus immersive chrome;
-- Guide wiki/document skin;
-- Marketplace 3D collection presentation;
-- noindex compatibility redirects.
+Community remains:
 
-Different layout families are intentional where the interaction model requires them; consistency means shared Pixel/Minecraft materials and navigation contracts rather than forcing every page into one card layout.
+- Leaderboards
+- Changelog
+- Rules
+- Staff Team
 
-### Forum / Development retirement
+Leaderboards now has a real frontend/table contract but deliberately publishes no invented standings. A verified server-backed ranking source is still required before player positions can be shown.
 
-The Forum is not an active PixelWeb product surface and `development.html` is not an active documentation family.
+## Visual system
 
-- runtime navigation contains neither Forum nor Development as a canonical family;
-- `forum.html` remains a `noindex`, `nofollow`, `noarchive` compatibility redirect to `community.html`;
-- `development.html` remains a `noindex` compatibility redirect to `guides.html`;
-- both remain excluded from canonical navigation and the sitemap.
+PixelWeb uses a warm Minecraft/RPG accent system across shared UI:
 
-### Staff Team / owner profiles
+- yellow;
+- gold;
+- amber;
+- orange;
+- copper;
+- warm charcoal/stone neutrals.
 
-`staff.html` now owns all intentionally public people/ownership presentation.
+The previous Pixel Blue treatment is no longer the global selection/accent language. Discord and Play remain neutral gray controls in the header so Store can retain the strongest gold CTA hierarchy.
 
-Klezee and PxlMads retain equal Owner status and the established responsibility split:
+Worlds and Nexus preserve their established immersive geometry and media treatment; the warm theme applies to shared chrome rather than recoloring approved imagery.
+
+## Guide Browse behavior
+
+The left Guide Browse panel uses expandable category groups.
+
+- category counts are not shown;
+- internal organizational captions such as `Start here`, `Account`, `Journey`, etc. are not shown;
+- every visible child entry is a real destination;
+- same-document subtopics such as Coins/Pixels/Nexus Points and individual basic commands link directly to their section anchors;
+- Guide search filters both document cards and the matching Browse destinations.
+
+## Staff Team
+
+`staff.html` owns the public owner/team presentation.
+
+Klezee and PxlMads remain equal Owners with the established responsibility split:
 
 - Klezee — Game & Technical Direction: world design, mechanics, programming, progression and level design;
 - PxlMads — Visual Direction: textures, menus/UI, bosses, mobs and visual direction.
 
-The username-synchronized Minecraft skin viewers moved with those profiles:
+The custom Canvas skin renderer currently supports:
 
-- `team-models.js` is now loaded by `staff.html`;
-- pointer drag rotates the model;
-- ArrowLeft/ArrowRight rotate yaw;
-- ArrowUp/ArrowDown adjust pitch;
-- Home resets each viewer to that owner's initial orientation;
-- model textures retain pixel rendering;
-- the no-JavaScript fallback remains username-based.
+- classic/Steve geometry;
+- slim/Alex geometry and UVs;
+- base and outer skin layers;
+- corrected Klezee head outer-layer side orientation;
+- pointer rotation;
+- keyboard yaw/pitch controls;
+- Home reset;
+- username-based image fallback on renderer load failure.
 
-Staff Team explicitly states that only intentionally public roles are shown. Private/unpublished staff membership is not inferred.
+The old visible `Drag to rotate` hint is intentionally removed.
 
-### About
+Browser/network validation of the remote skin provider remains desirable when interactive browser access is available.
 
-`team.html` remains the canonical About URL for compatibility, but no longer contains owner profiles.
+## Skyblock publication boundary
 
-About now owns:
+Skyblock public copy distinguishes current functionality from partial/planned functionality.
 
-- common questions / FAQ;
-- links to maintained player information;
-- official Store/Tebex boundary information;
-- the unofficial Minecraft server disclaimer;
-- external-service boundary notes;
-- licensing, copyright and attribution policy.
+Current player-facing core includes the persistent island/progression systems already supported by current source. Team invite/member-management/promotion must not be presented as a finished collaborative feature while its active wiring remains incomplete.
 
-Pixel-owned website source, copy, branding, layouts and custom assets are governed by the **Pixel Network Proprietary Website, Source, Content & Asset License v1.0** unless a more specific written notice applies. The canonical text is `LICENSE`; `license.html` is the public-readable copy. PixelWeb is proprietary, not open source. Third-party material is expressly excluded from Pixel Network's license grant and remains subject to its own rights and terms.
+## Store boundary
 
-About does not invent refund terms, prices, rank thresholds, purchase guarantees or legal/support policies that are not actually published.
+The official Store/Tebex destination remains canonical. Exact monetary thresholds, conversion claims, rank benefits or reward values must not be invented where current evidence does not establish them.
 
-### Shared footer
+Pixels are documented as a distinct currency concept; the website does not claim an unverified Coins↔Pixels conversion.
 
-`polish.js` now replaces legacy page-specific footer fragments with one shared runtime footer containing:
+## Gameplay/public-data invariants
 
-- Pixel Network / Java Edition identity;
-- Marketplace, Store, Guide, Community, Rules, Staff Team and About links;
-- the unofficial Minecraft server disclaimer;
-- a concise copyright / third-party-rights boundary.
-
-`security-hardening.css` provides the cross-family layout/responsive styling without overriding the intended Home/Guide/immersive footer backgrounds.
-
-## Existing security/repository foundation
-
-The hardening baseline already merged to `main` remains in force:
-
-- defensive `.gitignore` and documented public/private boundary;
-- committed-secret scanning;
-- strict CSP/static HTML validation;
-- canonical/sitemap/social-metadata contracts;
-- local fragment integrity;
-- structural accessibility checks;
-- player-facing copy boundary;
-- canonical public-data validation;
-- exact integrity protection for the approved Nexus boss PNGs;
-- reference-driven `_site/` builder and independent public-bundle validation;
-- read-only/commit-pinned GitHub Actions Quality Gate configuration.
-
-## Canonical gameplay/public-data invariants
-
-This frontend refresh does not intentionally change gameplay semantics. Existing guarded facts remain unchanged, including:
+Frontend work must not silently change gameplay semantics. Current guarded facts include:
 
 - four Worlds in order: Overworld → Pirate Kingdom → Nether → Winter;
-- Nexus separate from the World array;
+- Nexus is separate from the World array;
 - 27 canonical mines across the current Worlds;
-- Nexus permanent access at Prestige IV without a Viking/boss requirement unless intentionally re-evidenced;
-- current Nexus encounter/difficulty structure;
-- Skyblock remains source-verified / partial;
-- Store monetary thresholds remain unpublished while unverified;
-- approved Discord, Store and legacy GitBook destinations remain canonical;
-- approved Nexus boss PNG bytes remain unchanged.
+- Nexus access remains account/progression based according to the current public data source;
+- Skyblock retains explicit partial-feature boundaries;
+- approved Nexus boss PNG files remain uncompressed/unconverted originals;
+- legacy GitBook material is historical reference only where current evidence differs or is incomplete.
 
-## Crawl / publication state
+## Licensing / About
 
-- Sitemap-indexed pages keep one absolute HTTPS canonical each.
-- `license.html` is sitemap-indexed as the public-readable license surface.
-- Indexed pages retain their static Open Graph/Twitter metadata.
-- `forum.html` and `404.html` remain intentionally outside the sitemap and `noindex`.
-- The public artifact builder still includes the legacy Forum redirect and branded 404 as explicit non-indexed compatibility/error surfaces.
-- The `_site/` model remains prepared but must not be described as the live Pages source unless deployment is actually migrated.
+`team.html` remains the canonical About URL for compatibility and no longer owns owner profiles.
 
-## Validation state for this branch
+About owns:
 
-### Source/static review
+- FAQ/common questions;
+- official Store/Tebex boundary information;
+- unofficial Minecraft server disclaimer;
+- external-service boundary notes;
+- licensing/copyright/attribution information.
 
-The current branch has been reviewed at source level for:
+Pixel-owned website source, branding, copy, layouts and custom assets are governed by the Pixel Network Proprietary Website, Source, Content & Asset License v1.0 unless a more specific written notice applies. `LICENSE` is canonical and `license.html` is the public-readable copy.
 
-- all top-level HTML visual-family coverage;
-- canonical runtime navigation/category order;
-- Explore contextual-rail visual parity using Worlds/Nexus as the reference;
-- Discord header action source/style boundary;
-- Staff Team / About content ownership;
-- owner viewer relocation;
-- shared footer structure;
-- proprietary licensing/attribution boundaries;
-- documentation/contract alignment.
+## Retired / compatibility surfaces
 
-This is not validator execution and not browser/render proof.
+- Forum is not an active product family.
+- Development is not an active navigation family.
+- `forum.html` and `development.html` may remain only as noindex compatibility redirects where applicable.
+- legacy Systems Stage10 assets were removed after confirming the current Systems page no longer references that implementation.
 
-### Automated execution
+## Browser QA still required
 
-Recent Quality Gate runs on this branch, including run **#726**, created the `static-security` job but ended before any repository step executed (`steps: null`). This is infrastructure/account runner state, not validator PASS/FAIL.
-
-Do not claim a green Quality Gate unless a runner actually starts and executes the relevant steps.
-
-### Browser QA still required
-
-Required matrix:
+A complete browser pass is still required for claims that depend on real rendering or interaction. The pending matrix includes:
 
 - 1440 / 1024 / 768 / 430 / 390 CSS px;
 - short-height landscape;
-- 200% browser zoom;
+- 200% zoom;
 - keyboard/focus navigation;
 - reduced motion;
-- desktop hover-only vs 980 px mobile/touch boundary;
-- contextual navigation active state and horizontal overflow behavior;
-- Explore rail visual parity on Gameplay / Systems / Worlds / Skyblock / Nexus against the Worlds/Nexus reference;
-- Discord inset icon rendering and focus state;
+- desktop hover vs mobile/touch boundary;
+- contextual navigation horizontal behavior;
 - Play modal;
-- Guide anchors/search/tables and Progression-first state;
-- Staff Team skin loading, canvas rendering, pointer drag, keyboard rotation/reset and error state;
-- About FAQ, Tebex CTA, disclaimer, license link and attribution readability;
-- `license.html` readability and navigation;
-- shared footer across standard, Guide and immersive visual families;
-- no visible Forum/Development navigation and correct legacy redirects;
+- Guide Browse/search/anchors/tables;
+- Staff skin loading and interaction/fallback;
+- About/Store/license readability;
+- shared footer;
 - console/CSP/network state;
-- media crop/stretch/loading, especially Abyss + Astral.
+- media crop/stretch/loading, especially Nexus encounter imagery.
 
-## Release rule
+Do not describe browser-specific behavior as verified until that matrix, or an equivalent real-browser pass, has actually been executed.
 
-Do not promote this frontend branch to `main` solely from source review. First compare the branch to `main`, remediate unintended changes, then obtain the required automated/browser evidence when the execution environment is available. If a merge is approved afterward, prefer a squash merge so the branch's iterative implementation commits land as one coherent frontend change.
+## Current major remaining product work
+
+1. Connect Leaderboards to an authoritative server-backed ranking source.
+2. Complete or deliberately defer the unfinished Skyblock collaboration contract before advertising it as complete.
+3. Obtain live-client evidence for Guide mechanics where source validation alone is not enough for a stronger claim.
+4. Run the browser/responsive/accessibility interaction matrix when browser control is available.
+5. Continue removing stale source/documentation duplication when it can be done without changing player-facing semantics.
