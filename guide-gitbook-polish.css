@@ -36,8 +36,6 @@ body:has(.guides-main) .section-subnav,
 }
 body:has(.guides-main) .section-subnav-links,
 .guide-wiki-home .section-subnav-links { display: flex; }
-body:has(.guides-main) .section-subnav-links a[href*="#progression"],
-.guide-wiki-home .section-subnav-links a[href*="#progression"] { order: -10; }
 
 /* Landing — compact wiki header instead of a marketing hero. */
 .wiki-hero {
