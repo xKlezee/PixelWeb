@@ -1,4 +1,6 @@
 (() => {
+  'use strict';
+
   const nav = document.querySelector('.site-nav');
   const navLinks = document.getElementById('navLinks');
   const navToggle = document.getElementById('navToggle');
@@ -6,9 +8,24 @@
   const mobileNav = matchMedia('(max-width: 980px)');
   const network = window.PIXEL_NETWORK_PUBLIC || {};
   const currentPage = location.pathname.split('/').pop() || 'index.html';
+  const currentHash = location.hash.replace(/^#/, '');
 
-  // Local development may use HTTP on the same origin. Any external destination supplied
-  // by public data must be HTTPS so a content update cannot silently weaken transport.
+  /* Browser tab identity is deliberately separate from the full horizontal/root logo. */
+  const faviconHref = 'favicon.png';
+  const faviconLinks = [...document.querySelectorAll('link[rel~="icon"]')];
+  const configureFavicon = link => {
+    link.href = faviconHref;
+    link.type = 'image/png';
+    link.sizes = '32x32';
+  };
+  if (faviconLinks.length) faviconLinks.forEach(configureFavicon);
+  else {
+    const icon = document.createElement('link');
+    icon.rel = 'icon';
+    configureFavicon(icon);
+    document.head.appendChild(icon);
+  }
+
   const safePublicUrl = (value, fallback = null) => {
     const raw = String(value ?? '').trim();
     if (!raw) return fallback;
@@ -23,7 +40,7 @@
     }
   };
 
-  const safeLocalPage = (value, fallback) => {
+  const safeLocalPage = (value, fallback = 'index.html') => {
     if (!value) return fallback;
     const candidate = String(value).trim();
     if (/^[A-Za-z0-9._-]+\.html$/.test(candidate)) return candidate;
@@ -37,11 +54,54 @@
     }
   };
 
+  const safeLocalTarget = (value, fallback = 'index.html') => {
+    if (!value) return fallback;
+    const candidate = String(value).trim();
+    if (/^[A-Za-z0-9._-]+\.html(?:#[A-Za-z0-9_-]+)?$/.test(candidate)) return candidate;
+    try {
+      const url = new URL(candidate, location.href);
+      if (url.origin !== location.origin || !url.pathname.endsWith('.html')) return fallback;
+      const file = url.pathname.split('/').pop();
+      if (!/^[A-Za-z0-9._-]+\.html$/.test(file || '')) return fallback;
+      const hash = /^#[A-Za-z0-9_-]+$/.test(url.hash) ? url.hash : '';
+      return `${file}${hash}`;
+    } catch {
+      return fallback;
+    }
+  };
+
+  const targetPage = value => String(value || '').split('#')[0];
+  const targetHash = value => String(value || '').includes('#') ? String(value).split('#')[1] : '';
   const changelogLanding = safeLocalPage(network?.changelog?.landing, 'changelog.html');
   const guidesLanding = safeLocalPage(network?.community?.guidesLanding, 'guides.html');
   const marketplaceLanding = 'marketplace.html';
   const isGuideDetailPage = /^guide-[A-Za-z0-9._-]+\.html$/.test(currentPage);
-  const isCurrentLocalDestination = href => currentPage === href || (isGuideDetailPage && href === guidesLanding);
+
+  const guideCategoryByPage = Object.freeze({
+    'guide-getting-started.html': 'progression',
+    'guide-progression.html': 'progression',
+    'guide-worlds.html': 'progression',
+    'guide-nexus.html': 'specials',
+    'guide-skyblock.html': 'mechanics',
+    'guide-stats-equipment.html': 'armor',
+    'guide-talismans.html': 'specials',
+    'guide-enchantments.html': 'boosts'
+  });
+
+  const currentGuideCategory = isGuideDetailPage
+    ? guideCategoryByPage[currentPage]
+    : (currentPage === guidesLanding ? (currentHash || 'mechanics') : null);
+
+  const isCurrentLocalDestination = href => {
+    const page = targetPage(href);
+    const hash = targetHash(href);
+    if (page !== currentPage) {
+      if (!(isGuideDetailPage && page === guidesLanding)) return false;
+    }
+    if (page === guidesLanding && hash) return currentGuideCategory === hash;
+    if (page === guidesLanding && (currentPage === guidesLanding || isGuideDetailPage)) return true;
+    return page === currentPage;
+  };
 
   const appendNavCopy = (link, title, description) => {
     const strong = document.createElement('strong');
@@ -53,28 +113,23 @@
 
   const createLocalTextLink = (href, label) => {
     const link = document.createElement('a');
-    link.href = safeLocalPage(href, 'index.html');
+    link.href = safeLocalTarget(href, 'index.html');
     link.textContent = label;
     if (isCurrentLocalDestination(link.getAttribute('href'))) link.setAttribute('aria-current', 'page');
     return link;
   };
 
-  /* Keyboard users get a stable first-focus route past global navigation. */
   let skipLink = null;
   if (main) {
     if (!main.id) main.id = 'main-content';
     if (!main.hasAttribute('tabindex')) main.tabIndex = -1;
-
     skipLink = document.createElement('a');
     skipLink.className = 'skip-link';
     skipLink.href = `#${main.id}`;
     skipLink.textContent = 'Skip to content';
-    skipLink.addEventListener('click', () => {
-      requestAnimationFrame(() => main.focus({ preventScroll: true }));
-    });
+    skipLink.addEventListener('click', () => requestAnimationFrame(() => main.focus({ preventScroll: true })));
   }
 
-  /* Reading progress only. Scroll handlers must not mutate page geometry. */
   const progress = document.createElement('progress');
   progress.className = 'scroll-progress';
   progress.max = 1;
@@ -86,46 +141,27 @@
   const root = document.documentElement;
   let maxScroll = 1;
   let scheduled = false;
-
-  const measureScrollRange = () => {
-    maxScroll = Math.max(1, root.scrollHeight - window.innerHeight);
-  };
-
+  const measureScrollRange = () => { maxScroll = Math.max(1, root.scrollHeight - innerHeight); };
   const updateScrollProgress = () => {
     scheduled = false;
-    const y = window.scrollY || root.scrollTop || 0;
+    const y = scrollY || root.scrollTop || 0;
     progress.value = Math.min(1, Math.max(0, y / maxScroll));
   };
-
   const requestUpdate = () => {
     if (scheduled) return;
     scheduled = true;
     requestAnimationFrame(updateScrollProgress);
   };
-
   addEventListener('scroll', requestUpdate, { passive: true });
-  addEventListener('resize', () => {
+  addEventListener('resize', () => { measureScrollRange(); requestUpdate(); }, { passive: true });
+  addEventListener('load', () => { measureScrollRange(); requestUpdate(); }, { once: true });
+  if ('ResizeObserver' in window && document.body) new ResizeObserver(() => {
     measureScrollRange();
     requestUpdate();
-  }, { passive: true });
-  addEventListener('load', () => {
-    measureScrollRange();
-    requestUpdate();
-  }, { once: true });
-
-  if ('ResizeObserver' in window && document.body) {
-    const resizeObserver = new ResizeObserver(() => {
-      measureScrollRange();
-      requestUpdate();
-    });
-    resizeObserver.observe(document.body);
-  }
-
+  }).observe(document.body);
   measureScrollRange();
   updateScrollProgress();
 
-  /* One canonical navigation model for every public-site page. Static HTML remains a
-     no-JS fallback, but runtime navigation never depends on legacy page-specific markup. */
   const canonicalNavigation = [
     {
       label: 'Explore',
@@ -138,24 +174,33 @@
       ]
     },
     {
-      label: 'Development',
+      label: 'Guide',
+      relatedPages: [guidesLanding],
+      guideFamily: true,
       items: [
-        ['development.html', 'Development', 'Current status, roadmap and product scale.'],
-        [changelogLanding, 'Changelog', 'Player-facing release notes.']
+        [`${guidesLanding}#mechanics`, 'Mechanics', 'Gameplay systems and how they behave.'],
+        [`${guidesLanding}#tools`, 'Tools', 'Tool families and their supporting systems.'],
+        [`${guidesLanding}#armor`, 'Armor', 'Defense, equipment and armor modifiers.'],
+        [`${guidesLanding}#specials`, 'Specials', 'Talismans, Nexus and specialized systems.'],
+        [`${guidesLanding}#boosts`, 'Boosts', 'Effects and systems that improve performance.'],
+        [`${guidesLanding}#progression`, 'Progression', 'Getting started, Worlds, Prestige and progression routes.']
       ]
     },
     {
       label: 'Community',
+      relatedPages: ['community.html'],
       items: [
-        ['community.html', 'Community', 'Discord and network resources.'],
-        [guidesLanding, 'Guides', 'Detailed player reference and mechanics.']
+        ['leaderboards.html', 'Leaderboards', 'Public rankings and competitive progression.'],
+        [changelogLanding, 'Changelog', 'Player-facing release notes.'],
+        ['rules.html', 'Rules', 'Current player and community rules.'],
+        ['staff.html', 'Staff Team', 'The currently published Pixel Network team.']
       ]
     }
   ];
 
   const createNavLink = ([href, title, description]) => {
     const link = document.createElement('a');
-    link.href = safeLocalPage(href, 'index.html');
+    link.href = safeLocalTarget(href, 'index.html');
     appendNavCopy(link, title, description);
     if (isCurrentLocalDestination(link.getAttribute('href'))) link.setAttribute('aria-current', 'page');
     return link;
@@ -166,57 +211,45 @@
     canonicalNavigation.forEach(groupData => {
       const group = document.createElement('div');
       group.className = 'nav-group';
-
       const button = document.createElement('button');
       button.type = 'button';
       button.setAttribute('aria-haspopup', 'true');
       button.textContent = groupData.label;
-
       const menu = document.createElement('div');
       menu.className = 'nav-dropdown';
       groupData.items.forEach(item => menu.appendChild(createNavLink(item)));
-
       group.append(button, menu);
       fragment.appendChild(group);
 
-      /* Marketplace is a first-level product category, not an Explore or Store child. */
       if (groupData.label === 'Explore') {
         const marketplace = createLocalTextLink(marketplaceLanding, 'Marketplace');
         marketplace.classList.add('nav-marketplace');
         fragment.appendChild(marketplace);
       }
     });
-
-    const about = createLocalTextLink('team.html', 'About');
-    fragment.appendChild(about);
-
+    fragment.appendChild(createLocalTextLink('team.html', 'About'));
     navLinks.replaceChildren(fragment);
   }
 
-  /* A contextual sibling rail mirrors the information architecture used by mature
-     network sites: global family first, then one-click movement inside that family. */
-  const currentNavigationGroup = canonicalNavigation.find(groupData =>
-    groupData.items.some(([href]) => isCurrentLocalDestination(safeLocalPage(href, 'index.html')))
-  );
+  const currentNavigationGroup = canonicalNavigation.find(groupData => {
+    if (groupData.guideFamily && (currentPage === guidesLanding || isGuideDetailPage)) return true;
+    if (groupData.relatedPages?.includes(currentPage)) return true;
+    return groupData.items.some(([href]) => isCurrentLocalDestination(safeLocalTarget(href, 'index.html')));
+  });
 
   if (nav && main && currentNavigationGroup) {
     const sectionNav = document.createElement('nav');
     sectionNav.className = 'section-subnav';
     sectionNav.setAttribute('aria-label', `${currentNavigationGroup.label} sections`);
-
     const inner = document.createElement('div');
     inner.className = 'shell section-subnav-inner';
-
     const label = document.createElement('span');
     label.className = 'section-subnav-label';
     label.textContent = currentNavigationGroup.label;
-    inner.appendChild(label);
-
     const links = document.createElement('div');
     links.className = 'section-subnav-links';
-
     currentNavigationGroup.items.forEach(([href, title]) => {
-      const safeHref = safeLocalPage(href, 'index.html');
+      const safeHref = safeLocalTarget(href, 'index.html');
       const link = document.createElement('a');
       link.href = safeHref;
       link.textContent = title;
@@ -226,55 +259,40 @@
       }
       links.appendChild(link);
     });
-
-    inner.appendChild(links);
+    inner.append(label, links);
     sectionNav.appendChild(inner);
     nav.insertAdjacentElement('afterend', sectionNav);
     document.body.classList.add('has-section-subnav');
   }
 
-  /* Navigation groups: hover is convenient on desktop, click/keyboard is authoritative. */
   const groups = [...document.querySelectorAll('.nav-group')];
-
   const closeGroup = group => {
     const button = group?.querySelector(':scope > button');
     group?.classList.remove('is-open');
     button?.setAttribute('aria-expanded', 'false');
   };
-
-  const closeGroups = (except = null) => {
-    groups.forEach(group => {
-      if (group !== except) closeGroup(group);
-    });
-  };
-
+  const closeGroups = (except = null) => groups.forEach(group => { if (group !== except) closeGroup(group); });
   const openGroup = group => {
     if (!group) return;
-    const button = group.querySelector(':scope > button');
     closeGroups(group);
     group.classList.add('is-open');
-    button?.setAttribute('aria-expanded', 'true');
+    group.querySelector(':scope > button')?.setAttribute('aria-expanded', 'true');
   };
 
   groups.forEach((group, index) => {
     const button = group.querySelector(':scope > button');
     const menu = group.querySelector(':scope > .nav-dropdown');
     if (!button || !menu) return;
-
-    const menuId = `nav-menu-${index + 1}`;
-    menu.id = menuId;
-    button.setAttribute('aria-controls', menuId);
+    menu.id = `nav-menu-${index + 1}`;
+    button.setAttribute('aria-controls', menu.id);
     button.setAttribute('aria-expanded', 'false');
-
-    if (menu.querySelector('[aria-current="page"]')) group.classList.add('contains-current');
-
+    if (menu.querySelector('[aria-current="page"]') || currentNavigationGroup?.label === button.textContent) {
+      group.classList.add('contains-current');
+    }
     button.addEventListener('click', event => {
       event.preventDefault();
-      const willOpen = !group.classList.contains('is-open');
-      if (willOpen) openGroup(group);
-      else closeGroup(group);
+      group.classList.contains('is-open') ? closeGroup(group) : openGroup(group);
     });
-
     button.addEventListener('keydown', event => {
       if (event.key === 'ArrowDown') {
         event.preventDefault();
@@ -286,36 +304,26 @@
         button.focus();
       }
     });
-
     menu.addEventListener('keydown', event => {
       if (event.key !== 'Escape') return;
       event.preventDefault();
       closeGroup(group);
       button.focus();
     });
-
-    group.addEventListener('pointerenter', () => {
-      if (!mobileNav.matches) openGroup(group);
-    });
+    group.addEventListener('pointerenter', () => { if (!mobileNav.matches) openGroup(group); });
     group.addEventListener('pointerleave', () => {
       if (!mobileNav.matches && !group.contains(document.activeElement)) closeGroup(group);
     });
-    group.addEventListener('focusin', () => {
-      if (!mobileNav.matches) openGroup(group);
-    });
+    group.addEventListener('focusin', () => { if (!mobileNav.matches) openGroup(group); });
     group.addEventListener('focusout', () => {
       if (mobileNav.matches) return;
-      setTimeout(() => {
-        if (!group.contains(document.activeElement)) closeGroup(group);
-      }, 0);
+      setTimeout(() => { if (!group.contains(document.activeElement)) closeGroup(group); }, 0);
     });
   });
 
-  /* Canonical desktop actions: Discord, Store, Play, menu toggle. */
   const navActions = nav?.querySelector('.nav-actions');
   const storeLanding = safeLocalPage(network?.store?.landing, 'store.html');
   const discordUrl = safePublicUrl(network?.community?.discordUrl);
-
   const configureDiscordLink = link => {
     if (!link) return;
     link.textContent = 'Discord';
@@ -325,12 +333,12 @@
       link.target = '_blank';
       link.rel = 'noopener';
       link.removeAttribute('aria-disabled');
-      return;
+    } else {
+      link.removeAttribute('href');
+      link.removeAttribute('target');
+      link.removeAttribute('rel');
+      link.setAttribute('aria-disabled', 'true');
     }
-    link.removeAttribute('href');
-    link.removeAttribute('target');
-    link.removeAttribute('rel');
-    link.setAttribute('aria-disabled', 'true');
   };
 
   if (navActions) {
@@ -341,62 +349,51 @@
       navActions.prepend(desktopDiscord);
     }
     configureDiscordLink(desktopDiscord);
-
     let desktopStore = navActions.querySelector('.nav-store');
     if (!desktopStore) {
       desktopStore = document.createElement('a');
       desktopStore.className = 'button quiet nav-store';
-      const playButton = navActions.querySelector('.nav-play');
-      navActions.insertBefore(desktopStore, playButton || navToggle || null);
+      navActions.insertBefore(desktopStore, navActions.querySelector('.nav-play') || navToggle || null);
     }
     desktopStore.textContent = 'Store';
     desktopStore.href = storeLanding;
     desktopStore.removeAttribute('target');
     desktopStore.removeAttribute('rel');
-    desktopStore.toggleAttribute('aria-current', currentPage === storeLanding);
     if (currentPage === storeLanding) desktopStore.setAttribute('aria-current', 'page');
+    else desktopStore.removeAttribute('aria-current');
   }
 
-  /* Store and Discord remain available inside the mobile menu while Play stays in the header. */
   if (navLinks) {
     const mobileDiscord = document.createElement('a');
     mobileDiscord.className = 'nav-mobile-store nav-mobile-discord';
     configureDiscordLink(mobileDiscord);
-    navLinks.appendChild(mobileDiscord);
-
     const mobileStore = document.createElement('a');
     mobileStore.className = 'nav-mobile-store nav-mobile-store-link';
     mobileStore.href = storeLanding;
     mobileStore.textContent = 'Store';
     if (currentPage === storeLanding) mobileStore.setAttribute('aria-current', 'page');
-    navLinks.appendChild(mobileStore);
+    navLinks.append(mobileDiscord, mobileStore);
   }
 
-  /* The global footer follows one model as well. Page-specific static HTML remains a
-     no-JS fallback; with JavaScript enabled every public page exposes the same exits. */
   const footerInner = document.querySelector('.site-footer .site-footer-inner');
   if (footerInner) {
     const brand = document.createElement('span');
     brand.textContent = 'Pixel Network · Java Edition';
-
     const destinations = document.createElement('span');
     [
       [marketplaceLanding, 'Marketplace'],
-      ['store.html', 'Store'],
-      [guidesLanding, 'Guides'],
+      [storeLanding, 'Store'],
+      [guidesLanding, 'Guide'],
       ['community.html', 'Community'],
-      ['development.html', 'Development'],
       ['team.html', 'About']
     ].forEach(([href, label], index) => {
       if (index) destinations.appendChild(document.createTextNode(' · '));
       destinations.appendChild(createLocalTextLink(href, label));
     });
-
     footerInner.replaceChildren(brand, destinations);
   }
 
-  /* Keep the public Discord destination synchronized with data/network.js. */
-  document.querySelectorAll('[data-discord-url]').forEach(link => configureDiscordLink(link));
+  document.querySelectorAll('[data-discord-url]').forEach(configureDiscordLink);
 
   const closeMobileNav = () => {
     navLinks?.classList.remove('open');
@@ -405,16 +402,12 @@
     closeGroups();
   };
 
-  /* site.js keeps a basic no-polish fallback. When this canonical layer is present,
-     capture the toggle click before that fallback listener so one controller owns all
-     menu state and aria/body classes regardless of listener registration order. */
   navToggle?.addEventListener('click', event => {
     event.stopImmediatePropagation();
     if (!mobileNav.matches || !navLinks) {
       closeMobileNav();
       return;
     }
-
     const willOpen = !navLinks.classList.contains('open');
     navLinks.classList.toggle('open', willOpen);
     navToggle.setAttribute('aria-expanded', String(willOpen));
@@ -426,38 +419,38 @@
     if (!mobileNav.matches || !event.target.closest('a')) return;
     closeMobileNav();
   });
-
   document.addEventListener('pointerdown', event => {
     if (nav?.contains(event.target)) return;
     closeGroups();
     if (mobileNav.matches && navLinks?.classList.contains('open')) closeMobileNav();
   });
-
   document.addEventListener('keydown', event => {
     if (event.key !== 'Escape') return;
     const openGroupButton = document.querySelector('.nav-group.is-open > button');
     if (openGroupButton) {
       closeGroups();
       openGroupButton.focus();
-      return;
-    }
-    if (mobileNav.matches && navLinks?.classList.contains('open')) {
+    } else if (mobileNav.matches && navLinks?.classList.contains('open')) {
       closeMobileNav();
       navToggle?.focus();
     }
   });
-
-  const syncNavigationMode = () => {
+  mobileNav.addEventListener?.('change', () => {
     document.body.classList.remove('nav-open');
     closeGroups();
     if (!mobileNav.matches) {
       navLinks?.classList.remove('open');
       navToggle?.setAttribute('aria-expanded', 'false');
     }
-  };
-  mobileNav.addEventListener?.('change', syncNavigationMode);
+  });
 
-  /* Conservative same-origin prefetch on intent only. */
+  if (currentPage === guidesLanding && !document.querySelector('script[data-guide-categories]')) {
+    const script = document.createElement('script');
+    script.src = 'guide-categories.js';
+    script.dataset.guideCategories = '';
+    document.head.appendChild(script);
+  }
+
   const prefetched = new Set();
   const prefetch = href => {
     if (!href || prefetched.has(href)) return;
@@ -470,10 +463,9 @@
       link.href = url.href;
       document.head.appendChild(link);
     } catch {
-      // Invalid destinations are ignored instead of being prefetched.
+      /* Invalid destinations are ignored. */
     }
   };
-
   document.querySelectorAll('a[href]').forEach(link => {
     const href = link.getAttribute('href');
     link.addEventListener('pointerenter', () => prefetch(href), { once: true, passive: true });
