@@ -4,9 +4,9 @@
 .nav-actions .nav-discord,
 .nav-actions .nav-play,
 .button.primary.nav-play {
-  height: 40px;
-  min-height: 40px;
-  max-height: 40px;
+  height: 40px !important;
+  min-height: 40px !important;
+  max-height: 40px !important;
   box-sizing: border-box;
   padding: 0 16px;
   border: 2px solid #343941 !important;
