@@ -2,18 +2,23 @@
 
 Official web experience for Pixel Network.
 
-The site presents the network's gameplay model, progression worlds, Nexus endgame, Marketplace collections, development direction, team, community surfaces and player documentation through a lightweight static frontend deployed with GitHub Pages.
+The site presents the network's gameplay model, progression worlds, Nexus endgame, Marketplace collections, team, community surfaces and player documentation through a lightweight static frontend deployed with GitHub Pages.
 
 ## Public architecture
 
+- The canonical primary content families are **Explore**, **Marketplace**, **Guide**, **Community** and **About**. Store, Discord and Play remain actions rather than content families.
 - Product/overview pages explain the experience and relationships between systems.
 - `marketplace.html` is a separate primary category for cosmetic collections, rotations and interactive Minecraft-model inspection.
 - `data/marketplace.js` owns the browser-public Marketplace catalogue derived from verified Nexo item registrations; `docs/MARKETPLACE-NEXO-STRUCTURE.md` records the source hierarchy and import rules.
-- `guides.html` is the current player-documentation entry point.
+- **Guide replaces the former Development navigation family.** `guides.html` remains its canonical landing route and groups the current guide library under Mechanics, Tools, Armor, Specials, Boosts and Progression.
 - Detailed `guide-*.html` pages use a denser documentation-specific interface and canonical public data rather than duplicating exact gameplay values.
+- Community contains **Leaderboards, Changelog, Rules and Staff Team**. `community.html` remains the landing hub and Discord remains the live conversation layer.
+- `docs/NAVIGATION-STRUCTURE.md` is the source-of-truth note for the current navigation hierarchy and guide placement.
 - `data/network.js` owns the currently shared verified public network facts used across overview and guide surfaces.
 - The old GitBook documentation is retained only as an incomplete legacy migration reference. It is not the current source of truth.
-- Community is centered on Discord and Guides; the former Forum surface is retired.
+- The former Forum surface is retired.
+- The former `development.html` route is retained only as a noindex compatibility redirect to Guide; it is not a navigation category or sitemap destination.
+- `favicon.png` is the browser-tab icon and contains only the square Pixel Network cube. The full `LOGO OFICIAL.png` remains the header/social brand asset.
 
 ## Security boundary
 
