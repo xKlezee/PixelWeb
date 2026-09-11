@@ -29,17 +29,19 @@ A configured control is not a passed control. Record the actual result for the e
 - Local images/scripts/styles/deferred media resolve inside the intended repository/public roots.
 - External `_blank` links include `rel="noopener"`.
 - No duplicate IDs exist.
-- Above 980 px with a fine pointer, Explore / Development / Community retain hover-only pointer behavior without click-pinning.
+- Above 980 px with a fine pointer, Explore / Guide / Community retain hover-only pointer behavior without click-pinning.
 - At 980 px and below, explicit mobile click/touch group behavior remains available.
 - Keyboard opening/focus/Escape remain independent supported paths.
-- Guides remains selected for detailed `guide-*.html` pages.
+- Guide remains selected for detailed `guide-*.html` pages.
 - Skip to content is the first useful keyboard route on standard pages and moves focus to `<main>`.
 - Contextual sibling navigation appears only for the current category:
   - Explore → Gameplay / Systems / Worlds / Skyblock / Nexus;
-  - Development → Development / Changelog;
-  - Community → Community / Guides.
-- The current contextual destination and its parent global group use the Pixel Blue active treatment without relying on color alone for meaning.
+  - Guide → Progression / Mechanics / Tools / Armor / Specials / Boosts;
+  - Community → Leaderboards / Changelog / Rules / Staff Team.
+- Progression is the first Guide item in the canonical runtime array, Guide category data and visible sublist; `guides.html` without a hash treats Progression as the default category.
+- The current contextual destination and its parent global group use the active treatment without relying on color alone for meaning.
 - The contextual rail remains horizontally usable at narrow widths and does not create page-level overflow.
+- Worlds/Nexus retain the contextual-rail height required by their immersive viewport math.
 - No visible Forum destination/copy reappears in global or contextual navigation, including before runtime navigation replacement.
 
 ## Forum retirement
@@ -64,10 +66,11 @@ A configured control is not a passed control. Record the actual result for the e
 - Public external destinations use approved canonical HTTPS URLs.
 - Store thresholds remain unpublished while `thresholdsVerified` is false.
 
-## About / owner skin viewers
+## Staff Team / owner skin viewers
 
-- About keeps Klezee and PxlMads equal in owner status/visual weight.
-- `team-models.js` resolves skin textures by the configured usernames rather than repository-pinned owner renders.
+- Staff Team keeps Klezee and PxlMads equal in owner status/visual weight.
+- About does not duplicate the owner-profile cards.
+- `team-models.js` is loaded by `staff.html` and resolves skin textures by the configured usernames rather than repository-pinned owner renders.
 - Both viewers render readable Minecraft geometry without smoothing-related blur.
 - Pointer drag rotates the model and releases pointer capture correctly.
 - ArrowLeft/ArrowRight rotate yaw; ArrowUp/ArrowDown adjust pitch.
@@ -77,6 +80,27 @@ A configured control is not a passed control. Record the actual result for the e
 - Product copy describes the skin as username-synchronized rather than implying instant update guarantees.
 - The no-JavaScript fallback also uses username-based remote renders.
 - Browser/network QA confirms the selected skin provider permits the CORS behavior required for canvas rendering.
+- Staff Team states that only intentionally public roles are listed and does not infer private staff membership.
+
+## About / legal information
+
+- `team.html` remains the canonical About route for URL compatibility.
+- About contains FAQ, Store/Tebex boundary information, the independent Minecraft disclaimer, external-service boundary notes, copyright and attribution.
+- About does not invent prices, rank thresholds, refund promises, payment guarantees or unpublished support terms.
+- The official Store CTA resolves to the approved Tebex HTTPS destination.
+- The Minecraft disclaimer remains prominent and states that Pixel Network is not official, approved by or associated with Mojang/Microsoft.
+- No blanket Creative Commons license is presented as applying to PixelWeb.
+- Pixel-owned material and third-party material have separate rights boundaries.
+- Any future Creative Commons grant identifies the exact non-software material plus exact license/version rather than relicensing the whole site.
+
+## Shared footer
+
+- `polish.js` replaces legacy per-page footer fragments with one shared runtime footer.
+- Footer includes Pixel Network / Java Edition identity plus maintained links to Marketplace, Store, Guide, Community, Rules, Staff Team and About.
+- Footer includes the Minecraft unofficial-service disclaimer.
+- Footer includes a concise copyright/third-party-rights boundary.
+- Footer remains readable in Home, Guide, immersive Worlds/Nexus, Marketplace and secondary visual families without overriding their intended footer background.
+- Footer collapses cleanly on narrow widths without page-level horizontal overflow.
 
 ## Dynamic rendering / CSP
 
@@ -86,13 +110,14 @@ A configured control is not a passed control. Record the actual result for the e
 - No direct runtime inline-style mutation is introduced.
 - Dynamic URLs are constrained to expected scheme/origin where appropriate.
 - Contextual navigation is constructed from the same canonical runtime navigation model rather than duplicated independent data.
-- About's remote skin requests remain governed by the page's existing `img-src` policy and do not require weakening script/style CSP.
+- Staff Team remote skin requests remain governed by the page's existing `img-src` policy and do not require weakening script/style CSP.
 
 ## Guide content integrity
 
 - Guide evidence remains separate from feature state.
 - Shared numeric facts read from canonical owners where one exists.
 - `guides.html` retains one primary entry for each detailed `guide-*.html` page.
+- Progression is Category 01 and precedes Mechanics in the Guide index/sidebar/subnav.
 - Browser-public Guide copy avoids repository/deployment/database implementation detail guarded by `validate_player_facing_copy.py`.
 - Nexus is never presented as World 5.
 - Progression reset/reward/XP/persistence semantics remain unpublished until independently re-verified.
@@ -119,7 +144,7 @@ A configured control is not a passed control. Record the actual result for the e
 
 ## Browser behavior
 
-Verify Home, Gameplay, Worlds, Nexus, Systems, Skyblock, Store, Community, Development, Changelog, About and every detailed Guide. Direct `forum.html` is tested only as a legacy redirect.
+Verify Home, Gameplay, Worlds, Nexus, Systems, Skyblock, Store, Marketplace, Community, Leaderboards, Changelog, Rules, Staff Team, About, Guide and every detailed Guide. Direct `forum.html` and `development.html` are tested only as legacy redirects.
 
 At minimum confirm:
 
@@ -129,9 +154,12 @@ At minimum confirm:
 - contextual sibling rail is correct and active state follows the current page;
 - Play modal focus trap/Escape/restore behavior works;
 - Guide sidebars/rails/search/tables remain usable;
-- owner skin textures resolve and both canvases can be rotated with pointer and keyboard;
+- owner skin textures resolve on Staff Team and both canvases can be rotated with pointer and keyboard;
 - owner viewer failure state remains usable;
+- About FAQ/details, Tebex link and legal sections are readable and keyboard accessible;
+- the shared footer is present and readable across visual families;
 - direct `forum.html` redirects to Community and no Forum UI flashes first;
+- direct `development.html` redirects to Guide and no retired Development UI returns;
 - reduced-motion mode remains usable;
 - no unexpected HTTP subresources are requested.
 
@@ -147,7 +175,9 @@ At every width check:
 - no inaccessible navigation;
 - no unintended image crop/stretch;
 - contextual rails/tables remain independently scrollable where intentional;
-- owner viewer dimensions remain balanced with the owner copy.
+- Staff Team owner viewer dimensions remain balanced with the owner copy;
+- About overview cards and policy panels collapse without becoming oversized marketing cards;
+- footer link groups and legal copy remain readable.
 
 Do not mark a viewport PASS from CSS/source inspection alone.
 
