@@ -106,7 +106,7 @@ The full explanation remains in About and the dedicated License page.
 
 ## Licensing decision
 
-PixelWeb now uses the **Pixel Network Proprietary Website, Source, Content & Asset License v1.0** as the default rights statement for Pixel-owned material.
+PixelWeb uses the **Pixel Network Proprietary Website, Source, Content & Asset License v1.0** as the default rights statement for Pixel-owned material.
 
 Canonical sources:
 
