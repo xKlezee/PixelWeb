@@ -9,7 +9,7 @@
   .stats-formula-main,.stats-formula-note,.stats-family-card,.stats-layer-card,.stats-exclusion,
   .stats-verification-grid .verification-card
 ) {
-  border-radius: 2px !important;
+  border-radius: 3px !important;
   box-shadow: none !important;
 }
 
@@ -21,90 +21,72 @@
   .stats-formula-main,.stats-formula-note,.stats-family-card,.stats-exclusion,
   .stats-verification-grid .verification-card
 ) {
-  border: 1px solid var(--wiki-line) !important;
-  background: rgba(17,23,18,.52) !important;
+  border: 1px solid var(--px-wiki-line,rgba(224,210,176,.12)) !important;
+  background: rgba(255,255,255,.016) !important;
 }
 
-/* Flow components read as compact documentation tables rather than promotional cards. */
 .guides-main .talisman-state-flow,
 .guides-main .talisman-pipeline,
 .guides-main .progression-layer-rail {
-  border: 1px solid var(--wiki-line-strong) !important;
-  background: rgba(15,20,16,.58) !important;
+  border: 1px solid var(--px-wiki-line-strong,rgba(224,210,176,.2)) !important;
+  background: rgba(24,23,20,.48) !important;
 }
-.guides-main :is(.talisman-state,.talisman-pipeline-stage,.progression-layer) {
-  background: transparent !important;
-}
+.guides-main :is(.talisman-state,.talisman-pipeline-stage,.progression-layer) { background: transparent !important; }
 .guides-main .talisman-state + .talisman-state,
 .guides-main .talisman-pipeline-stage + .talisman-pipeline-stage,
-.guides-main .progression-layer + .progression-layer {
-  border-color: var(--wiki-line) !important;
-}
+.guides-main .progression-layer + .progression-layer { border-color: var(--px-wiki-line,rgba(224,210,176,.12)) !important; }
 
-/* Status tokens remain visible, but never become dominant UI. */
 .guides-main :is(
   .guide-disclosure,.talisman-rarity-chip,.talisman-pipeline-value,
   .stats-family-status,.stats-family-chips code,.stats-family-empty,
   .enchant-mechanic-status
 ) {
   min-height: 22px !important;
-  border-radius: 2px !important;
+  border-radius: 3px !important;
   background: rgba(255,255,255,.018) !important;
   box-shadow: none !important;
   font-size: 7.5px !important;
 }
 .guides-main .talisman-state-marker {
-  border-radius: 2px !important;
-  background: rgba(114,177,255,.035) !important;
+  border-radius: 3px !important;
+  background: rgba(231,189,75,.035) !important;
   box-shadow: none !important;
 }
 
-/* Notes use a wiki callout language. */
 .guides-main :is(.talisman-secret-policy,.enchant-semantic-note,.progression-access-note,.skyblock-status-banner) {
   padding: 13px 16px !important;
   border: 0 !important;
-  border-left: 3px solid var(--wiki-gold) !important;
-  background: rgba(212,186,120,.04) !important;
+  border-left: 3px solid var(--px-wiki-gold,#e7bd4b) !important;
+  background: rgba(231,189,75,.045) !important;
 }
 .guides-main .stats-layer-card {
   border: 0 !important;
-  border-left: 3px solid var(--wiki-blue) !important;
-  background: rgba(114,177,255,.035) !important;
+  border-left: 3px solid #8ba9cf !important;
+  background: rgba(139,169,207,.035) !important;
 }
 
-/* Formula stays visually distinct because it is reference data, not decoration. */
 .guides-main .stats-formula-main,
-.guides-main .stats-formula-note {
-  background: rgba(14,19,15,.72) !important;
-}
+.guides-main .stats-formula-note { background: rgba(24,23,20,.62) !important; }
 .guides-main .stats-formula-code {
-  border-radius: 2px !important;
-  border-color: var(--wiki-line-strong) !important;
-  background: #090d0a !important;
-  color: #c9dcf4 !important;
+  border-radius: 3px !important;
+  border-color: var(--px-wiki-line-strong,rgba(224,210,176,.2)) !important;
+  background: #151411 !important;
+  color: #d8d1c5 !important;
 }
 
-/* Verification is secondary metadata. */
-.guides-main :is(.verification-grid,.enchant-verification-grid,.stats-verification-grid) {
-  gap: 8px !important;
-}
-.guides-main :is(.verification-card,.stats-verification-grid .verification-card) {
-  padding: 15px 16px !important;
-}
+.guides-main :is(.verification-grid,.enchant-verification-grid,.stats-verification-grid) { gap: 8px !important; }
+.guides-main :is(.verification-card,.stats-verification-grid .verification-card) { padding: 15px 16px !important; }
 .guides-main :is(.verification-card,.stats-verification-grid .verification-card) h3 {
   margin-top: 6px !important;
   font-size: 14px !important;
 }
 
-/* Reduce visual mass in repeated grids. */
 .guides-main :is(
   .enchant-principles,.enchant-mechanics-grid,.enchant-retired-grid,
   .progression-milestone-grid,.progression-boundary-grid,
   .skyblock-capability-grid,.skyblock-foundation-grid,.skyblock-partial-grid,
   .stats-family-grid,.stats-layer-grid,.stats-exclusion-grid
-) {
-  gap: 8px !important;
-}
+) { gap: 8px !important; }
 .guides-main :is(
   .enchant-principle,.enchant-mechanic,.enchant-retired-item,
   .progression-milestone-card,.progression-boundary-card,
@@ -115,7 +97,6 @@
   min-height: 0 !important;
 }
 
-/* Text colors harmonize with the wiki surface even in legacy component styles. */
 .guides-main :is(
   .talisman-state-copy p,.talisman-pipeline-stage p,.verification-card p,.talisman-secret-policy p,
   .enchant-principle p,.enchant-mechanic p,.enchant-retired-item p,.enchant-semantic-note p,
@@ -123,7 +104,7 @@
   .skyblock-foundation-card p,.skyblock-partial-card p,.skyblock-rule p,.skyblock-status-banner p,
   .stats-formula-main p,.stats-formula-note p,.stats-family-card p,.stats-layer-card p,.stats-exclusion p,
   .stats-verification-grid .verification-card p
-) { color: #9ca79a !important; }
+) { color: #aaa396 !important; }
 
 @media (max-width: 700px) {
   .guides-main :is(
