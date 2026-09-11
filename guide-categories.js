@@ -6,6 +6,18 @@
 
   const categories = [
     {
+      id: 'progression',
+      name: 'Progression',
+      description: 'The route through Pixel Network from first entry to Worlds, Prestige, Nexus and alternate progression surfaces.',
+      guides: [
+        ['guide-getting-started.html', 'Getting Started', 'The main Pixel experience and where a new player should begin.'],
+        ['guide-progression.html', 'Levels, Prestige & Legacy', 'Current caps, access milestones and account progression layers.'],
+        ['guide-worlds.html', 'Worlds & Gates', 'The four current Worlds and their progression roles.'],
+        ['guide-nexus.html', 'Nexus & Instances', 'The endgame transition and account-based Nexus access.'],
+        ['guide-skyblock.html', 'Skyblock', 'Personal island progression as a dedicated gameplay route.']
+      ]
+    },
+    {
       id: 'mechanics',
       name: 'Mechanics',
       description: 'How Pixel systems behave in play: island systems, combat rules and the mechanics that connect equipment to progression.',
@@ -49,18 +61,6 @@
       guides: [
         ['guide-enchantments.html', 'Enchantments', 'Equipment effects and specialized enhancement mechanics.'],
         ['guide-talismans.html', 'Talisman Codex', 'Equipped passive effects and advanced Talisman interactions.']
-      ]
-    },
-    {
-      id: 'progression',
-      name: 'Progression',
-      description: 'The route through Pixel Network from first entry to Worlds, Prestige, Nexus and alternate progression surfaces.',
-      guides: [
-        ['guide-getting-started.html', 'Getting Started', 'The main Pixel experience and where a new player should begin.'],
-        ['guide-progression.html', 'Levels, Prestige & Legacy', 'Current caps, access milestones and account progression layers.'],
-        ['guide-worlds.html', 'Worlds & Gates', 'The four current Worlds and their progression roles.'],
-        ['guide-nexus.html', 'Nexus & Instances', 'The endgame transition and account-based Nexus access.'],
-        ['guide-skyblock.html', 'Skyblock', 'Personal island progression as a dedicated gameplay route.']
       ]
     }
   ];

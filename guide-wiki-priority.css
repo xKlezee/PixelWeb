@@ -1,5 +1,6 @@
 /* Pixel Network — final Guide/Wiki cascade overrides.
    Loaded after page-specific guide styles through security-hardening.css. */
+@import url('pixel-global-chrome.css');
 
 .guides-main :is(
   .talisman-state-flow,.talisman-pipeline,.verification-card,.talisman-secret-policy,

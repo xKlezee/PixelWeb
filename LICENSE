@@ -1,0 +1,180 @@
+PIXEL NETWORK PROPRIETARY WEBSITE, SOURCE, CONTENT & ASSET LICENSE
+Version 1.0 — Effective 11 September 2026
+
+Copyright © 2026 Pixel Network. All rights reserved.
+
+IMPORTANT: THIS IS A PROPRIETARY LICENSE. IT IS NOT AN OPEN-SOURCE OR PUBLIC-CONTENT LICENSE.
+
+1. SCOPE AND PURPOSE
+
+This license (the “License”) states the default terms under which material owned or controlled by Pixel Network may be accessed through the PixelWeb repository, the Pixel Network website, and related public distributions of that material.
+
+This License applies only to material for which Pixel Network owns or controls the relevant rights (“Pixel Materials”). It does not claim ownership of or replace the licenses, terms, trademarks, copyrights, permissions, or other rights applicable to Third-Party Materials.
+
+By accessing, copying, downloading, using, modifying, hosting, distributing, or otherwise exercising rights in Pixel Materials, you agree to comply with this License to the extent applicable to that activity. If you do not agree, you must not exercise rights beyond ordinary access to the publicly served website and rights that applicable law or a controlling third-party platform agreement independently grants to you.
+
+2. DEFINITIONS
+
+“Pixel Network” or “Licensor” means the operator and rights holder of the original Pixel Network material covered by this License.
+
+“PixelWeb” means the Pixel Network website project and its repository, including original source code, HTML, CSS, JavaScript, documentation, layouts, interface compositions, written copy, original graphics, branding elements, original media, and other original materials to the extent owned or controlled by Pixel Network.
+
+“Pixel Materials” means original material within PixelWeb or another Pixel Network publication for which Pixel Network owns or controls sufficient rights to license that material.
+
+“Third-Party Materials” means software, code, libraries, trademarks, names, logos, game assets, media, data, fonts, services, documentation, or other material owned or controlled by another person or entity, including material associated with Minecraft, Mojang, Microsoft, Discord, Tebex, GitHub, and third-party libraries or providers.
+
+“Use” includes copying, reproducing, modifying, adapting, translating, distributing, publishing, displaying, performing, hosting, mirroring, sublicensing, selling, incorporating, extracting, or otherwise exploiting material.
+
+3. OWNERSHIP AND RESERVATION OF RIGHTS
+
+Pixel Network retains all right, title, and interest it holds in the Pixel Materials, including applicable copyright, design, database, trade dress, trademark, contractual, and other proprietary rights.
+
+Public accessibility, source visibility, repository availability, browser delivery, or the absence of technical access controls does not place Pixel Materials in the public domain and does not create an implied license.
+
+Except for the limited permissions expressly stated in Section 4, all rights are reserved.
+
+4. LIMITED PERMISSION FOR ORDINARY ACCESS
+
+Subject to this License, Pixel Network grants a limited, revocable, non-exclusive, non-transferable, non-sublicensable permission to:
+
+(a) access and view the publicly served Pixel Network website for personal or ordinary informational use;
+(b) make transient or incidental technical copies reasonably required by a web browser, operating system, content-delivery mechanism, or accessibility technology to display the website;
+(c) link to publicly accessible Pixel Network pages in a lawful, non-deceptive manner that does not imply endorsement, sponsorship, partnership, or ownership; and
+(d) inspect publicly visible source code for evaluation, security review, interoperability review, learning, or reference, provided that such inspection does not itself include prohibited copying, redistribution, deployment, or creation of derivative products.
+
+No commercial exploitation right is granted by this Section.
+
+5. PUBLIC REPOSITORY AND PLATFORM RIGHTS
+
+If PixelWeb is hosted in a public repository, public visibility does not make the project open source.
+
+Where a hosting platform’s mandatory or accepted platform terms grant users limited technical rights necessary to view, clone, cache, or use platform-provided features such as forking, those platform-specific rights apply only to the minimum extent required by that platform agreement. They do not create a broader independent license from Pixel Network to deploy, redistribute, sell, rebrand, publish, sublicense, or create derivative products from Pixel Materials.
+
+A repository fork, clone, archive, cache, or local checkout does not by itself authorize public deployment or redistribution of Pixel Materials.
+
+6. PROHIBITED USES
+
+Unless Pixel Network gives prior written permission that specifically authorizes the activity, you may not, to the extent permitted by applicable law:
+
+(a) copy, republish, redistribute, mirror, rehost, or make available substantial Pixel Materials outside ordinary browser or platform operation;
+(b) deploy PixelWeb, a substantial portion of PixelWeb, or a confusingly similar derivative as another public website, server website, template, theme, product, service, portfolio, marketplace item, or commercial offering;
+(c) modify, adapt, translate, remix, transform, or create derivative works from Pixel Materials for publication or distribution;
+(d) incorporate Pixel source code, interface components, layouts, written copy, original media, artwork, branding, or custom assets into another project, product, service, game network, website, application, or repository;
+(e) sell, rent, lease, sublicense, license, monetize, commercially exploit, or offer Pixel Materials as part of a paid or ad-supported product or service;
+(f) remove, obscure, falsify, or materially alter copyright, ownership, provenance, trademark, license, attribution, or rights notices;
+(g) use Pixel Network names, logos, marks, visual identity, trade dress, or confusingly similar identifiers as your own branding or in a manner likely to create confusion about source, sponsorship, endorsement, affiliation, or ownership;
+(h) scrape, crawl, harvest, bulk-download, or systematically extract Pixel Materials for republication, dataset creation, asset packs, archives, competitive replication, or other exploitation beyond ordinary search-engine indexing and ordinary technical caching;
+(i) use Pixel Materials as a training corpus, fine-tuning corpus, retrieval dataset, evaluation dataset, or other source dataset for developing or improving a machine-learning or generative model, except where such restriction is prohibited by applicable law or Pixel Network has granted written permission;
+(j) bypass, defeat, or interfere with security controls, access controls, rate limits, integrity mechanisms, or technical restrictions protecting Pixel Network systems or materials;
+(k) falsely represent Pixel Materials as original work created by you or another party; or
+(l) use Pixel Materials in an unlawful, fraudulent, deceptive, infringing, defamatory, or malicious manner.
+
+7. NO TRADEMARK OR BRAND LICENSE
+
+No right to use the Pixel Network name, logos, service marks, trade dress, domain identity, server identity, or other source-identifying branding is granted except as strictly necessary for truthful nominative reference to Pixel Network.
+
+Any permission to reproduce Pixel Network branding must be separately granted in writing unless applicable law independently permits the specific use.
+
+8. THIRD-PARTY MATERIALS
+
+Third-Party Materials are excluded from the license grant in this License unless Pixel Network explicitly states otherwise and has authority to grant the relevant rights.
+
+Third-Party Materials remain governed by the rights, licenses, permissions, brand rules, platform terms, and other conditions established by their respective owners or providers.
+
+Nothing in this License grants rights in Minecraft, Mojang, Microsoft, Discord, Tebex, GitHub, third-party software libraries, third-party fonts, third-party media, or other third-party property.
+
+Where PixelWeb displays or references a third-party mark or service, that reference is descriptive and does not imply that Pixel Network owns the third-party mark or that the third party endorses Pixel Network.
+
+9. MINECRAFT INDEPENDENCE
+
+Pixel Network is an independently operated Minecraft community server/network.
+
+NOT AN OFFICIAL MINECRAFT SERVER. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.
+
+Minecraft-related names, concepts, and third-party game materials remain subject to the rights and applicable usage rules of their respective owners. This License covers only Pixel Network’s own protectable contributions and does not attempt to relicense Minecraft or other third-party content.
+
+10. PERMISSIONS AND SEPARATE AGREEMENTS
+
+Pixel Network may grant additional rights through a separate written agreement, authorization, commercial license, contributor agreement, asset-specific notice, or other express permission.
+
+A separate written permission may be narrower or broader than this License. To the extent of a direct conflict, the more specific written permission controls for the material and activity it expressly covers.
+
+Silence, delay, past tolerance, failure to enforce, technical accessibility, or informal discussion does not constitute permission or waiver.
+
+11. CONTRIBUTIONS AND SUBMISSIONS
+
+This License does not by itself determine ownership of material submitted to Pixel Network by third parties and does not automatically transfer copyright from a contributor to Pixel Network.
+
+Contributions, commissioned work, submissions, or pull requests may be subject to separate written terms, contributor terms, employment terms, commission agreements, or platform terms. Contributors are responsible for ensuring they have authority to submit material under any applicable contribution terms.
+
+12. NO IMPLIED LICENSES
+
+No patent, trademark, copyright, database, design, publicity, privacy, confidential-information, or other license is granted by implication, estoppel, exhaustion beyond what applicable law requires, or otherwise.
+
+Only rights expressly granted in this License or in another controlling written agreement are granted by Pixel Network.
+
+13. LICENSE VERSIONING AND CHANGES
+
+Pixel Network may publish revised versions of this proprietary License for future distributions or future access to Pixel Materials.
+
+A revised version does not retroactively cancel a separate written permission already granted for a defined version or copy of Pixel Materials unless that separate agreement lawfully provides otherwise.
+
+The version and effective date stated at the top of the applicable license identify the terms intended to govern that distribution.
+
+14. TERMINATION
+
+The permissions granted by this License terminate automatically if you materially breach the License and fail to cure the breach where applicable law requires or allows a cure.
+
+Upon termination, you must stop the unauthorized use and, where legally required and reasonably possible, remove or destroy unauthorized copies under your control. Termination does not eliminate accrued claims, ownership rights, or provisions that by their nature should survive, including ownership, restrictions, disclaimers, limitation of liability, enforcement, and interpretation provisions.
+
+15. ENFORCEMENT AND NO WAIVER
+
+Pixel Network reserves all remedies available under applicable law or contract for unauthorized use of Pixel Materials.
+
+A failure or delay to enforce a provision in one situation does not waive Pixel Network’s right to enforce that provision or another provision later.
+
+16. DISCLAIMER OF WARRANTIES
+
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, PIXEL MATERIALS AND THE PUBLIC WEBSITE ARE PROVIDED “AS IS” AND “AS AVAILABLE,” WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, ACCURACY, AVAILABILITY, SECURITY, OR CONTINUOUS OPERATION.
+
+Nothing in this Section excludes a warranty or right that applicable law does not permit to be excluded.
+
+17. LIMITATION OF LIABILITY
+
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, PIXEL NETWORK AND ITS OWNERS, CONTRIBUTORS, OR AUTHORIZED OPERATORS WILL NOT BE LIABLE UNDER THIS LICENSE FOR INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE, OR CONSEQUENTIAL DAMAGES, OR FOR LOSS OF DATA, PROFITS, REVENUE, GOODWILL, OR BUSINESS OPPORTUNITY, ARISING FROM OR RELATING TO USE OF OR INABILITY TO USE PIXEL MATERIALS.
+
+Nothing in this Section limits liability that applicable law does not permit to be limited.
+
+18. SEVERABILITY
+
+If a provision of this License is held invalid, illegal, or unenforceable, that provision will be interpreted or limited to the minimum extent necessary where permitted, and the remaining provisions will continue in effect to the maximum extent permitted by law.
+
+19. INTERPRETATION AND ORDER OF PRECEDENCE
+
+This License governs Pixel Materials by default.
+
+For Third-Party Materials, the applicable third-party license, permission, or terms control.
+
+For Pixel Materials covered by a separate written agreement or asset-specific license issued by Pixel Network, that specific agreement or notice controls to the extent it expressly conflicts with this License.
+
+Headings are for convenience and do not limit the meaning of the provisions.
+
+20. APPLICABLE LAW AND MANDATORY RIGHTS
+
+This License does not remove rights, exceptions, limitations, defenses, or mandatory consumer protections that cannot lawfully be waived or restricted.
+
+Nothing in this License is intended to prohibit an activity that applicable law affirmatively permits notwithstanding a private license restriction.
+
+No choice of court, country, or governing jurisdiction is imposed by this version of the License. Applicable law and mandatory jurisdiction rules determine those questions unless Pixel Network and the relevant party enter into a separate written agreement.
+
+21. PERMISSION REQUESTS
+
+Requests for reuse, commercial licensing, reproduction, publication, distribution, derivative use, or other rights beyond this License must receive express written authorization from Pixel Network through an official contact channel published by Pixel Network.
+
+A request does not grant permission until Pixel Network affirmatively provides written authorization.
+
+22. COMPLETE DEFAULT RIGHTS STATEMENT
+
+This License is the complete default rights statement for Pixel Materials distributed with it, subject to applicable law, Third-Party Materials, and any more specific written agreement or asset-specific notice.
+
+ALL RIGHTS NOT EXPRESSLY GRANTED ARE RESERVED BY PIXEL NETWORK.

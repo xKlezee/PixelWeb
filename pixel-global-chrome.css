@@ -1,0 +1,139 @@
+/* Pixel Network — final shared chrome overrides.
+   The Explore rail uses the established Worlds/Nexus Minecraft treatment as the
+   canonical reference. Discord uses Discord's official unmodified Symbol asset
+   inside an inset Pixel material control. */
+
+/* Official Explore contextual rail: Gameplay / Systems / Worlds / Skyblock / Nexus. */
+.minecraft-rpg-page:not(.minecraft-rpg-secondary) .section-subnav,
+.skyblock-rpg-page .section-subnav,
+.worlds-region-page .section-subnav,
+.nexus-encounter-page .section-subnav {
+  min-height: 50px;
+  background: linear-gradient(180deg, rgba(25,31,25,.985), rgba(14,18,15,.985));
+  border-bottom: 2px solid #080a08;
+  box-shadow: 0 4px 0 rgba(0,0,0,.17);
+}
+
+.minecraft-rpg-page:not(.minecraft-rpg-secondary) .section-subnav-inner,
+.skyblock-rpg-page .section-subnav-inner,
+.worlds-region-page .section-subnav-inner,
+.nexus-encounter-page .section-subnav-inner {
+  min-height: 50px;
+}
+
+.minecraft-rpg-page:not(.minecraft-rpg-secondary) .section-subnav-label,
+.skyblock-rpg-page .section-subnav-label,
+.worlds-region-page .section-subnav-label,
+.nexus-encounter-page .section-subnav-label {
+  color: #788376;
+  font-size: 8px;
+  font-weight: 850;
+  letter-spacing: .17em;
+  text-transform: uppercase;
+}
+
+.minecraft-rpg-page:not(.minecraft-rpg-secondary) .section-subnav-links a,
+.skyblock-rpg-page .section-subnav-links a,
+.worlds-region-page .section-subnav-links a,
+.nexus-encounter-page .section-subnav-links a {
+  min-height: 34px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  color: #929b90;
+  font-size: 10px;
+  font-weight: 760;
+  text-transform: uppercase;
+  letter-spacing: .055em;
+}
+
+.minecraft-rpg-page:not(.minecraft-rpg-secondary) .section-subnav-links a:hover,
+.minecraft-rpg-page:not(.minecraft-rpg-secondary) .section-subnav-links a.is-current,
+.minecraft-rpg-page:not(.minecraft-rpg-secondary) .section-subnav-links a[aria-current='page'],
+.skyblock-rpg-page .section-subnav-links a:hover,
+.skyblock-rpg-page .section-subnav-links a.is-current,
+.skyblock-rpg-page .section-subnav-links a[aria-current='page'],
+.worlds-region-page .section-subnav-links a:hover,
+.worlds-region-page .section-subnav-links a.is-current,
+.worlds-region-page .section-subnav-links a[aria-current='page'],
+.nexus-encounter-page .section-subnav-links a:hover,
+.nexus-encounter-page .section-subnav-links a.is-current,
+.nexus-encounter-page .section-subnav-links a[aria-current='page'] {
+  color: #eaf3ff;
+  background: rgba(103,170,255,.07);
+  border-color: transparent;
+  box-shadow: inset 0 -2px 0 rgba(103,170,255,.6);
+}
+
+/* Discord: official Symbol.svg, left untouched, recessed into the navigation material. */
+.nav-actions .nav-discord {
+  width: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0;
+  flex: 0 0 40px;
+  border: 2px solid #090c09;
+  border-radius: 3px;
+  background: linear-gradient(180deg, rgba(35,40,34,.98), rgba(18,22,18,.99));
+  box-shadow:
+    inset 4px 4px 8px rgba(0,0,0,.54),
+    inset -2px -2px 0 rgba(255,255,255,.045),
+    0 1px 0 rgba(255,255,255,.025);
+  color: transparent;
+  font-size: 0;
+  text-transform: none;
+  letter-spacing: 0;
+  overflow: hidden;
+  transform: none;
+}
+
+.nav-actions .nav-discord::before {
+  content: '';
+  display: block;
+  width: 21px;
+  height: 17px;
+  background: url('https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/66e3d7f4ef6498ac018f2c55_Symbol.svg') center / contain no-repeat;
+}
+
+.nav-actions .nav-discord:hover,
+.nav-actions .nav-discord:focus-visible {
+  background: linear-gradient(180deg, rgba(42,48,40,.99), rgba(20,25,20,.99));
+  border-color: #111711;
+  box-shadow:
+    inset 4px 4px 8px rgba(0,0,0,.48),
+    inset -2px -2px 0 rgba(255,255,255,.06),
+    0 0 0 1px rgba(88,101,242,.13);
+  color: transparent;
+  transform: none;
+}
+
+.nav-actions .nav-discord:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 5px 5px 10px rgba(0,0,0,.64),
+    inset -1px -1px 0 rgba(255,255,255,.025);
+}
+
+.nav-actions .nav-discord[aria-disabled='true'] {
+  opacity: .45;
+  pointer-events: none;
+}
+
+@media (max-width: 760px) {
+  .minecraft-rpg-page:not(.minecraft-rpg-secondary) .section-subnav,
+  .skyblock-rpg-page .section-subnav,
+  .worlds-region-page .section-subnav,
+  .nexus-encounter-page .section-subnav,
+  .minecraft-rpg-page:not(.minecraft-rpg-secondary) .section-subnav-inner,
+  .skyblock-rpg-page .section-subnav-inner,
+  .worlds-region-page .section-subnav-inner,
+  .nexus-encounter-page .section-subnav-inner {
+    min-height: 50px;
+  }
+
+  .minecraft-rpg-page:not(.minecraft-rpg-secondary) .section-subnav-links a,
+  .skyblock-rpg-page .section-subnav-links a,
+  .worlds-region-page .section-subnav-links a,
+  .nexus-encounter-page .section-subnav-links a {
+    font-size: 10px;
+  }
+}

@@ -79,40 +79,17 @@
 .nexus-encounter-page .button.quiet,
 .nexus-encounter-page .button.secondary { color:#e9ecdf; background:linear-gradient(180deg,#30372f,#20251f); }
 
-/* polish.js inserts this 50px Explore rail. Keep its height stable for immersive viewport math. */
+/*
+ * Worlds/Nexus established the canonical visual reference for the Explore rail.
+ * pixel-global-chrome.css promotes that same treatment to Gameplay, Systems and
+ * Skyblock. This immersive file retains only the 50px geometry locally because
+ * the Worlds/Nexus stage-height calculation depends on it.
+ */
 .worlds-region-page .section-subnav,
-.nexus-encounter-page .section-subnav {
-  min-height:50px;
-  background:linear-gradient(180deg,rgba(25,31,25,.985),rgba(14,18,15,.985));
-  border-bottom:2px solid #080a08;
-  box-shadow:0 4px 0 rgba(0,0,0,.17);
-}
+.nexus-encounter-page .section-subnav,
 .worlds-region-page .section-subnav-inner,
-.nexus-encounter-page .section-subnav-inner { min-height:50px; }
-.worlds-region-page .section-subnav-label,
-.nexus-encounter-page .section-subnav-label {
-  color:#788376;
-  font-size:8px;
-  font-weight:850;
-  letter-spacing:.17em;
-  text-transform:uppercase;
-}
-.worlds-region-page .section-subnav-links a,
-.nexus-encounter-page .section-subnav-links a {
-  border-radius:2px;
-  color:#929b90;
-  font-size:10px;
-  font-weight:760;
-  text-transform:uppercase;
-  letter-spacing:.055em;
-}
-.worlds-region-page .section-subnav-links a:hover,
-.worlds-region-page .section-subnav-links a.is-current,
-.nexus-encounter-page .section-subnav-links a:hover,
-.nexus-encounter-page .section-subnav-links a.is-current {
-  color:#eaf3ff;
-  background:rgba(103,170,255,.07);
-  box-shadow:inset 0 -2px 0 rgba(103,170,255,.6);
+.nexus-encounter-page .section-subnav-inner {
+  min-height:50px;
 }
 
 /* Explore dialogs keep their existing content/runtime but use the Minecraft RPG material language. */
