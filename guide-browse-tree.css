@@ -17,7 +17,7 @@
 .wiki-browse-group > summary {
   min-height: 40px;
   display: grid;
-  grid-template-columns: minmax(0,1fr) auto auto;
+  grid-template-columns: minmax(0,1fr) auto;
   gap: 8px;
   align-items: center;
   padding: 7px 8px;
@@ -65,25 +65,9 @@
   letter-spacing: -.01em;
 }
 
+/* Article-count badges are intentionally hidden: the browse tree should read as navigation, not inventory. */
 .wiki-browse-count {
-  min-width: 20px;
-  height: 18px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 5px;
-  border: 1px solid rgba(246,201,69,.13);
-  border-radius: 999px;
-  background: rgba(246,201,69,.04);
-  color: #8f8779;
-  font-size: 7.5px;
-  font-weight: 800;
-  line-height: 1;
-}
-
-.wiki-browse-group[open] .wiki-browse-count {
-  border-color: rgba(246,201,69,.24);
-  color: #d5b55e;
+  display: none !important;
 }
 
 .wiki-browse-menu {
