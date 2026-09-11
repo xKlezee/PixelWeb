@@ -22,7 +22,7 @@ Current groups:
 - Guide → Progression / Mechanics / Tools / Armor / Specials / Boosts
 - Community → Leaderboards / Changelog / Rules / Staff Team
 
-`Progression` is first in the actual Guide model, not merely moved visually by CSS. `guides.html` without a hash treats Progression as the default Guide category. `guide-categories.js` uses the same canonical order.
+`Progression` is now first in the actual Guide model, not merely moved visually by CSS. `guides.html` without a hash also treats Progression as the default Guide category. `guide-categories.js` uses the same canonical order.
 
 The rail appears directly below global navigation only when the current page belongs to one of those groups. Home, Marketplace, Store and About do not create an empty contextual rail.
 
@@ -58,7 +58,7 @@ The Forum is not an active PixelWeb product surface and `development.html` is no
 
 ### Staff Team / owner profiles
 
-`staff.html` owns all intentionally public people/ownership presentation.
+`staff.html` now owns all intentionally public people/ownership presentation.
 
 Klezee and PxlMads retain equal Owner status and the established responsibility split:
 
@@ -67,7 +67,7 @@ Klezee and PxlMads retain equal Owner status and the established responsibility 
 
 The username-synchronized Minecraft skin viewers moved with those profiles:
 
-- `team-models.js` is loaded by `staff.html`;
+- `team-models.js` is now loaded by `staff.html`;
 - pointer drag rotates the model;
 - ArrowLeft/ArrowRight rotate yaw;
 - ArrowUp/ArrowDown adjust pitch;
@@ -96,7 +96,7 @@ About does not invent refund terms, prices, rank thresholds, purchase guarantees
 
 ### Shared footer
 
-`polish.js` replaces legacy page-specific footer fragments with one shared runtime footer containing:
+`polish.js` now replaces legacy page-specific footer fragments with one shared runtime footer containing:
 
 - Pixel Network / Java Edition identity;
 - Marketplace, Store, Guide, Community, Rules, Staff Team and About links;
