@@ -90,7 +90,7 @@
 
   const currentGuideCategory = isGuideDetailPage
     ? guideCategoryByPage[currentPage]
-    : (currentPage === guidesLanding ? (currentHash || 'mechanics') : null);
+    : (currentPage === guidesLanding ? (currentHash || 'progression') : null);
 
   const isCurrentLocalDestination = href => {
     const page = targetPage(href);
@@ -178,12 +178,12 @@
       relatedPages: [guidesLanding],
       guideFamily: true,
       items: [
+        [`${guidesLanding}#progression`, 'Progression', 'Getting started, Worlds, Prestige and progression routes.'],
         [`${guidesLanding}#mechanics`, 'Mechanics', 'Gameplay systems and how they behave.'],
         [`${guidesLanding}#tools`, 'Tools', 'Tool families and their supporting systems.'],
         [`${guidesLanding}#armor`, 'Armor', 'Defense, equipment and armor modifiers.'],
         [`${guidesLanding}#specials`, 'Specials', 'Talismans, Nexus and specialized systems.'],
-        [`${guidesLanding}#boosts`, 'Boosts', 'Effects and systems that improve performance.'],
-        [`${guidesLanding}#progression`, 'Progression', 'Getting started, Worlds, Prestige and progression routes.']
+        [`${guidesLanding}#boosts`, 'Boosts', 'Effects and systems that improve performance.']
       ]
     },
     {
@@ -377,20 +377,39 @@
 
   const footerInner = document.querySelector('.site-footer .site-footer-inner');
   if (footerInner) {
-    const brand = document.createElement('span');
-    brand.textContent = 'Pixel Network · Java Edition';
-    const destinations = document.createElement('span');
+    footerInner.classList.add('site-footer-rich');
+
+    const identity = document.createElement('div');
+    identity.className = 'site-footer-brand';
+    const brandName = document.createElement('strong');
+    brandName.textContent = 'Pixel Network';
+    const brandMeta = document.createElement('span');
+    brandMeta.textContent = 'Java Edition · Independent community server';
+    identity.append(brandName, brandMeta);
+
+    const destinations = document.createElement('nav');
+    destinations.className = 'site-footer-links';
+    destinations.setAttribute('aria-label', 'Footer navigation');
     [
       [marketplaceLanding, 'Marketplace'],
       [storeLanding, 'Store'],
       [guidesLanding, 'Guide'],
       ['community.html', 'Community'],
+      ['rules.html', 'Rules'],
+      ['staff.html', 'Staff Team'],
       ['team.html', 'About']
-    ].forEach(([href, label], index) => {
-      if (index) destinations.appendChild(document.createTextNode(' · '));
-      destinations.appendChild(createLocalTextLink(href, label));
-    });
-    footerInner.replaceChildren(brand, destinations);
+    ].forEach(([href, label]) => destinations.appendChild(createLocalTextLink(href, label)));
+
+    const legal = document.createElement('div');
+    legal.className = 'site-footer-legal';
+    const disclaimer = document.createElement('p');
+    disclaimer.className = 'site-footer-disclaimer';
+    disclaimer.textContent = 'NOT AN OFFICIAL MINECRAFT SERVER. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.';
+    const rights = document.createElement('p');
+    rights.textContent = `© ${new Date().getFullYear()} Pixel Network. Original Pixel Network branding, site copy and custom assets are all rights reserved unless otherwise stated. Third-party names, trademarks and assets remain subject to their respective owners' terms.`;
+    legal.append(disclaimer, rights);
+
+    footerInner.replaceChildren(identity, destinations, legal);
   }
 
   document.querySelectorAll('[data-discord-url]').forEach(configureDiscordLink);
