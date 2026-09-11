@@ -16,6 +16,9 @@
   const WORLD_IMAGE_PROXY_PATH = '/home/~gitbook/image';
   const LOCAL_WORLD_MEDIA_RE = /^assets\/worlds\/[A-Za-z0-9._/-]+\.(?:svg|png|jpe?g|webp|avif)$/i;
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const WHEEL_THRESHOLD = 38;
+  const WHEEL_IDLE_MS = 120;
+  const MOTION_MS = reducedMotion.matches ? 80 : 640;
 
   const descriptions = Object.freeze({
     overworld: 'The foundation of Pixel Network. Mining, equipment, economy and combat establish the language used by every later World.',
@@ -78,7 +81,8 @@
         image.fetchPriority = 'high';
       } else {
         image.dataset.src = source;
-        image.loading = 'lazy';
+        image.loading = 'eager';
+        image.fetchPriority = 'low';
       }
       image.addEventListener('error', () => background.classList.add('is-fallback'), { once: true });
       background.appendChild(image);
@@ -131,17 +135,33 @@
 
   const hydrateImage = index => {
     const image = panels[index]?.querySelector('img[data-src]');
-    if (!image?.dataset.src) return;
+    if (!image?.dataset.src) return null;
     image.src = image.dataset.src;
     image.removeAttribute('data-src');
+    return image;
+  };
+
+  const prewarmWorldImages = () => {
+    panels.forEach((panel, index) => {
+      const image = hydrateImage(index) || panel.querySelector('img[data-world-background]');
+      if (!image) return;
+      const decoded = image.decode?.();
+      decoded?.catch?.(() => {});
+    });
   };
 
   let activeIndex = Math.max(0, worlds.findIndex(world => `#${world.id}` === location.hash));
-  let wheelAccumulator = 0;
-  let transitionLockUntil = 0;
   let touchStartY = null;
   let touchPointerId = null;
   let lastInvestigator = null;
+
+  let wheelAccumulator = 0;
+  let wheelDirection = 0;
+  let wheelConsumed = false;
+  let wheelIdleTimer = 0;
+  let transitionTimer = 0;
+  let transitionActive = false;
+  let pendingDirection = 0;
 
   const updateHash = world => {
     if (!world?.id) return;
@@ -175,26 +195,83 @@
     if (options.syncHash !== false) updateHash(worlds[activeIndex]);
   };
 
-  const step = direction => {
-    const next = Math.max(0, Math.min(worlds.length - 1, activeIndex + direction));
-    if (next === activeIndex) return;
-    setActive(next);
+  const completeTransition = () => {
+    transitionActive = false;
+    transitionTimer = 0;
+    if (!pendingDirection) return;
+    const direction = pendingDirection;
+    pendingDirection = 0;
+    requestStep(direction);
   };
 
-  nodes.forEach((node, index) => node.addEventListener('click', () => setActive(index)));
+  const travelTo = index => {
+    const nextIndex = Math.max(0, Math.min(worlds.length - 1, Number(index) || 0));
+    if (nextIndex === activeIndex) return false;
+    transitionActive = true;
+    setActive(nextIndex);
+    clearTimeout(transitionTimer);
+    transitionTimer = window.setTimeout(completeTransition, MOTION_MS);
+    return true;
+  };
+
+  const requestStep = direction => {
+    const normalizedDirection = direction > 0 ? 1 : -1;
+    const next = Math.max(0, Math.min(worlds.length - 1, activeIndex + normalizedDirection));
+    if (next === activeIndex) {
+      pendingDirection = 0;
+      return;
+    }
+    if (transitionActive) {
+      pendingDirection = normalizedDirection;
+      return;
+    }
+    travelTo(next);
+  };
+
+  const resetWheelGesture = () => {
+    wheelAccumulator = 0;
+    wheelDirection = 0;
+    wheelConsumed = false;
+    wheelIdleTimer = 0;
+  };
+
+  const normalizeWheelDelta = event => {
+    let delta = event.deltaY;
+    if (event.deltaMode === WheelEvent.DOM_DELTA_LINE) delta *= 18;
+    else if (event.deltaMode === WheelEvent.DOM_DELTA_PAGE) delta *= Math.max(400, innerHeight * .82);
+    return Math.max(-160, Math.min(160, delta));
+  };
+
+  nodes.forEach((node, index) => node.addEventListener('click', () => {
+    pendingDirection = 0;
+    resetWheelGesture();
+    travelTo(index);
+  }));
 
   stage.addEventListener('wheel', event => {
     if (dialog?.open) return;
     event.preventDefault();
-    wheelAccumulator += event.deltaY;
-    if (Math.abs(wheelAccumulator) < 34) return;
 
-    const now = performance.now();
-    const direction = wheelAccumulator > 0 ? 1 : -1;
+    const delta = normalizeWheelDelta(event);
+    const direction = Math.sign(delta);
+    if (!direction) return;
+
+    if (wheelDirection && wheelDirection !== direction) {
+      wheelAccumulator = 0;
+      wheelConsumed = false;
+    }
+    wheelDirection = direction;
+
+    clearTimeout(wheelIdleTimer);
+    wheelIdleTimer = window.setTimeout(resetWheelGesture, WHEEL_IDLE_MS);
+
+    if (wheelConsumed) return;
+    wheelAccumulator += delta;
+    if (Math.abs(wheelAccumulator) < WHEEL_THRESHOLD) return;
+
+    wheelConsumed = true;
     wheelAccumulator = 0;
-    if (now < transitionLockUntil) return;
-    transitionLockUntil = now + (reducedMotion.matches ? 180 : 720);
-    step(direction);
+    requestStep(direction);
   }, { passive: false });
 
   stage.addEventListener('pointerdown', event => {
@@ -211,7 +288,7 @@
     touchStartY = null;
     touchPointerId = null;
     if (Math.abs(delta) < 44) return;
-    step(delta < 0 ? 1 : -1);
+    requestStep(delta < 0 ? 1 : -1);
   });
 
   stage.addEventListener('pointercancel', () => {
@@ -223,16 +300,18 @@
     if (dialog?.open) return;
     if (['ArrowDown', 'PageDown'].includes(event.key)) {
       event.preventDefault();
-      step(1);
+      requestStep(1);
     } else if (['ArrowUp', 'PageUp'].includes(event.key)) {
       event.preventDefault();
-      step(-1);
+      requestStep(-1);
     } else if (event.key === 'Home') {
       event.preventDefault();
-      setActive(0);
+      pendingDirection = 0;
+      travelTo(0);
     } else if (event.key === 'End') {
       event.preventDefault();
-      setActive(worlds.length - 1);
+      pendingDirection = 0;
+      travelTo(worlds.length - 1);
     }
   });
 
@@ -316,8 +395,17 @@
 
   addEventListener('hashchange', () => {
     const index = worlds.findIndex(world => `#${world.id}` === location.hash);
-    if (index >= 0 && index !== activeIndex) setActive(index, { syncHash: false });
+    if (index >= 0 && index !== activeIndex) {
+      pendingDirection = 0;
+      travelTo(index);
+    }
   });
 
   setActive(activeIndex, { syncHash: location.hash.length > 1 });
+
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(prewarmWorldImages, { timeout: 450 });
+  } else {
+    setTimeout(prewarmWorldImages, 80);
+  }
 })();
