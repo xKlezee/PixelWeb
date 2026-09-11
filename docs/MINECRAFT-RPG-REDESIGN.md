@@ -117,6 +117,34 @@ Rules:
 - do not convert, recompress, sprite, crop or replace the approved Nexus boss PNG files;
 - detailed progression explanation remains in `guide-nexus.html`, not duplicated on the visual Nexus page.
 
+## Marketplace contract
+
+`marketplace.html` is a visual collection showcase, not a technical model browser.
+
+The redesign may change the presentation around the runtime, but must preserve:
+
+- the existing `marketplace.js` renderer;
+- the Nexo-backed Marketplace manifest and imported model/texture assets;
+- live rotating previews on collection cards;
+- the large interactive inspection viewer;
+- current drag directions;
+- idle Y-axis rotation in the large viewer;
+- wheel zoom;
+- preview/inspection scale normalization;
+- click transfer from preview orientation to the large viewer;
+- reduced-motion behavior.
+
+The intended presentation is:
+
+1. short Marketplace hero;
+2. compact collection route;
+3. large model viewer as the primary visual;
+4. item-like detail panel;
+5. live model slots for the collection;
+6. small bridge to Store.
+
+Marketplace and Store remain separate surfaces.
+
 ## Interior-page contract
 
 Gameplay, Systems and Guide share one Minecraft RPG presentation layer rather than three unrelated layouts.
@@ -148,6 +176,7 @@ The secondary pages use the same Minecraft RPG material language while staying i
 - `staff.html` is the compact public roster.
 - `team.html` keeps Klezee and PxlMads visually equal and preserves the interactive skin viewers.
 - `store.html` focuses on the official Store, cumulative rank path and current purchase categories without publishing unverified thresholds.
+- `404.html` uses the same material language and routes users back to maintained destinations.
 
 ## Detailed Guide presentation
 
@@ -165,6 +194,21 @@ The guide layer may change:
 - spacing and visual hierarchy.
 
 It must not silently change guide facts, evidence claims, values or source boundaries.
+
+## Shared chrome and immersive responsive behavior
+
+`minecraft-rpg-chrome.css` provides a common navigation and detail-panel treatment for the immersive Worlds/Nexus destinations while deliberately preserving their viewport math.
+
+Both immersive pages keep a two-level chrome contract of approximately 113px on desktop and 111px at the current responsive breakpoint. Styling work must not casually change these heights because the stage dimensions are calculated from them.
+
+On smaller layouts:
+
+- the vertical rail collapses to nodes only;
+- side metadata is hidden before core encounter/world information;
+- titles scale down without changing the interaction model;
+- Explore remains reachable;
+- detail dialogs collapse from two columns to one;
+- reduced-motion continues to disable non-essential transitions.
 
 ## Existing systems that must survive the redesign
 
@@ -204,7 +248,7 @@ Long-form explanation belongs in detailed Guide/Changelog pages, not Home or vis
 The draft redesign currently covers:
 
 - Home rebuilt around Minecraft-first scenes and shorter copy.
-- Worlds preserved as the production full-screen region selector.
+- Worlds preserved as the production full-screen region selector and reskinned only at the chrome/detail level.
 - Nexus converted to the same scene/slider interaction grammar as Worlds.
 - Gameplay simplified to a progression overview.
 - Systems simplified to a visual system index.
@@ -213,8 +257,10 @@ The draft redesign currently covers:
 - Community, Leaderboards, Changelog, Rules and Staff Team aligned to the new material language.
 - About reduced to two equal owner profiles while preserving both live skin viewers.
 - Store reduced to the official CTA, cumulative rank path, purchase categories and one progression boundary note.
+- Marketplace reskinned as a Minecraft collection showcase without changing its 3D runtime.
 - Detailed Guides receive a shared Minecraft RPG document skin without changing their factual content.
-- Shared Minecraft RPG material language added for interior and secondary pages.
+- 404 aligned to the same visual identity.
+- Shared Minecraft RPG material language added for Home, interior, secondary, guide and immersive chrome surfaces.
 
 ## Review state
 
