@@ -7,7 +7,7 @@ This document records current source architecture and release gates without trea
 - The previous Guide/Store/Play/Nexus polish release is merged into `main` at `62f070c1204db67833d23725614627ab1084f8fe`.
 - `main` remains the stable/published frontend branch until the current candidate is promoted.
 - The current frontend iteration lives on `frontend/about-footer-consistency-2026-09`.
-- This branch audits HTML visual-family coverage, normalizes Guide category order, separates Staff Team from About and expands the shared footer/legal boundary.
+- This branch audits HTML visual-family coverage, normalizes Guide category order, separates Staff Team from About, unifies the Explore rail around the established Worlds/Nexus design, updates Discord chrome and introduces the Pixel Network proprietary license.
 - It must not be described as browser-verified until the browser matrix has actually been executed.
 
 ## Current frontend iteration
@@ -22,11 +22,15 @@ Current groups:
 - Guide → Progression / Mechanics / Tools / Armor / Specials / Boosts
 - Community → Leaderboards / Changelog / Rules / Staff Team
 
-`Progression` is now first in the actual Guide model, not merely moved visually by CSS. `guides.html` without a hash also treats Progression as the default Guide category. `guide-categories.js` uses the same canonical order.
+`Progression` is first in the actual Guide model, not merely moved visually by CSS. `guides.html` without a hash treats Progression as the default Guide category. `guide-categories.js` uses the same canonical order.
 
 The rail appears directly below global navigation only when the current page belongs to one of those groups. Home, Marketplace, Store and About do not create an empty contextual rail.
 
-Within Explore, Gameplay, Systems, Worlds, Skyblock and Nexus now use the same contextual-rail typography, sizing, button geometry, spacing, colors, borders and hover/current-page treatment. The previous immersive override in `minecraft-rpg-chrome.css` has been removed; Worlds/Nexus retain only the 50px geometry required by immersive viewport calculations.
+Within Explore, **Worlds/Nexus are the visual reference**. Their established compact uppercase, squared Minecraft rail is now shared to Gameplay, Systems and Skyblock through `pixel-global-chrome.css`. The older rounded generic rail is not the canonical Explore appearance. Worlds/Nexus retain the 50px geometry required by immersive viewport calculations.
+
+### Header actions
+
+Store, Discord and Play remain high-priority header actions. Discord now uses Discord's official unmodified Symbol asset inside an inset/recessed Pixel material control rather than a competing text-button treatment. The mobile navigation retains a readable Discord text destination.
 
 ### HTML visual audit
 
@@ -54,7 +58,7 @@ The Forum is not an active PixelWeb product surface and `development.html` is no
 
 ### Staff Team / owner profiles
 
-`staff.html` now owns all intentionally public people/ownership presentation.
+`staff.html` owns all intentionally public people/ownership presentation.
 
 Klezee and PxlMads retain equal Owner status and the established responsibility split:
 
@@ -63,7 +67,7 @@ Klezee and PxlMads retain equal Owner status and the established responsibility 
 
 The username-synchronized Minecraft skin viewers moved with those profiles:
 
-- `team-models.js` is now loaded by `staff.html`;
+- `team-models.js` is loaded by `staff.html`;
 - pointer drag rotates the model;
 - ArrowLeft/ArrowRight rotate yaw;
 - ArrowUp/ArrowDown adjust pitch;
@@ -84,15 +88,15 @@ About now owns:
 - official Store/Tebex boundary information;
 - the unofficial Minecraft server disclaimer;
 - external-service boundary notes;
-- copyright and attribution policy.
+- licensing, copyright and attribution policy.
 
-No blanket Creative Commons license is applied to PixelWeb. Original Pixel Network material remains all rights reserved unless specifically marked otherwise; third-party material remains subject to its own rights/terms. If selected non-software material is intentionally released under Creative Commons later, it must be marked individually with an exact license/version. Source-code reuse rights, if later granted, should use a software-specific license.
+Pixel-owned website source, copy, branding, layouts and custom assets are governed by the **Pixel Network Proprietary Website, Source, Content & Asset License v1.0** unless a more specific written notice applies. The canonical text is `LICENSE`; `license.html` is the public-readable copy. PixelWeb is proprietary, not open source. Third-party material is expressly excluded from Pixel Network's license grant and remains subject to its own rights and terms.
 
 About does not invent refund terms, prices, rank thresholds, purchase guarantees or legal/support policies that are not actually published.
 
 ### Shared footer
 
-`polish.js` now replaces legacy page-specific footer fragments with one shared runtime footer containing:
+`polish.js` replaces legacy page-specific footer fragments with one shared runtime footer containing:
 
 - Pixel Network / Java Edition identity;
 - Marketplace, Store, Guide, Community, Rules, Staff Team and About links;
@@ -134,6 +138,7 @@ This frontend refresh does not intentionally change gameplay semantics. Existing
 ## Crawl / publication state
 
 - Sitemap-indexed pages keep one absolute HTTPS canonical each.
+- `license.html` is sitemap-indexed as the public-readable license surface.
 - Indexed pages retain their static Open Graph/Twitter metadata.
 - `forum.html` and `404.html` remain intentionally outside the sitemap and `noindex`.
 - The public artifact builder still includes the legacy Forum redirect and branded 404 as explicit non-indexed compatibility/error surfaces.
@@ -147,11 +152,12 @@ The current branch has been reviewed at source level for:
 
 - all top-level HTML visual-family coverage;
 - canonical runtime navigation/category order;
-- Explore contextual-rail visual parity across all five Explore destinations;
+- Explore contextual-rail visual parity using Worlds/Nexus as the reference;
+- Discord header action source/style boundary;
 - Staff Team / About content ownership;
 - owner viewer relocation;
 - shared footer structure;
-- licensing/attribution boundaries;
+- proprietary licensing/attribution boundaries;
 - documentation/contract alignment.
 
 This is not validator execution and not browser/render proof.
@@ -171,11 +177,13 @@ Required matrix:
 - reduced motion;
 - desktop hover-only vs 980 px mobile/touch boundary;
 - contextual navigation active state and horizontal overflow behavior;
-- Explore rail visual parity on Gameplay / Systems / Worlds / Skyblock / Nexus;
+- Explore rail visual parity on Gameplay / Systems / Worlds / Skyblock / Nexus against the Worlds/Nexus reference;
+- Discord inset icon rendering and focus state;
 - Play modal;
 - Guide anchors/search/tables and Progression-first state;
 - Staff Team skin loading, canvas rendering, pointer drag, keyboard rotation/reset and error state;
-- About FAQ, Tebex CTA, disclaimer and attribution readability;
+- About FAQ, Tebex CTA, disclaimer, license link and attribution readability;
+- `license.html` readability and navigation;
 - shared footer across standard, Guide and immersive visual families;
 - no visible Forum/Development navigation and correct legacy redirects;
 - console/CSP/network state;
