@@ -24,11 +24,11 @@ The website intentionally has several presentation families because not every de
 | HTML | Role | Visual family | Status / boundary |
 | --- | --- | --- | --- |
 | `index.html` | Home | Minecraft home | Current Minecraft-first landing. |
-| `gameplay.html` | Explore | Minecraft RPG shell | Current. |
-| `systems.html` | Explore | Minecraft RPG shell | Current. |
-| `worlds.html` | Explore | Immersive chrome | Current; must preserve one-world-at-a-time interaction and viewport math. |
-| `skyblock.html` | Explore | Minecraft RPG secondary | Current. |
-| `nexus.html` | Explore | Immersive chrome | Current; must preserve encounter slider and original boss PNG contract. |
+| `gameplay.html` | Explore | Minecraft RPG shell | Current; Explore rail now matches Worlds/Nexus. |
+| `systems.html` | Explore | Minecraft RPG shell | Current; Explore rail now matches Worlds/Nexus. |
+| `worlds.html` | Explore | Immersive chrome | Current; reference visual for the official Explore rail; viewport math preserved. |
+| `skyblock.html` | Explore | Minecraft RPG secondary | Current; Explore rail now matches Worlds/Nexus. |
+| `nexus.html` | Explore | Immersive chrome | Current; reference visual for the official Explore rail; approved boss PNG contract preserved. |
 | `marketplace.html` | Marketplace | Marketplace RPG | Current; 3D renderer/runtime preserved. |
 | `guides.html` | Guide landing | Guide wiki / GitBook-like skin | Current; Progression is canonical first category. |
 | `guide-getting-started.html` | Guide detail | Guide document skin | Current. |
@@ -45,7 +45,8 @@ The website intentionally has several presentation families because not every de
 | `rules.html` | Community | Minecraft RPG secondary | Current; no reconstructed stale rules. |
 | `staff.html` | Community | Minecraft RPG secondary + owner viewers | Updated: owns the full public Klezee/PxlMads profiles. |
 | `store.html` | Store action | Minecraft RPG secondary/store | Current; official Tebex CTA and verified-publication boundaries retained. |
-| `team.html` | About | Minecraft RPG secondary/information | Updated: FAQ, Tebex boundary, disclaimers and attribution; no longer duplicates Staff Team. |
+| `team.html` | About | Minecraft RPG secondary/information | Updated: FAQ, Tebex boundary, disclaimers, proprietary license and attribution; no longer duplicates Staff Team. |
+| `license.html` | Rights | Minecraft RPG secondary/information | New: public-readable Pixel Network Proprietary License v1.0. |
 | `404.html` | Error | Minecraft RPG shell | Current branded error surface; noindex. |
 | `development.html` | Legacy | Compatibility redirect | Intentionally noindex redirect to Guide; not a visual destination. |
 | `forum.html` | Legacy | Compatibility redirect | Intentionally noindex redirect to Community; not a visual destination. |
@@ -62,9 +63,9 @@ Required invariant:
 - same keyboard/mobile interaction;
 - same horizontal rail behavior;
 - within Explore, Gameplay / Systems / Worlds / Skyblock / Nexus use the same typography, sizing, spacing, borders, colors and hover/current-page treatment;
-- Worlds/Nexus retain only their established 50px rail geometry where needed by immersive viewport math.
+- Worlds/Nexus retain their established 50px rail geometry where needed by immersive viewport math.
 
-The old immersive chrome was overriding the Explore rail on Worlds/Nexus with smaller uppercase text, squared buttons, a green/gray background and a different active treatment. That override has been removed. `minecraft-rpg-chrome.css` now preserves only the 50px geometry while the complete visual treatment inherits from the shared `polish.css` rules used by Gameplay, Systems and Skyblock.
+The visual reference for Explore is the established **Worlds/Nexus** rail, not the older generic rounded rail from `polish.css`. Its compact uppercase typography, squared button geometry, dark green/stone surface and Pixel Blue lower-edge active state are now shared to Gameplay, Systems and Skyblock through `pixel-global-chrome.css`.
 
 The previous Guide implementation had a structural mismatch: Progression was visually moved to the front by CSS while remaining last in the canonical data array, and `guides.html` without a hash still selected Mechanics by default. This pass fixes the model itself:
 
@@ -75,6 +76,10 @@ The previous Guide implementation had a structural mismatch: Progression was vis
 
 Existing CSS ordering rules may remain harmless compatibility styling, but they are no longer required to establish the canonical order.
 
+## Header action audit
+
+Discord and Store remain separate destinations but no longer look like unrelated controls. The Discord header action uses Discord's official Symbol asset without redrawing or recoloring it, placed inside an inset/recessed Pixel material control at the same header scale as Store. Mobile navigation retains a readable text destination.
+
 ## About / Staff separation
 
 The previous state used `team.html` (labeled About) for the full owner profiles while `staff.html` contained a second, simplified copy of the same people.
@@ -82,7 +87,8 @@ The previous state used `team.html` (labeled About) for the full owner profiles 
 New ownership boundary:
 
 - `staff.html` = people, public roles, equal ownership, interactive owner skins;
-- `team.html` = About, FAQ, Store/Tebex boundary, Minecraft disclaimer, external-service notes, copyright and attribution.
+- `team.html` = About, FAQ, Store/Tebex boundary, Minecraft disclaimer, external-service notes, licensing and attribution;
+- `license.html` = full public-readable Pixel Network proprietary license.
 
 This removes duplicated team semantics without changing the established public About URL in this pass.
 
@@ -96,22 +102,18 @@ The shared runtime footer now owns information that should appear everywhere but
 - unofficial Minecraft disclaimer;
 - copyright and third-party-rights boundary.
 
-The full explanation remains in About.
+The full explanation remains in About and the dedicated License page.
 
 ## Licensing decision
 
-Do not apply `CC BY-NC-SA 3.0` or another Creative Commons license globally to PixelWeb by default.
+PixelWeb now uses the **Pixel Network Proprietary Website, Source, Content & Asset License v1.0** as the default rights statement for Pixel-owned material.
 
-Reasoning:
+Canonical sources:
 
-- a CC license intentionally grants reuse permissions rather than merely protecting attribution;
-- PixelWeb mixes original branding/content with software and third-party material;
-- Creative Commons does not recommend its licenses for software;
-- third-party material cannot be relicensed simply by placing a blanket site notice over it.
+- repository legal text: `LICENSE`;
+- public-readable page: `license.html`;
+- policy summary and attribution boundary: `team.html` (About).
 
-Current site policy:
+The license is intentionally proprietary and not open source. It allows ordinary public website access and source inspection while reserving redistribution, public redeployment, derivative publication, commercial exploitation, branding use, bulk asset extraction and other reuse unless Pixel Network gives written permission or applicable law independently permits the activity.
 
-- original Pixel Network branding, site copy, layouts and custom assets are all rights reserved unless specifically stated otherwise;
-- third-party material remains under the respective rights/terms;
-- future CC releases must mark the exact non-software material and exact license/version individually;
-- future source-code reuse rights, if desired, should be granted with a software-specific license.
+Third-party material is expressly excluded from Pixel Network's license grant and remains governed by the rights, licenses and terms of its respective owners.
