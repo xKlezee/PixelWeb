@@ -61,8 +61,10 @@ Required invariant:
 - same active-state logic;
 - same keyboard/mobile interaction;
 - same horizontal rail behavior;
-- theme-specific colors are allowed;
-- Worlds/Nexus retain their established 50px rail height where needed by immersive viewport math.
+- within Explore, Gameplay / Systems / Worlds / Skyblock / Nexus use the same typography, sizing, spacing, borders, colors and hover/current-page treatment;
+- Worlds/Nexus retain only their established 50px rail geometry where needed by immersive viewport math.
+
+The old immersive chrome was overriding the Explore rail on Worlds/Nexus with smaller uppercase text, squared buttons, a green/gray background and a different active treatment. That override has been removed. `minecraft-rpg-chrome.css` now preserves only the 50px geometry while the complete visual treatment inherits from the shared `polish.css` rules used by Gameplay, Systems and Skyblock.
 
 The previous Guide implementation had a structural mismatch: Progression was visually moved to the front by CSS while remaining last in the canonical data array, and `guides.html` without a hash still selected Mechanics by default. This pass fixes the model itself:
 
