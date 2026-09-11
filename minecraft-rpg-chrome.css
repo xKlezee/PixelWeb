@@ -115,6 +115,39 @@
   box-shadow:inset 0 -2px 0 rgba(103,170,255,.6);
 }
 
+/* Explore dialogs keep their existing content/runtime but use the Minecraft RPG material language. */
+.worlds-region-page .worlds-region-dialog,
+.nexus-encounter-page .nexus-encounter-dialog {
+  border:4px solid #060806;
+  border-radius:0;
+  background:linear-gradient(180deg,#20271f,#111511);
+  box-shadow:12px 14px 0 rgba(0,0,0,.34),0 36px 110px rgba(0,0,0,.58),inset 0 0 0 1px rgba(255,255,255,.06);
+  clip-path:polygon(0 10px,10px 10px,10px 0,calc(100% - 10px) 0,calc(100% - 10px) 10px,100% 10px,100% calc(100% - 10px),calc(100% - 10px) calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,10px calc(100% - 10px),0 calc(100% - 10px));
+}
+.worlds-region-page .worlds-region-dialog-body,
+.nexus-encounter-page .nexus-encounter-dialog-body {
+  background:linear-gradient(180deg,#20271f,#141914);
+}
+.worlds-region-page .worlds-region-dialog-close,
+.nexus-encounter-page .nexus-encounter-dialog-close {
+  border-radius:2px;
+  border:2px solid #0b0e0b;
+  background:linear-gradient(180deg,#30372f,#1c211c);
+  box-shadow:3px 4px 0 rgba(0,0,0,.28);
+}
+.worlds-region-page .worlds-region-dialog-stats,
+.nexus-encounter-page .nexus-encounter-dialog-ladder {
+  border-top:2px solid rgba(0,0,0,.28);
+}
+.worlds-region-page .worlds-region-dialog-stat,
+.nexus-encounter-page .nexus-encounter-dialog-tier {
+  border-bottom:1px solid rgba(226,234,215,.08);
+}
+.worlds-region-page .worlds-region-dialog-note {
+  border-left:4px solid #67aaff;
+  background:rgba(103,170,255,.055);
+}
+
 @media (max-width:980px) {
   .worlds-region-page .nav-links,
   .nexus-encounter-page .nav-links {
