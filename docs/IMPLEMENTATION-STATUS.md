@@ -26,7 +26,7 @@ Current groups:
 
 The rail appears directly below global navigation only when the current page belongs to one of those groups. Home, Marketplace, Store and About do not create an empty contextual rail.
 
-Visual families may recolor the rail, but item order, active-state logic, keyboard/touch behavior and responsive horizontal scrolling come from the shared model. Worlds/Nexus retain their established rail height because immersive viewport math depends on it.
+Within Explore, Gameplay, Systems, Worlds, Skyblock and Nexus now use the same contextual-rail typography, sizing, button geometry, spacing, colors, borders and hover/current-page treatment. The previous immersive override in `minecraft-rpg-chrome.css` has been removed; Worlds/Nexus retain only the 50px geometry required by immersive viewport calculations.
 
 ### HTML visual audit
 
@@ -147,6 +147,7 @@ The current branch has been reviewed at source level for:
 
 - all top-level HTML visual-family coverage;
 - canonical runtime navigation/category order;
+- Explore contextual-rail visual parity across all five Explore destinations;
 - Staff Team / About content ownership;
 - owner viewer relocation;
 - shared footer structure;
@@ -157,7 +158,7 @@ This is not validator execution and not browser/render proof.
 
 ### Automated execution
 
-Do not claim a green Quality Gate unless a runner actually starts and executes the relevant steps. A workflow startup failure with no assigned runner/steps is infrastructure state, not validator PASS/FAIL.
+Do not claim a green Quality Gate unless a runner actually starts and executes the relevant steps. Quality Gate runs on this branch have created the `static-security` job but failed before repository steps began, with no assigned runner/steps. That is infrastructure state, not validator PASS/FAIL.
 
 ### Browser QA still required
 
@@ -170,6 +171,7 @@ Required matrix:
 - reduced motion;
 - desktop hover-only vs 980 px mobile/touch boundary;
 - contextual navigation active state and horizontal overflow behavior;
+- Explore rail visual parity on Gameplay / Systems / Worlds / Skyblock / Nexus;
 - Play modal;
 - Guide anchors/search/tables and Progression-first state;
 - Staff Team skin loading, canvas rendering, pointer drag, keyboard rotation/reset and error state;
