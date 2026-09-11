@@ -80,6 +80,62 @@ Current intended section order:
 
 The previous long immersive/video explanation, development-status sales copy and repeated system descriptions are intentionally removed from Home.
 
+## Worlds contract
+
+`worlds.html` keeps the immersive region selector that already exists on production.
+
+It must remain:
+
+- one full-screen World scene at a time;
+- Overworld → Pirate Kingdom → Nether → Winter;
+- vertical node rail;
+- wheel / trackpad / swipe / keyboard navigation;
+- a smooth state transition between images rather than stacked banners;
+- one pulsing Explore control;
+- a compact detail view for access, mines, boss and next gate;
+- Nexus excluded from the World rail.
+
+The Minecraft RPG redesign may reskin the chrome around this experience, but must not replace it with cards or a conventional page section stack.
+
+## Nexus contract
+
+`nexus.html` follows the same interaction grammar as Worlds, but the selectable states are current Instance encounters rather than regions:
+
+1. Raphael
+2. Azazel
+3. Abyss + Astral
+
+Rules:
+
+- one encounter scene at a time;
+- vertical node rail;
+- wheel / trackpad / swipe / keyboard navigation;
+- pulsing Explore control;
+- Explore opens the encounter format and current difficulty unlocks;
+- Raphael and Azazel use one original PNG each;
+- Abyss + Astral remains one encounter and displays both original PNGs together;
+- do not convert, recompress, sprite, crop or replace the approved Nexus boss PNG files;
+- detailed progression explanation remains in `guide-nexus.html`, not duplicated on the visual Nexus page.
+
+## Interior-page contract
+
+Gameplay, Systems and Guide share one Minecraft RPG presentation layer rather than three unrelated layouts.
+
+- `gameplay.html` explains the playable journey at a glance.
+- `systems.html` acts as a visual system index.
+- `guides.html` is a category catalogue, not a technical documentation dashboard.
+
+Guide categories remain:
+
+- Mechanics
+- Tools
+- Armor
+- Specials
+- Boosts
+- Progression
+
+All current Guide documents must stay reachable. A Guide may appear in more than one category when its subject genuinely crosses categories.
+
 ## Existing systems that must survive the redesign
 
 Visual work must not casually rewrite or replace these runtime/data contracts:
@@ -111,4 +167,17 @@ Player-facing copy should be concise. A typical visual section should need:
 - zero or one short paragraph;
 - one primary action.
 
-Long-form explanation belongs in Guide/Changelog pages, not Home.
+Long-form explanation belongs in detailed Guide/Changelog pages, not Home or visual destination pages.
+
+## Current redesign pass
+
+The first branch pass currently changes only presentation and page composition:
+
+- Home rebuilt around Minecraft-first scenes and shorter copy.
+- Nexus converted to the same scene/slider interaction grammar as Worlds.
+- Gameplay simplified to a progression overview.
+- Systems simplified to a visual system index.
+- Guide landing rebuilt around the six canonical Guide categories.
+- Shared Minecraft RPG material language added for interior pages.
+
+Production `main` remains untouched while PR #11 stays in draft.
