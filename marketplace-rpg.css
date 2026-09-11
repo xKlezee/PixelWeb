@@ -1,0 +1,262 @@
+/* Pixel Network — Minecraft RPG Marketplace presentation.
+   Presentation only: the existing 3D renderer and item runtime remain authoritative. */
+
+.marketplace-rpg-page {
+  --market-stone:#151a16;
+  --market-stone-hi:#252d25;
+  --market-deep:#090c0a;
+  --market-line:rgba(226,234,215,.13);
+  --market-blue:#67aaff;
+  --market-gold:#e6bf65;
+  background:linear-gradient(180deg,#0b0f0c,#070908 62%,#050706);
+}
+
+.marketplace-rpg-page .marketplace-subnav {
+  min-height:52px;
+  background:linear-gradient(180deg,#1e251e,#121612);
+  border-bottom:3px solid #070907;
+  box-shadow:0 6px 0 rgba(0,0,0,.22),0 16px 28px rgba(0,0,0,.18);
+}
+.marketplace-rpg-page .marketplace-subnav-label {
+  color:#82907f;
+  font-size:9px;
+  letter-spacing:.17em;
+}
+.marketplace-rpg-page .marketplace-subnav a {
+  min-height:32px;
+  border-radius:2px;
+  color:#a6aea2;
+  font-size:11px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.055em;
+}
+.marketplace-rpg-page .marketplace-subnav a.is-current,
+.marketplace-rpg-page .marketplace-subnav a[aria-current='location'] {
+  color:#eff6ff;
+  border-color:rgba(103,170,255,.24);
+  background:rgba(103,170,255,.08);
+  box-shadow:inset 0 -2px 0 rgba(103,170,255,.72);
+}
+
+.marketplace-rpg-page .marketplace-hero {
+  position:relative;
+  min-height:500px;
+  display:grid;
+  align-items:end;
+  overflow:hidden;
+  border-bottom:4px solid #050706;
+  background:
+    radial-gradient(circle at 76% 34%,rgba(103,170,255,.18),transparent 26%),
+    linear-gradient(135deg,#293129 0%,#151b16 52%,#090c0a 100%);
+}
+.marketplace-rpg-page .marketplace-hero::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  opacity:.22;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:20px 20px;
+}
+.marketplace-rpg-page .marketplace-hero::after {
+  content:'';
+  position:absolute;
+  inset:auto 0 0;
+  height:80px;
+  background:linear-gradient(135deg,transparent 12px,rgba(7,9,8,.96) 0) 0 0/24px 24px repeat-x;
+  opacity:.85;
+}
+.marketplace-rpg-page .marketplace-hero .shell {
+  position:relative;
+  z-index:1;
+  padding-bottom:100px;
+}
+.marketplace-rpg-page .marketplace-hero h1 {
+  max-width:880px;
+  margin:10px 0 0;
+  font-size:clamp(58px,8vw,108px);
+  line-height:.82;
+  letter-spacing:-.067em;
+  text-shadow:5px 6px 0 rgba(0,0,0,.35);
+}
+.marketplace-rpg-page .marketplace-hero-copy {
+  max-width:520px;
+  margin:20px 0 0;
+  color:#b8c1b5;
+  font-size:14px;
+  line-height:1.6;
+}
+.marketplace-rpg-page .marketplace-hero-note {
+  margin-top:20px;
+  color:#9bac9a;
+  font-size:10px;
+  font-weight:820;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.marketplace-rpg-page .marketplace-hero-note::before {
+  width:6px;
+  height:6px;
+  border-radius:0;
+  box-shadow:3px 3px 0 rgba(0,0,0,.3);
+}
+
+.marketplace-rpg-page .marketplace-collection-section {
+  position:relative;
+  padding:72px 0 96px;
+}
+.marketplace-rpg-page .marketplace-route {
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+  margin:0 0 22px;
+}
+.marketplace-rpg-page .marketplace-route-step {
+  padding:14px 16px;
+  border:3px solid #080b09;
+  border-radius:0;
+  background:linear-gradient(180deg,#272f26,#171c17);
+  box-shadow:4px 5px 0 rgba(0,0,0,.24),inset 0 0 0 1px rgba(255,255,255,.06);
+  clip-path:polygon(0 6px,6px 6px,6px 0,calc(100% - 6px) 0,calc(100% - 6px) 6px,100% 6px,100% calc(100% - 6px),calc(100% - 6px) calc(100% - 6px),calc(100% - 6px) 100%,6px 100%,6px calc(100% - 6px),0 calc(100% - 6px));
+}
+.marketplace-rpg-page .marketplace-route-step:not(:last-child)::after { display:none; }
+.marketplace-rpg-page .marketplace-route-step small { color:#869184; }
+.marketplace-rpg-page .marketplace-route-step strong { color:#ececde; font-size:14px; }
+.marketplace-rpg-page .marketplace-route-step.active {
+  border-color:#0a1015;
+  background:linear-gradient(180deg,#30465d,#1b2a38);
+  box-shadow:4px 5px 0 rgba(0,0,0,.27),inset 0 0 0 1px rgba(158,205,255,.16);
+}
+.marketplace-rpg-page .marketplace-route-step.active strong { color:#ddebff; }
+
+.marketplace-rpg-page .marketplace-shell {
+  grid-template-columns:minmax(0,1.34fr) minmax(300px,.66fr);
+  gap:14px;
+}
+.marketplace-rpg-page .marketplace-viewer-card,
+.marketplace-rpg-page .marketplace-detail-card {
+  border:4px solid #060806;
+  border-radius:0;
+  background:linear-gradient(180deg,#20271f,#121612);
+  box-shadow:10px 12px 0 rgba(0,0,0,.28),0 30px 60px rgba(0,0,0,.22),inset 0 0 0 1px rgba(255,255,255,.06);
+  clip-path:polygon(0 10px,10px 10px,10px 0,calc(100% - 10px) 0,calc(100% - 10px) 10px,100% 10px,100% calc(100% - 10px),calc(100% - 10px) calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,10px calc(100% - 10px),0 calc(100% - 10px));
+}
+.marketplace-rpg-page .marketplace-model-stage {
+  min-height:620px;
+  background:
+    radial-gradient(55% 55% at 50% 50%,rgba(103,170,255,.10),transparent 72%),
+    linear-gradient(180deg,#121712,#090c0a);
+}
+.marketplace-rpg-page .marketplace-model-stage::before {
+  content:'';
+  position:absolute;
+  inset:18px;
+  pointer-events:none;
+  border:1px solid rgba(226,234,215,.08);
+  box-shadow:inset 0 0 44px rgba(0,0,0,.25);
+}
+.marketplace-rpg-page .marketplace-detail-card {
+  padding:34px;
+  justify-content:flex-end;
+  background:
+    radial-gradient(circle at 85% 14%,rgba(103,170,255,.11),transparent 32%),
+    linear-gradient(180deg,#252d24,#151a16);
+}
+.marketplace-rpg-page .marketplace-detail-card h2 {
+  font-size:clamp(42px,5vw,68px);
+  text-shadow:3px 4px 0 rgba(0,0,0,.25);
+}
+.marketplace-rpg-page .marketplace-variant {
+  color:#9dcaff;
+  font-size:10px;
+  letter-spacing:.15em;
+}
+.marketplace-rpg-page .marketplace-detail-copy {
+  margin-top:16px;
+  color:#aeb7aa;
+  font-size:12px;
+  line-height:1.55;
+}
+.marketplace-rpg-page .marketplace-facts {
+  margin-top:24px;
+  border-top:2px solid rgba(0,0,0,.3);
+}
+.marketplace-rpg-page .marketplace-fact {
+  padding:12px 0;
+  border-bottom:1px solid rgba(226,234,215,.08);
+}
+.marketplace-rpg-page .marketplace-fact span { color:#869184; }
+.marketplace-rpg-page .marketplace-fact strong { color:#e8eadf; }
+
+.marketplace-rpg-page .marketplace-items-head {
+  margin-top:58px;
+}
+.marketplace-rpg-page .marketplace-item-grid {
+  gap:10px;
+}
+.marketplace-rpg-page .marketplace-item-card {
+  border:3px solid #070a08;
+  border-radius:0;
+  background:linear-gradient(180deg,#242c23,#151a16);
+  box-shadow:5px 6px 0 rgba(0,0,0,.25),inset 0 0 0 1px rgba(255,255,255,.055);
+  clip-path:polygon(0 7px,7px 7px,7px 0,calc(100% - 7px) 0,calc(100% - 7px) 7px,100% 7px,100% calc(100% - 7px),calc(100% - 7px) calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,7px calc(100% - 7px),0 calc(100% - 7px));
+}
+.marketplace-rpg-page .marketplace-item-card:hover {
+  transform:translateY(-3px);
+  border-color:#0a0f0b;
+  background:linear-gradient(180deg,#30392f,#1a201a);
+}
+.marketplace-rpg-page .marketplace-item-card.is-active {
+  border-color:#112239;
+  background:linear-gradient(180deg,#2d4258,#192a39);
+  box-shadow:5px 6px 0 rgba(0,0,0,.27),inset 0 0 0 1px rgba(157,202,255,.17);
+}
+.marketplace-rpg-page .marketplace-item-preview {
+  background:
+    radial-gradient(58% 58% at 50% 50%,rgba(103,170,255,.075),transparent 74%),
+    #0c100d;
+  border-bottom:2px solid rgba(0,0,0,.28);
+}
+.marketplace-rpg-page .marketplace-item-copy { padding:14px 15px 15px; }
+.marketplace-rpg-page .marketplace-item-copy small { color:#849082; }
+.marketplace-rpg-page .marketplace-item-copy strong { color:#eef0e5; }
+
+.marketplace-rpg-page .marketplace-store-bridge {
+  margin-top:58px;
+  padding:22px 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  border:3px solid #070a08;
+  background:linear-gradient(180deg,#242c23,#171c17);
+  box-shadow:6px 7px 0 rgba(0,0,0,.24);
+}
+.marketplace-rpg-page .marketplace-store-bridge p {
+  margin:5px 0 0;
+  color:#9fa99c;
+  font-size:11px;
+}
+
+@media (max-width:900px) {
+  .marketplace-rpg-page .marketplace-hero { min-height:430px; }
+  .marketplace-rpg-page .marketplace-shell { grid-template-columns:1fr; }
+  .marketplace-rpg-page .marketplace-model-stage { min-height:510px; }
+  .marketplace-rpg-page .marketplace-route { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media (max-width:620px) {
+  .marketplace-rpg-page .marketplace-hero h1 { font-size:clamp(48px,15vw,72px); }
+  .marketplace-rpg-page .marketplace-hero .shell { padding-bottom:82px; }
+  .marketplace-rpg-page .marketplace-collection-section { padding:52px 0 72px; }
+  .marketplace-rpg-page .marketplace-route { grid-template-columns:1fr 1fr; }
+  .marketplace-rpg-page .marketplace-model-stage { min-height:420px; }
+  .marketplace-rpg-page .marketplace-detail-card { padding:25px; }
+  .marketplace-rpg-page .marketplace-store-bridge { align-items:flex-start; flex-direction:column; }
+}
+@media (max-width:430px) {
+  .marketplace-rpg-page .marketplace-route { grid-template-columns:1fr; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .marketplace-rpg-page .marketplace-item-card { transition:none; }
+}
