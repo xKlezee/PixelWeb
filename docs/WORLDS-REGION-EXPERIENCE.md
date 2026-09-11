@@ -59,6 +59,6 @@ Temporary third-party imagery may only be used when its reuse license has been v
 - Do not add runtime inline styles or unsafe DOM HTML parsing.
 - Keep all gameplay facts data-driven from `data/network.js`.
 
-## Legacy files
+## Legacy implementation
 
-The previous `worlds-stage8.*` card-rail implementation is no longer referenced by `worlds.html`. It may be deleted once repository cleanup confirms there are no remaining consumers. Do not reintroduce the old card rail as the main Worlds experience.
+The previous `worlds-stage8.css`, `worlds-stage8-media.css` and `worlds-stage8.js` card-rail implementation was removed when this selector became canonical. Do not reintroduce those files or the old card rail as the primary Worlds experience.
