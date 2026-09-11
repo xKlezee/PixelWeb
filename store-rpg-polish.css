@@ -1,0 +1,162 @@
+/* Pixel Network — Store priority + rank explanation modal. */
+
+.store-rpg-page .mc-page-hero {
+  min-height: 420px;
+  align-items: center;
+}
+.store-rpg-page .mc-page-hero .shell {
+  width: min(920px,calc(100% - 32px));
+  padding: 54px 0 48px;
+  text-align: center;
+}
+.store-rpg-page .mc-page-kicker { margin-bottom: 8px; }
+.store-rpg-page .mc-page-title {
+  max-width: 680px;
+  margin-inline: auto;
+  font-size: clamp(38px,5vw,62px);
+}
+.store-rpg-page .mc-page-lead {
+  max-width: 570px;
+  margin-inline: auto;
+}
+.store-shop-primary {
+  min-width: min(420px,100%);
+  min-height: 76px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 26px;
+  padding: 0 34px;
+  color: #fff7d7;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-size: 18px;
+  font-weight: 950;
+  border: 3px solid #241b09;
+  background:
+    linear-gradient(rgba(255,255,255,.16),transparent 34%),
+    linear-gradient(180deg,#f1c84d,#c99720 58%,#a67512);
+  box-shadow: inset 0 3px 0 rgba(255,255,255,.20),inset 0 -6px 0 rgba(99,67,7,.42),0 7px 0 #5c410b,0 16px 28px rgba(0,0,0,.26);
+  clip-path: polygon(0 6px,6px 6px,6px 0,calc(100% - 6px) 0,calc(100% - 6px) 6px,100% 6px,100% calc(100% - 6px),calc(100% - 6px) calc(100% - 6px),calc(100% - 6px) 100%,6px 100%,6px calc(100% - 6px),0 calc(100% - 6px));
+  transition: transform .14s ease,filter .14s ease,box-shadow .14s ease;
+}
+.store-shop-primary:hover { transform: translateY(-2px); filter: brightness(1.06); }
+.store-shop-primary:active { transform: translateY(5px); box-shadow: inset 0 2px 0 rgba(255,255,255,.16),inset 0 -3px 0 rgba(99,67,7,.38),0 2px 0 #5c410b; }
+
+.store-rank-info-trigger {
+  width: fit-content;
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 18px;
+  padding: 0 12px;
+  border: 0;
+  background: transparent;
+  color: #d9dddb;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 820;
+  cursor: pointer;
+}
+.store-rank-info-trigger:hover { color: #fff4c8; }
+.store-info-icon {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #c8cecf;
+  color: #171a1b;
+  font-size: 17px;
+  font-weight: 950;
+}
+
+.store-rank-dialog {
+  width: min(980px,calc(100% - 28px));
+  max-height: min(760px,calc(100svh - 32px));
+  margin: auto;
+  padding: 0;
+  overflow: auto;
+  border: 3px solid #090b09;
+  border-radius: 4px;
+  background: #111412;
+  color: #eef0e8;
+  box-shadow: 0 32px 80px rgba(0,0,0,.64);
+}
+.store-rank-dialog::backdrop { background: rgba(5,6,5,.78); backdrop-filter: blur(5px); }
+.store-rank-dialog-shell { position: relative; }
+.store-rank-dialog-close {
+  position: absolute;
+  z-index: 2;
+  right: 16px;
+  top: 16px;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 4px;
+  background: #1d211f;
+  color: #aeb4b1;
+  font-size: 28px;
+  cursor: pointer;
+}
+.store-rank-dialog-close:hover { color: #fff; background: #252b28; }
+.store-rank-dialog-copy {
+  padding: 32px 72px 28px 32px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.store-rank-dialog-copy h2 { margin: 0; font-size: clamp(25px,3vw,36px); }
+.store-rank-dialog-copy p { max-width: 760px; margin: 13px auto 0; color: #b7bdb8; font-size: 12px; line-height: 1.7; }
+.store-rank-dialog-grid {
+  display: grid;
+  grid-template-columns: repeat(5,minmax(0,1fr));
+}
+.store-rank-dialog-tier {
+  min-width: 0;
+  min-height: 210px;
+  padding: 0 20px 24px;
+  border-right: 1px solid rgba(255,255,255,.055);
+  background: #181c1a;
+}
+.store-rank-dialog-tier:last-child { border-right: 0; }
+.store-rank-tier-head {
+  margin: 0 -20px 22px;
+  padding: 17px 10px;
+  text-align: center;
+  background: linear-gradient(180deg,#d7ad34,#b68419);
+  color: #fff9e2;
+  text-shadow: 0 2px 0 rgba(73,48,5,.42);
+}
+.store-rank-dialog-tier:nth-child(2) .store-rank-tier-head { background: linear-gradient(180deg,#8bc84c,#5f9d27); }
+.store-rank-dialog-tier:nth-child(3) .store-rank-tier-head { background: linear-gradient(180deg,#4aaee0,#2383b8); }
+.store-rank-dialog-tier:nth-child(4) .store-rank-tier-head { background: linear-gradient(180deg,#a86bd8,#7742aa); }
+.store-rank-dialog-tier:nth-child(5) .store-rank-tier-head { background: linear-gradient(180deg,#e7549d,#b72c70); }
+.store-rank-tier-head strong { display: block; font-size: 18px; letter-spacing: .04em; }
+.store-rank-tier-head span { display: block; margin-top: 4px; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+.store-rank-dialog-tier h3 { margin: 0 0 12px; font-size: 13px; }
+.store-rank-dialog-tier p { margin: 0; color: #9fa6a1; font-size: 10.5px; line-height: 1.6; }
+.store-rank-dialog-note {
+  padding: 17px 22px;
+  border-top: 1px solid rgba(255,255,255,.07);
+  color: #9da39f;
+  font-size: 10px;
+  line-height: 1.55;
+  text-align: center;
+}
+body.store-rank-dialog-open { overflow: hidden; }
+
+@media (max-width: 850px) {
+  .store-rank-dialog-grid { grid-template-columns: 1fr 1fr; }
+  .store-rank-dialog-tier { border-bottom: 1px solid rgba(255,255,255,.055); }
+}
+@media (max-width: 560px) {
+  .store-rpg-page .mc-page-hero { min-height: 360px; }
+  .store-shop-primary { min-height: 64px; font-size: 15px; }
+  .store-rank-dialog-grid { grid-template-columns: 1fr; }
+  .store-rank-dialog-tier { min-height: 0; border-right: 0; }
+  .store-rank-dialog-copy { padding: 28px 54px 22px 20px; text-align: left; }
+}
