@@ -63,135 +63,55 @@
   box-shadow: inset 0 -2px 0 rgba(103,170,255,.6);
 }
 
-/* Desktop header actions: Discord → Play → Store.
-   All three share exactly the same control geometry, border language and depth. */
-@media (min-width: 981px) {
-  .nav-actions {
-    align-items: center;
-  }
-
-  .nav-actions .nav-discord,
-  .nav-actions .nav-play,
-  .nav-actions .nav-store {
-    height: 40px;
-    min-height: 40px;
-    max-height: 40px;
-    box-sizing: border-box;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid #17191c;
-    border-radius: 3px;
-    font-weight: 800;
-    line-height: 1;
-    box-shadow:
-      inset 0 2px 0 rgba(255,255,255,.10),
-      inset 0 -3px 0 rgba(0,0,0,.28),
-      0 2px 0 rgba(0,0,0,.24);
-    transform: none;
-  }
-
-  .nav-actions .nav-discord { order: 1; }
-
-  .nav-actions .nav-play {
-    order: 2;
-    padding: 0 16px;
-    background: linear-gradient(180deg, #4a4d52 0%, #383b40 54%, #2b2e32 100%);
-    border-color: #202226;
-    color: #eceef1;
-    text-shadow: 0 1px 0 rgba(0,0,0,.35);
-  }
-
-  .nav-actions .nav-play:hover,
-  .nav-actions .nav-play:focus-visible {
-    background: linear-gradient(180deg, #5a5e64 0%, #45494f 52%, #34373c 100%);
-    border-color: #292c31;
-    color: #fff;
-    box-shadow:
-      inset 0 2px 0 rgba(255,255,255,.13),
-      inset 0 -3px 0 rgba(0,0,0,.25),
-      0 2px 0 rgba(0,0,0,.24);
-    transform: none;
-  }
-
-  /* Store is permanently gold, including pages where .button.quiet has its own skin. */
-  .nav-actions .nav-store,
-  .nav-actions .button.quiet.nav-store {
-    order: 3;
-    padding: 0 17px;
-    border-color: #6f4c08 !important;
-    background: linear-gradient(180deg, #f5c94a 0%, #d9a51f 54%, #ad780d 100%) !important;
-    color: #1c1404 !important;
-    text-shadow: 0 1px 0 rgba(255,255,255,.32) !important;
-    box-shadow:
-      inset 0 2px 0 rgba(255,255,255,.24),
-      inset 0 -3px 0 rgba(92,57,3,.38),
-      0 2px 0 rgba(0,0,0,.24) !important;
-  }
-
-  .nav-actions .nav-store:hover,
-  .nav-actions .nav-store:focus-visible,
-  .nav-actions .button.quiet.nav-store:hover,
-  .nav-actions .button.quiet.nav-store:focus-visible {
-    border-color: #8b620b !important;
-    background: linear-gradient(180deg, #ffdc68 0%, #e8b92f 50%, #bd840f 100%) !important;
-    color: #160f02 !important;
-    box-shadow:
-      inset 0 2px 0 rgba(255,255,255,.30),
-      inset 0 -3px 0 rgba(105,65,3,.42),
-      0 2px 0 rgba(0,0,0,.24),
-      0 0 12px rgba(232,185,47,.16) !important;
-    transform: none;
-  }
-
-  .nav-actions .nav-discord:active,
-  .nav-actions .nav-play:active {
-    transform: translateY(1px);
-    box-shadow:
-      inset 0 3px 5px rgba(0,0,0,.30),
-      inset 0 -1px 0 rgba(255,255,255,.08);
-  }
-
-  .nav-actions .nav-store:active,
-  .nav-actions .button.quiet.nav-store:active {
-    border-color: #684607 !important;
-    background: linear-gradient(180deg, #d9a51f 0%, #b77d0e 100%) !important;
-    color: #160f02 !important;
-    transform: translateY(1px);
-    box-shadow:
-      inset 0 3px 5px rgba(83,50,2,.42),
-      inset 0 -1px 0 rgba(255,255,255,.16) !important;
-  }
+/* Canonical header actions: one source of truth for Discord, Play and Store. */
+.nav-actions .nav-discord,
+.nav-actions .nav-play,
+.nav-actions .nav-store {
+  height: 40px !important;
+  min-height: 40px !important;
+  max-height: 40px !important;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px !important;
+  font-weight: 850 !important;
+  line-height: 1;
+  transform: none !important;
+  filter: none !important;
 }
 
-/* Discord: official Symbol.svg, untouched and centered inside the shared button shell. */
+/* Discord and Play share the exact same neutral-gray shell. */
+.nav-actions .nav-discord,
+.nav-actions .nav-play,
+.nav-actions .button.primary.nav-play {
+  border: 2px solid #343941 !important;
+  background: linear-gradient(180deg, #454a52 0%, #33383f 55%, #292e34 100%) !important;
+  color: #eceef1 !important;
+  text-shadow: none !important;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,.10),
+    inset 0 -3px 0 rgba(0,0,0,.28),
+    0 2px 0 rgba(0,0,0,.24) !important;
+}
+
+.nav-actions .nav-play,
+.nav-actions .button.primary.nav-play {
+  padding: 0 16px;
+}
+
 .nav-actions .nav-discord {
   position: relative;
   width: 40px;
   min-width: 40px;
-  height: 40px;
-  min-height: 40px;
-  max-height: 40px;
-  box-sizing: border-box;
-  padding: 0;
   flex: 0 0 40px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid #202226;
-  border-radius: 3px;
-  background: linear-gradient(180deg, #4a4d52 0%, #383b40 54%, #2b2e32 100%);
-  box-shadow:
-    inset 0 2px 0 rgba(255,255,255,.10),
-    inset 0 -3px 0 rgba(0,0,0,.28),
-    0 2px 0 rgba(0,0,0,.24);
-  color: transparent;
+  padding: 0 !important;
+  color: transparent !important;
   font-size: 0;
   line-height: 0;
   text-transform: none;
   letter-spacing: 0;
   overflow: hidden;
-  transform: none;
 }
 
 .nav-actions .nav-discord::before {
@@ -207,20 +127,108 @@
 }
 
 .nav-actions .nav-discord:hover,
-.nav-actions .nav-discord:focus-visible {
-  background: linear-gradient(180deg, #5a5e64 0%, #45494f 52%, #34373c 100%);
-  border-color: #292c31;
+.nav-actions .nav-discord:focus-visible,
+.nav-actions .nav-play:hover,
+.nav-actions .nav-play:focus-visible,
+.nav-actions .button.primary.nav-play:hover,
+.nav-actions .button.primary.nav-play:focus-visible {
+  border-color: #464d57 !important;
+  background: linear-gradient(180deg, #535963 0%, #3d434b 55%, #30363d 100%) !important;
+  color: #fff !important;
   box-shadow:
-    inset 0 2px 0 rgba(255,255,255,.13),
-    inset 0 -3px 0 rgba(0,0,0,.25),
-    0 2px 0 rgba(0,0,0,.24);
-  color: transparent;
-  transform: none;
+    inset 0 2px 0 rgba(255,255,255,.10),
+    inset 0 -3px 0 rgba(0,0,0,.28),
+    0 2px 0 rgba(0,0,0,.24) !important;
+  transform: none !important;
+}
+
+.nav-actions .nav-discord:hover,
+.nav-actions .nav-discord:focus-visible {
+  color: transparent !important;
+}
+
+.nav-actions .nav-discord:active,
+.nav-actions .nav-play:active,
+.nav-actions .button.primary.nav-play:active {
+  border-color: #343941 !important;
+  background: linear-gradient(180deg, #30353c 0%, #292e34 100%) !important;
+  box-shadow:
+    inset 0 3px 5px rgba(0,0,0,.34),
+    inset 0 -1px 0 rgba(255,255,255,.07) !important;
+  transform: translateY(1px) !important;
+}
+
+/* Store is permanently gold; hover/active only vary the gold shade. */
+.nav-actions .nav-store,
+.nav-actions .button.quiet.nav-store {
+  padding: 0 17px;
+  border: 2px solid #6f4c08 !important;
+  background: linear-gradient(180deg, #f5c94a 0%, #d9a51f 54%, #ad780d 100%) !important;
+  color: #1c1404 !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.32) !important;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,.24),
+    inset 0 -3px 0 rgba(92,57,3,.38),
+    0 2px 0 rgba(0,0,0,.24) !important;
+}
+
+.nav-actions .nav-store:hover,
+.nav-actions .nav-store:focus-visible,
+.nav-actions .button.quiet.nav-store:hover,
+.nav-actions .button.quiet.nav-store:focus-visible {
+  border-color: #8b620b !important;
+  background: linear-gradient(180deg, #ffdc68 0%, #e8b92f 50%, #bd840f 100%) !important;
+  color: #160f02 !important;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,.30),
+    inset 0 -3px 0 rgba(105,65,3,.42),
+    0 2px 0 rgba(0,0,0,.24),
+    0 0 12px rgba(232,185,47,.16) !important;
+  transform: none !important;
+}
+
+.nav-actions .nav-store:active,
+.nav-actions .button.quiet.nav-store:active {
+  border-color: #684607 !important;
+  background: linear-gradient(180deg, #d9a51f 0%, #b77d0e 100%) !important;
+  color: #160f02 !important;
+  box-shadow:
+    inset 0 3px 5px rgba(83,50,2,.42),
+    inset 0 -1px 0 rgba(255,255,255,.16) !important;
+  transform: translateY(1px) !important;
 }
 
 .nav-actions .nav-discord[aria-disabled='true'] {
   opacity: .45;
   pointer-events: none;
+}
+
+/* Preserve the intended visual order while legacy static HTML is progressively normalized. */
+@media (min-width: 981px) {
+  .nav-actions { align-items: center; }
+  .nav-actions .nav-discord { order: 1; }
+  .nav-actions .nav-play { order: 2; }
+  .nav-actions .nav-store { order: 3; }
+}
+
+@media (max-width: 980px) {
+  .nav-actions .nav-store { display: none !important; }
+  .nav-actions .nav-play { display: inline-flex !important; }
+}
+
+@media (max-width: 600px) {
+  .nav-actions .nav-play {
+    min-width: 58px;
+    padding: 0 12px;
+  }
+}
+
+@media (max-width: 390px) {
+  .nav-actions .nav-play {
+    min-width: 52px;
+    padding: 0 10px;
+    font-size: 12px;
+  }
 }
 
 @media (max-width: 760px) {
