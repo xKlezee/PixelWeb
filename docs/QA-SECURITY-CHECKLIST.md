@@ -1,210 +1,143 @@
 # Security & Release Regression QA Checklist
 
-Run this checklist against the exact candidate HEAD before promoting substantial PixelWeb frontend changes to `main`.
+This checklist records the current PixelWeb contracts. A configured control is not a passed control; browser or workflow claims require actual execution evidence.
 
-A configured control is not a passed control. Record the actual result for the exact candidate commit.
+## Current release posture
 
-## Repository / automated gate
-
-- Record the exact candidate HEAD before validation.
-- `PixelWeb Quality Gate` must start a real runner and expose repository steps before its result is interpreted as validator PASS/FAIL.
-- Python syntax compilation completes for committed Python validators/builders.
-- `python3 scripts/security_scan.py` completes successfully.
-- `python3 scripts/validate_media_integrity.py` completes successfully.
-- `node --check` completes successfully for repository JavaScript.
-- `node scripts/validate_public_data.js` completes successfully.
-- `python3 scripts/validate_site.py` completes successfully.
-- `python3 scripts/validate_social_metadata.py` completes successfully.
-- `python3 scripts/validate_runtime_contracts.py` completes successfully.
-- `python3 scripts/validate_accessibility.py` completes successfully.
-- `python3 scripts/validate_player_facing_copy.py` completes successfully.
-- `python3 scripts/build_public_site.py` stages `_site/` successfully.
-- `python3 scripts/validate_public_bundle.py` validates the staged publication boundary successfully.
-- A workflow startup failure with no runner/steps is classified as infrastructure/account state, not code PASS/FAIL.
+- Record the exact candidate/main SHA before declaring a deployment live.
+- Confirm GitHub Pages ran against that exact SHA and finished successfully.
+- The owner has temporarily disabled Quality Gate execution because of account/payment runner issues. Do not block ordinary frontend fixes on that workflow or claim it passed until this override is reversed and a real run executes.
 
 ## Navigation and page integrity
 
 - All local navigation links resolve.
 - Every local same-page/cross-page fragment resolves to an existing destination `id`.
-- Local images/scripts/styles/deferred media resolve inside the intended repository/public roots.
+- Local images/scripts/styles/deferred media resolve inside intended public roots.
 - External `_blank` links include `rel="noopener"`.
 - No duplicate IDs exist.
-- Above 980 px with a fine pointer, Explore / Guide / Community retain hover-only pointer behavior without click-pinning.
-- At 980 px and below, explicit mobile click/touch group behavior remains available.
-- Keyboard opening/focus/Escape remain independent supported paths.
+- Above 980 px with a fine pointer, Explore / Guide / Community retain desktop hover behavior; at 980 px and below explicit mobile click/touch behavior remains available.
+- Keyboard opening/focus/Escape remain independent paths.
 - Guide remains selected for detailed `guide-*.html` pages.
-- Skip to content is the first useful keyboard route on standard pages and moves focus to `<main>`.
-- Contextual sibling navigation appears only for the current category:
+- Skip to content moves focus to `<main>`.
+- Contextual sibling navigation uses these canonical groups:
   - Explore → Gameplay / Systems / Worlds / Skyblock / Nexus;
-  - Guide → Progression / Mechanics / Tools / Armor / Specials / Boosts;
+  - Guide → Getting Started / Currencies / Basic Commands / Progression / Mechanics / Tools / Armor / Specials / Boosts;
   - Community → Leaderboards / Changelog / Rules / Staff Team.
-- Progression is the first Guide item in the canonical runtime array, Guide category data and visible sublist; `guides.html` without a hash treats Progression as the default category.
-- Explore rail styling on Gameplay, Systems and Skyblock matches the established Worlds/Nexus reference: compact uppercase typography, squared geometry, dark green/stone material and Pixel Blue lower-edge current state.
-- The current contextual destination and its parent global group use the active treatment without relying on color alone for meaning.
-- The contextual rail remains horizontally usable at narrow widths and does not create page-level overflow.
-- Worlds/Nexus retain the 50px contextual-rail height required by their immersive viewport math.
-- No visible Forum destination/copy reappears in global or contextual navigation, including before runtime navigation replacement.
+- Getting Started is the first Guide item and the default for `guides.html` without a hash.
+- Current destination and parent global group use an active treatment without relying on color alone.
+- Context rails remain horizontally usable at narrow widths without page-level overflow.
+- Worlds/Nexus retain their 50px contextual-rail geometry.
+- Warm gold/amber/orange/copper is the shared interaction-accent language; approved artwork is not recolored.
+- No visible Forum or Development navigation returns.
+
+## Guide content and Browse integrity
+
+- `guides.html` statically owns the canonical nine-category Guide IA; JavaScript must not be required to create foundation categories.
+- Categories remain ordered: Getting Started, Currencies, Basic Commands, Progression, Mechanics, Tools, Armor, Specials, Boosts.
+- Browse category counts are not displayed.
+- Internal organizational labels such as Start here / Account / Journey are not displayed.
+- Fake `Category overview` rows are absent.
+- Every visible Browse child is a real destination.
+- Currencies exposes direct destinations for Coins, Pixels and Nexus Points.
+- Basic Commands exposes direct destinations for the currently documented player commands.
+- Guide search filters the content cards and corresponding Browse destinations coherently.
+- Getting Started contains its server-basics section statically and links to Currencies, Basic Commands and Progression.
+- `guide-getting-started.js` hydrates shared public facts only; it must not reconstruct the document IA.
+- Nexus is never presented as World 5.
+- Shared numeric facts read from canonical owners where one exists.
+- Secret Talisman discovery inputs remain concealed.
+- Unverified live-client behavior remains explicitly bounded rather than being upgraded from source evidence alone.
 
 ## Header actions
 
-- Desktop Discord uses Discord's official Symbol asset and does not display competing textual button copy.
-- The Discord symbol is not redrawn, stretched, recolored or otherwise modified by Pixel CSS.
-- The surrounding Discord control uses the intended inset/recessed Pixel material treatment and aligns at the same header scale as Store.
-- Discord remains keyboard focusable and has an accessible label.
-- The mobile navigation retains a readable Discord destination.
-- Store and Play behavior remain unchanged by the Discord restyle.
-
-## Forum retirement
-
-- Forum is not exposed as an active product surface.
-- Community contains no Forum preview card, post UI, account UI or Forum CTA.
-- Home does not describe Forum as a destination.
-- `data/network.js` contains no active Forum landing/state model.
-- `validate_public_data.js` does not require a Forum preview contract.
-- Former Forum-only JavaScript/CSS files remain removed.
-- `forum.html` contains only the compatibility redirect surface, declares `noindex,nofollow,noarchive`, and redirects to `community.html` without loops.
-- `forum.html` remains excluded from `sitemap.xml`.
+- Desktop Discord uses Discord's official Symbol asset and does not display competing text copy.
+- Discord symbol is not redrawn, stretched or recolored.
+- Discord and Play remain neutral gray; Store remains the strongest gold purchase CTA.
+- All three header controls preserve their compact 40px shell/alignment contract.
+- Discord remains keyboard focusable with an accessible label.
+- Mobile navigation retains readable Discord and Store destinations.
 
 ## Canonical public data
 
-- `data/network.js` remains the single owner for shared public network facts.
+- `data/network.js` remains the shared owner for network facts.
 - Current World route remains exactly Overworld → Pirate Kingdom → Nether → Winter; Nexus remains outside the World array.
 - Per-World mine counts sum to the canonical total.
 - World/Nexus encounter counts remain internally consistent.
-- Nexus access remains permanent at its canonical unlock without silently acquiring a Viking/boss requirement.
-- Skyblock remains `source-verified / partial`; incomplete collaboration remains outside the current feature list.
-- Public external destinations use approved canonical HTTPS URLs.
-- Store thresholds remain unpublished while `thresholdsVerified` is false.
+- Skyblock remains source-verified / partial and does not advertise incomplete collaboration as finished.
+- Public external destinations use approved HTTPS URLs.
+- Store monetary thresholds remain unpublished while unverified.
+- Coins, Pixels and Nexus Points are treated as distinct currency concepts; no invented conversion is published.
 
 ## Staff Team / owner skin viewers
 
-- Staff Team keeps Klezee and PxlMads equal in owner status/visual weight.
-- About does not duplicate the owner-profile cards.
-- `team-models.js` is loaded by `staff.html` and resolves skin textures by the configured usernames rather than repository-pinned owner renders.
-- Both viewers render readable Minecraft geometry without smoothing-related blur.
-- Pointer drag rotates the model and releases pointer capture correctly.
-- ArrowLeft/ArrowRight rotate yaw; ArrowUp/ArrowDown adjust pitch.
-- Home resets each owner to that viewer's own initial angle.
-- Keyboard focus indicator remains visible around each viewer.
-- Provider failure leaves a readable status rather than an empty/broken owner panel.
-- Product copy describes the skin as username-synchronized rather than implying instant update guarantees.
-- The no-JavaScript fallback also uses username-based remote renders.
-- Browser/network QA confirms the selected skin provider permits the CORS behavior required for canvas rendering.
-- Staff Team states that only intentionally public roles are listed and does not infer private staff membership.
+- Klezee and PxlMads retain equal Owner status and equal structural weight.
+- About does not duplicate owner cards.
+- `team-models.js` resolves textures by username.
+- Classic/Steve and slim/Alex arm geometry/UVs both remain supported.
+- Base and outer skin layers render without smoothing-related blur.
+- Klezee head outer-layer side orientation remains corrected without changing the other head faces.
+- Pointer drag rotates and releases pointer capture correctly.
+- ArrowLeft/ArrowRight rotate yaw; ArrowUp/ArrowDown adjust pitch; Home resets each owner to that viewer's own initial angle.
+- No visible `Drag to rotate` helper label returns.
+- Provider failure produces the username-based fallback instead of an empty frame.
+- Browser/network QA must confirm provider CORS/canvas behavior before calling remote skin rendering browser-verified.
 
 ## About / legal information
 
-- `team.html` remains the canonical About route for URL compatibility.
-- About contains FAQ, Store/Tebex boundary information, the independent Minecraft disclaimer, external-service boundary notes, licensing and attribution.
-- About does not duplicate owner profiles from Staff Team.
-- About does not invent prices, rank thresholds, refund promises, payment guarantees or unpublished support terms.
-- The official Store CTA resolves to the approved Tebex HTTPS destination.
-- The Minecraft disclaimer remains prominent and states that Pixel Network is not official, approved by or associated with Mojang/Microsoft.
-- About identifies the **Pixel Network Proprietary Website, Source, Content & Asset License v1.0** for Pixel-owned material.
-- `LICENSE` is the canonical repository license text and `license.html` is the public-readable copy.
-- PixelWeb is described as proprietary rather than open source.
-- Pixel-owned material and third-party material have separate rights boundaries.
-- Third-party material is not presented as covered by Pixel Network's proprietary grant.
-- `license.html` is reachable from About and appears in `sitemap.xml`.
+- `team.html` remains canonical About route.
+- About contains FAQ, Store/Tebex boundaries, Minecraft independence disclaimer, external-service notes, licensing and attribution.
+- About Start here points to Getting Started.
+- About does not invent prices, thresholds, refund promises or unpublished support terms.
+- Official Store CTA resolves to approved Tebex HTTPS destination.
+- `LICENSE` remains canonical repository license and `license.html` public-readable copy.
+- Pixel-owned and third-party materials retain separate rights boundaries.
 
-## Shared footer
+## Leaderboards
 
-- `polish.js` replaces legacy per-page footer fragments with one shared runtime footer.
-- Footer includes Pixel Network / Java Edition identity plus maintained links to Marketplace, Store, Guide, Community, Rules, Staff Team and About.
-- Footer includes the Minecraft unofficial-service disclaimer.
-- Footer includes a concise copyright/third-party-rights boundary.
-- Footer remains readable in Home, Guide, immersive Worlds/Nexus, Marketplace and secondary visual families without overriding their intended footer background.
-- Footer collapses cleanly on narrow widths without page-level horizontal overflow.
-
-## Dynamic rendering / CSP
-
-- Future/API-controlled text is rendered through safe DOM construction / `textContent` where appropriate.
-- No user-controlled value is interpolated into inline JavaScript.
-- No string-to-DOM parsing sink is introduced.
-- No direct runtime inline-style mutation is introduced.
-- Dynamic URLs are constrained to expected scheme/origin where appropriate.
-- Contextual navigation is constructed from the same canonical runtime navigation model rather than duplicated independent data.
-- Staff Team remote skin requests remain governed by the page's existing `img-src` policy and do not require weakening script/style CSP.
-- The official Discord Symbol is loaded as an HTTPS image resource allowed by the existing `img-src` policy; script/style policy is not weakened.
-
-## Guide content integrity
-
-- Guide evidence remains separate from feature state.
-- Shared numeric facts read from canonical owners where one exists.
-- `guides.html` retains one primary entry for each detailed `guide-*.html` page.
-- Progression is Category 01 and precedes Mechanics in the Guide index/sidebar/subnav.
-- Browser-public Guide copy avoids repository/deployment/database implementation detail guarded by `validate_player_facing_copy.py`.
-- Nexus is never presented as World 5.
-- Progression reset/reward/XP/persistence semantics remain unpublished until independently re-verified.
-- Secret Talisman discovery inputs remain concealed.
-- Existing Talisman and Enchantment evidence/scopes remain unchanged by this frontend iteration.
+- Leaderboards frontend may expose structure, tabs, empty/source-pending states and verified timestamps.
+- Do not publish player positions, scores or inferred rankings until an authoritative server-backed source is connected.
+- Empty state must not look like a zero-score ranking table.
 
 ## Media integrity
 
-- `assets/nexus/raphael.png`, `azazel.png`, `abyss.png`, `astral.png` remain byte-identical approved 1448×1086 PNGs.
-- No automatic AVIF/WebP conversion, recompression or downscale is introduced.
-- Abyss + Astral remain two independent complete 4:3 source images.
-- Home immersive video remains deferred and reduced-motion avoids unnecessary loading.
+- `assets/nexus/raphael.png`, `azazel.png`, `abyss.png`, `astral.png` remain the approved original 1448×1086 PNGs.
+- No AVIF/WebP conversion, recompression or downscale is introduced.
+- Abyss + Astral remain independent complete 4:3 images.
+- Home immersive video remains deferred and reduced motion avoids unnecessary loading.
 
 ## Crawl / publication behavior
 
-- `sitemap.xml` contains all indexable product/Guide/About/License pages and excludes non-indexed compatibility/error pages.
-- Every sitemap-indexed page keeps one absolute HTTPS canonical matching its sitemap URL.
+- `sitemap.xml` includes all indexable current product/Guide/About/License pages, including Currencies and Basic Commands.
+- Every indexed page keeps one absolute HTTPS canonical matching its intended URL.
 - Indexed pages retain coherent source Open Graph/Twitter metadata.
-- `forum.html` and `404.html` remain outside the sitemap and `noindex`.
-- Canonical/social metadata remains source HTML, not runtime-injected.
-- `_site/` remains derived from explicit publication roots/dependencies rather than arbitrary repository files.
-- `docs/`, `scripts/`, `.github/`, env files, private keys, logs/databases and internal repository artifacts remain absent from the intended public bundle.
-- The prepared `_site/` artifact is not called the live deployment source unless Pages is actually migrated to it.
+- `forum.html` and `404.html` remain outside the sitemap and noindex where applicable.
+- `development.html` remains a legacy redirect to Guide, not a current navigation family.
+- Public bundle must exclude docs/scripts/internal repo artifacts if/when the `_site/` publication model is used.
 
 ## Browser behavior
 
-Verify Home, Gameplay, Worlds, Nexus, Systems, Skyblock, Store, Marketplace, Community, Leaderboards, Changelog, Rules, Staff Team, About, License, Guide and every detailed Guide. Direct `forum.html` and `development.html` are tested only as legacy redirects.
+Verify Home, Gameplay, Worlds, Nexus, Systems, Skyblock, Store, Marketplace, Community, Leaderboards, Changelog, Rules, Staff Team, About, License, Guide and every detailed Guide. Forum/Development are tested only as compatibility redirects.
 
 At minimum confirm:
 
 - no uncaught first-party console errors;
 - no first-party CSP violations;
 - global nav hover/touch/keyboard behavior works at the 980 px boundary;
-- contextual sibling rail is correct and active state follows the current page;
-- all five Explore pages match the Worlds/Nexus rail reference;
-- desktop Discord Symbol loads and its inset control does not shift header geometry;
+- Guide contextual rail contains all nine current categories and starts with Getting Started;
+- Guide Browse/search/direct anchors work on desktop and mobile;
 - Play modal focus trap/Escape/restore behavior works;
-- Guide sidebars/rails/search/tables remain usable;
-- owner skin textures resolve on Staff Team and both canvases can be rotated with pointer and keyboard;
-- owner viewer failure state remains usable;
-- About FAQ/details, Tebex link, license link and legal sections are readable and keyboard accessible;
-- `license.html` remains readable at normal and zoomed widths;
-- the shared footer is present and readable across visual families;
-- direct `forum.html` redirects to Community and no Forum UI flashes first;
-- direct `development.html` redirects to Guide and no retired Development UI returns;
-- reduced-motion mode remains usable;
-- no unexpected HTTP subresources are requested.
+- skin textures resolve and interaction/fallback behavior works;
+- About FAQ/details, Tebex and license links remain accessible;
+- shared footer remains present/readable;
+- no unexpected HTTP subresources;
+- no image stretch/crop regressions.
 
 ## Responsive matrix
 
 Verify at minimum **1440, 1024, 768, 430 and 390 CSS px**, plus short-height landscape and 200% browser zoom.
 
-At every width check:
+Check no unexpected horizontal overflow, clipped controls/text, overlapping content/media, inaccessible navigation or unintended image crop/stretch. Intentional rails/tables may scroll independently.
 
-- no unexpected page-level horizontal overflow;
-- no clipped controls/text;
-- no overlapping content/media;
-- no inaccessible navigation;
-- no unintended image crop/stretch;
-- contextual rails/tables remain independently scrollable where intentional;
-- Staff Team owner viewer dimensions remain balanced with the owner copy;
-- About overview cards and policy panels collapse without becoming oversized marketing cards;
-- License legal copy remains readable;
-- footer link groups and legal copy remain readable.
+## Final rule
 
-Do not mark a viewport PASS from CSS/source inspection alone.
-
-## Final merge gate
-
-The branch is ready to promote only when both are true:
-
-1. the automated quality gate has actually executed and passed on the exact final candidate HEAD; and
-2. the browser/render matrix has been completed with findings remediated and rechecked.
-
-Until then, keep the work isolated from stable `main` and do not describe it as browser-verified.
+Source review, successful Pages deployment and browser verification are separate claims. Report each only when its actual evidence exists.
