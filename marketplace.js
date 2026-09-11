@@ -488,7 +488,7 @@
       const dy = event.clientY - lastY;
       lastX = event.clientX;
       lastY = event.clientY;
-      renderer.nudge(dx * 0.010, dy * 0.0065);
+      renderer.nudge(dx * 0.010, -dy * 0.0065);
     });
 
     const endDrag = event => {
