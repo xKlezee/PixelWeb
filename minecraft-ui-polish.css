@@ -38,6 +38,14 @@
     0 1px 0 #1d3118 !important;
 }
 
+/* Progression is the first Guide category everywhere, including the generated dropdown. */
+.nav-dropdown:has(a[href*="guides.html#progression"]) {
+  display: flex;
+  flex-direction: column;
+}
+.nav-dropdown a[href*="guides.html#progression"] { order: -20; }
+.section-subnav-links a[href*="guides.html#progression"] { order: -20; }
+
 /* Interior pages were behaving like landing pages. Reduce headline dominance. */
 .minecraft-rpg-page .mc-page-hero { min-height: 350px; }
 .minecraft-rpg-page .mc-page-hero .shell { padding-bottom: 62px; }
