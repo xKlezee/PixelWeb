@@ -73,13 +73,10 @@
   };
 
   browseGroups.forEach(group => {
-    group.addEventListener('toggle', () => {
-      if (!group.open) return;
-      const summary = group.querySelector(':scope > summary');
-      summary?.setAttribute('aria-expanded', 'true');
-    });
     const summary = group.querySelector(':scope > summary');
-    if (summary) summary.setAttribute('aria-expanded', group.open ? 'true' : 'false');
+    const syncExpanded = () => summary?.setAttribute('aria-expanded', group.open ? 'true' : 'false');
+    group.addEventListener('toggle', syncExpanded);
+    syncExpanded();
   });
 
   window.addEventListener('hashchange', openBrowseGroupFromHash);
