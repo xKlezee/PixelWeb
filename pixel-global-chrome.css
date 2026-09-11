@@ -114,40 +114,53 @@
     transform: none;
   }
 
-  /* Store is the highlighted action: gold at rest, richer gold on hover. */
-  .nav-actions .nav-store {
+  /* Store is permanently gold, including pages where .button.quiet has its own skin. */
+  .nav-actions .nav-store,
+  .nav-actions .button.quiet.nav-store {
     order: 3;
     padding: 0 17px;
-    border-color: #6f4c08;
-    background: linear-gradient(180deg, #f5c94a 0%, #d9a51f 54%, #ad780d 100%);
-    color: #1c1404;
-    text-shadow: 0 1px 0 rgba(255,255,255,.32);
+    border-color: #6f4c08 !important;
+    background: linear-gradient(180deg, #f5c94a 0%, #d9a51f 54%, #ad780d 100%) !important;
+    color: #1c1404 !important;
+    text-shadow: 0 1px 0 rgba(255,255,255,.32) !important;
     box-shadow:
       inset 0 2px 0 rgba(255,255,255,.24),
       inset 0 -3px 0 rgba(92,57,3,.38),
-      0 2px 0 rgba(0,0,0,.24);
+      0 2px 0 rgba(0,0,0,.24) !important;
   }
 
   .nav-actions .nav-store:hover,
-  .nav-actions .nav-store:focus-visible {
-    border-color: #8b620b;
-    background: linear-gradient(180deg, #ffdc68 0%, #e8b92f 50%, #bd840f 100%);
-    color: #160f02;
+  .nav-actions .nav-store:focus-visible,
+  .nav-actions .button.quiet.nav-store:hover,
+  .nav-actions .button.quiet.nav-store:focus-visible {
+    border-color: #8b620b !important;
+    background: linear-gradient(180deg, #ffdc68 0%, #e8b92f 50%, #bd840f 100%) !important;
+    color: #160f02 !important;
     box-shadow:
       inset 0 2px 0 rgba(255,255,255,.30),
       inset 0 -3px 0 rgba(105,65,3,.42),
       0 2px 0 rgba(0,0,0,.24),
-      0 0 12px rgba(232,185,47,.16);
+      0 0 12px rgba(232,185,47,.16) !important;
     transform: none;
   }
 
   .nav-actions .nav-discord:active,
-  .nav-actions .nav-play:active,
-  .nav-actions .nav-store:active {
+  .nav-actions .nav-play:active {
     transform: translateY(1px);
     box-shadow:
       inset 0 3px 5px rgba(0,0,0,.30),
       inset 0 -1px 0 rgba(255,255,255,.08);
+  }
+
+  .nav-actions .nav-store:active,
+  .nav-actions .button.quiet.nav-store:active {
+    border-color: #684607 !important;
+    background: linear-gradient(180deg, #d9a51f 0%, #b77d0e 100%) !important;
+    color: #160f02 !important;
+    transform: translateY(1px);
+    box-shadow:
+      inset 0 3px 5px rgba(83,50,2,.42),
+      inset 0 -1px 0 rgba(255,255,255,.16) !important;
   }
 }
 
