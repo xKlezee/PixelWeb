@@ -80,11 +80,10 @@
 .nexus-encounter-page .button.secondary { color:#e9ecdf; background:linear-gradient(180deg,#30372f,#20251f); }
 
 /*
- * polish.js owns the contextual Explore rail presentation across the site.
- * Worlds/Nexus keep only the established 50px geometry because their immersive
- * stage height is calculated against this chrome. Typography, spacing, buttons,
- * hover/current states and colors intentionally inherit the same shared rules
- * used by the other contextual category bars.
+ * Worlds/Nexus established the canonical visual reference for the Explore rail.
+ * pixel-global-chrome.css promotes that same treatment to Gameplay, Systems and
+ * Skyblock. This immersive file retains only the 50px geometry locally because
+ * the Worlds/Nexus stage-height calculation depends on it.
  */
 .worlds-region-page .section-subnav,
 .nexus-encounter-page .section-subnav,
