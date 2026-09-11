@@ -78,7 +78,9 @@
   const isGuideDetailPage = /^guide-[A-Za-z0-9._-]+\.html$/.test(currentPage);
 
   const guideCategoryByPage = Object.freeze({
-    'guide-getting-started.html': 'progression',
+    'guide-getting-started.html': 'getting-started',
+    'guide-currencies.html': 'currencies',
+    'guide-basic-commands.html': 'basic-commands',
     'guide-progression.html': 'progression',
     'guide-worlds.html': 'progression',
     'guide-nexus.html': 'specials',
@@ -90,7 +92,7 @@
 
   const currentGuideCategory = isGuideDetailPage
     ? guideCategoryByPage[currentPage]
-    : (currentPage === guidesLanding ? (currentHash || 'progression') : null);
+    : (currentPage === guidesLanding ? (currentHash || 'getting-started') : null);
 
   const isCurrentLocalDestination = href => {
     const page = targetPage(href);
@@ -178,7 +180,10 @@
       relatedPages: [guidesLanding],
       guideFamily: true,
       items: [
-        [`${guidesLanding}#progression`, 'Progression', 'Getting started, Worlds, Prestige and progression routes.'],
+        [`${guidesLanding}#getting-started`, 'Getting Started', 'Join Pixel Network and learn the server basics.'],
+        [`${guidesLanding}#currencies`, 'Currencies', 'Coins, Pixels and Nexus Points.'],
+        [`${guidesLanding}#basic-commands`, 'Basic Commands', 'Common player commands and shortcuts.'],
+        [`${guidesLanding}#progression`, 'Progression', 'Worlds, Prestige and progression routes.'],
         [`${guidesLanding}#mechanics`, 'Mechanics', 'Gameplay systems and how they behave.'],
         [`${guidesLanding}#tools`, 'Tools', 'Tool families and their supporting systems.'],
         [`${guidesLanding}#armor`, 'Armor', 'Defense, equipment and armor modifiers.'],
