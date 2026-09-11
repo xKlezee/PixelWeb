@@ -21,6 +21,7 @@
   <link rel="stylesheet" href="polish.css"/>
   <link rel="stylesheet" href="phase1.css"/>
   <link rel="stylesheet" href="guides.css"/>
+  <link rel="stylesheet" href="guide-browse-tree.css"/>
   <link rel="stylesheet" href="security-hardening.css"/>
   <script src="data/network.js" defer></script>
   <script src="site.js" defer></script>
@@ -55,13 +56,62 @@
     <div class="shell wiki-layout">
       <aside class="wiki-index-sidebar" aria-label="Wiki categories">
         <small>Browse</small>
-        <nav>
-          <a href="#progression">Progression</a>
-          <a href="#mechanics">Mechanics</a>
-          <a href="#tools">Tools</a>
-          <a href="#armor">Armor</a>
-          <a href="#specials">Specials</a>
-          <a href="#boosts">Boosts</a>
+        <nav class="wiki-browse-tree" aria-label="Guide categories and articles">
+          <details class="wiki-browse-group" data-wiki-browse-group="progression" open>
+            <summary><span class="wiki-browse-label">Progression</span><span class="wiki-browse-count">5</span></summary>
+            <div class="wiki-browse-menu">
+              <a class="wiki-browse-overview" href="#progression">Category overview</a>
+              <div class="wiki-browse-subgroup"><span class="wiki-browse-subtitle">Start here</span><a href="guide-getting-started.html">Getting Started</a></div>
+              <div class="wiki-browse-subgroup"><span class="wiki-browse-subtitle">Account</span><a href="guide-progression.html">Levels, Prestige & Legacy</a></div>
+              <div class="wiki-browse-subgroup"><span class="wiki-browse-subtitle">Journey</span><a href="guide-worlds.html">Worlds & Gates</a><a href="guide-skyblock.html">Skyblock</a></div>
+              <div class="wiki-browse-subgroup"><span class="wiki-browse-subtitle">Endgame</span><a href="guide-nexus.html">Nexus & Instances</a></div>
+            </div>
+          </details>
+
+          <details class="wiki-browse-group" data-wiki-browse-group="mechanics">
+            <summary><span class="wiki-browse-label">Mechanics</span><span class="wiki-browse-count">3</span></summary>
+            <div class="wiki-browse-menu">
+              <a class="wiki-browse-overview" href="#mechanics">Category overview</a>
+              <div class="wiki-browse-subgroup"><span class="wiki-browse-subtitle">World systems</span><a href="guide-skyblock.html">Skyblock</a></div>
+              <div class="wiki-browse-subgroup"><span class="wiki-browse-subtitle">Equipment systems</span><a href="guide-enchantments.html">Enchantments</a><a href="guide-stats-equipment.html">Stats & Equipment</a></div>
+            </div>
+          </details>
+
+          <details class="wiki-browse-group" data-wiki-browse-group="tools">
+            <summary><span class="wiki-browse-label">Tools</span><span class="wiki-browse-count">2</span></summary>
+            <div class="wiki-browse-menu">
+              <a class="wiki-browse-overview" href="#tools">Category overview</a>
+              <a href="guide-stats-equipment.html">Stats & Equipment</a>
+              <a href="guide-enchantments.html">Enchantments</a>
+            </div>
+          </details>
+
+          <details class="wiki-browse-group" data-wiki-browse-group="armor">
+            <summary><span class="wiki-browse-label">Armor</span><span class="wiki-browse-count">2</span></summary>
+            <div class="wiki-browse-menu">
+              <a class="wiki-browse-overview" href="#armor">Category overview</a>
+              <a href="guide-stats-equipment.html">Stats & Equipment</a>
+              <a href="guide-enchantments.html">Enchantments</a>
+            </div>
+          </details>
+
+          <details class="wiki-browse-group" data-wiki-browse-group="specials">
+            <summary><span class="wiki-browse-label">Specials</span><span class="wiki-browse-count">2</span></summary>
+            <div class="wiki-browse-menu">
+              <a class="wiki-browse-overview" href="#specials">Category overview</a>
+              <div class="wiki-browse-subgroup"><span class="wiki-browse-subtitle">Codex</span><a href="guide-talismans.html">Talisman Codex</a></div>
+              <div class="wiki-browse-subgroup"><span class="wiki-browse-subtitle">Endgame</span><a href="guide-nexus.html">Nexus & Instances</a></div>
+            </div>
+          </details>
+
+          <details class="wiki-browse-group" data-wiki-browse-group="boosts">
+            <summary><span class="wiki-browse-label">Boosts</span><span class="wiki-browse-count">2</span></summary>
+            <div class="wiki-browse-menu">
+              <a class="wiki-browse-overview" href="#boosts">Category overview</a>
+              <div class="wiki-browse-subgroup"><span class="wiki-browse-subtitle">Equipment</span><a href="guide-enchantments.html">Enchantments</a></div>
+              <div class="wiki-browse-subgroup"><span class="wiki-browse-subtitle">Passive systems</span><a href="guide-talismans.html">Talisman Codex</a></div>
+            </div>
+          </details>
         </nav>
         <div class="wiki-index-meta">Current player reference. Verification boundaries remain visible inside each article.</div>
       </aside>

@@ -2,12 +2,11 @@
   'use strict';
 
   const input = document.querySelector('[data-wiki-search]');
-  if (!input) return;
-
   const entries = [...document.querySelectorAll('[data-wiki-entry]')];
   const categories = [...document.querySelectorAll('[data-wiki-category]')];
   const count = document.querySelector('[data-wiki-search-count]');
   const empty = document.querySelector('[data-wiki-empty]');
+  const browseGroups = [...document.querySelectorAll('[data-wiki-browse-group]')];
 
   const normalize = value => String(value || '')
     .toLocaleLowerCase()
@@ -19,7 +18,44 @@
     visibleEntries.map(entry => entry.getAttribute('href')).filter(Boolean)
   ).size;
 
+  const openBrowseGroupFromHash = () => {
+    const id = decodeURIComponent(String(window.location.hash || '').replace(/^#/, ''));
+    if (!id) return;
+    const group = browseGroups.find(item => item.dataset.wikiBrowseGroup === id);
+    if (group) group.open = true;
+  };
+
+  const syncBrowseSearch = query => {
+    if (!browseGroups.length) return;
+
+    browseGroups.forEach(group => {
+      const categoryId = group.dataset.wikiBrowseGroup;
+      const category = categories.find(item => item.id === categoryId);
+      const visibleHrefs = new Set(
+        [...(category?.querySelectorAll('[data-wiki-entry]:not([hidden])') || [])]
+          .map(entry => entry.getAttribute('href'))
+          .filter(Boolean)
+      );
+      const articleLinks = [...group.querySelectorAll('.wiki-browse-menu a:not(.wiki-browse-overview)')];
+      const subgroups = [...group.querySelectorAll('.wiki-browse-subgroup')];
+
+      articleLinks.forEach(link => {
+        link.hidden = Boolean(query) && !visibleHrefs.has(link.getAttribute('href'));
+      });
+
+      subgroups.forEach(subgroup => {
+        const hasVisibleLink = subgroup.querySelector('a:not([hidden])');
+        subgroup.hidden = Boolean(query) && !hasVisibleLink;
+      });
+
+      const hasVisibleArticle = articleLinks.some(link => !link.hidden);
+      group.hidden = Boolean(query) && !hasVisibleArticle;
+      if (query && hasVisibleArticle) group.open = true;
+    });
+  };
+
   const update = () => {
+    if (!input) return;
     const query = normalize(input.value);
     const visible = [];
 
@@ -35,11 +71,25 @@
       category.hidden = !hasVisibleEntry;
     });
 
+    syncBrowseSearch(query);
+
     const articles = uniqueArticleCount(visible);
     if (count) count.textContent = `${articles} ${articles === 1 ? 'article' : 'articles'}`;
     if (empty) empty.hidden = visible.length !== 0;
   };
 
-  input.addEventListener('input', update, { passive: true });
-  update();
+  browseGroups.forEach(group => {
+    const summary = group.querySelector(':scope > summary');
+    const syncExpanded = () => summary?.setAttribute('aria-expanded', group.open ? 'true' : 'false');
+    group.addEventListener('toggle', syncExpanded);
+    syncExpanded();
+  });
+
+  window.addEventListener('hashchange', openBrowseGroupFromHash);
+  openBrowseGroupFromHash();
+
+  if (input) {
+    input.addEventListener('input', update, { passive: true });
+    update();
+  }
 })();
