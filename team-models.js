@@ -93,8 +93,6 @@
     try {
       probeCtx.clearRect(0,0,64,64);
       probeCtx.drawImage(image,0,0,64,64);
-      // In the slim layout these two two-pixel strips are unused by the base arm backs.
-      // Mojang-compatible slim skins keep them transparent; classic arms use them.
       const unusedSlimStrips = [[54,20,2,12],[46,52,2,12]];
       return unusedSlimStrips.every(([x,y,w,h]) => {
         const pixels = probeCtx.getImageData(x,y,w,h).data;
@@ -119,8 +117,6 @@
     return [yawX, y * cp - yawZ * sp, y * sp + yawZ * cp];
   };
 
-  const rotateNormal = (normal, yaw, pitch) => rotatePoint(normal, yaw, pitch);
-
   const buildFaces = (part, layer, yaw, pitch, uvMap) => {
     const expansion = layer === 'outer' ? (part.key === 'head' ? .34 : .24) : 0;
     const [width, height, depth] = part.size;
@@ -132,7 +128,7 @@
     if (!uv) return [];
 
     return Object.entries(FACE_DEFS).flatMap(([name, def]) => {
-      const normal = rotateNormal(def.normal, yaw, pitch);
+      const normal = rotatePoint(def.normal, yaw, pitch);
       if (normal[2] >= -.001) return [];
       const texture = uv[name];
       if (!texture) return [];
@@ -141,7 +137,8 @@
         rotatePoint([px + cx, py + cy, pz + cz], yaw, pitch)
       );
       const depthValue = points.reduce((sum, point) => sum + point[2], 0) / points.length;
-      return [{ points, texture, depth: depthValue }];
+      const flipX = part.key === 'head' && layer === 'outer' && (name === 'left' || name === 'right');
+      return [{ points, texture, depth:depthValue, flipX }];
     });
   };
 
@@ -164,6 +161,10 @@
       p0.x,
       p0.y
     );
+    if (face.flipX) {
+      ctx.translate(sw, 0);
+      ctx.scale(-1, 1);
+    }
     ctx.imageSmoothingEnabled = false;
     ctx.drawImage(image, sx, sy, sw, sh, 0, 0, sw, sh);
     ctx.restore();
@@ -172,7 +173,6 @@
   const createRenderer = viewer => {
     const player = String(viewer.dataset.player || '').trim();
     const canvas = viewer.querySelector('canvas');
-    const status = viewer.querySelector('[data-skin-status]');
     if (!player || !canvas) return;
 
     const ctx = canvas.getContext('2d', { alpha:true });
@@ -188,7 +188,6 @@
     let skin = null;
     let skinUv = CLASSIC_UV;
     let skinParts = createParts(false);
-    let skinModel = 'classic';
 
     const render = () => {
       if (!skin) return;
@@ -209,13 +208,6 @@
       faces.forEach(face => drawTexturedFace(ctx, skin, face, scale, centerX, centerY));
     };
 
-    const setStatus = text => {
-      if (status) status.textContent = text;
-    };
-
-    const image = new Image();
-    image.crossOrigin = 'anonymous';
-    image.decoding = 'async';
     const showFallbackRender = () => {
       const visual = viewer.closest('.mc-owner-visual') || viewer.parentElement;
       if (!visual) return;
@@ -232,22 +224,22 @@
       fallback.src = `https://api.mcheads.org/player/${encodeURIComponent(player)}/320`;
     };
 
+    const image = new Image();
+    image.crossOrigin = 'anonymous';
+    image.decoding = 'async';
     image.onload = () => {
       skin = image;
       const slim = detectSlimSkin(image);
-      skinModel = slim ? 'slim' : 'classic';
       skinUv = createUvMap(slim);
       skinParts = createParts(slim);
-      viewer.dataset.skinModel = skinModel;
+      viewer.dataset.skinModel = slim ? 'slim' : 'classic';
       viewer.classList.add('is-ready');
       viewer.classList.remove('is-error');
-      setStatus(`Drag to rotate · ${skinModel} skin`);
       render();
     };
     image.onerror = () => {
       viewer.classList.add('is-error');
       viewer.classList.remove('is-ready');
-      setStatus('Interactive skin unavailable · showing current render');
       showFallbackRender();
     };
     image.src = `${SKIN_BASE}${encodeURIComponent(player)}`;

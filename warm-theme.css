@@ -144,6 +144,7 @@ body .guides-main .stats-layer-card {
   background: radial-gradient(circle at 50% 45%, rgba(246,201,69,.10), transparent 40%), #0c100d !important;
 }
 .skin-viewer:focus-visible { outline-color: #f6c945; }
+.staff-rpg-page .skin-viewer-ui { display: none !important; }
 
 .about-overview-card {
   background:
