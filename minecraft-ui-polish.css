@@ -1,6 +1,7 @@
 /* Pixel Network — final Minecraft UI polish shared by public pages. */
 
-/* Play follows the shared header action format and stays neutral gray. */
+/* Discord and Play use the exact same neutral-gray header button shell. */
+.nav-actions .nav-discord,
 .nav-actions .nav-play,
 .button.primary.nav-play {
   height: 40px;
@@ -22,6 +23,18 @@
   transform: none;
   filter: none;
 }
+
+/* Discord keeps a square footprint and icon-only content; the shell is identical to Play. */
+.nav-actions .nav-discord {
+  width: 40px;
+  min-width: 40px;
+  flex: 0 0 40px;
+  padding: 0 !important;
+  color: transparent !important;
+}
+
+.nav-actions .nav-discord:hover,
+.nav-actions .nav-discord:focus-visible,
 .nav-actions .nav-play:hover,
 .nav-actions .nav-play:focus-visible,
 .button.primary.nav-play:hover,
@@ -29,11 +42,23 @@
   border-color: #464d57 !important;
   background: linear-gradient(180deg, #535963 0%, #3d434b 55%, #30363d 100%) !important;
   color: #fff !important;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,.10),
+    inset 0 -3px 0 rgba(0,0,0,.28),
+    0 2px 0 rgba(0,0,0,.24) !important;
   filter: none;
   transform: none;
 }
+
+.nav-actions .nav-discord:hover,
+.nav-actions .nav-discord:focus-visible {
+  color: transparent !important;
+}
+
+.nav-actions .nav-discord:active,
 .nav-actions .nav-play:active,
 .button.primary.nav-play:active {
+  border-color: #343941 !important;
   background: linear-gradient(180deg, #30353c 0%, #292e34 100%) !important;
   box-shadow:
     inset 0 3px 5px rgba(0,0,0,.34),
