@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta name="theme-color" content="#211f1b"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https: data:; media-src 'self' https:; font-src 'self' https: data:; connect-src 'self'; frame-src 'none'; worker-src 'none'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests"/>
+  <meta name="referrer" content="strict-origin-when-cross-origin"/>
+  <meta name="description" content="Pixel Network currency guide covering Coins, Pixels and Nexus Points and the role each currency has in the player experience."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:site_name" content="Pixel Network"/>
+  <meta property="og:title" content="Currencies Guide — Pixel Network"/>
+  <meta property="og:description" content="Understand Coins, Pixels and Nexus Points without mixing their different roles."/>
+  <meta property="og:url" content="https://xklezee.github.io/PixelWeb/guide-currencies.html"/>
+  <meta property="og:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/>
+  <meta property="og:image:alt" content="Pixel Network logo"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:title" content="Currencies Guide — Pixel Network"/>
+  <meta name="twitter:description" content="Understand Coins, Pixels and Nexus Points without mixing their different roles."/>
+  <meta name="twitter:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/>
+  <title>Currencies Guide — Pixel Network</title>
+  <link rel="canonical" href="https://xklezee.github.io/PixelWeb/guide-currencies.html"/>
+  <link rel="icon" href="LOGO%20OFICIAL.png"/>
+  <link rel="stylesheet" href="site.css"/>
+  <link rel="stylesheet" href="polish.css"/>
+  <link rel="stylesheet" href="phase1.css"/>
+  <link rel="stylesheet" href="guides.css"/>
+  <link rel="stylesheet" href="security-hardening.css"/>
+  <script src="data/network.js" defer></script>
+  <script src="site.js" defer></script>
+  <script src="polish.js" defer></script>
+</head>
+<body>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <nav class="site-nav" aria-label="Main navigation"><div class="shell nav-inner">
+    <a class="brand" href="index.html"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a>
+    <div class="nav-links" id="navLinks" data-nav-contract="canonical-v1"><div class="nav-group"><button type="button" aria-haspopup="true" aria-expanded="false" aria-controls="nav-static-explore">Explore</button><div class="nav-dropdown" id="nav-static-explore"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div><a class="nav-marketplace" href="marketplace.html">Marketplace</a><div class="nav-group contains-current"><button type="button" aria-haspopup="true" aria-expanded="false" aria-controls="nav-static-guide">Guide</button><div class="nav-dropdown" id="nav-static-guide"><a href="guides.html#progression"><strong>Progression</strong><span>Worlds, Prestige and progression routes.</span></a><a href="guides.html#mechanics"><strong>Mechanics</strong><span>Gameplay systems and how they behave.</span></a><a href="guides.html#tools"><strong>Tools</strong><span>Tool families and their supporting systems.</span></a><a href="guides.html#armor"><strong>Armor</strong><span>Defense, equipment and armor modifiers.</span></a><a href="guides.html#specials"><strong>Specials</strong><span>Talismans, Nexus and specialized systems.</span></a><a href="guides.html#boosts"><strong>Boosts</strong><span>Effects and systems that improve performance.</span></a></div></div><div class="nav-group"><button type="button" aria-haspopup="true" aria-expanded="false" aria-controls="nav-static-community">Community</button><div class="nav-dropdown" id="nav-static-community"><a href="leaderboards.html"><strong>Leaderboards</strong><span>Public rankings and competitive progression.</span></a><a href="changelog.html"><strong>Changelog</strong><span>Player-facing release notes.</span></a><a href="rules.html"><strong>Rules</strong><span>Current player and community rules.</span></a><a href="staff.html"><strong>Staff Team</strong><span>The currently published Pixel Network team.</span></a></div></div><a href="team.html">About</a></div><div class="nav-actions"><a class="button quiet nav-discord" href="https://discord.gg/7KzWpezTNZ" target="_blank" rel="noopener" aria-label="Join Pixel Network on Discord">Discord</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><a class="button quiet nav-store" href="store.html">Store</a><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
+  </div></nav>
+
+  <main class="guides-main">
+    <div class="guides-topbar"><div class="shell guides-topbar-inner"><div class="guides-breadcrumbs"><a href="index.html">Pixel Network</a><span>/</span><a href="guides.html">Guides</a><span>/</span><span>Currencies</span></div><span class="guides-top-status">Core server reference</span></div></div>
+
+    <div class="guides-layout">
+      <aside class="guides-sidebar" aria-label="Currency guide sections">
+        <div class="guides-sidebar-brand"><small>Guide</small><strong>Currencies</strong><span>Coins, Pixels and Nexus Points are separate currencies with different roles.</span></div>
+        <nav class="guides-sidebar-nav">
+          <div class="guides-nav-group"><small>On this page</small><a href="#overview">Overview</a><a href="#coins">Coins</a><a href="#pixels">Pixels</a><a href="#nexus-points">Nexus Points</a><a href="#boundaries">Reference boundaries</a></div>
+          <div class="guides-nav-group"><small>Related</small><a href="guide-getting-started.html">Getting Started</a><a href="guide-basic-commands.html">Basic Commands</a><a href="guide-progression.html">Progression</a><a href="guides.html">All Guides</a></div>
+        </nav>
+      </aside>
+
+      <article class="guides-document">
+        <header class="guides-document-header" id="overview">
+          <div class="eyebrow">Economy reference</div>
+          <h1>Currencies.</h1>
+          <p class="guides-document-lead">Pixel Network uses more than one currency. Keeping them separate matters: Coins support the broad gameplay economy, Pixels appear in wallet and store-facing flows, and Nexus Points belong to the Nexus currency layer.</p>
+          <div class="guides-document-meta"><span>Coins</span><span>Pixels</span><span>Nexus Points</span></div>
+        </header>
+
+        <section class="guide-section" id="coins">
+          <div class="guide-section-head"><div><small>Gameplay economy</small><h2>Coins</h2></div><p>The general-purpose economy used across multiple current gameplay systems.</p></div>
+          <div class="guide-reference-grid">
+            <article class="guide-reference-item"><small>Role</small><h3>Main gameplay currency</h3><p>Coins are used by the broader gameplay economy, including progression-facing systems and Skyblock economy features.</p></article>
+            <article class="guide-reference-item"><small>Where you see them</small><h3>Gameplay & progression</h3><p>Current systems can reward, spend, deposit or withdraw Coins depending on the feature. Exact prices and reward amounts belong to the system that owns them.</p></article>
+          </div>
+        </section>
+
+        <section class="guide-section" id="pixels">
+          <div class="guide-section-head"><div><small>Wallet & store</small><h2>Pixels</h2></div><p>A distinct Pixel Network currency used by wallet/store-oriented player flows.</p></div>
+          <div class="guide-reference-grid">
+            <article class="guide-reference-item"><small>Role</small><h3>Separate from Coins</h3><p>Pixels have their own balance and should not be treated as another name for Coins. Store-facing systems can use a Pixels balance for purchases.</p></article>
+            <article class="guide-reference-item"><small>Reference rule</small><h3>No invented conversion rate</h3><p>This guide does not publish a Coins↔Pixels conversion or unverified acquisition rate. Any exact cost belongs to the feature or store surface where it is actually used.</p></article>
+          </div>
+        </section>
+
+        <section class="guide-section" id="nexus-points">
+          <div class="guide-section-head"><div><small>Endgame currency</small><h2>Nexus Points</h2></div><p>The currency associated with the Nexus layer of Pixel Network.</p></div>
+          <div class="guide-callout"><span aria-hidden="true"></span><div><strong>Nexus Points are their own currency.</strong><p>They are documented separately from Coins and Pixels. Exact earning routes, costs and exchange behavior are only published when the corresponding Nexus economy rules are verified for the current server build.</p><div class="guide-callout-actions"><a class="guide-text-link" href="guide-nexus.html">Nexus & Instances →</a></div></div></div>
+        </section>
+
+        <section class="guide-section" id="boundaries">
+          <div class="guide-section-head"><div><small>Documentation boundary</small><h2>Names are stable; values belong to their systems.</h2></div><p>The currency guide explains what each balance represents. It deliberately avoids carrying old prices, reward rates or thresholds forward without current evidence.</p></div>
+          <div class="guide-reference-grid">
+            <article class="guide-reference-item"><small>Coins</small><h3>Gameplay economy</h3><p>Use the owning gameplay guide for exact costs or rewards.</p></article>
+            <article class="guide-reference-item"><small>Pixels</small><h3>Wallet / store-facing</h3><p>Use the active store or wallet surface for exact purchase values.</p></article>
+            <article class="guide-reference-item"><small>Nexus Points</small><h3>Nexus-specific</h3><p>Use the Nexus reference once exact economy routes are published.</p></article>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer"><div class="shell site-footer-inner"><span>Pixel Network · Currencies</span><span><a href="store.html">Store</a> · <a href="guides.html">Guides</a> · <a href="community.html">Community</a> · <a href="team.html">About</a></span></div></footer>
+</body>
+</html>
