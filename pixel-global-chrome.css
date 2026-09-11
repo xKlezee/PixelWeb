@@ -1,7 +1,6 @@
 /* Pixel Network — final shared chrome overrides.
    The Explore rail uses the established Worlds/Nexus Minecraft treatment as the
-   canonical reference. Discord uses Discord's official unmodified Symbol asset
-   inside an inset Pixel material control. */
+   canonical reference. Discord uses Discord's official unmodified Symbol asset. */
 
 /* Official Explore contextual rail: Gameplay / Systems / Worlds / Skyblock / Nexus. */
 .minecraft-rpg-page:not(.minecraft-rpg-secondary) .section-subnav,
@@ -64,7 +63,8 @@
   box-shadow: inset 0 -2px 0 rgba(103,170,255,.6);
 }
 
-/* Desktop header actions: Discord → Play → Store, all on one 40px control height. */
+/* Desktop header actions: Discord → Play → Store.
+   All three share exactly the same control geometry, border language and depth. */
 @media (min-width: 981px) {
   .nav-actions {
     align-items: center;
@@ -80,6 +80,15 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    border: 2px solid #17191c;
+    border-radius: 3px;
+    font-weight: 800;
+    line-height: 1;
+    box-shadow:
+      inset 0 2px 0 rgba(255,255,255,.10),
+      inset 0 -3px 0 rgba(0,0,0,.28),
+      0 2px 0 rgba(0,0,0,.24);
+    transform: none;
   }
 
   .nav-actions .nav-discord { order: 1; }
@@ -87,41 +96,31 @@
   .nav-actions .nav-play {
     order: 2;
     padding: 0 16px;
-    border: 2px solid #111711;
-    border-radius: 3px;
-    background: linear-gradient(180deg, rgba(38,44,37,.98), rgba(20,25,20,.99));
-    color: #d9ddd6;
-    box-shadow:
-      inset 0 1px 0 rgba(255,255,255,.045),
-      inset 0 -2px 0 rgba(0,0,0,.28);
-    transform: none;
+    background: linear-gradient(180deg, #4a4d52 0%, #383b40 54%, #2b2e32 100%);
+    border-color: #202226;
+    color: #eceef1;
+    text-shadow: 0 1px 0 rgba(0,0,0,.35);
   }
 
   .nav-actions .nav-play:hover,
   .nav-actions .nav-play:focus-visible {
-    border-color: #192119;
-    background: linear-gradient(180deg, rgba(45,52,43,.99), rgba(23,29,23,.99));
-    color: #f1f3ef;
+    background: linear-gradient(180deg, #5a5e64 0%, #45494f 52%, #34373c 100%);
+    border-color: #292c31;
+    color: #fff;
     box-shadow:
-      inset 0 1px 0 rgba(255,255,255,.06),
-      inset 0 -2px 0 rgba(0,0,0,.24);
+      inset 0 2px 0 rgba(255,255,255,.13),
+      inset 0 -3px 0 rgba(0,0,0,.25),
+      0 2px 0 rgba(0,0,0,.24);
     transform: none;
   }
 
   .nav-actions .nav-store {
     order: 3;
     padding: 0 17px;
-    border: 2px solid #6d5314;
-    border-radius: 3px;
+    border-color: #6d5314;
     background: linear-gradient(180deg, #f3d35d 0%, #e2ba38 54%, #c99520 100%);
     color: #1d1707;
-    font-weight: 850;
     text-shadow: 0 1px 0 rgba(255,255,255,.24);
-    box-shadow:
-      inset 0 2px 0 rgba(255,255,255,.28),
-      inset 0 -3px 0 rgba(98,67,8,.30),
-      0 2px 0 rgba(0,0,0,.24);
-    transform: none;
   }
 
   .nav-actions .nav-store:hover,
@@ -130,23 +129,23 @@
     background: linear-gradient(180deg, #ffd968 0%, #efbd32 50%, #d69b18 100%);
     color: #171104;
     box-shadow:
-      inset 0 2px 0 rgba(255,255,255,.34),
-      inset 0 -3px 0 rgba(111,72,5,.34),
-      0 0 0 1px rgba(255,196,45,.18),
-      0 2px 0 rgba(0,0,0,.26);
+      inset 0 2px 0 rgba(255,255,255,.18),
+      inset 0 -3px 0 rgba(111,72,5,.30),
+      0 2px 0 rgba(0,0,0,.24);
     transform: none;
   }
 
+  .nav-actions .nav-discord:active,
+  .nav-actions .nav-play:active,
   .nav-actions .nav-store:active {
-    background: linear-gradient(180deg, #d9a82a 0%, #c98d12 100%);
-    box-shadow:
-      inset 0 3px 5px rgba(81,50,4,.32),
-      inset 0 -1px 0 rgba(255,255,255,.13);
     transform: translateY(1px);
+    box-shadow:
+      inset 0 3px 5px rgba(0,0,0,.30),
+      inset 0 -1px 0 rgba(255,255,255,.08);
   }
 }
 
-/* Discord: official Symbol.svg, left untouched, recessed into the navigation material. */
+/* Discord: official Symbol.svg, untouched and centered inside the shared button shell. */
 .nav-actions .nav-discord {
   position: relative;
   width: 40px;
@@ -160,13 +159,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #090c09;
+  border: 2px solid #202226;
   border-radius: 3px;
-  background: linear-gradient(180deg, rgba(35,40,34,.98), rgba(18,22,18,.99));
+  background: linear-gradient(180deg, #4a4d52 0%, #383b40 54%, #2b2e32 100%);
   box-shadow:
-    inset 4px 4px 8px rgba(0,0,0,.54),
-    inset -2px -2px 0 rgba(255,255,255,.045),
-    0 1px 0 rgba(255,255,255,.025);
+    inset 0 2px 0 rgba(255,255,255,.10),
+    inset 0 -3px 0 rgba(0,0,0,.28),
+    0 2px 0 rgba(0,0,0,.24);
   color: transparent;
   font-size: 0;
   line-height: 0;
@@ -190,21 +189,14 @@
 
 .nav-actions .nav-discord:hover,
 .nav-actions .nav-discord:focus-visible {
-  background: linear-gradient(180deg, rgba(42,48,40,.99), rgba(20,25,20,.99));
-  border-color: #111711;
+  background: linear-gradient(180deg, #5a5e64 0%, #45494f 52%, #34373c 100%);
+  border-color: #292c31;
   box-shadow:
-    inset 4px 4px 8px rgba(0,0,0,.48),
-    inset -2px -2px 0 rgba(255,255,255,.06),
-    0 0 0 1px rgba(88,101,242,.13);
+    inset 0 2px 0 rgba(255,255,255,.13),
+    inset 0 -3px 0 rgba(0,0,0,.25),
+    0 2px 0 rgba(0,0,0,.24);
   color: transparent;
   transform: none;
-}
-
-.nav-actions .nav-discord:active {
-  transform: translateY(1px);
-  box-shadow:
-    inset 5px 5px 10px rgba(0,0,0,.64),
-    inset -1px -1px 0 rgba(255,255,255,.025);
 }
 
 .nav-actions .nav-discord[aria-disabled='true'] {
