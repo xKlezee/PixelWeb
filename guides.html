@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-  <meta name="theme-color" content="#0b0f0c"/>
+  <meta name="theme-color" content="#211f1b"/>
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https: data:; media-src 'self' https:; font-src 'self' https: data:; connect-src 'self'; frame-src 'none'; worker-src 'none'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
-  <meta name="description" content="Pixel Network Wiki — browse player guides for mechanics, tools, armor, specials, boosts and progression."/>
+  <meta name="description" content="Pixel Network Wiki — browse player guides for progression, mechanics, tools, armor, specials and boosts."/>
   <meta property="og:type" content="website"/>
   <meta property="og:site_name" content="Pixel Network"/>
-  <meta property="og:title" content="Guide — Pixel Network Wiki"/>
-  <meta property="og:description" content="Browse Pixel Network player guides as a compact game wiki."/>
+  <meta property="og:title" content="Wiki & Guides — Pixel Network"/>
+  <meta property="og:description" content="Browse Pixel Network player guides as a compact Minecraft wiki."/>
   <meta property="og:url" content="https://xklezee.github.io/PixelWeb/guides.html"/>
   <meta property="og:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/>
   <meta property="og:image:alt" content="Pixel Network logo"/>
-  <title>Guide — Pixel Network Wiki</title>
+  <title>Wiki & Guides — Pixel Network</title>
   <link rel="canonical" href="https://xklezee.github.io/PixelWeb/guides.html"/>
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png"/>
   <link rel="stylesheet" href="site.css"/>
@@ -39,9 +39,9 @@
     <section class="wiki-hero">
       <div class="shell wiki-hero-inner">
         <div>
-          <div class="wiki-kicker">Pixel Network Wiki</div>
-          <h1>Guide.</h1>
-          <p>Mechanics, equipment and progression in one player reference.</p>
+          <div class="wiki-kicker">Pixel Network</div>
+          <h1>Wiki & Guides</h1>
+          <p>Progression, mechanics and equipment reference without leaving the main site.</p>
         </div>
         <div class="wiki-search-box">
           <label for="wikiSearch">Search the wiki</label>
@@ -57,21 +57,32 @@
       <aside class="wiki-index-sidebar" aria-label="Wiki categories">
         <small>Browse</small>
         <nav>
+          <a href="#progression">Progression</a>
           <a href="#mechanics">Mechanics</a>
           <a href="#tools">Tools</a>
           <a href="#armor">Armor</a>
           <a href="#specials">Specials</a>
           <a href="#boosts">Boosts</a>
-          <a href="#progression">Progression</a>
         </nav>
-        <div class="wiki-index-meta">Current player-facing reference. Detailed articles keep source and verification boundaries visible.</div>
+        <div class="wiki-index-meta">Current player reference. Verification boundaries remain visible inside each article.</div>
       </aside>
 
       <article class="wiki-index-content">
         <header class="wiki-index-intro">
           <h2>Browse the wiki</h2>
-          <p>Open the subject you need. Articles can appear in more than one category when a system crosses equipment or progression boundaries.</p>
+          <p>Start with progression, then jump directly into the system you need.</p>
         </header>
+
+        <section class="wiki-category" id="progression" data-wiki-category>
+          <div class="wiki-category-head"><h2>Progression</h2><span>Main journey</span></div>
+          <div class="wiki-article-list">
+            <a class="wiki-article-link" href="guide-getting-started.html" data-wiki-entry data-search="getting started start beginner first steps progression"><strong>Getting Started</strong><p>Where the Pixel journey begins.</p><em>Progression</em></a>
+            <a class="wiki-article-link" href="guide-progression.html" data-wiki-entry data-search="levels prestige legacy account progression"><strong>Levels, Prestige & Legacy</strong><p>Account milestones and current access gates.</p><em>Progression</em></a>
+            <a class="wiki-article-link" href="guide-worlds.html" data-wiki-entry data-search="worlds gates overworld pirate kingdom nether winter progression"><strong>Worlds & Gates</strong><p>The four-World route and transition conditions.</p><em>Progression</em></a>
+            <a class="wiki-article-link" href="guide-nexus.html" data-wiki-entry data-search="nexus endgame instances progression"><strong>Nexus & Instances</strong><p>Permanent access and the encounter ladder.</p><em>Progression</em></a>
+            <a class="wiki-article-link" href="guide-skyblock.html" data-wiki-entry data-search="skyblock alternative progression island"><strong>Skyblock</strong><p>Personal island progression.</p><em>Progression</em></a>
+          </div>
+        </section>
 
         <section class="wiki-category" id="mechanics" data-wiki-category>
           <div class="wiki-category-head"><h2>Mechanics</h2><span>Core systems</span></div>
@@ -111,17 +122,6 @@
           <div class="wiki-article-list">
             <a class="wiki-article-link" href="guide-enchantments.html" data-wiki-entry data-search="boosts enchantments equipment effects"><strong>Enchantments</strong><p>Specialized equipment improvements.</p><em>Boosts</em></a>
             <a class="wiki-article-link" href="guide-talismans.html" data-wiki-entry data-search="boosts talismans passive effects affinity synergy meta"><strong>Talisman Codex</strong><p>Equipped effects and advanced interactions.</p><em>Boosts</em></a>
-          </div>
-        </section>
-
-        <section class="wiki-category" id="progression" data-wiki-category>
-          <div class="wiki-category-head"><h2>Progression</h2><span>Main journey</span></div>
-          <div class="wiki-article-list">
-            <a class="wiki-article-link" href="guide-getting-started.html" data-wiki-entry data-search="getting started start beginner first steps progression"><strong>Getting Started</strong><p>Where the Pixel journey begins.</p><em>Progression</em></a>
-            <a class="wiki-article-link" href="guide-progression.html" data-wiki-entry data-search="levels prestige legacy account progression"><strong>Levels, Prestige & Legacy</strong><p>Account milestones and current access gates.</p><em>Progression</em></a>
-            <a class="wiki-article-link" href="guide-worlds.html" data-wiki-entry data-search="worlds gates overworld pirate kingdom nether winter progression"><strong>Worlds & Gates</strong><p>The four-World route and transition conditions.</p><em>Progression</em></a>
-            <a class="wiki-article-link" href="guide-nexus.html" data-wiki-entry data-search="nexus endgame instances progression"><strong>Nexus & Instances</strong><p>Permanent access and the encounter ladder.</p><em>Progression</em></a>
-            <a class="wiki-article-link" href="guide-skyblock.html" data-wiki-entry data-search="skyblock alternative progression island"><strong>Skyblock</strong><p>Personal island progression.</p><em>Progression</em></a>
           </div>
         </section>
 

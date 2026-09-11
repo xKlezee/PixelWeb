@@ -1,5 +1,6 @@
 /* PixelWeb security/accessibility hardening helpers.
    Loaded statically by hardened public pages so runtime behavior does not require inline styles. */
+@import url('minecraft-ui-polish.css');
 @import url('guide-wiki-priority.css');
 
 .skip-link {

@@ -1,0 +1,22 @@
+/* Pixel Network — Nexus presentation polish.
+   Difficulty/access details belong to Explore, not the hero state. */
+
+.nexus-encounter-meta { display: none !important; }
+.nexus-encounter-content {
+  grid-template-columns: minmax(0,1fr) !important;
+  gap: 0 !important;
+}
+.nexus-encounter-copy { max-width: 690px; }
+.nexus-encounter-role { max-width: 560px; }
+
+/* Keep the main state focused on encounter identity; details live in the pulsing Explore dialog. */
+.nexus-encounter-title { font-size: clamp(56px,8vw,112px); }
+
+@media (max-width: 760px) {
+  .nexus-encounter-content {
+    width: calc(100% - 38px);
+    padding-left: 70px;
+    padding-right: 18px;
+  }
+  .nexus-encounter-title { font-size: clamp(44px,14vw,72px); }
+}
