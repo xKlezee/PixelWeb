@@ -4,6 +4,8 @@ This document records the source-level audit performed after the Light / Dark / 
 
 The goal of this pass is that every current public visual mechanic has an intentional theme treatment, not merely the page body or navigation.
 
+A second source pass found additional runtime-level gaps after the first matrix was written: Marketplace loading/failure states could collapse into a blank canvas, the shared toast and keyboard skip-link retained dark-only colors in Light mode, and a few late CSS rules reintroduced generic cool-blue accents after the warm Pixel identity had already been applied. Those cases are now part of the coverage contract rather than being treated as cosmetic exceptions.
+
 ## Status matrix
 
 | Surface / mechanic | Audited states | Coverage |
@@ -14,6 +16,7 @@ The goal of this pass is that every current public visual mechanic has an intent
 | Appearance control | system, light, dark, menu, keyboard | Covered |
 | Pixel Navigator | trigger, panel, search, examples, results, fallback, mobile | Covered |
 | Play / Join dialog | backdrop, steps, IP control, footer actions | Covered |
+| Shared feedback / accessibility | toast, skip-link, focus | Covered |
 | Home hero | full-bleed Nexus media, overlays, copy, status | Covered |
 | Home progression cards | default / hover / text / accents | Covered |
 | Home World gallery | image frames, overlays, hover, captions | Covered |
@@ -22,8 +25,8 @@ The goal of this pass is that every current public visual mechanic has an intent
 | Gameplay / Systems | heroes, stat cards, information cards, routes, flow lines | Covered |
 | Legacy shared content surfaces | World rows, Nexus access, difficulty, development/status, timeline, CTAs, indexes | Covered |
 | Marketplace hero / subnav | default, current, route selection | Covered |
-| Marketplace 3D visualizer | card, transparent canvas stage, loading, focus, shadow | Covered |
-| Marketplace item previews | transparent canvases, cards, active, hover | Covered |
+| Marketplace 3D visualizer | card, transparent canvas stage, loading, failure, focus, shadow | Covered |
+| Marketplace item previews | transparent canvases, loading, failure, cards, active, hover | Covered |
 | Marketplace detail / Store bridge | details, facts, CTA boundary | Covered |
 | Leaderboards | hero, categories, metrics, records | Covered |
 | Leaderboards Top 3 | podium cards, full-player renders, fallback, shadows | Covered |
@@ -54,11 +57,24 @@ The goal of this pass is that every current public visual mechanic has an intent
 | Talisman guide | state flow, rarity, pipeline, verification, secret policy | Covered |
 | Mobile-only navigation/actions | menu surface, dropdown rail, Store/Discord rows | Covered |
 
+## Second-pass corrections
+
+The second source pass specifically corrected these previously missed details:
+
+- Marketplace model and item-preview canvases now expose visible `loading` and `failure` states in both effective themes instead of fading to an unexplained empty frame.
+- The feedback toast now has explicit Light-mode foreground/background/border/shadow contrast instead of combining a near-white themed surface with the old fixed `#ddd` text color.
+- The keyboard skip-link now follows Light mode instead of retaining its authored dark panel.
+- The Skyblock **Objectives** card no longer inherits an unrelated generic blue accent in Light mode.
+- About/License disclaimer surfaces use the shared warm Pixel palette rather than a residual generic blue glow.
+- The late Guide priority stylesheet can no longer reintroduce a cool-blue Stats layer accent after the warm theme has loaded; the final accent is amber/gold.
+
+Semantic/authored colors are still allowed. Discord identity, biome/world accents, boss art and other content-specific colors are not forcibly converted to gold.
+
 ## Media / renderer rule
 
 The theme system does **not** rewrite source art. Theme support around a media mechanic means adapting its environment rather than recoloring the asset itself.
 
-- Marketplace model/item canvases remain transparent. Their CSS stage, border, shadow and surrounding cards change with the theme.
+- Marketplace model/item canvases remain transparent. Their CSS stage, border, shadow, loading/failure feedback and surrounding cards change with the theme.
 - Minecraft player skins remain their original textures. Their viewer stage, floor/shadow and card treatment change.
 - World and Nexus images remain the same files. Light mode uses CSS brightness/contrast and light overlays to keep the full-bleed composition readable; dark mode keeps the authored dark presentation.
 - Nexus boss PNGs remain untouched and no image conversion, compression or sprite generation is part of theme switching.
@@ -72,6 +88,7 @@ Theme overrides are intentionally loaded after page-specific authored CSS:
 2. `pixel-theme-coverage.css`
 3. `pixel-theme-audit-fixes.css`
 4. `pixel-theme-page-fixes.css`
+   - imports `pixel-theme-runtime-fixes.css` before its own rules so runtime states and late cascade collisions are normalized while page-specific legal/mobile rules can still remain last
 5. `pixel-theme.js`
 
 The active effective mode is exposed through `html[data-theme-effective="light|dark"]`. System mode resolves to one of those modes and reacts to `prefers-color-scheme` changes while the page is open.

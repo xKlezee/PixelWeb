@@ -1,4 +1,5 @@
 /* Pixel Network — remaining public page mechanics from the full source audit. */
+@import url('pixel-theme-runtime-fixes.css');
 
 /* Legacy/shared Phase 1 surfaces still used by current pages. */
 html[data-theme-effective='light'] :where(.nexus-access,.difficulty-tier,.dev-progress,.status-column,.person,.page-cta,.next-destination,.index-row) {
@@ -47,7 +48,7 @@ html[data-theme-effective='light'] .about-disclaimer-panel {
   box-shadow:6px 7px 0 rgba(85,60,30,.09) !important;
 }
 html[data-theme-effective='light'] .about-disclaimer-panel {
-  background:radial-gradient(circle at 80% 18%,rgba(103,170,255,.08),transparent 32%),linear-gradient(155deg,#f9f4ed,#e4dcd1 72%) !important;
+  background:radial-gradient(circle at 80% 18%,rgba(207,115,30,.10),transparent 32%),linear-gradient(155deg,#f9f4ed,#e5dace 72%) !important;
 }
 html[data-theme-effective='light'] .about-policy-panel h3 { color:#30261b !important; }
 html[data-theme-effective='light'] .about-policy-panel h3:not(:first-child) { border-top-color:rgba(80,58,30,.12) !important; }

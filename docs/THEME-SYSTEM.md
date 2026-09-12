@@ -21,6 +21,7 @@ It then loads, in cascade order:
 2. `pixel-theme-coverage.css` — component-by-component coverage for the current public product surfaces.
 3. `pixel-theme-audit-fixes.css` — audited nested/immersive and secondary mechanics with their own authored dark shells.
 4. `pixel-theme-page-fixes.css` — remaining current page mechanics, legacy shared components, About/License/legal surfaces and mobile-only states.
+   - This sheet imports `pixel-theme-runtime-fixes.css` before its own rules. The imported layer closes runtime feedback/loading/error states and late cascade collisions discovered after the first source audit.
 5. `pixel-theme.js` — chooser behavior, persistence, system-theme listener and browser `theme-color` updates.
 
 A `pixelthemechange` window event is dispatched after changes with `{ mode, effective }` in `event.detail`.
@@ -35,15 +36,16 @@ Current source-level coverage explicitly includes:
 - Shared RPG page heroes, stat cards, system cards, route panels, portal cards, search controls and footer.
 - Gameplay/Systems shared detail cards, flow lines, World progression rows, Nexus access/difficulty, development/status panels, timeline, CTAs and compact index rows.
 - Skyblock island cards and boundaries, Community/Discord surfaces, About/Staff owner and staff cards, Store panels and category surfaces.
-- Marketplace navigation, route, 3D/model canvas stage, loading/focus frame, item preview canvases, detail panel and Store bridge.
+- Marketplace navigation, route, 3D/model canvas stage, visible loading/failure states, focus frame, item preview canvases, detail panel and Store bridge.
 - Leaderboards hero, categories, records, podium/top three, player heads/renders, top-10/full table and empty/source states.
 - Worlds immersive full-screen imagery, fallback imagery, content overlays, rail, investigation cue, counters, metadata and detail dialog internals.
 - Nexus immersive boss imagery (including dual Abyss/Astral), rails, investigate control, metadata, difficulty ladder and detail dialog.
 - Staff/About owner cards, Minecraft skin canvases, render stages, tags and labels.
 - Store surfaces and the rank explanation dialog.
-- Guide/Wiki shell, tables, callouts and specialized Progression, Skyblock, Enchantments, Stats/Equipment and Talisman components.
+- Guide/Wiki shell, tables, callouts and specialized Progression, Skyblock, Enchantments, Stats/Equipment and Talisman components, including late priority overrides.
 - About FAQ, information/policy panels, legal disclosure surfaces and the public License page.
 - Changelog/timeline and other shared current Phase 1 information surfaces.
+- Shared feedback toast and keyboard skip-link.
 - Play/join dialog.
 - Pixel Navigator and Appearance control.
 - Mobile navigation and mobile-only action rows.
@@ -55,6 +57,7 @@ Theme changes must not mutate authored assets. Boss PNGs, World imagery, Minecra
 The presentation around media *does* adapt:
 
 - Canvas renderers remain transparent; their stage/frame/background belongs to the theme.
+- Marketplace renderers expose visible loading/failure feedback instead of becoming unexplained blank themed panels.
 - Image frames, borders, shadows and surrounding surfaces follow the active theme.
 - Full-bleed World/Nexus imagery may use theme-specific brightness/contrast and separate CSS overlays so text remains readable.
 - Player skins and Marketplace model textures are never recolored.
@@ -62,7 +65,9 @@ The presentation around media *does* adapt:
 
 ## Interaction rule
 
-Hover, focus, active, selected, loading, empty, modal/backdrop and responsive/mobile states must remain legible in both themes. `System` is not a third color palette: it always resolves to the current OS/browser light or dark preference and updates live when that preference changes.
+Hover, focus, active, selected, loading, failure, empty, modal/backdrop, feedback and responsive/mobile states must remain legible in both themes. `System` is not a third color palette: it always resolves to the current OS/browser light or dark preference and updates live when that preference changes.
+
+Generic Pixel interaction accents use the shared gold/amber/orange identity. Cool colors remain only where they are semantic or authored — for example Discord identity, World/biome identity or boss artwork — rather than leaking into generic controls through old CSS.
 
 ## Verification boundary
 
