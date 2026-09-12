@@ -38,13 +38,6 @@
     return Number.isNaN(date.getTime()) ? null : date.toISOString();
   };
 
-  const formatUpdated = value => {
-    if (!value) return 'Tracking not connected yet';
-    const date = new Date(value);
-    if (Number.isNaN(date.getTime())) return 'Tracking not connected yet';
-    return `Updated ${date.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}`;
-  };
-
   const cleanEntries = entries => (Array.isArray(entries) ? entries : [])
     .filter(entry => entry && typeof entry === 'object')
     .map(entry => ({
@@ -65,22 +58,48 @@
     entries: cleanEntries(metric?.entries)
   });
 
+  const buildTestEntries = (metricId, roster, values) => {
+    const metricValues = Array.isArray(values?.[metricId]) ? values[metricId] : [];
+    return roster
+      .map((player, index) => ({
+        rank: index + 1,
+        player: String(player || '').trim(),
+        value: String(metricValues[index] ?? '').trim()
+      }))
+      .filter(entry => entry.player && entry.value)
+      .slice(0, 100);
+  };
+
   const normalizeSnapshot = candidate => {
     const input = candidate && typeof candidate === 'object' ? candidate : {};
     const source = input.source && typeof input.source === 'object' ? input.source : {};
     const generatedAt = validIsoDate(source.generatedAt);
-    const ready = input.schemaVersion === 3
+
+    const liveReady = input.schemaVersion === 3
       && source.state === 'ready'
       && source.authority === 'pixel-server-export'
       && Boolean(generatedAt);
 
+    const testReady = input.schemaVersion === 3
+      && source.state === 'test'
+      && source.authority === 'pixel-test-fixture';
+
+    const testRoster = Array.isArray(input.testRoster) ? input.testRoster.slice(0, 100) : [];
+    const testValues = input.testValues && typeof input.testValues === 'object' ? input.testValues : {};
     const incomingCategories = Array.isArray(input.categories) ? input.categories : [];
     const categories = FALLBACK_CATEGORIES.map(definition => {
       const incoming = incomingCategories.find(category => category && category.id === definition.id) || {};
       const metrics = (Array.isArray(incoming.metrics) ? incoming.metrics : [])
         .map(cleanMetric)
         .filter(metric => metric.id && metric.label)
-        .map(metric => ({ ...metric, entries: ready ? metric.entries : [] }));
+        .map(metric => ({
+          ...metric,
+          entries: liveReady
+            ? metric.entries
+            : testReady
+              ? buildTestEntries(metric.id, testRoster, testValues)
+              : []
+        }));
 
       return {
         ...definition,
@@ -91,15 +110,18 @@
       };
     });
 
+    const state = liveReady ? 'ready' : testReady ? 'test' : 'pending';
     return {
       schemaVersion: 3,
       source: {
-        state: ready ? 'ready' : 'pending',
-        authority: ready ? 'pixel-server-export' : 'pending',
-        label: ready
+        state,
+        authority: liveReady ? 'pixel-server-export' : testReady ? 'pixel-test-fixture' : 'pending',
+        label: liveReady
           ? String(source.label || 'Pixel Network live records')
-          : 'Leaderboard tracking is not connected yet',
-        generatedAt: ready ? generatedAt : null
+          : testReady
+            ? String(source.label || 'TEST DATA · real usernames, fictional values')
+            : 'Leaderboard tracking is not connected yet',
+        generatedAt: liveReady || testReady ? generatedAt : null
       },
       categories
     };
@@ -143,6 +165,24 @@
     return cell;
   };
 
+  const makePlayerIdentity = (player, compact = false) => {
+    const identity = document.createElement('span');
+    identity.className = compact ? 'leaderboard-player-identity is-compact' : 'leaderboard-player-identity';
+
+    const head = document.createElement('img');
+    head.className = 'leaderboard-player-head';
+    head.src = `https://api.mcheads.org/head/${encodeURIComponent(player)}/${compact ? 32 : 64}`;
+    head.alt = '';
+    head.loading = 'lazy';
+    head.decoding = 'async';
+    head.addEventListener('error', () => head.remove(), { once: true });
+
+    const name = document.createElement('span');
+    name.textContent = player;
+    identity.append(head, name);
+    return identity;
+  };
+
   const renderPodium = metric => {
     if (!podium) return;
     const entries = Array.isArray(metric?.entries) ? metric.entries : [];
@@ -160,8 +200,20 @@
 
       const avatar = document.createElement('div');
       avatar.className = 'leaderboard-podium-avatar';
-      avatar.setAttribute('aria-hidden', 'true');
-      avatar.textContent = entry ? entry.player.slice(0, 1).toUpperCase() : '—';
+      if (entry) {
+        const head = document.createElement('img');
+        head.src = `https://api.mcheads.org/head/${encodeURIComponent(entry.player)}/${position === 1 ? 96 : 80}`;
+        head.alt = '';
+        head.loading = 'lazy';
+        head.decoding = 'async';
+        head.addEventListener('error', () => {
+          head.remove();
+          avatar.textContent = entry.player.slice(0, 1).toUpperCase();
+        }, { once: true });
+        avatar.appendChild(head);
+      } else {
+        avatar.textContent = '—';
+      }
 
       const player = document.createElement('strong');
       player.textContent = entry?.player || 'Awaiting player';
@@ -185,7 +237,7 @@
         const strong = empty.querySelector(':scope > div > strong');
         const span = empty.querySelector(':scope > div > span');
         if (strong) strong.textContent = `${metric?.label || 'This ranking'} is ready for standings.`;
-        if (span) span.textContent = 'The board layout is live; player positions will appear when leaderboard tracking is connected.';
+        if (span) span.textContent = 'Player positions will appear here when leaderboard tracking is connected.';
       }
       return;
     }
@@ -195,9 +247,12 @@
 
     entries.forEach(entry => {
       const row = document.createElement('tr');
+      const playerCell = document.createElement('td');
+      playerCell.className = 'leaderboard-player';
+      playerCell.appendChild(makePlayerIdentity(entry.player, true));
       row.append(
         makeCell('td', `#${entry.rank}`, 'leaderboard-rank'),
-        makeCell('td', entry.player, 'leaderboard-player'),
+        playerCell,
         makeCell('td', metric?.label || 'Record', 'leaderboard-metric'),
         makeCell('td', entry.value, 'leaderboard-value')
       );
@@ -219,13 +274,12 @@
       const short = document.createElement('span');
       short.className = 'leaderboard-category-short';
       short.textContent = category.short;
+
       const copy = document.createElement('span');
       copy.className = 'leaderboard-category-copy';
       const strong = document.createElement('strong');
       strong.textContent = category.label;
-      const small = document.createElement('small');
-      small.textContent = `${category.metrics.length} ranking${category.metrics.length === 1 ? '' : 's'}`;
-      copy.append(strong, small);
+      copy.appendChild(strong);
       button.append(short, copy);
 
       button.addEventListener('click', () => {
@@ -285,8 +339,14 @@
   const applySourceStatus = () => {
     const source = snapshot?.source || {};
     if (sourceLabel) sourceLabel.textContent = source.label || 'Leaderboard tracking is not connected yet';
-    if (updated) updated.textContent = formatUpdated(source.generatedAt);
-    root.dataset.leaderboardState = source.state === 'ready' ? 'ready' : 'pending';
+    if (updated) {
+      updated.textContent = source.state === 'test'
+        ? 'Preview only · standings and values are fictional'
+        : source.generatedAt
+          ? `Updated ${new Date(source.generatedAt).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}`
+          : 'Tracking not connected yet';
+    }
+    root.dataset.leaderboardState = ['ready', 'test'].includes(source.state) ? source.state : 'pending';
   };
 
   window.addEventListener('hashchange', () => {
