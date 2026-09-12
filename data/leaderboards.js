@@ -2,9 +2,11 @@
   'use strict';
 
   const data = {
-    schemaVersion: 1,
+    schemaVersion: 2,
+    endpoint: 'data/leaderboards.json',
     source: {
       state: 'pending',
+      authority: 'pending',
       label: 'Server-backed ranking source not connected',
       generatedAt: null
     },
