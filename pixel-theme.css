@@ -1,0 +1,416 @@
+/* Pixel Network — global page theme system.
+   Dark remains the authored baseline. Light remaps shared chrome/surfaces without
+   recoloring screenshots, boss art, skins, world imagery or other authored media. */
+
+:root {
+  --theme-control-bg: rgba(14,14,10,.94);
+  --theme-control-panel: #11110d;
+  --theme-control-panel-hi: #181711;
+  --theme-control-text: #f2ead8;
+  --theme-control-muted: #9f9686;
+  --theme-control-line: rgba(246,201,69,.18);
+  --theme-control-shadow: 0 18px 54px rgba(0,0,0,.38);
+}
+
+html[data-theme-effective='light'] {
+  color-scheme: light;
+  --bg: #f1eadf;
+  --bg-soft: #ebe2d4;
+  --surface: #f8f2e8;
+  --surface-hi: #fffaf1;
+  --surface-low: #e5dccd;
+  --text: #211b13;
+  --muted: #695f52;
+  --muted-2: #8b8172;
+  --line: rgba(69,51,27,.14);
+  --raised: 10px 10px 24px rgba(91,70,43,.13), -7px -7px 20px rgba(255,255,255,.78);
+  --raised-soft: 7px 7px 18px rgba(91,70,43,.11), -5px -5px 15px rgba(255,255,255,.72);
+  --pressed: inset 4px 4px 9px rgba(98,76,47,.14), inset -3px -3px 8px rgba(255,255,255,.84);
+  --theme-control-bg: rgba(247,240,229,.96);
+  --theme-control-panel: #f8f1e5;
+  --theme-control-panel-hi: #fffaf2;
+  --theme-control-text: #261d12;
+  --theme-control-muted: #6f6252;
+  --theme-control-line: rgba(146,94,23,.24);
+  --theme-control-shadow: 0 18px 44px rgba(79,57,30,.18);
+}
+
+html[data-theme-effective='light'],
+html[data-theme-effective='light'] body {
+  background:#f1eadf !important;
+  color:#211b13 !important;
+}
+html[data-theme-effective='light'] body {
+  background:
+    radial-gradient(920px 620px at 12% -8%,rgba(224,169,61,.13),transparent 62%),
+    radial-gradient(720px 520px at 100% 32%,rgba(130,92,37,.055),transparent 68%),
+    linear-gradient(180deg,#f5efe5 0%,#eee5d8 100%) !important;
+}
+html[data-theme-effective='light'] body::before {
+  opacity:.34;
+  background-image:linear-gradient(rgba(78,57,31,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(78,57,31,.035) 1px,transparent 1px) !important;
+}
+html[data-theme-effective='light'] body.minecraft-rpg-home {
+  background:
+    radial-gradient(1100px 760px at 50% -10%,rgba(225,166,49,.15),transparent 58%),
+    linear-gradient(180deg,#f5eee2 0%,#eee4d4 54%,#e8ddcc 100%) !important;
+}
+
+/* Shared navigation / contextual rails */
+html[data-theme-effective='light'] .site-nav {
+  background:rgba(247,241,231,.90) !important;
+  border-bottom-color:rgba(72,52,27,.11) !important;
+  box-shadow:0 8px 28px rgba(81,59,31,.055) !important;
+}
+html[data-theme-effective='light'] .brand-wordmark { color:#241d15 !important; }
+html[data-theme-effective='light'] .brand-wordmark small { color:#847968 !important; }
+html[data-theme-effective='light'] .nav-links > a,
+html[data-theme-effective='light'] .nav-group > button { color:#62594e !important; }
+html[data-theme-effective='light'] .nav-links > a:hover,
+html[data-theme-effective='light'] .nav-links > a:focus-visible,
+html[data-theme-effective='light'] .nav-links > a[aria-current='page'],
+html[data-theme-effective='light'] .nav-group > button:hover,
+html[data-theme-effective='light'] .nav-group > button:focus-visible,
+html[data-theme-effective='light'] .nav-group.contains-current > button {
+  color:#2d210f !important;
+  background:linear-gradient(180deg,rgba(224,170,55,.16),rgba(207,115,30,.07)) !important;
+}
+html[data-theme-effective='light'] .nav-dropdown {
+  background:#faf5ec !important;
+  border-color:rgba(79,58,30,.14) !important;
+  box-shadow:0 18px 42px rgba(68,48,24,.16) !important;
+}
+html[data-theme-effective='light'] .nav-dropdown a { color:#5f5548 !important; }
+html[data-theme-effective='light'] .nav-dropdown a strong { color:#292117 !important; }
+html[data-theme-effective='light'] .nav-dropdown a span { color:#7f7464 !important; }
+html[data-theme-effective='light'] .nav-dropdown a:hover,
+html[data-theme-effective='light'] .nav-dropdown a:focus-visible,
+html[data-theme-effective='light'] .nav-dropdown a[aria-current='page'] {
+  color:#2f230f !important;
+  background:linear-gradient(90deg,rgba(224,170,55,.18),rgba(207,115,30,.05)) !important;
+}
+html[data-theme-effective='light'] .nav-toggle {
+  background:#f5ede1 !important;
+  border:1px solid rgba(73,54,29,.12) !important;
+  box-shadow:var(--raised-soft) !important;
+}
+html[data-theme-effective='light'] .nav-toggle span { background:#4d4337 !important; }
+
+html[data-theme-effective='light'] .section-subnav,
+html[data-theme-effective='light'] .minecraft-rpg-page:not(.minecraft-rpg-secondary) .section-subnav,
+html[data-theme-effective='light'] .skyblock-rpg-page .section-subnav,
+html[data-theme-effective='light'] .worlds-region-page .section-subnav,
+html[data-theme-effective='light'] .nexus-encounter-page .section-subnav {
+  background:linear-gradient(180deg,rgba(238,231,218,.99),rgba(229,220,204,.99)) !important;
+  border-bottom-color:#cfc2ae !important;
+  box-shadow:0 4px 0 rgba(92,69,40,.07) !important;
+}
+html[data-theme-effective='light'] .section-subnav-label { color:#8b7b67 !important; }
+html[data-theme-effective='light'] .section-subnav-links a { color:#6b6256 !important; }
+html[data-theme-effective='light'] .section-subnav-links a:hover,
+html[data-theme-effective='light'] .section-subnav-links a.is-current,
+html[data-theme-effective='light'] .section-subnav-links a[aria-current='page'] {
+  color:#33240d !important;
+  background:rgba(224,170,55,.13) !important;
+}
+
+/* Shared page surfaces */
+html[data-theme-effective='light'] .button.secondary,
+html[data-theme-effective='light'] .copy-ip,
+html[data-theme-effective='light'] .stat-rail,
+html[data-theme-effective='light'] .system-card,
+html[data-theme-effective='light'] .feature-story,
+html[data-theme-effective='light'] .hero-note,
+html[data-theme-effective='light'] .world-shell {
+  background:#f4ecdf !important;
+  border-color:rgba(77,56,30,.12) !important;
+  color:#30271c !important;
+}
+html[data-theme-effective='light'] .hero-lead,
+html[data-theme-effective='light'] .feature-copy p,
+html[data-theme-effective='light'] .system-card p,
+html[data-theme-effective='light'] .section-head p,
+html[data-theme-effective='light'] .hero-meta,
+html[data-theme-effective='light'] .hero-note,
+html[data-theme-effective='light'] .stat span { color:#706558 !important; }
+html[data-theme-effective='light'] .hero-meta strong,
+html[data-theme-effective='light'] .feature-list li,
+html[data-theme-effective='light'] .button.secondary { color:#393025 !important; }
+html[data-theme-effective='light'] .hero-object::before { background:#e4d9ca !important; box-shadow:22px 22px 46px rgba(93,69,39,.15),-16px -16px 34px rgba(255,255,255,.72) !important; }
+html[data-theme-effective='light'] .hero-logo-card { background:linear-gradient(145deg,#fff9ef,#ddd1c0) !important; border-color:rgba(83,60,30,.13) !important; }
+
+/* Wiki / Guide */
+html[data-theme-effective='light'] .guide-wiki-home,
+html[data-theme-effective='light'] .guide-rpg-page,
+html[data-theme-effective='light'] .guides-main,
+html[data-theme-effective='light'] .guide-wiki-main {
+  --wiki-bg:#f1eadf;
+  --wiki-panel:#f8f2e8;
+  --wiki-panel-soft:#eee5d7;
+  --wiki-text:#261e15;
+  --wiki-muted:#6c6255;
+  --wiki-line:rgba(74,54,29,.13);
+}
+html[data-theme-effective='light'] .wiki-hero,
+html[data-theme-effective='light'] .guides-hero,
+html[data-theme-effective='light'] .guide-hero {
+  background:linear-gradient(180deg,#f7f1e8,#eee5d8) !important;
+  border-color:rgba(83,61,31,.12) !important;
+}
+html[data-theme-effective='light'] .wiki-index-sidebar,
+html[data-theme-effective='light'] .guides-sidebar,
+html[data-theme-effective='light'] .guide-sidebar,
+html[data-theme-effective='light'] .wiki-browse-group,
+html[data-theme-effective='light'] .wiki-card,
+html[data-theme-effective='light'] .guide-reference-item,
+html[data-theme-effective='light'] .guide-note,
+html[data-theme-effective='light'] .guide-callout {
+  background:#f8f2e8 !important;
+  border-color:rgba(78,57,30,.13) !important;
+  color:#2b2319 !important;
+  box-shadow:none !important;
+}
+html[data-theme-effective='light'] .wiki-browse-group summary,
+html[data-theme-effective='light'] .wiki-browse-menu a,
+html[data-theme-effective='light'] .guides-nav-group a { color:#5f5548 !important; }
+html[data-theme-effective='light'] .wiki-browse-menu a:hover,
+html[data-theme-effective='light'] .wiki-browse-menu a:focus-visible,
+html[data-theme-effective='light'] .wiki-index-sidebar a[aria-current='page'] { color:#34260f !important; }
+html[data-theme-effective='light'] .wiki-search-control input,
+html[data-theme-effective='light'] .guides-search,
+html[data-theme-effective='light'] .guide-search {
+  background:#fffaf3 !important;
+  color:#2a2117 !important;
+  border-color:rgba(82,59,29,.17) !important;
+  box-shadow:inset 2px 2px 6px rgba(101,76,45,.08) !important;
+}
+html[data-theme-effective='light'] .wiki-search-control input::placeholder,
+html[data-theme-effective='light'] .guides-search::placeholder { color:#9a8e7e !important; }
+html[data-theme-effective='light'] .wiki-category-head,
+html[data-theme-effective='light'] .guide-section-head { border-color:rgba(77,56,30,.13) !important; }
+html[data-theme-effective='light'] .wiki-article-link {
+  background:#f7f0e5 !important;
+  border-color:rgba(77,56,30,.12) !important;
+  color:#2a2218 !important;
+}
+html[data-theme-effective='light'] .wiki-article-link p,
+html[data-theme-effective='light'] .guide-section p,
+html[data-theme-effective='light'] .guide-reference-item p { color:#6d6255 !important; }
+
+/* Leaderboards */
+html[data-theme-effective='light'] .leaderboards-rpg-page {
+  --lb-ink:#282015;
+  --lb-muted:#706557;
+  --lb-line:rgba(157,104,28,.20);
+  --lb-deep:#e8dece;
+  --lb-panel:#f7f0e5;
+}
+html[data-theme-effective='light'] .leaderboard-hero {
+  border-bottom-color:rgba(169,112,31,.18) !important;
+  background:
+    linear-gradient(90deg,rgba(249,244,235,.97) 0%,rgba(244,236,224,.94) 48%,rgba(236,221,195,.88) 100%),
+    repeating-linear-gradient(90deg,rgba(146,94,23,.035) 0 1px,transparent 1px 82px),
+    radial-gradient(circle at 78% 32%,rgba(225,166,49,.18),transparent 28%),
+    #f3ebdf !important;
+}
+html[data-theme-effective='light'] .leaderboard-hero-copy p { color:#6f6455 !important; }
+html[data-theme-effective='light'] .leaderboard-hero-mark { background:linear-gradient(145deg,rgba(246,201,69,.18),rgba(207,115,30,.06)) !important; box-shadow:inset 0 0 0 6px rgba(97,71,36,.06),0 18px 38px rgba(87,61,29,.10) !important; }
+html[data-theme-effective='light'] .leaderboard-shell { background:linear-gradient(180deg,#eee5d8,#e8dece 70%) !important; }
+html[data-theme-effective='light'] .leaderboard-frame { background:#f5eee3 !important; border-color:rgba(146,94,23,.18) !important; box-shadow:0 24px 64px rgba(83,59,29,.12),inset 0 1px 0 rgba(255,255,255,.78) !important; }
+html[data-theme-effective='light'] .leaderboard-browser { background:linear-gradient(180deg,rgba(224,170,55,.12),transparent 170px),linear-gradient(180deg,#f7f0e4,#ece2d4) !important; border-right-color:rgba(140,91,23,.16) !important; }
+html[data-theme-effective='light'] .leaderboard-browser-head { border-bottom-color:rgba(76,55,29,.12) !important; }
+html[data-theme-effective='light'] .leaderboard-browser-head strong,
+html[data-theme-effective='light'] .leaderboard-category-head h2,
+html[data-theme-effective='light'] .leaderboard-record-head h3 { color:#2a2116 !important; }
+html[data-theme-effective='light'] .leaderboard-browser-head span,
+html[data-theme-effective='light'] .leaderboard-category-head p,
+html[data-theme-effective='light'] .leaderboard-record-head p,
+html[data-theme-effective='light'] .leaderboard-source span { color:#716658 !important; }
+html[data-theme-effective='light'] .leaderboard-category { color:#655b4f !important; }
+html[data-theme-effective='light'] .leaderboard-category:hover,
+html[data-theme-effective='light'] .leaderboard-category:focus-visible { color:#302518 !important; background:rgba(224,170,55,.10) !important; }
+html[data-theme-effective='light'] .leaderboard-category[aria-pressed='true'] { color:#35250c !important; background:linear-gradient(90deg,rgba(224,170,55,.20),rgba(207,115,30,.06)) !important; }
+html[data-theme-effective='light'] .leaderboard-category-short { background:#eee4d5 !important; color:#776b5d !important; border-color:rgba(77,56,30,.13) !important; }
+html[data-theme-effective='light'] .leaderboard-content { background:linear-gradient(180deg,#faf4eb,#efe6d9 65%) !important; }
+html[data-theme-effective='light'] .leaderboard-category-head { border-bottom-color:rgba(146,94,23,.14) !important; }
+html[data-theme-effective='light'] .leaderboard-metric-list { background:rgba(159,105,27,.13) !important; border-bottom-color:rgba(146,94,23,.14) !important; }
+html[data-theme-effective='light'] .leaderboard-metric-button { background:#f3ebdf !important; color:#62584c !important; }
+html[data-theme-effective='light'] .leaderboard-metric-button:hover,
+html[data-theme-effective='light'] .leaderboard-metric-button:focus-visible { background:#f8f0e3 !important; color:#302519 !important; }
+html[data-theme-effective='light'] .leaderboard-metric-button[aria-pressed='true'] { background:linear-gradient(135deg,#ead9b7,#f8f0e4 72%) !important; color:#33240d !important; }
+html[data-theme-effective='light'] .leaderboard-metric-button small { color:#817566 !important; }
+html[data-theme-effective='light'] .leaderboard-record-badge,
+html[data-theme-effective='light'] .leaderboard-table-wrap,
+html[data-theme-effective='light'] .leaderboard-podium-card { background:#f7f0e5 !important; border-color:rgba(146,94,23,.16) !important; }
+html[data-theme-effective='light'] .leaderboard-table th { color:#7a6e5e !important; background:#ebe1d2 !important; }
+html[data-theme-effective='light'] .leaderboard-table td { color:#352b20 !important; border-color:rgba(80,58,30,.10) !important; }
+html[data-theme-effective='light'] .leaderboard-player-head { background:#e8decf !important; }
+html[data-theme-effective='light'] .leaderboard-footnote { color:#726758 !important; }
+
+/* Marketplace / community / staff / store informational panels. */
+html[data-theme-effective='light'] :where(
+  .marketplace-panel,.marketplace-card,.marketplace-item-card,.marketplace-route-step,
+  .community-card,.community-panel,.rules-card,.rules-panel,.staff-card,.mc-owner-card,
+  .about-overview-card,.about-disclaimer-panel,.store-card,.store-panel,.store-rank-card,
+  .mc-content-card,.mc-stat-card,.mc-path-card,.mc-panel,.content-card
+) {
+  background:#f5ede1 !important;
+  color:#2c2318 !important;
+  border-color:rgba(78,57,30,.13) !important;
+  box-shadow:none !important;
+}
+html[data-theme-effective='light'] :where(
+  .marketplace-card,.marketplace-item-card,.community-card,.rules-card,.staff-card,
+  .mc-owner-card,.about-overview-card,.store-card,.store-rank-card,.mc-content-card,.mc-stat-card,.mc-path-card
+) p { color:#6d6255 !important; }
+html[data-theme-effective='light'] .mc-owner-visual { background:radial-gradient(circle at 50% 45%,rgba(224,170,55,.15),transparent 40%),#e7ddce !important; }
+html[data-theme-effective='light'] .about-overview-card strong,
+html[data-theme-effective='light'] .site-footer-brand strong { color:#2b2217 !important; }
+
+/* Footer */
+html[data-theme-effective='light'] .site-footer {
+  border-top-color:rgba(77,56,30,.13) !important;
+  background:linear-gradient(180deg,rgba(236,226,211,.44),rgba(225,214,197,.64)) !important;
+}
+html[data-theme-effective='light'] .site-footer-inner,
+html[data-theme-effective='light'] .site-footer-brand span,
+html[data-theme-effective='light'] .site-footer-links a,
+html[data-theme-effective='light'] .site-footer-legal p { color:#756a5c !important; }
+html[data-theme-effective='light'] .site-footer-links a:hover,
+html[data-theme-effective='light'] .site-footer-links a:focus-visible { color:#9b6317 !important; }
+html[data-theme-effective='light'] .site-footer-legal { border-top-color:rgba(77,56,30,.12) !important; }
+html[data-theme-effective='light'] .site-footer-legal .site-footer-disclaimer { color:#5d5347 !important; }
+
+/* Play dialog and Pixel Navigator follow the selected shell theme. */
+html[data-theme-effective='light'] .play-dialog,
+html[data-theme-effective='light'] .pixel-navigator-panel {
+  background:#f8f1e6 !important;
+  color:#2b2217 !important;
+  border-color:rgba(133,87,22,.22) !important;
+  box-shadow:0 24px 64px rgba(68,47,22,.20) !important;
+}
+html[data-theme-effective='light'] .pixel-navigator-head p,
+html[data-theme-effective='light'] .pixel-navigator-status,
+html[data-theme-effective='light'] .pixel-navigator-foot,
+html[data-theme-effective='light'] .play-dialog-intro { color:#716557 !important; }
+html[data-theme-effective='light'] .pixel-navigator-input,
+html[data-theme-effective='light'] .pixel-navigator-result,
+html[data-theme-effective='light'] .play-step,
+html[data-theme-effective='light'] .play-ip-control {
+  background:#fffaf3 !important;
+  color:#30261a !important;
+  border-color:rgba(79,57,29,.14) !important;
+}
+html[data-theme-effective='light'] .pixel-navigator-trigger {
+  background:linear-gradient(180deg,#fbf5eb,#e9ddcb) !important;
+  color:#2c2113 !important;
+  border-color:rgba(133,87,22,.28) !important;
+  box-shadow:0 12px 30px rgba(70,49,23,.18) !important;
+}
+
+/* Theme control: fixed bottom-right counterpart to Ask Pixel. */
+.pixel-theme-control {
+  position:fixed;
+  right:max(16px,env(safe-area-inset-right));
+  bottom:max(16px,env(safe-area-inset-bottom));
+  z-index:460;
+  display:grid;
+  justify-items:end;
+  gap:10px;
+  font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+.pixel-theme-trigger {
+  min-width:112px;
+  height:44px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:0 12px 0 10px;
+  border:1px solid var(--theme-control-line);
+  border-radius:4px;
+  background:var(--theme-control-bg);
+  color:var(--theme-control-text);
+  box-shadow:0 10px 28px rgba(0,0,0,.20);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  cursor:pointer;
+  transition:transform 140ms ease,border-color 140ms ease,background 140ms ease;
+}
+.pixel-theme-trigger:hover,
+.pixel-theme-trigger:focus-visible {
+  outline:none;
+  transform:translateY(-1px);
+  border-color:rgba(234,165,47,.52);
+}
+.pixel-theme-trigger-icon {
+  position:relative;
+  width:24px;
+  height:24px;
+  flex:0 0 24px;
+  border:1px solid rgba(234,165,47,.32);
+  background:rgba(234,165,47,.08);
+}
+.pixel-theme-trigger-icon::before,
+.pixel-theme-trigger-icon::after { content:''; position:absolute; }
+.pixel-theme-trigger-icon[data-mode='dark']::before { width:10px; height:10px; border:3px solid #e7bd4b; border-top-color:transparent; border-right-color:transparent; border-radius:50%; left:5px; top:4px; transform:rotate(-35deg); }
+.pixel-theme-trigger-icon[data-mode='light']::before { width:8px; height:8px; border-radius:50%; background:#e7bd4b; left:7px; top:7px; box-shadow:0 -5px 0 -3px #e7bd4b,0 5px 0 -3px #e7bd4b,5px 0 0 -3px #e7bd4b,-5px 0 0 -3px #e7bd4b; }
+.pixel-theme-trigger-icon[data-mode='system']::before { left:4px; right:4px; top:5px; height:10px; border:2px solid #d6ad42; }
+.pixel-theme-trigger-icon[data-mode='system']::after { width:9px; height:2px; left:7px; bottom:4px; background:#d6ad42; box-shadow:0 -2px 0 -1px #d6ad42; }
+.pixel-theme-trigger-copy { display:grid; gap:1px; text-align:left; line-height:1; }
+.pixel-theme-trigger-copy > span { color:var(--theme-control-muted); font-size:8px; font-weight:850; letter-spacing:.13em; text-transform:uppercase; }
+.pixel-theme-trigger-copy strong { color:var(--theme-control-text); font-size:12px; font-weight:850; }
+
+.pixel-theme-panel {
+  width:min(310px,calc(100vw - 32px));
+  padding:14px;
+  border:1px solid var(--theme-control-line);
+  border-radius:4px;
+  background:var(--theme-control-panel);
+  color:var(--theme-control-text);
+  box-shadow:var(--theme-control-shadow);
+}
+.pixel-theme-panel[hidden] { display:none; }
+.pixel-theme-panel-head { display:flex; align-items:start; justify-content:space-between; gap:16px; padding:3px 3px 12px; border-bottom:1px solid var(--theme-control-line); }
+.pixel-theme-kicker { display:block; color:#c9932a; font-size:8px; font-weight:900; letter-spacing:.16em; text-transform:uppercase; }
+.pixel-theme-panel h2 { margin:4px 0 0; color:var(--theme-control-text); font-size:20px; line-height:1; letter-spacing:-.03em; }
+.pixel-theme-close { width:30px; height:30px; border:1px solid var(--theme-control-line); border-radius:3px; background:transparent; color:var(--theme-control-muted); font-size:20px; line-height:1; cursor:pointer; }
+.pixel-theme-close:hover,.pixel-theme-close:focus-visible { outline:none; color:var(--theme-control-text); border-color:rgba(234,165,47,.48); }
+.pixel-theme-options { display:grid; gap:6px; padding-top:10px; }
+.pixel-theme-option {
+  width:100%;
+  min-height:62px;
+  display:grid;
+  grid-template-columns:34px minmax(0,1fr) 20px;
+  align-items:center;
+  gap:10px;
+  padding:9px 10px;
+  border:1px solid transparent;
+  border-radius:3px;
+  background:transparent;
+  color:var(--theme-control-text);
+  text-align:left;
+  cursor:pointer;
+}
+.pixel-theme-option:hover,.pixel-theme-option:focus-visible { outline:none; background:rgba(234,165,47,.055); border-color:rgba(234,165,47,.15); }
+.pixel-theme-option.is-selected { background:linear-gradient(90deg,rgba(246,201,69,.12),rgba(207,115,30,.025)); border-color:rgba(234,165,47,.28); box-shadow:inset 3px 0 0 #e2a932; }
+.pixel-theme-symbol { position:relative; width:30px; height:30px; border:1px solid var(--theme-control-line); background:var(--theme-control-panel-hi); }
+.pixel-theme-symbol[data-mode='light']::before { content:''; position:absolute; width:9px; height:9px; left:9px; top:9px; border-radius:50%; background:#e7bd4b; box-shadow:0 -6px 0 -4px #e7bd4b,0 6px 0 -4px #e7bd4b,6px 0 0 -4px #e7bd4b,-6px 0 0 -4px #e7bd4b; }
+.pixel-theme-symbol[data-mode='dark']::before { content:''; position:absolute; width:11px; height:11px; left:7px; top:6px; border:3px solid #d8af43; border-top-color:transparent; border-right-color:transparent; border-radius:50%; transform:rotate(-35deg); }
+.pixel-theme-symbol[data-mode='system']::before { content:''; position:absolute; left:5px; right:5px; top:6px; height:11px; border:2px solid #caa13b; }
+.pixel-theme-symbol[data-mode='system']::after { content:''; position:absolute; width:10px; height:2px; left:9px; bottom:5px; background:#caa13b; }
+.pixel-theme-option-copy { display:grid; gap:4px; min-width:0; }
+.pixel-theme-option-copy strong { font-size:13px; font-weight:850; line-height:1.1; }
+.pixel-theme-option-copy small { color:var(--theme-control-muted); font-size:10px; line-height:1.35; }
+.pixel-theme-check { color:#e5b23d; font-size:14px; font-weight:900; opacity:0; }
+.pixel-theme-option.is-selected .pixel-theme-check { opacity:1; }
+.pixel-theme-live { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+
+@media (max-width:760px) {
+  .pixel-theme-control { right:max(12px,env(safe-area-inset-right)); bottom:max(12px,env(safe-area-inset-bottom)); }
+  .pixel-theme-trigger { min-width:44px; width:44px; padding:0; justify-content:center; }
+  .pixel-theme-trigger-copy { display:none; }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .pixel-theme-trigger { transition:none; }
+}
