@@ -14,6 +14,23 @@ This document separates **static/code review** from **browser-render verificatio
 
 Also required: one short-height landscape window and 200% browser zoom.
 
+The viewport matrix must be executed in both effective `Light` and `Dark`. `System` is additionally verified at representative desktop and mobile widths by changing the browser/OS color-scheme preference while the page is open. A source-level theme audit does not mark any browser-render cell PASS.
+
+## Appearance / theme execution
+
+- `System`, `Light` and `Dark` remain reachable by pointer/touch and keyboard wherever the Appearance control is available.
+- `System` resolves to the current browser/OS light or dark preference; it is not a third visual palette.
+- While `System` is selected, changing the system/browser color-scheme preference updates `html[data-theme-effective]` and the rendered page without a reload.
+- Explicit `Light` and `Dark` choices persist across reloads and same-origin navigation and are not replaced by later system-preference changes.
+- The browser `theme-color` follows the effective theme where supported.
+- A persisted preference must not produce a visible opposite-theme flash during first paint.
+- Default, hover, focus, active, selected, loading, failure, empty, modal/backdrop and shared-feedback states remain legible in both effective themes.
+- Marketplace loading/error states remain visible rather than appearing as unexplained empty canvases.
+- Toast, skip-link, Pixel Navigator, Play dialog and mobile navigation maintain readable foreground/background/border contrast.
+- Generic interaction accents remain warm gold/amber/orange/copper. Semantic/authored colors such as Discord identity, World/biome identity and boss artwork may remain distinct.
+- Theme changes must not replace, recolor, recompress, downscale or otherwise mutate approved World/Nexus imagery, Nexus boss PNGs, Minecraft skins, Marketplace model textures or logos.
+- Reduced-motion behavior must remain correct in both effective themes and must not be defeated by theme-specific status or feedback animation.
+
 ## Global navigation
 
 - Desktop navigation remains active above 980 px; mobile navigation takes over at 980 px and below.
@@ -52,6 +69,7 @@ Also required: one short-height landscape window and 200% browser zoom.
 - Reduced-motion mode must not hydrate/download the immersive MP4 during normal page use.
 - Home no longer presents or links retired Forum/Development surfaces.
 - Home Guide entry points to Getting Started rather than assuming Progression is the first documentation destination.
+- Light mode adapts image stages/overlays and surrounding cards without replacing or recoloring the original media.
 
 ## Worlds / Nexus
 
@@ -61,12 +79,15 @@ Also required: one short-height landscape window and 200% browser zoom.
 - Nexus detail layout collapses without hiding encounter-critical information.
 - Raphael, Azazel, Abyss and Astral remain the approved original 1448×1086 PNGs without recompression/conversion.
 - Abyss + Astral display as two complete independent 4:3 images without crop or stretch.
+- In Light mode, full-screen media remains the same source file while stage brightness/contrast, overlays, rail, metadata, counter, investigation control and dialog surfaces adapt independently.
+- Theme switching must not introduce a dark-only overlay over Light mode imagery or wash out encounter/world artwork.
 
 ## Systems / Skyblock
 
 - Systems progression spine changes from horizontal to vertical below 980 px.
 - Supporting rows collapse from editorial multi-column layouts to one column at narrow widths.
 - Skyblock keeps the current/partial/planned feature boundary readable at all widths.
+- Skyblock Objectives and other generic interaction surfaces retain the warm shared accent in Light mode rather than falling back to unrelated cool-blue styling.
 
 ## Guide
 
@@ -81,6 +102,22 @@ Also required: one short-height landscape window and 200% browser zoom.
 - The Browse list shows no article-count badges, hidden organizational labels or fake category-overview rows.
 - Every visible Browse child is a real destination; Coins/Pixels/Nexus Points and command entries resolve to their exact section anchors.
 - Getting Started owns server basics statically: join flow, Currencies, Basic Commands and progression orientation must remain usable even before its data-hydration script runs.
+- Specialized Progression, Skyblock, Enchantments, Stats/Equipment and Talisman components must be checked in both Light and Dark, including late priority styles that could otherwise reintroduce dark-only or cool-blue accents.
+
+## Marketplace
+
+- The large model stage remains transparent at canvas level; the themed stage/frame owns its environment.
+- Model texture/source data is not recolored by the appearance system.
+- Loading and failure states remain visible and centered at desktop, tablet and mobile widths.
+- Item previews preserve their own loading/failure feedback, active state, hover/focus treatment and readable detail relationship.
+- Theme switching must not change model scale, yaw/pitch behavior, texture sampling or the original source texture bytes.
+
+## Leaderboards
+
+- Top 3 podium/player renders remain legible and structurally balanced in both effective themes.
+- Top 10, Full Leaderboard, metric selector, badges and empty/source-pending states remain readable at every required width.
+- Empty/source-pending state must not visually resemble a populated zero-score leaderboard.
+- Player heads/renders and their fallbacks retain intended image treatment; the theme adapts their surrounding stage/podium rather than recoloring player imagery.
 
 ## Staff Team / Owners
 
@@ -99,7 +136,8 @@ Static expectations:
 - Klezee's head outer-layer side textures remain correctly oriented;
 - live texture lookup remains keyed by `Klezee` and `PxlMads`;
 - provider failure degrades to a readable username-based image fallback;
-- no visible `Drag to rotate` helper label returns.
+- no visible `Drag to rotate` helper label returns;
+- Light/Dark changes affect the viewer stage, floor/shadow and card only; skin texture pixels remain unchanged.
 
 Browser/network QA must additionally verify CORS/canvas behavior and both usernames resolving correctly.
 
@@ -111,6 +149,13 @@ Browser/network QA must additionally verify CORS/canvas behavior and both userna
 - Tebex actions wrap/stack without overflow.
 - Minecraft disclaimer, licensing/attribution and external-service notes remain prominent and readable.
 - `license.html` retains readable line length, keyboard navigation and a clear path back to About.
+- Policy/disclaimer/legal panels remain readable in Light mode and use the warm Pixel palette rather than residual generic blue glows.
+
+## Store
+
+- Store panels, category surfaces, Shop CTA and rank-information dialog remain usable at every required width.
+- Light mode must retain clear hierarchy between neutral informational surfaces and the strongest gold purchase CTA.
+- Modal/backdrop focus and contrast remain readable in both effective themes.
 
 ## Community / Leaderboards
 
@@ -124,12 +169,14 @@ Browser/network QA must additionally verify CORS/canvas behavior and both userna
 - Minecraft disclaimer and rights boundary remain readable without dominating the page.
 - Guide/Worlds/Nexus may keep visual-family background treatment while sharing the normalized footer structure.
 - The legal block never creates page-level horizontal overflow.
+- Footer surfaces and link/focus states remain legible in both effective themes.
 
 ## Play modal
 
 - Dialog width and height remain viewport-bounded.
 - Narrow layouts stack footer actions.
 - Focus trapping, Escape close and focus restoration remain implemented without runtime inline styles.
+- Backdrop, steps, IP control and footer actions remain readable in both effective themes.
 
 ## Crawl / compatibility surfaces
 
@@ -145,29 +192,39 @@ Repository validators remain useful when they actually execute, but the owner ha
 
 ## Browser verification checklist
 
-1. No unexpected page-level horizontal scrolling at 1440 / 1024 / 768 / 430 / 390 px.
-2. Explore / Guide / Community desktop hover behavior opens/closes without sticky pointer-click state.
-3. Mobile/touch navigation still opens explicitly at 980 px and below.
-4. Keyboard focus, ArrowDown and Escape remain usable in global navigation.
-5. Guide rail order starts with Getting Started, then Currencies and Basic Commands, and all nine Guide categories remain reachable on narrow screens.
-6. `guides.html` without a hash activates Getting Started.
-7. Guide Browse dropdowns, search, direct child links and anchor targets work on desktop/mobile.
-8. Getting Started shows server basics without depending on DOM injection.
-9. Skip to content moves both scroll position and focus to `<main>`.
-10. Play modal is fully reachable and escapable with mouse, touch and keyboard.
-11. Focus indicators are visible and unclipped.
-12. Typography remains readable at 200% zoom.
-13. Images are not stretched or unintentionally cropped; Abyss + Astral remain complete.
-14. Staff Team shows equal owner-card visual weight and both skins resolve/render correctly.
-15. Pointer/keyboard skin interactions and Home reset work for both owners.
-16. About FAQ, Tebex CTA and license route remain usable.
-17. Shared footer remains readable across visual families.
-18. Direct Forum/Development legacy URLs redirect correctly without retired UI returning.
-19. Home immersive media remains deferred and reduced-motion stable.
-20. Browser console shows zero uncaught first-party errors and first-party CSP violations.
-21. Network panel shows no insecure HTTP subresources.
-22. Short-height landscape remains usable for navigation, Guide, Play modal, Staff, About and License.
+1. No unexpected page-level horizontal scrolling at 1440 / 1024 / 768 / 430 / 390 px in either effective Light or Dark.
+2. Appearance control selects System / Light / Dark by pointer/touch and keyboard.
+3. Explicit Light/Dark persists across reloads and same-origin navigation.
+4. System follows the current browser/OS preference and updates live when that preference changes.
+5. Browser `theme-color` follows the effective theme where supported and persisted mode does not produce an obvious opposite-theme first-paint flash.
+6. Default, hover, focus, active, selected, loading, failure, empty, modal/backdrop and feedback states remain readable in both themes.
+7. Marketplace large/small canvases expose visible loading/failure feedback and preserve original model textures/interaction.
+8. Worlds/Nexus imagery remains source-identical and uncropped while Light/Dark overlays, rails, metadata and dialogs adapt correctly.
+9. Leaderboards Top 3 / Top 10 / Full / empty-source states remain readable and structurally correct in both themes.
+10. Explore / Guide / Community desktop hover behavior opens/closes without sticky pointer-click state.
+11. Mobile/touch navigation still opens explicitly at 980 px and below.
+12. Keyboard focus, ArrowDown and Escape remain usable in global navigation.
+13. Guide rail order starts with Getting Started, then Currencies and Basic Commands, and all nine Guide categories remain reachable on narrow screens.
+14. `guides.html` without a hash activates Getting Started.
+15. Guide Browse dropdowns, search, direct child links and anchor targets work on desktop/mobile.
+16. Getting Started shows server basics without depending on DOM injection.
+17. Specialized Guide pages retain correct Light/Dark styling without late dark-only or cool-blue regressions.
+18. Skip to content moves both scroll position and focus to `<main>` and remains visually readable in both themes.
+19. Play modal is fully reachable and escapable with mouse, touch and keyboard in both themes.
+20. Focus indicators are visible and unclipped.
+21. Typography remains readable at 200% zoom.
+22. Images are not stretched or unintentionally cropped; Abyss + Astral remain complete and original media is not replaced/recompressed by theme switching.
+23. Staff Team shows equal owner-card visual weight and both skins resolve/render correctly without theme-driven recoloring.
+24. Pointer/keyboard skin interactions and Home reset work for both owners.
+25. About FAQ, Tebex CTA and license route remain usable and readable in Light/Dark.
+26. Store CTA/modal hierarchy remains clear in Light/Dark.
+27. Shared footer remains readable across visual families and themes.
+28. Direct Forum/Development legacy URLs redirect correctly without retired UI returning.
+29. Home immersive media remains deferred and reduced-motion stable in both themes.
+30. Browser console shows zero uncaught first-party errors and first-party CSP violations during theme changes and normal interaction.
+31. Network panel shows no insecure HTTP subresources and no theme switch unexpectedly replaces/re-downloads authored source imagery as alternate theme assets.
+32. Short-height landscape remains usable for navigation, Guide, Play modal, Staff, About and License in both effective themes.
 
 ## Release rule
 
-Static/source review is not browser proof. Do not mark browser-specific behavior PASS until the real browser matrix has been executed.
+Static/source review is not browser proof. Do not mark browser-specific behavior PASS until the real browser matrix has been executed in both effective themes and representative System-mode switching has been verified.
