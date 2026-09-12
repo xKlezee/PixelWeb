@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-  <meta name="theme-color" content="#211f1b"/>
+  <meta name="theme-color" content="#16120a"/>
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https: data:; media-src 'self' https:; font-src 'self' https: data:; connect-src 'self'; frame-src 'none'; worker-src 'none'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests"/>
   <meta name="referrer" content="strict-origin-when-cross-origin"/>
-  <meta name="description" content="Pixel Network Leaderboards — verified server-backed rankings only."/>
-  <meta property="og:type" content="website"/><meta property="og:site_name" content="Pixel Network"/><meta property="og:title" content="Leaderboards — Pixel Network"/><meta property="og:description" content="Verified Pixel Network rankings with a server-backed data boundary."/><meta property="og:url" content="https://xklezee.github.io/PixelWeb/leaderboards.html"/><meta property="og:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/><meta property="og:image:alt" content="Pixel Network logo"/>
-  <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Leaderboards — Pixel Network"/><meta name="twitter:description" content="Verified Pixel Network rankings with a server-backed data boundary."/><meta name="twitter:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/>
+  <meta name="description" content="Pixel Network Leaderboards — mining, economy, progression, combat, Skyblock, Nexus and collection records."/>
+  <meta property="og:type" content="website"/><meta property="og:site_name" content="Pixel Network"/><meta property="og:title" content="Leaderboards — Pixel Network"/><meta property="og:description" content="Explore Pixel Network competitive records across mining, economy, progression, combat, Skyblock, Nexus and collections."/><meta property="og:url" content="https://xklezee.github.io/PixelWeb/leaderboards.html"/><meta property="og:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/><meta property="og:image:alt" content="Pixel Network logo"/>
+  <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Leaderboards — Pixel Network"/><meta name="twitter:description" content="Pixel Network competitive records across the full progression journey."/><meta name="twitter:image" content="https://xklezee.github.io/PixelWeb/LOGO%20OFICIAL.png"/>
   <title>Leaderboards — Pixel Network</title>
   <link rel="canonical" href="https://xklezee.github.io/PixelWeb/leaderboards.html"/>
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png"/>
@@ -30,33 +30,55 @@
   <nav class="site-nav" aria-label="Main navigation"><div class="shell nav-inner"><a class="brand" href="index.html"><img src="LOGO%20OFICIAL.png" width="34" height="34" alt="Pixel Network logo"/><span class="brand-wordmark">Pixel Network<small>Java Edition</small></span></a><div class="nav-links" id="navLinks" data-nav-contract="canonical-v1"><div class="nav-group"><button type="button" aria-haspopup="true" aria-expanded="false" aria-controls="nav-static-explore">Explore</button><div class="nav-dropdown" id="nav-static-explore"><a href="gameplay.html"><strong>Gameplay</strong><span>The main player journey.</span></a><a href="systems.html"><strong>Systems</strong><span>Progression, collection and equipment.</span></a><a href="worlds.html"><strong>Worlds</strong><span>The current world progression.</span></a><a href="skyblock.html"><strong>Skyblock</strong><span>Personal island progression.</span></a><a href="nexus.html"><strong>Nexus</strong><span>Endgame access and instance progression.</span></a></div></div><a class="nav-marketplace" href="marketplace.html">Marketplace</a><div class="nav-group"><button type="button" aria-haspopup="true" aria-expanded="false" aria-controls="nav-static-guide">Guide</button><div class="nav-dropdown" id="nav-static-guide"><a href="guides.html#getting-started"><strong>Getting Started</strong><span>Join Pixel Network and learn the server basics.</span></a><a href="guides.html#currencies"><strong>Currencies</strong><span>Coins, Pixels and Nexus Points.</span></a><a href="guides.html#basic-commands"><strong>Basic Commands</strong><span>Common player commands and shortcuts.</span></a><a href="guides.html#progression"><strong>Progression</strong><span>Worlds, Prestige and progression routes.</span></a><a href="guides.html#mechanics"><strong>Mechanics</strong><span>Gameplay systems and how they behave.</span></a><a href="guides.html#tools"><strong>Tools</strong><span>Tool families and their supporting systems.</span></a><a href="guides.html#armor"><strong>Armor</strong><span>Defense, equipment and armor modifiers.</span></a><a href="guides.html#specials"><strong>Specials</strong><span>Talismans, Nexus and specialized systems.</span></a><a href="guides.html#boosts"><strong>Boosts</strong><span>Effects and systems that improve performance.</span></a></div></div><div class="nav-group contains-current"><button type="button" aria-haspopup="true" aria-expanded="false" aria-controls="nav-static-community">Community</button><div class="nav-dropdown" id="nav-static-community"><a href="leaderboards.html" aria-current="page"><strong>Leaderboards</strong><span>Public rankings and competitive progression.</span></a><a href="changelog.html"><strong>Changelog</strong><span>Player-facing release notes.</span></a><a href="rules.html"><strong>Rules</strong><span>Current player and community rules.</span></a><a href="staff.html"><strong>Staff Team</strong><span>The currently published Pixel Network team.</span></a></div></div><a href="team.html">About</a></div><div class="nav-actions"><a class="button quiet nav-discord" href="https://discord.gg/7KzWpezTNZ" target="_blank" rel="noopener" aria-label="Join Pixel Network on Discord">Discord</a><button class="button primary nav-play" type="button" data-copy-ip>Play</button><a class="button quiet nav-store" href="store.html">Store</a><button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div></div></nav>
 
   <main>
-    <section class="mc-page-hero"><div class="shell"><div class="mc-page-kicker">Community · Rankings</div><h1 class="mc-page-title">Leaderboards.</h1><p class="mc-page-lead">A public ranking surface that only publishes standings backed by a verified server source.</p></div></section>
+    <section class="leaderboard-hero">
+      <div class="shell leaderboard-hero-inner">
+        <div class="leaderboard-hero-copy">
+          <div class="mc-page-kicker">Community · Hall of Records</div>
+          <h1>Leaderboards.</h1>
+          <p>Mining. Wealth. Progression. Bosses. Islands. Collections. Every record gets its own board.</p>
+        </div>
+        <div class="leaderboard-hero-mark" aria-hidden="true"><span>01</span><i></i><strong>TOP</strong></div>
+      </div>
+    </section>
 
     <section class="leaderboard-shell" data-leaderboards-root>
       <div class="shell">
-        <div class="leaderboard-panel">
-          <div class="leaderboard-toolbar">
-            <div class="leaderboard-toolbar-copy"><small>Ranking category</small><h2 data-leaderboard-title>Progression</h2><p data-leaderboard-description>Verified account progression standings.</p></div>
-            <div class="leaderboard-source" aria-live="polite"><strong data-leaderboard-source>Server-backed ranking source not connected</strong><span data-leaderboard-updated>Awaiting verified data</span></div>
+        <div class="leaderboard-frame">
+          <aside class="leaderboard-browser" aria-label="Leaderboard categories">
+            <div class="leaderboard-browser-head"><small>Browse</small><strong>Records</strong><span>Choose a discipline, then the exact ranking.</span></div>
+            <div class="leaderboard-category-list" data-leaderboard-categories></div>
+            <div class="leaderboard-source" aria-live="polite"><span class="leaderboard-source-dot" aria-hidden="true"></span><div><strong data-leaderboard-source>Leaderboard tracking is not connected yet</strong><span data-leaderboard-updated>Tracking not connected yet</span></div></div>
+          </aside>
+
+          <div class="leaderboard-content">
+            <header class="leaderboard-category-head">
+              <div><small>Category</small><h2 data-leaderboard-category-title>Mining</h2></div>
+              <p data-leaderboard-category-description>Records built through mining and resource progression.</p>
+            </header>
+
+            <div class="leaderboard-metric-list" data-leaderboard-metrics aria-label="Rankings in selected category"></div>
+
+            <section class="leaderboard-record" aria-live="polite">
+              <div class="leaderboard-record-head">
+                <div><small data-leaderboard-metric-eyebrow>Lifetime mining</small><h3 data-leaderboard-metric-title>Blocks Mined</h3><p data-leaderboard-metric-description>Total blocks mined across the tracked Pixel Network progression loop.</p></div>
+                <div class="leaderboard-record-badge"><span>PIXEL</span><strong>TOP 100</strong></div>
+              </div>
+
+              <div class="leaderboard-podium" data-leaderboard-podium aria-label="Top three players"></div>
+
+              <div class="leaderboard-table-wrap">
+                <table class="leaderboard-table" data-leaderboard-table hidden>
+                  <thead><tr><th scope="col">Rank</th><th scope="col">Player</th><th scope="col">Record</th><th scope="col">Value</th></tr></thead>
+                  <tbody data-leaderboard-body></tbody>
+                </table>
+              </div>
+
+              <div class="leaderboard-empty" data-leaderboard-empty><span class="leaderboard-empty-mark" aria-hidden="true">#</span><div><strong>Blocks Mined is ready for standings.</strong><span>The board layout is live; player positions will appear when leaderboard tracking is connected.</span></div></div>
+            </section>
           </div>
-
-          <div class="leaderboard-tabs" data-leaderboard-tabs role="tablist" aria-label="Leaderboard categories"></div>
-
-          <div class="leaderboard-table-wrap">
-            <table class="leaderboard-table" data-leaderboard-table hidden>
-              <thead><tr><th scope="col">Rank</th><th scope="col">Player</th><th scope="col">Metric</th><th scope="col">Value</th></tr></thead>
-              <tbody data-leaderboard-body></tbody>
-            </table>
-          </div>
-
-          <div class="leaderboard-empty" data-leaderboard-empty><strong>No verified standings published yet.</strong><span>Progression will appear here only when a server-backed source is connected and validated.</span></div>
         </div>
 
-        <div class="leaderboard-integrity" aria-label="Leaderboard publication rules">
-          <article><small>Source</small><h3>Server-backed only</h3><p>Ranks are not populated from screenshots, memory, cached lists or manually entered positions.</p></article>
-          <article><small>Freshness</small><h3>Timestamped data</h3><p>Once connected, the page exposes when the published ranking snapshot was generated.</p></article>
-          <article><small>Boundary</small><h3>No guessed metrics</h3><p>Progression, Combat and Islands remain empty until their exact ranking semantics are defined by the source.</p></article>
-        </div>
+        <div class="leaderboard-footnote"><strong>Competitive record policy</strong><span>No placeholder players, fabricated placements or guessed values are published. Until tracking is connected, the complete leaderboard structure remains visible without fake standings.</span></div>
       </div>
     </section>
   </main>
