@@ -4,6 +4,14 @@
   const root = document.querySelector('[data-leaderboards-root]');
   if (!root) return;
 
+  if (!document.querySelector('link[data-leaderboard-full-styles]')) {
+    const fullStyles = document.createElement('link');
+    fullStyles.rel = 'stylesheet';
+    fullStyles.href = 'leaderboards-full.css';
+    fullStyles.dataset.leaderboardFullStyles = '';
+    document.head.appendChild(fullStyles);
+  }
+
   const fallback = window.PIXEL_LEADERBOARDS || {};
   const endpoint = String(fallback.endpoint || 'data/leaderboards.json');
   const categoryNav = root.querySelector('[data-leaderboard-categories]');
@@ -19,6 +27,8 @@
   const body = root.querySelector('[data-leaderboard-body]');
   const empty = root.querySelector('[data-leaderboard-empty]');
   const podium = root.querySelector('[data-leaderboard-podium]');
+  const tableWrap = root.querySelector('.leaderboard-table-wrap');
+  const recordBadge = root.querySelector('.leaderboard-record-badge strong');
 
   const FALLBACK_CATEGORIES = Object.freeze([
     { id: 'mining', label: 'Mining', short: 'MIN', description: 'Records built through mining and resource progression.', metrics: [] },
@@ -31,6 +41,8 @@
   ]);
 
   let snapshot = null;
+  let fullToggle = null;
+  let fullPanel = null;
 
   const validIsoDate = value => {
     if (typeof value !== 'string' || !value.trim()) return null;
@@ -46,8 +58,7 @@
       value: String(entry.value ?? '').trim()
     }))
     .filter(entry => Number.isInteger(entry.rank) && entry.rank > 0 && entry.player && entry.value)
-    .sort((a, b) => a.rank - b.rank)
-    .slice(0, 100);
+    .sort((a, b) => a.rank - b.rank);
 
   const cleanMetric = metric => ({
     id: String(metric?.id || '').trim(),
@@ -66,8 +77,7 @@
         player: String(player || '').trim(),
         value: String(metricValues[index] ?? '').trim()
       }))
-      .filter(entry => entry.player && entry.value)
-      .slice(0, 100);
+      .filter(entry => entry.player && entry.value);
   };
 
   const normalizeSnapshot = candidate => {
@@ -84,7 +94,7 @@
       && source.state === 'test'
       && source.authority === 'pixel-test-fixture';
 
-    const testRoster = Array.isArray(input.testRoster) ? input.testRoster.slice(0, 100) : [];
+    const testRoster = Array.isArray(input.testRoster) ? input.testRoster : [];
     const testValues = input.testValues && typeof input.testValues === 'object' ? input.testValues : {};
     const incomingCategories = Array.isArray(input.categories) ? input.categories : [];
     const categories = FALLBACK_CATEGORIES.map(definition => {
@@ -192,6 +202,58 @@
     return identity;
   };
 
+  const ensureFullLeaderboardControls = () => {
+    if (!podium || !tableWrap) return;
+
+    fullToggle = document.createElement('button');
+    fullToggle.type = 'button';
+    fullToggle.className = 'leaderboard-full-toggle';
+    fullToggle.hidden = true;
+    fullToggle.setAttribute('aria-expanded', 'false');
+    fullToggle.setAttribute('aria-controls', 'leaderboard-full-panel');
+
+    const copy = document.createElement('span');
+    copy.className = 'leaderboard-full-toggle-copy';
+    copy.textContent = 'View full leaderboard';
+
+    const icon = document.createElement('span');
+    icon.className = 'leaderboard-full-toggle-icon';
+    icon.setAttribute('aria-hidden', 'true');
+    icon.textContent = '↓';
+
+    fullToggle.append(copy, icon);
+    podium.insertAdjacentElement('afterend', fullToggle);
+
+    fullPanel = document.createElement('div');
+    fullPanel.id = 'leaderboard-full-panel';
+    fullPanel.className = 'leaderboard-full-panel';
+    fullPanel.hidden = true;
+    tableWrap.parentNode?.insertBefore(fullPanel, tableWrap);
+    fullPanel.appendChild(tableWrap);
+
+    fullToggle.addEventListener('click', () => {
+      setFullLeaderboardOpen(fullToggle.getAttribute('aria-expanded') !== 'true');
+    });
+  };
+
+  const setFullLeaderboardOpen = open => {
+    if (!fullToggle || !fullPanel) return;
+    const isOpen = Boolean(open) && !fullToggle.hidden;
+    fullToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    fullPanel.hidden = !isOpen;
+    const copy = fullToggle.querySelector('.leaderboard-full-toggle-copy');
+    if (copy) copy.textContent = isOpen ? 'Hide full leaderboard' : 'View full leaderboard';
+  };
+
+  const setFullLeaderboardAvailable = available => {
+    if (!fullToggle || !fullPanel) return;
+    fullToggle.hidden = !available;
+    if (!available) {
+      fullPanel.hidden = true;
+      fullToggle.setAttribute('aria-expanded', 'false');
+    }
+  };
+
   const renderPodium = metric => {
     if (!podium) return;
     const entries = Array.isArray(metric?.entries) ? metric.entries : [];
@@ -248,8 +310,10 @@
   const renderEntries = metric => {
     const entries = Array.isArray(metric?.entries) ? metric.entries : [];
     if (body) body.replaceChildren();
+    setFullLeaderboardOpen(false);
 
     if (!entries.length) {
+      setFullLeaderboardAvailable(false);
       if (table) table.hidden = true;
       if (empty) {
         empty.hidden = false;
@@ -261,6 +325,7 @@
       return;
     }
 
+    setFullLeaderboardAvailable(true);
     if (empty) empty.hidden = true;
     if (table) table.hidden = false;
 
@@ -367,6 +432,9 @@
     }
     root.dataset.leaderboardState = ['ready', 'test'].includes(source.state) ? source.state : 'pending';
   };
+
+  ensureFullLeaderboardControls();
+  if (recordBadge) recordBadge.textContent = 'ALL PLAYERS';
 
   window.addEventListener('hashchange', () => {
     const { category, metric } = routeFromHash();
