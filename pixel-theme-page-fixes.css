@@ -60,6 +60,51 @@ html[data-theme-effective='light'] .about-disclaimer-panel > strong {
 }
 html[data-theme-effective='light'] .about-external-note { color:#807466 !important; }
 
+/* Header correction pass.
+   Light uses a bright Discord surface instead of the old dark slate square, while the
+   official Symbol remains crisp white. The Home wordmark drops the inherited Minecraft
+   text shadow in Light and gets explicit line geometry so the two lines never collide. */
+html[data-theme-effective='light'] .nav-actions .nav-discord {
+  border-color:#4c57d8 !important;
+  background:linear-gradient(180deg,#818aff 0%,#6672f5 52%,#5865f2 100%) !important;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.32),inset 0 -3px 0 rgba(49,57,172,.28),0 2px 0 rgba(79,57,30,.10) !important;
+}
+html[data-theme-effective='light'] .nav-actions .nav-discord:hover,
+html[data-theme-effective='light'] .nav-actions .nav-discord:focus-visible {
+  border-color:#5964e4 !important;
+  background:linear-gradient(180deg,#9299ff 0%,#7580fb 50%,#626ff5 100%) !important;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.38),inset 0 -3px 0 rgba(49,57,172,.25),0 2px 0 rgba(79,57,30,.10),0 0 0 2px rgba(88,101,242,.08) !important;
+}
+html[data-theme-effective='light'] .nav-actions .nav-discord:active {
+  border-color:#4852c8 !important;
+  background:linear-gradient(180deg,#606bf0 0%,#505de5 100%) !important;
+  box-shadow:inset 0 3px 5px rgba(40,47,145,.26),inset 0 -1px 0 rgba(255,255,255,.18) !important;
+}
+html[data-theme-effective='light'] .nav-actions .nav-discord::before,
+html[data-theme-effective='light'] .nav-actions .nav-discord:hover::before,
+html[data-theme-effective='light'] .nav-actions .nav-discord:focus-visible::before,
+html[data-theme-effective='light'] .nav-actions .nav-discord:active::before {
+  filter:brightness(0) invert(1) contrast(1.15) !important;
+  opacity:1 !important;
+}
+
+html[data-theme-effective='light'] .brand-wordmark {
+  display:flex !important;
+  flex-direction:column;
+  justify-content:center;
+  gap:3px;
+  line-height:1 !important;
+  letter-spacing:-.02em !important;
+  text-shadow:none !important;
+}
+html[data-theme-effective='light'] .brand-wordmark small {
+  display:block;
+  margin-top:0 !important;
+  line-height:1 !important;
+  letter-spacing:.14em !important;
+  text-shadow:none !important;
+}
+
 /* Mobile-only action rows and dropdown internals. */
 @media (max-width:980px) {
   html[data-theme-effective='light'] .nav-mobile-store {
