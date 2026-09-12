@@ -100,6 +100,89 @@ html[data-theme-effective='light'] .skip-link {
   box-shadow:0 10px 26px rgba(77,54,27,.16) !important;
 }
 
+/* Header Play / Discord actions are theme-aware. Store remains the strongest gold CTA.
+   Discord's official Symbol asset is never recolored; only its surrounding shell changes. */
+html[data-theme-effective='dark'] .nav-actions .nav-play,
+html[data-theme-effective='dark'] .nav-actions .button.primary.nav-play {
+  border-color:#343941 !important;
+  background:linear-gradient(180deg,#454a52 0%,#33383f 55%,#292e34 100%) !important;
+  color:#eceef1 !important;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.10),inset 0 -3px 0 rgba(0,0,0,.28),0 2px 0 rgba(0,0,0,.24) !important;
+}
+html[data-theme-effective='dark'] .nav-actions .nav-play:hover,
+html[data-theme-effective='dark'] .nav-actions .nav-play:focus-visible,
+html[data-theme-effective='dark'] .nav-actions .button.primary.nav-play:hover,
+html[data-theme-effective='dark'] .nav-actions .button.primary.nav-play:focus-visible {
+  border-color:#464d57 !important;
+  background:linear-gradient(180deg,#535963 0%,#3d434b 55%,#30363d 100%) !important;
+  color:#fff !important;
+}
+html[data-theme-effective='dark'] .nav-actions .nav-play:active,
+html[data-theme-effective='dark'] .nav-actions .button.primary.nav-play:active {
+  border-color:#343941 !important;
+  background:linear-gradient(180deg,#30353c 0%,#292e34 100%) !important;
+  color:#eceef1 !important;
+  box-shadow:inset 0 3px 5px rgba(0,0,0,.34),inset 0 -1px 0 rgba(255,255,255,.07) !important;
+}
+
+html[data-theme-effective='dark'] .nav-actions .nav-discord {
+  border-color:#343941 !important;
+  background:linear-gradient(180deg,#454a52 0%,#33383f 55%,#292e34 100%) !important;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.10),inset 0 -3px 0 rgba(0,0,0,.28),0 2px 0 rgba(0,0,0,.24) !important;
+}
+html[data-theme-effective='dark'] .nav-actions .nav-discord:hover,
+html[data-theme-effective='dark'] .nav-actions .nav-discord:focus-visible {
+  border-color:#464d57 !important;
+  background:linear-gradient(180deg,#535963 0%,#3d434b 55%,#30363d 100%) !important;
+}
+html[data-theme-effective='dark'] .nav-actions .nav-discord:active {
+  border-color:#343941 !important;
+  background:linear-gradient(180deg,#30353c 0%,#292e34 100%) !important;
+  box-shadow:inset 0 3px 5px rgba(0,0,0,.34),inset 0 -1px 0 rgba(255,255,255,.07) !important;
+}
+
+html[data-theme-effective='light'] .nav-actions .nav-play,
+html[data-theme-effective='light'] .nav-actions .button.primary.nav-play {
+  border-color:#b8a68d !important;
+  background:linear-gradient(180deg,#fffaf1 0%,#eee5d8 55%,#ddd0bd 100%) !important;
+  color:#30261b !important;
+  text-shadow:0 1px 0 rgba(255,255,255,.72) !important;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.86),inset 0 -3px 0 rgba(101,74,40,.12),0 2px 0 rgba(79,57,30,.12) !important;
+}
+html[data-theme-effective='light'] .nav-actions .nav-play:hover,
+html[data-theme-effective='light'] .nav-actions .nav-play:focus-visible,
+html[data-theme-effective='light'] .nav-actions .button.primary.nav-play:hover,
+html[data-theme-effective='light'] .nav-actions .button.primary.nav-play:focus-visible {
+  border-color:#a9895b !important;
+  background:linear-gradient(180deg,#fffdf7 0%,#f4ead9 52%,#e3d2ba 100%) !important;
+  color:#21180f !important;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.92),inset 0 -3px 0 rgba(123,83,34,.14),0 2px 0 rgba(79,57,30,.12),0 0 0 2px rgba(224,170,55,.08) !important;
+}
+html[data-theme-effective='light'] .nav-actions .nav-play:active,
+html[data-theme-effective='light'] .nav-actions .button.primary.nav-play:active {
+  border-color:#a18d73 !important;
+  background:linear-gradient(180deg,#e6dac8 0%,#d8cab6 100%) !important;
+  color:#2b2117 !important;
+  box-shadow:inset 0 3px 5px rgba(90,63,32,.17),inset 0 -1px 0 rgba(255,255,255,.62) !important;
+}
+
+html[data-theme-effective='light'] .nav-actions .nav-discord {
+  border-color:#777a7f !important;
+  background:linear-gradient(180deg,#7c8088 0%,#676c75 55%,#585e67 100%) !important;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.16),inset 0 -3px 0 rgba(31,34,39,.22),0 2px 0 rgba(79,57,30,.12) !important;
+}
+html[data-theme-effective='light'] .nav-actions .nav-discord:hover,
+html[data-theme-effective='light'] .nav-actions .nav-discord:focus-visible {
+  border-color:#8e9299 !important;
+  background:linear-gradient(180deg,#898e97 0%,#727781 54%,#60666f 100%) !important;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.19),inset 0 -3px 0 rgba(31,34,39,.22),0 2px 0 rgba(79,57,30,.12),0 0 0 2px rgba(91,101,242,.06) !important;
+}
+html[data-theme-effective='light'] .nav-actions .nav-discord:active {
+  border-color:#6c7077 !important;
+  background:linear-gradient(180deg,#626770 0%,#555b64 100%) !important;
+  box-shadow:inset 0 3px 5px rgba(31,34,39,.27),inset 0 -1px 0 rgba(255,255,255,.12) !important;
+}
+
 /* Remove generic cool-blue accents that survived through later authored stylesheets. */
 .guides-main .stats-layer-card {
   border-left-color:var(--accent-amber,#eaa52f) !important;
