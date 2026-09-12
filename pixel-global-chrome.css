@@ -143,18 +143,19 @@ html[data-theme-effective='dark'] .nav-actions .nav-discord:active::before {
   filter: brightness(0) invert(1);
   opacity: .86;
 }
+/* Light keeps the official Symbol visually light against the slate button shell. */
 html[data-theme-effective='light'] .nav-actions .nav-discord::before {
-  filter: brightness(0) saturate(100%);
-  opacity: .78;
+  filter: brightness(0) invert(1);
+  opacity: .98;
 }
 html[data-theme-effective='light'] .nav-actions .nav-discord:hover::before,
 html[data-theme-effective='light'] .nav-actions .nav-discord:focus-visible::before {
-  filter: brightness(0) saturate(100%);
-  opacity: .96;
+  filter: brightness(0) invert(1);
+  opacity: 1;
 }
 html[data-theme-effective='light'] .nav-actions .nav-discord:active::before {
-  filter: brightness(0) saturate(100%);
-  opacity: .88;
+  filter: brightness(0) invert(1);
+  opacity: .90;
 }
 
 .nav-actions .nav-discord:hover,
