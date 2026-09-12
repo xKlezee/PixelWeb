@@ -18,9 +18,10 @@ The preference is stored locally under `pixel-theme-mode-v1`. No account, cookie
 It then loads, in cascade order:
 
 1. `pixel-theme.css` — base theme tokens, shared chrome and the Appearance control.
-2. `pixel-theme-coverage.css` — component-by-component coverage for every current public mechanic.
-3. `pixel-theme-audit-fixes.css` — audited detail selectors for nested/immersive and secondary mechanics that have their own authored dark shells.
-4. `pixel-theme.js` — chooser behavior, persistence, system-theme listener and browser `theme-color` updates.
+2. `pixel-theme-coverage.css` — component-by-component coverage for the current public product surfaces.
+3. `pixel-theme-audit-fixes.css` — audited nested/immersive and secondary mechanics with their own authored dark shells.
+4. `pixel-theme-page-fixes.css` — remaining current page mechanics, legacy shared components, About/License/legal surfaces and mobile-only states.
+5. `pixel-theme.js` — chooser behavior, persistence, system-theme listener and browser `theme-color` updates.
 
 A `pixelthemechange` window event is dispatched after changes with `{ mode, effective }` in `event.detail`.
 
@@ -28,10 +29,11 @@ A `pixelthemechange` window event is dispatched after changes with `{ mode, effe
 
 Theme support is a product contract, not a header/background-only feature. Every public visual mechanic must have an intentional light and dark presentation. New components are incomplete until both effective themes work.
 
-Current coverage explicitly includes:
+Current source-level coverage explicitly includes:
 
 - Home hero, path cards, World image gallery, Nexus media and Marketplace promo.
 - Shared RPG page heroes, stat cards, system cards, route panels, portal cards, search controls and footer.
+- Gameplay/Systems shared detail cards, flow lines, World progression rows, Nexus access/difficulty, development/status panels, timeline, CTAs and compact index rows.
 - Skyblock island cards and boundaries, Community/Discord surfaces, About/Staff owner and staff cards, Store panels and category surfaces.
 - Marketplace navigation, route, 3D/model canvas stage, loading/focus frame, item preview canvases, detail panel and Store bridge.
 - Leaderboards hero, categories, records, podium/top three, player heads/renders, top-10/full table and empty/source states.
@@ -40,9 +42,11 @@ Current coverage explicitly includes:
 - Staff/About owner cards, Minecraft skin canvases, render stages, tags and labels.
 - Store surfaces and the rank explanation dialog.
 - Guide/Wiki shell, tables, callouts and specialized Progression, Skyblock, Enchantments, Stats/Equipment and Talisman components.
+- About FAQ, information/policy panels, legal disclosure surfaces and the public License page.
+- Changelog/timeline and other shared current Phase 1 information surfaces.
 - Play/join dialog.
 - Pixel Navigator and Appearance control.
-- Mobile navigation and shared legacy content cards.
+- Mobile navigation and mobile-only action rows.
 
 ## Media rule
 
@@ -59,3 +63,7 @@ The presentation around media *does* adapt:
 ## Interaction rule
 
 Hover, focus, active, selected, loading, empty, modal/backdrop and responsive/mobile states must remain legible in both themes. `System` is not a third color palette: it always resolves to the current OS/browser light or dark preference and updates live when that preference changes.
+
+## Verification boundary
+
+The September 2026 pass is a source-level coverage audit of current public mechanics and CSS states. It does not claim pixel-perfect browser/device visual QA. Browser visual QA remains a separate verification step and should be used to catch rendering differences that cannot be proven from source alone.
