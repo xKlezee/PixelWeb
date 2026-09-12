@@ -1,6 +1,7 @@
 /* Pixel Network — final shared chrome overrides.
    The Explore rail uses the established Worlds/Nexus Minecraft treatment as the
-   canonical reference. Discord uses Discord's official unmodified Symbol asset. */
+   canonical reference. Discord keeps Discord's official Symbol source asset while
+   CSS presentation tint follows the effective page theme. */
 
 /* Official Explore contextual rail: Gameplay / Systems / Worlds / Skyblock / Nexus. */
 .minecraft-rpg-page:not(.minecraft-rpg-secondary) .section-subnav,
@@ -81,7 +82,7 @@
   filter: none !important;
 }
 
-/* Discord and Play share the exact same neutral-gray shell. */
+/* Dark baseline. The theme runtime may remap Play/Discord surfaces in Light. */
 .nav-actions .nav-discord,
 .nav-actions .nav-play,
 .nav-actions .button.primary.nav-play {
@@ -122,8 +123,38 @@
   width: 21px;
   height: 17px;
   background: url('https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/66e3d7f4ef6498ac018f2c55_Symbol.svg') center / contain no-repeat;
+  filter: brightness(0) invert(1);
+  opacity: .96;
   transform: translate(-50%, -50%);
+  transition: filter 140ms ease, opacity 140ms ease;
   pointer-events: none;
+}
+
+html[data-theme-effective='dark'] .nav-actions .nav-discord::before {
+  filter: brightness(0) invert(1);
+  opacity: .96;
+}
+html[data-theme-effective='dark'] .nav-actions .nav-discord:hover::before,
+html[data-theme-effective='dark'] .nav-actions .nav-discord:focus-visible::before {
+  filter: brightness(0) invert(1);
+  opacity: 1;
+}
+html[data-theme-effective='dark'] .nav-actions .nav-discord:active::before {
+  filter: brightness(0) invert(1);
+  opacity: .86;
+}
+html[data-theme-effective='light'] .nav-actions .nav-discord::before {
+  filter: brightness(0) saturate(100%);
+  opacity: .78;
+}
+html[data-theme-effective='light'] .nav-actions .nav-discord:hover::before,
+html[data-theme-effective='light'] .nav-actions .nav-discord:focus-visible::before {
+  filter: brightness(0) saturate(100%);
+  opacity: .96;
+}
+html[data-theme-effective='light'] .nav-actions .nav-discord:active::before {
+  filter: brightness(0) saturate(100%);
+  opacity: .88;
 }
 
 .nav-actions .nav-discord:hover,
