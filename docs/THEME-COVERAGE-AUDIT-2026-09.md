@@ -6,11 +6,14 @@ The goal of this pass is that every current public visual mechanic has an intent
 
 A second source pass found additional runtime-level gaps after the first matrix was written: Marketplace loading/failure states could collapse into a blank canvas, the shared toast and keyboard skip-link retained dark-only colors in Light mode, and a few late CSS rules reintroduced generic cool-blue accents after the warm Pixel identity had already been applied. Those cases are now part of the coverage contract rather than being treated as cosmetic exceptions.
 
+A third source/runtime pass found that the shared header still forced Play and Discord into the same authored dark neutral-gray shell through late `!important` rules. That meant the surrounding navigation could switch to Light while those two controls remained visually dark-only. They are now explicit theme-aware controls: Dark retains the charcoal shell, Light gives Play a parchment/stone shell and Discord a lighter slate shell that preserves contrast for Discord's official Symbol asset without recoloring it. Store remains the dominant gold purchase CTA.
+
 ## Status matrix
 
 | Surface / mechanic | Audited states | Coverage |
 | --- | --- | --- |
 | Global body / header / navigation | light, dark, system, hover, focus, current, mobile | Covered |
+| Header Play / Discord actions | light, dark, hover, focus, active, official Discord Symbol preservation | Covered |
 | Contextual Explore / Guide / Community rails | default, current, hover, mobile | Covered |
 | Footer | identity, links, legal text | Covered |
 | Appearance control | system, light, dark, menu, keyboard | Covered |
@@ -70,6 +73,17 @@ The second source pass specifically corrected these previously missed details:
 
 Semantic/authored colors are still allowed. Discord identity, biome/world accents, boss art and other content-specific colors are not forcibly converted to gold.
 
+## Third-pass header correction
+
+The third source/runtime pass specifically closed the remaining shared-header mismatch:
+
+- Play now has explicit Dark, Dark hover/focus/active, Light and Light hover/focus/active shells.
+- Discord now has explicit Dark and Light shells plus matching hover/focus/active states.
+- Light-mode Play uses the same warm parchment / pale-stone family as the surrounding navigation instead of remaining a dark button.
+- Light-mode Discord uses a lighter slate environment so the official Discord Symbol remains visible without modifying the Symbol asset itself.
+- Store is intentionally unchanged by this correction and remains the strongest gold CTA.
+- Theme resolution still comes from `data-theme-effective`, so `System` automatically receives the correct header treatment through its resolved Light/Dark state.
+
 ## Media / renderer rule
 
 The theme system does **not** rewrite source art. Theme support around a media mechanic means adapting its environment rather than recoloring the asset itself.
@@ -78,6 +92,7 @@ The theme system does **not** rewrite source art. Theme support around a media m
 - Minecraft player skins remain their original textures. Their viewer stage, floor/shadow and card treatment change.
 - World and Nexus images remain the same files. Light mode uses CSS brightness/contrast and light overlays to keep the full-bleed composition readable; dark mode keeps the authored dark presentation.
 - Nexus boss PNGs remain untouched and no image conversion, compression or sprite generation is part of theme switching.
+- Discord's official Symbol asset remains unmodified; only the surrounding button shell changes with the effective theme.
 - Logos and other authored images are not replaced.
 
 ## Runtime cascade
@@ -88,7 +103,7 @@ Theme overrides are intentionally loaded after page-specific authored CSS:
 2. `pixel-theme-coverage.css`
 3. `pixel-theme-audit-fixes.css`
 4. `pixel-theme-page-fixes.css`
-   - imports `pixel-theme-runtime-fixes.css` before its own rules so runtime states and late cascade collisions are normalized while page-specific legal/mobile rules can still remain last
+   - imports `pixel-theme-runtime-fixes.css` before its own rules so runtime states, header action corrections and late cascade collisions are normalized while page-specific legal/mobile rules can still remain last
 5. `pixel-theme.js`
 
 The active effective mode is exposed through `html[data-theme-effective="light|dark"]`. System mode resolves to one of those modes and reacts to `prefers-color-scheme` changes while the page is open.
