@@ -19,7 +19,8 @@ It then loads, in cascade order:
 
 1. `pixel-theme.css` — base theme tokens, shared chrome and the Appearance control.
 2. `pixel-theme-coverage.css` — component-by-component coverage for every current public mechanic.
-3. `pixel-theme.js` — chooser behavior, persistence, system-theme listener and browser `theme-color` updates.
+3. `pixel-theme-audit-fixes.css` — audited detail selectors for nested/immersive and secondary mechanics that have their own authored dark shells.
+4. `pixel-theme.js` — chooser behavior, persistence, system-theme listener and browser `theme-color` updates.
 
 A `pixelthemechange` window event is dispatched after changes with `{ mode, effective }` in `event.detail`.
 
@@ -30,12 +31,13 @@ Theme support is a product contract, not a header/background-only feature. Every
 Current coverage explicitly includes:
 
 - Home hero, path cards, World image gallery, Nexus media and Marketplace promo.
-- Shared RPG page heroes, stat cards, system cards, route panels, search controls and footer.
-- Marketplace navigation, route, 3D/model canvas stage, item preview canvases, detail panel and Store bridge.
+- Shared RPG page heroes, stat cards, system cards, route panels, portal cards, search controls and footer.
+- Skyblock island cards and boundaries, Community/Discord surfaces, About/Staff owner and staff cards, Store panels and category surfaces.
+- Marketplace navigation, route, 3D/model canvas stage, loading/focus frame, item preview canvases, detail panel and Store bridge.
 - Leaderboards hero, categories, records, podium/top three, player heads/renders, top-10/full table and empty/source states.
-- Worlds immersive full-screen imagery, content overlays, rail, counters, metadata and detail dialog.
-- Nexus immersive boss imagery (including dual Abyss/Astral), rails, investigate control, metadata and detail dialog.
-- Staff/About owner cards, Minecraft skin canvases, render stages and labels.
+- Worlds immersive full-screen imagery, fallback imagery, content overlays, rail, investigation cue, counters, metadata and detail dialog internals.
+- Nexus immersive boss imagery (including dual Abyss/Astral), rails, investigate control, metadata, difficulty ladder and detail dialog.
+- Staff/About owner cards, Minecraft skin canvases, render stages, tags and labels.
 - Store surfaces and the rank explanation dialog.
 - Guide/Wiki shell, tables, callouts and specialized Progression, Skyblock, Enchantments, Stats/Equipment and Talisman components.
 - Play/join dialog.
