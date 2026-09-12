@@ -165,13 +165,22 @@
     return cell;
   };
 
+  const headRenderSrc = (player, size = 64) =>
+    `https://api.mcheads.org/head/${encodeURIComponent(player)}/${size}/hat`;
+
+  const podiumRenderSrc = (player, place) => {
+    const direction = place === 3 ? 'left' : 'right';
+    const size = place === 1 ? 320 : 256;
+    return `https://api.mcheads.org/avatar/${encodeURIComponent(player)}/${direction}/${size}`;
+  };
+
   const makePlayerIdentity = (player, compact = false) => {
     const identity = document.createElement('span');
     identity.className = compact ? 'leaderboard-player-identity is-compact' : 'leaderboard-player-identity';
 
     const head = document.createElement('img');
     head.className = 'leaderboard-player-head';
-    head.src = `https://api.mcheads.org/head/${encodeURIComponent(player)}/${compact ? 32 : 64}`;
+    head.src = headRenderSrc(player, compact ? 48 : 64);
     head.alt = '';
     head.loading = 'lazy';
     head.decoding = 'async';
@@ -198,21 +207,31 @@
       crown.className = 'leaderboard-podium-rank';
       crown.textContent = `#${position}`;
 
-      const avatar = document.createElement('div');
-      avatar.className = 'leaderboard-podium-avatar';
+      const render = document.createElement('div');
+      render.className = 'leaderboard-podium-render';
+
       if (entry) {
-        const head = document.createElement('img');
-        head.src = `https://api.mcheads.org/head/${encodeURIComponent(entry.player)}/${position === 1 ? 96 : 80}`;
-        head.alt = '';
-        head.loading = 'lazy';
-        head.decoding = 'async';
-        head.addEventListener('error', () => {
-          head.remove();
-          avatar.textContent = entry.player.slice(0, 1).toUpperCase();
+        const skin = document.createElement('img');
+        skin.className = 'leaderboard-podium-skin';
+        skin.src = podiumRenderSrc(entry.player, position);
+        skin.alt = `${entry.player} Minecraft skin`;
+        skin.loading = 'eager';
+        skin.decoding = 'async';
+        skin.addEventListener('error', () => {
+          skin.remove();
+          const fallbackLetter = document.createElement('span');
+          fallbackLetter.className = 'leaderboard-podium-fallback';
+          fallbackLetter.textContent = entry.player.slice(0, 1).toUpperCase();
+          fallbackLetter.setAttribute('aria-hidden', 'true');
+          render.appendChild(fallbackLetter);
         }, { once: true });
-        avatar.appendChild(head);
+        render.appendChild(skin);
       } else {
-        avatar.textContent = '—';
+        const fallbackMark = document.createElement('span');
+        fallbackMark.className = 'leaderboard-podium-fallback';
+        fallbackMark.textContent = '—';
+        fallbackMark.setAttribute('aria-hidden', 'true');
+        render.appendChild(fallbackMark);
       }
 
       const player = document.createElement('strong');
@@ -221,7 +240,7 @@
       const value = document.createElement('span');
       value.textContent = entry?.value || '—';
 
-      card.append(crown, avatar, player, value);
+      card.append(crown, render, player, value);
       podium.appendChild(card);
     });
   };
