@@ -1,4 +1,55 @@
 (() => {
+  // Theme fallback executes before any public data construction. Canonical pages load
+  // pixel-theme-bootstrap.js synchronously in <head>; legacy/long-form pages that do not
+  // yet have that bootstrap still resolve their effective theme at the first deferred tick.
+  const THEME_STORAGE_KEY = 'pixel-theme-mode-v1';
+  const THEME_MODES = ['system', 'light', 'dark'];
+  const bootstrappedTheme = window.PIXEL_THEME_BOOTSTRAP;
+  let storedTheme = THEME_MODES.includes(bootstrappedTheme?.mode) ? bootstrappedTheme.mode : 'system';
+  let effectiveTheme = THEME_MODES.includes(bootstrappedTheme?.effective) && bootstrappedTheme.effective !== 'system'
+    ? bootstrappedTheme.effective
+    : null;
+
+  if (!bootstrappedTheme) {
+    try {
+      const candidate = localStorage.getItem(THEME_STORAGE_KEY);
+      if (THEME_MODES.includes(candidate)) storedTheme = candidate;
+    } catch {
+      /* Storage can be unavailable in hardened/private contexts. */
+    }
+    const systemDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? true;
+    effectiveTheme = storedTheme === 'system' ? (systemDark ? 'dark' : 'light') : storedTheme;
+  }
+
+  document.documentElement.dataset.themeMode = storedTheme;
+  document.documentElement.dataset.themeEffective = effectiveTheme;
+  document.documentElement.style.colorScheme = effectiveTheme;
+  const themeColor = document.querySelector('meta[name="theme-color"]');
+  if (themeColor) themeColor.content = effectiveTheme === 'light' ? '#f1eadf' : '#0b0c0e';
+
+  const themeStyleAssets = [
+    ['pixel-theme.css', 'base'],
+    ['pixel-theme-coverage.css', 'coverage'],
+    ['pixel-theme-audit-fixes.css', 'audit'],
+    ['pixel-theme-page-fixes.css', 'pages']
+  ];
+  themeStyleAssets.forEach(([href, role]) => {
+    if (document.querySelector(`link[data-pixel-theme-styles="${role}"]`)) return;
+    const themeStyles = document.createElement('link');
+    themeStyles.rel = 'stylesheet';
+    themeStyles.href = href;
+    themeStyles.dataset.pixelThemeStyles = role;
+    document.head.appendChild(themeStyles);
+  });
+
+  if (!document.querySelector('script[data-pixel-theme-script]')) {
+    const themeScript = document.createElement('script');
+    themeScript.src = 'pixel-theme.js';
+    themeScript.async = false;
+    themeScript.dataset.pixelThemeScript = '';
+    document.head.appendChild(themeScript);
+  }
+
   const planned = [
     'Progressive raids',
     'Progressive dungeons',
@@ -216,46 +267,6 @@
   };
 
   window.PIXEL_NETWORK_PUBLIC = Object.freeze(data);
-
-  // Apply the stored/system theme before the late shared theme stylesheets arrive. This
-  // keeps the selected mode consistent across navigation without changing authored media.
-  const THEME_STORAGE_KEY = 'pixel-theme-mode-v1';
-  const THEME_MODES = ['system', 'light', 'dark'];
-  let storedTheme = 'system';
-  try {
-    const candidate = localStorage.getItem(THEME_STORAGE_KEY);
-    if (THEME_MODES.includes(candidate)) storedTheme = candidate;
-  } catch {
-    /* Storage can be unavailable in hardened/private contexts. */
-  }
-  const systemDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? true;
-  const effectiveTheme = storedTheme === 'system' ? (systemDark ? 'dark' : 'light') : storedTheme;
-  document.documentElement.dataset.themeMode = storedTheme;
-  document.documentElement.dataset.themeEffective = effectiveTheme;
-  document.documentElement.style.colorScheme = effectiveTheme;
-
-  const themeStyleAssets = [
-    ['pixel-theme.css', 'base'],
-    ['pixel-theme-coverage.css', 'coverage'],
-    ['pixel-theme-audit-fixes.css', 'audit'],
-    ['pixel-theme-page-fixes.css', 'pages']
-  ];
-  themeStyleAssets.forEach(([href, role]) => {
-    if (document.querySelector(`link[data-pixel-theme-styles="${role}"]`)) return;
-    const themeStyles = document.createElement('link');
-    themeStyles.rel = 'stylesheet';
-    themeStyles.href = href;
-    themeStyles.dataset.pixelThemeStyles = role;
-    document.head.appendChild(themeStyles);
-  });
-
-  if (!document.querySelector('script[data-pixel-theme-script]')) {
-    const themeScript = document.createElement('script');
-    themeScript.src = 'pixel-theme.js';
-    themeScript.async = false;
-    themeScript.dataset.pixelThemeScript = '';
-    document.head.appendChild(themeScript);
-  }
 
   // Shared public navigator. Kept as separate assets so navigation intelligence stays
   // independent from the canonical product data above while still loading on every page.
