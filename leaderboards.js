@@ -182,8 +182,8 @@
       if (table) table.hidden = true;
       if (empty) {
         empty.hidden = false;
-        const strong = empty.querySelector('strong');
-        const span = empty.querySelector('div > span');
+        const strong = empty.querySelector(':scope > div > strong');
+        const span = empty.querySelector(':scope > div > span');
         if (strong) strong.textContent = `${metric?.label || 'This ranking'} is ready for standings.`;
         if (span) span.textContent = 'The board layout is live; player positions will appear when leaderboard tracking is connected.';
       }
