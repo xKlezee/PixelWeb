@@ -216,4 +216,23 @@
   };
 
   window.PIXEL_NETWORK_PUBLIC = Object.freeze(data);
+
+  // Shared public navigator. Kept as separate assets so navigation intelligence stays
+  // independent from the canonical product data above while still loading on every page.
+  if (!document.querySelector('link[data-pixel-navigator-styles]')) {
+    const styles = document.createElement('link');
+    styles.rel = 'stylesheet';
+    styles.href = 'pixel-navigator.css';
+    styles.dataset.pixelNavigatorStyles = '';
+    document.head.appendChild(styles);
+  }
+  if (!document.querySelector('script[data-pixel-navigator-script]')) {
+    ['pixel-navigator-primary-data.js', 'pixel-navigator-secondary-data.js', 'pixel-navigator.js'].forEach((src, index) => {
+      const script = document.createElement('script');
+      script.src = src;
+      script.async = false;
+      if (index === 2) script.dataset.pixelNavigatorScript = '';
+      document.head.appendChild(script);
+    });
+  }
 })();
