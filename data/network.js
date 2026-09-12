@@ -237,7 +237,8 @@
   const themeStyleAssets = [
     ['pixel-theme.css', 'base'],
     ['pixel-theme-coverage.css', 'coverage'],
-    ['pixel-theme-audit-fixes.css', 'audit']
+    ['pixel-theme-audit-fixes.css', 'audit'],
+    ['pixel-theme-page-fixes.css', 'pages']
   ];
   themeStyleAssets.forEach(([href, role]) => {
     if (document.querySelector(`link[data-pixel-theme-styles="${role}"]`)) return;
