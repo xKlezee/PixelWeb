@@ -30,6 +30,27 @@ This checklist records the current PixelWeb contracts. A configured control is n
 - Warm gold/amber/orange/copper is the shared interaction-accent language; approved artwork is not recolored.
 - No visible Forum or Development navigation returns.
 
+## Appearance / theme regression
+
+Verify the appearance system as a real browser/runtime feature, not only as a source-level selector audit.
+
+- `System`, `Light` and `Dark` are all selectable and keyboard reachable.
+- `System` resolves to the browser/OS preference; it is not treated as a third color palette.
+- Changing the browser/OS color-scheme preference while `System` is selected updates the effective theme without requiring a reload.
+- An explicit `Light` or `Dark` choice persists across same-origin navigation and reloads and is not overwritten by later OS preference changes.
+- The browser `theme-color` follows the effective theme where supported.
+- No first paint visibly flashes the opposite theme after a persisted preference is already available.
+- Default, hover, focus, active, selected, loading, failure, empty, modal/backdrop and feedback states remain legible in both effective themes.
+- Shared toast, skip-link, Pixel Navigator, Play dialog and mobile navigation retain adequate foreground/background/border contrast.
+- Marketplace 3D stage and item previews show intentional loading and failure feedback rather than collapsing into a blank canvas.
+- Leaderboards Top 3, Top 10, full table, empty/source state, metric controls and player-image fallbacks remain readable in both themes.
+- Worlds and Nexus preserve their immersive media while their overlays, rails, metadata, counters, investigation controls and dialogs adapt correctly.
+- Staff skin viewers preserve the original skin texture; only stage/card/shadow treatment changes.
+- Store, About, License and specialized Guide pages do not regress to dark-only nested panels or cool-blue generic accents in Light mode.
+- Generic interaction accents remain warm gold/amber/orange/copper; semantic/authored colors such as Discord identity, biome/world identity and boss artwork may remain distinct.
+- Approved World/Nexus images, Nexus boss PNGs, Minecraft skins, Marketplace model textures and logos are not replaced, recolored, recompressed or downscaled by theme switching.
+- Reduced-motion mode must not be broken by theme-specific animation/status feedback.
+
 ## Guide content and Browse integrity
 
 - `guides.html` statically owns the canonical nine-category Guide IA; JavaScript must not be required to create foundation categories.
@@ -126,6 +147,7 @@ At minimum confirm:
 - Guide contextual rail contains all nine current categories and starts with Getting Started;
 - Guide Browse/search/direct anchors work on desktop and mobile;
 - Play modal focus trap/Escape/restore behavior works;
+- appearance selection and effective-theme behavior match the Appearance / theme regression section;
 - skin textures resolve and interaction/fallback behavior works;
 - About FAQ/details, Tebex and license links remain accessible;
 - shared footer remains present/readable;
@@ -136,7 +158,7 @@ At minimum confirm:
 
 Verify at minimum **1440, 1024, 768, 430 and 390 CSS px**, plus short-height landscape and 200% browser zoom.
 
-Check no unexpected horizontal overflow, clipped controls/text, overlapping content/media, inaccessible navigation or unintended image crop/stretch. Intentional rails/tables may scroll independently.
+Run the matrix in both effective `Light` and `Dark`; additionally verify `System` resolution/switching at representative desktop and mobile widths. Check no unexpected horizontal overflow, clipped controls/text, overlapping content/media, inaccessible navigation or unintended image crop/stretch. Intentional rails/tables may scroll independently.
 
 ## Final rule
 

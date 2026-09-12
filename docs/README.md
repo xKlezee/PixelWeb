@@ -14,11 +14,12 @@ This directory is the reviewable technical contract for PixelWeb's security, pub
 ## Documentation architecture
 
 - `GUIDES-CONTENT-MODEL.md` — canonical-data rule, legacy migration policy, evidence levels, factual feature states and public-disclosure rules for Pixel Guides.
-- `IMPLEMENTATION-STATUS.md` — current release-candidate architecture, Guide/publication boundaries, outstanding release gates and known infrastructure limitations.
+- `IMPLEMENTATION-STATUS.md` — current public-site architecture, Guide/publication boundaries, theme/runtime state and remaining verification work.
+- `THEME-COVERAGE-AUDIT-2026-09.md` — source-level Light / Dark / System coverage matrix, media-preservation rules, cascade order and runtime-state corrections. It is an audit of code/selectors/states, not a substitute for browser/render QA.
 
 ## Quality, performance and deployment
 
-- `QA-SECURITY-CHECKLIST.md` — security, rendering, navigation, Guide integrity, media-integrity and publication regression checklist before merge.
+- `QA-SECURITY-CHECKLIST.md` — security, rendering, navigation, theme-state, Guide integrity, media-integrity and publication regression checklist before release claims.
 - `RESPONSIVE-QA.md` — required 1440 / 1024 / 768 / 430 / 390 px matrix and the strict separation between static review and real browser-render verification.
 - `PERFORMANCE-BUDGET.md` — asset/loading budget and performance constraints, including the rule that approved original Nexus PNGs are not recompressed merely to improve scores.
 - `PAGES-DEPLOYMENT-MIGRATION.md` — controlled migration from branch-root Pages publishing to a validated `_site/` artifact after GitHub Actions is healthy.
@@ -39,4 +40,4 @@ Repository-level automated controls live outside this directory:
 - `scripts/build_public_site.py` — reference-driven builder for the `_site/` Pages artifact;
 - `scripts/validate_public_bundle.py` — publication-boundary and local-reference validator for `_site/`.
 
-A configured check is not considered verified merely because the workflow or script exists. `IMPLEMENTATION-STATUS.md` records whether the current candidate has actually executed the gate and browser-render matrix.
+A configured check is not considered verified merely because the workflow or script exists. `IMPLEMENTATION-STATUS.md` records whether the current public state has actually executed the gate and browser-render matrix.

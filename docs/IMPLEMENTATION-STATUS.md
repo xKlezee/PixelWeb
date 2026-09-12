@@ -80,6 +80,26 @@ The previous Pixel Blue treatment is no longer the global selection/accent langu
 
 Worlds and Nexus preserve their established immersive geometry and media treatment; the warm theme applies to shared chrome rather than recoloring approved imagery.
 
+## Appearance / theme system
+
+PixelWeb now exposes three appearance choices: `System`, `Light` and `Dark`. `System` is a preference mode, not a third palette: it resolves to the current browser/OS light or dark preference and updates while the page is open.
+
+The effective theme is exposed through `html[data-theme-effective="light|dark"]`. Theme switching changes UI surfaces, stages, overlays, borders, shadows, interaction states and browser theme color; it does not replace, recompress or recolor authored media.
+
+The current cascade is intentionally layered:
+
+1. `pixel-theme.css`;
+2. `pixel-theme-coverage.css`;
+3. `pixel-theme-audit-fixes.css`;
+4. `pixel-theme-page-fixes.css`, which imports `pixel-theme-runtime-fixes.css` before its own page-specific rules;
+5. `pixel-theme.js` for selection, persistence, system-preference listening and runtime theme updates.
+
+The completed source-level coverage pass explicitly includes Home, Gameplay, Systems, Worlds, Nexus, Skyblock, Marketplace, Community, Leaderboards, Changelog, Rules, Staff Team, About, Store, License, the Guide shell and specialized Guide pages, Play, Pixel Navigator, mobile navigation and shared feedback/accessibility states. Marketplace loading/failure feedback, toast/skip-link contrast and late warm-accent cascade collisions are part of that contract.
+
+Approved World/Nexus imagery, Nexus boss PNGs, Minecraft skins, Marketplace model textures and logos remain source-identical. Light mode adapts their containing stage/overlay/contrast environment only. The detailed source audit is maintained in `docs/THEME-COVERAGE-AUDIT-2026-09.md`.
+
+This is still a source/selectors/states claim. Real-browser visual verification of System/Light/Dark at the responsive matrix remains pending and must not be inferred from the audit.
+
 ## Guide Browse behavior
 
 The left Guide Browse panel uses expandable category groups.
@@ -170,13 +190,15 @@ A complete browser pass is still required for claims that depend on real renderi
 - reduced motion;
 - desktop hover vs mobile/touch boundary;
 - contextual navigation horizontal behavior;
+- System / Light / Dark selection, persistence and live system-preference switching;
+- theme coverage for default, hover, focus, selected, loading, failure, empty, modal/backdrop and feedback states;
 - Play modal;
 - Guide Browse/search/anchors/tables;
 - Staff skin loading and interaction/fallback;
 - About/Store/license readability;
 - shared footer;
 - console/CSP/network state;
-- media crop/stretch/loading, especially Nexus encounter imagery.
+- media crop/stretch/loading, especially Nexus encounter imagery and the Light-mode immersive overlays.
 
 Do not describe browser-specific behavior as verified until that matrix, or an equivalent real-browser pass, has actually been executed.
 
@@ -185,5 +207,5 @@ Do not describe browser-specific behavior as verified until that matrix, or an e
 1. Connect Leaderboards to an authoritative server-backed ranking source.
 2. Complete or deliberately defer the unfinished Skyblock collaboration contract before advertising it as complete.
 3. Obtain live-client evidence for Guide mechanics where source validation alone is not enough for a stronger claim.
-4. Run the browser/responsive/accessibility interaction matrix when browser control is available.
+4. Run the browser/responsive/accessibility/theme interaction matrix when browser control is available.
 5. Continue removing stale source/documentation duplication when it can be done without changing player-facing semantics.
