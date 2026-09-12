@@ -8,13 +8,52 @@ PixelWeb exposes three visual modes through the bottom-right Appearance control:
 
 The preference is stored locally under `pixel-theme-mode-v1`. No account, cookie or backend is required.
 
-`data/network.js` applies the saved/system mode before loading `pixel-theme.css` and `pixel-theme.js`, so the same choice follows navigation across public pages. `pixel-theme.js` owns the accessible chooser, persistence, system-theme listener and `theme-color` updates.
+## Runtime ownership
 
-`pixel-theme.css` is deliberately loaded after the existing page styles. Light mode remaps shared backgrounds, chrome, Guide, Leaderboards, common cards, dialogs and footer surfaces while leaving authored media such as Minecraft screenshots, world imagery, boss art and player skins unchanged.
-
-The active state is available on `<html>` as:
+`data/network.js` resolves the stored/system mode before the shared theme assets are loaded and sets:
 
 - `data-theme-mode="system|light|dark"`
 - `data-theme-effective="light|dark"`
 
+It then loads, in cascade order:
+
+1. `pixel-theme.css` — base theme tokens, shared chrome and the Appearance control.
+2. `pixel-theme-coverage.css` — component-by-component coverage for every current public mechanic.
+3. `pixel-theme.js` — chooser behavior, persistence, system-theme listener and browser `theme-color` updates.
+
 A `pixelthemechange` window event is dispatched after changes with `{ mode, effective }` in `event.detail`.
+
+## Coverage contract
+
+Theme support is a product contract, not a header/background-only feature. Every public visual mechanic must have an intentional light and dark presentation. New components are incomplete until both effective themes work.
+
+Current coverage explicitly includes:
+
+- Home hero, path cards, World image gallery, Nexus media and Marketplace promo.
+- Shared RPG page heroes, stat cards, system cards, route panels, search controls and footer.
+- Marketplace navigation, route, 3D/model canvas stage, item preview canvases, detail panel and Store bridge.
+- Leaderboards hero, categories, records, podium/top three, player heads/renders, top-10/full table and empty/source states.
+- Worlds immersive full-screen imagery, content overlays, rail, counters, metadata and detail dialog.
+- Nexus immersive boss imagery (including dual Abyss/Astral), rails, investigate control, metadata and detail dialog.
+- Staff/About owner cards, Minecraft skin canvases, render stages and labels.
+- Store surfaces and the rank explanation dialog.
+- Guide/Wiki shell, tables, callouts and specialized Progression, Skyblock, Enchantments, Stats/Equipment and Talisman components.
+- Play/join dialog.
+- Pixel Navigator and Appearance control.
+- Mobile navigation and shared legacy content cards.
+
+## Media rule
+
+Theme changes must not mutate authored assets. Boss PNGs, World imagery, Minecraft skins, Marketplace textures/models, logos and other source media stay byte-identical.
+
+The presentation around media *does* adapt:
+
+- Canvas renderers remain transparent; their stage/frame/background belongs to the theme.
+- Image frames, borders, shadows and surrounding surfaces follow the active theme.
+- Full-bleed World/Nexus imagery may use theme-specific brightness/contrast and separate CSS overlays so text remains readable.
+- Player skins and Marketplace model textures are never recolored.
+- Images are not converted, recompressed, cropped or replaced as part of theme switching.
+
+## Interaction rule
+
+Hover, focus, active, selected, loading, empty, modal/backdrop and responsive/mobile states must remain legible in both themes. `System` is not a third color palette: it always resolves to the current OS/browser light or dark preference and updates live when that preference changes.
