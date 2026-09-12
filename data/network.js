@@ -217,7 +217,7 @@
 
   window.PIXEL_NETWORK_PUBLIC = Object.freeze(data);
 
-  // Apply the stored/system theme before the late shared theme stylesheet arrives. This
+  // Apply the stored/system theme before the late shared theme stylesheets arrive. This
   // keeps the selected mode consistent across navigation without changing authored media.
   const THEME_STORAGE_KEY = 'pixel-theme-mode-v1';
   const THEME_MODES = ['system', 'light', 'dark'];
@@ -234,13 +234,19 @@
   document.documentElement.dataset.themeEffective = effectiveTheme;
   document.documentElement.style.colorScheme = effectiveTheme;
 
-  if (!document.querySelector('link[data-pixel-theme-styles]')) {
+  const themeStyleAssets = [
+    ['pixel-theme.css', 'base'],
+    ['pixel-theme-coverage.css', 'coverage']
+  ];
+  themeStyleAssets.forEach(([href, role]) => {
+    if (document.querySelector(`link[data-pixel-theme-styles="${role}"]`)) return;
     const themeStyles = document.createElement('link');
     themeStyles.rel = 'stylesheet';
-    themeStyles.href = 'pixel-theme.css';
-    themeStyles.dataset.pixelThemeStyles = '';
+    themeStyles.href = href;
+    themeStyles.dataset.pixelThemeStyles = role;
     document.head.appendChild(themeStyles);
-  }
+  });
+
   if (!document.querySelector('script[data-pixel-theme-script]')) {
     const themeScript = document.createElement('script');
     themeScript.src = 'pixel-theme.js';
