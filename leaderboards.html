@@ -19,6 +19,7 @@
   <link rel="stylesheet" href="minecraft-rpg-secondary.css"/>
   <link rel="stylesheet" href="leaderboards.css"/>
   <link rel="stylesheet" href="leaderboards-player-renders.css"/>
+  <link rel="stylesheet" href="leaderboards-full.css"/>
   <link rel="stylesheet" href="security-hardening.css"/>
   <script src="data/network.js" defer></script>
   <script src="data/leaderboards.js" defer></script>
@@ -62,16 +63,24 @@
             <section class="leaderboard-record" aria-live="polite">
               <div class="leaderboard-record-head">
                 <div><small data-leaderboard-metric-eyebrow>Lifetime mining</small><h3 data-leaderboard-metric-title>Blocks Mined</h3><p data-leaderboard-metric-description>Total blocks mined across the tracked Pixel Network progression loop.</p></div>
-                <div class="leaderboard-record-badge"><span>PIXEL</span><strong>TOP 100</strong></div>
+                <div class="leaderboard-record-badge"><span>PIXEL</span><strong>TOP 10</strong></div>
               </div>
 
               <div class="leaderboard-podium" data-leaderboard-podium aria-label="Top three players"></div>
 
-              <div class="leaderboard-table-wrap">
-                <table class="leaderboard-table" data-leaderboard-table hidden>
-                  <thead><tr><th scope="col">Rank</th><th scope="col">Player</th><th scope="col">Record</th><th scope="col">Value</th></tr></thead>
-                  <tbody data-leaderboard-body></tbody>
-                </table>
+              <div class="leaderboard-table-block">
+                <div class="leaderboard-table-wrap">
+                  <table class="leaderboard-table" data-leaderboard-table hidden>
+                    <thead><tr><th scope="col">Rank</th><th scope="col">Player</th><th scope="col">Value</th></tr></thead>
+                    <tbody data-leaderboard-body></tbody>
+                  </table>
+                </div>
+                <div class="leaderboard-table-actions">
+                  <button class="leaderboard-full-toggle" type="button" data-leaderboard-full-toggle hidden aria-expanded="false">
+                    <span data-leaderboard-full-label>View full leaderboard</span>
+                    <span class="leaderboard-full-toggle-icon" data-leaderboard-full-icon aria-hidden="true">↗</span>
+                  </button>
+                </div>
               </div>
 
               <div class="leaderboard-empty" data-leaderboard-empty><span class="leaderboard-empty-mark" aria-hidden="true">#</span><div><strong>Blocks Mined is ready for standings.</strong><span>The board layout is live; player positions will appear when leaderboard tracking is connected.</span></div></div>
@@ -79,7 +88,7 @@
           </div>
         </div>
 
-        <div class="leaderboard-footnote"><strong>Competitive record policy</strong><span>No placeholder players, fabricated placements or guessed values are published. Until tracking is connected, the complete leaderboard structure remains visible without fake standings.</span></div>
+        <div class="leaderboard-footnote"><strong>Competitive record policy</strong><span>The default view shows the top 10 for each record. View full leaderboard expands the same ranking to every historical player entry available for that metric. Current preview usernames are real accounts; preview placements and values are fictional.</span></div>
       </div>
     </section>
   </main>

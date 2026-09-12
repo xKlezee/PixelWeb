@@ -4,16 +4,9 @@
   const root = document.querySelector('[data-leaderboards-root]');
   if (!root) return;
 
-  if (!document.querySelector('link[data-leaderboard-full-styles]')) {
-    const fullStyles = document.createElement('link');
-    fullStyles.rel = 'stylesheet';
-    fullStyles.href = 'leaderboards-full.css';
-    fullStyles.dataset.leaderboardFullStyles = '';
-    document.head.appendChild(fullStyles);
-  }
-
   const fallback = window.PIXEL_LEADERBOARDS || {};
   const endpoint = String(fallback.endpoint || 'data/leaderboards.json');
+
   const categoryNav = root.querySelector('[data-leaderboard-categories]');
   const metricNav = root.querySelector('[data-leaderboard-metrics]');
   const categoryTitle = root.querySelector('[data-leaderboard-category-title]');
@@ -27,8 +20,10 @@
   const body = root.querySelector('[data-leaderboard-body]');
   const empty = root.querySelector('[data-leaderboard-empty]');
   const podium = root.querySelector('[data-leaderboard-podium]');
-  const tableWrap = root.querySelector('.leaderboard-table-wrap');
+  const fullToggle = root.querySelector('[data-leaderboard-full-toggle]');
   const recordBadge = root.querySelector('.leaderboard-record-badge strong');
+
+  const DEFAULT_VISIBLE_ROWS = 10;
 
   const FALLBACK_CATEGORIES = Object.freeze([
     { id: 'mining', label: 'Mining', short: 'MIN', description: 'Records built through mining and resource progression.', metrics: [] },
@@ -41,8 +36,8 @@
   ]);
 
   let snapshot = null;
-  let fullToggle = null;
-  let fullPanel = null;
+  let activeMetric = null;
+  let showingAll = false;
 
   const validIsoDate = value => {
     if (typeof value !== 'string' || !value.trim()) return null;
@@ -97,6 +92,7 @@
     const testRoster = Array.isArray(input.testRoster) ? input.testRoster : [];
     const testValues = input.testValues && typeof input.testValues === 'object' ? input.testValues : {};
     const incomingCategories = Array.isArray(input.categories) ? input.categories : [];
+
     const categories = FALLBACK_CATEGORIES.map(definition => {
       const incoming = incomingCategories.find(category => category && category.id === definition.id) || {};
       const metrics = (Array.isArray(incoming.metrics) ? incoming.metrics : [])
@@ -121,6 +117,7 @@
     });
 
     const state = liveReady ? 'ready' : testReady ? 'test' : 'pending';
+
     return {
       schemaVersion: 3,
       source: {
@@ -179,95 +176,44 @@
     `https://api.mcheads.org/head/${encodeURIComponent(player)}/${size}/hat`;
 
   const podiumRenderSrc = (player, place) => {
-    const direction = place === 3 ? 'left' : 'right';
+    const direction = place === 2 ? 'left' : 'right';
     const size = place === 1 ? 320 : 256;
     return `https://api.mcheads.org/avatar/${encodeURIComponent(player)}/${direction}/${size}`;
   };
 
-  const makePlayerIdentity = (player, compact = false) => {
+  const makePlayerIdentity = player => {
     const identity = document.createElement('span');
-    identity.className = compact ? 'leaderboard-player-identity is-compact' : 'leaderboard-player-identity';
+    identity.className = 'leaderboard-player-identity is-compact';
 
     const head = document.createElement('img');
     head.className = 'leaderboard-player-head';
-    head.src = headRenderSrc(player, compact ? 48 : 64);
+    head.src = headRenderSrc(player, 48);
     head.alt = '';
     head.loading = 'lazy';
     head.decoding = 'async';
     head.addEventListener('error', () => head.remove(), { once: true });
 
     const name = document.createElement('span');
+    name.className = 'leaderboard-player-name';
     name.textContent = player;
+
     identity.append(head, name);
     return identity;
-  };
-
-  const ensureFullLeaderboardControls = () => {
-    if (!podium || !tableWrap) return;
-
-    fullToggle = document.createElement('button');
-    fullToggle.type = 'button';
-    fullToggle.className = 'leaderboard-full-toggle';
-    fullToggle.hidden = true;
-    fullToggle.setAttribute('aria-expanded', 'false');
-    fullToggle.setAttribute('aria-controls', 'leaderboard-full-panel');
-
-    const copy = document.createElement('span');
-    copy.className = 'leaderboard-full-toggle-copy';
-    copy.textContent = 'View full leaderboard';
-
-    const icon = document.createElement('span');
-    icon.className = 'leaderboard-full-toggle-icon';
-    icon.setAttribute('aria-hidden', 'true');
-    icon.textContent = '↓';
-
-    fullToggle.append(copy, icon);
-    podium.insertAdjacentElement('afterend', fullToggle);
-
-    fullPanel = document.createElement('div');
-    fullPanel.id = 'leaderboard-full-panel';
-    fullPanel.className = 'leaderboard-full-panel';
-    fullPanel.hidden = true;
-    tableWrap.parentNode?.insertBefore(fullPanel, tableWrap);
-    fullPanel.appendChild(tableWrap);
-
-    fullToggle.addEventListener('click', () => {
-      setFullLeaderboardOpen(fullToggle.getAttribute('aria-expanded') !== 'true');
-    });
-  };
-
-  const setFullLeaderboardOpen = open => {
-    if (!fullToggle || !fullPanel) return;
-    const isOpen = Boolean(open) && !fullToggle.hidden;
-    fullToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    fullPanel.hidden = !isOpen;
-    const copy = fullToggle.querySelector('.leaderboard-full-toggle-copy');
-    if (copy) copy.textContent = isOpen ? 'Hide full leaderboard' : 'View full leaderboard';
-  };
-
-  const setFullLeaderboardAvailable = available => {
-    if (!fullToggle || !fullPanel) return;
-    fullToggle.hidden = !available;
-    if (!available) {
-      fullPanel.hidden = true;
-      fullToggle.setAttribute('aria-expanded', 'false');
-    }
   };
 
   const renderPodium = metric => {
     if (!podium) return;
     const entries = Array.isArray(metric?.entries) ? metric.entries : [];
-    const positions = [2, 1, 3];
     podium.replaceChildren();
 
-    positions.forEach(position => {
+    [2, 1, 3].forEach(position => {
       const entry = entries.find(item => item.rank === position);
       const card = document.createElement('article');
       card.className = `leaderboard-podium-card place-${position}${entry ? ' has-entry' : ''}`;
 
-      const crown = document.createElement('span');
-      crown.className = 'leaderboard-podium-rank';
-      crown.textContent = `#${position}`;
+      const rank = document.createElement('span');
+      rank.className = 'leaderboard-podium-rank';
+      rank.textContent = `#${position}`;
 
       const render = document.createElement('div');
       render.className = 'leaderboard-podium-render';
@@ -302,18 +248,34 @@
       const value = document.createElement('span');
       value.textContent = entry?.value || '—';
 
-      card.append(crown, render, player, value);
+      card.append(rank, render, player, value);
       podium.appendChild(card);
     });
   };
 
-  const renderEntries = metric => {
+  const updateFullToggle = entries => {
+    if (!fullToggle) return;
+
+    const hasMore = entries.length > DEFAULT_VISIBLE_ROWS;
+    fullToggle.hidden = !hasMore;
+    fullToggle.setAttribute('aria-expanded', showingAll ? 'true' : 'false');
+
+    const label = fullToggle.querySelector('[data-leaderboard-full-label]');
+    if (label) label.textContent = showingAll ? 'Show top 10' : 'View full leaderboard';
+
+    const icon = fullToggle.querySelector('[data-leaderboard-full-icon]');
+    if (icon) icon.textContent = showingAll ? '↑' : '↗';
+
+    if (recordBadge) recordBadge.textContent = showingAll ? 'ALL PLAYERS' : 'TOP 10';
+  };
+
+  const renderRows = metric => {
     const entries = Array.isArray(metric?.entries) ? metric.entries : [];
     if (body) body.replaceChildren();
-    setFullLeaderboardOpen(false);
 
     if (!entries.length) {
-      setFullLeaderboardAvailable(false);
+      showingAll = false;
+      updateFullToggle(entries);
       if (table) table.hidden = true;
       if (empty) {
         empty.hidden = false;
@@ -325,23 +287,28 @@
       return;
     }
 
-    setFullLeaderboardAvailable(true);
     if (empty) empty.hidden = true;
     if (table) table.hidden = false;
 
-    entries.forEach(entry => {
+    const visibleEntries = showingAll ? entries : entries.slice(0, DEFAULT_VISIBLE_ROWS);
+
+    visibleEntries.forEach(entry => {
       const row = document.createElement('tr');
+
       const playerCell = document.createElement('td');
       playerCell.className = 'leaderboard-player';
-      playerCell.appendChild(makePlayerIdentity(entry.player, true));
+      playerCell.appendChild(makePlayerIdentity(entry.player));
+
       row.append(
         makeCell('td', `#${entry.rank}`, 'leaderboard-rank'),
         playerCell,
-        makeCell('td', metric?.label || 'Record', 'leaderboard-metric'),
         makeCell('td', entry.value, 'leaderboard-value')
       );
+
       body?.appendChild(row);
     });
+
+    updateFullToggle(entries);
   };
 
   const renderCategories = activeCategory => {
@@ -361,8 +328,10 @@
 
       const copy = document.createElement('span');
       copy.className = 'leaderboard-category-copy';
+
       const strong = document.createElement('strong');
       strong.textContent = category.label;
+
       copy.appendChild(strong);
       button.append(short, copy);
 
@@ -372,11 +341,12 @@
         setHash(category, metric);
         render(category, metric);
       });
+
       categoryNav.appendChild(button);
     });
   };
 
-  const renderMetrics = (category, activeMetric) => {
+  const renderMetrics = (category, activeMetricValue) => {
     if (!metricNav) return;
     metricNav.replaceChildren();
 
@@ -384,13 +354,16 @@
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'leaderboard-metric-button';
-      button.setAttribute('aria-pressed', metric.id === activeMetric?.id ? 'true' : 'false');
+      button.setAttribute('aria-pressed', metric.id === activeMetricValue?.id ? 'true' : 'false');
 
       const copy = document.createElement('span');
+
       const strong = document.createElement('strong');
       strong.textContent = metric.label;
+
       const small = document.createElement('small');
       small.textContent = metric.kicker || metric.unit || 'Ranking';
+
       copy.append(strong, small);
 
       const arrow = document.createElement('span');
@@ -399,30 +372,40 @@
       arrow.textContent = '→';
 
       button.append(copy, arrow);
+
       button.addEventListener('click', () => {
         setHash(category, metric);
         render(category, metric);
       });
+
       metricNav.appendChild(button);
     });
   };
 
   const render = (category, metric) => {
     if (!category) return;
+
+    showingAll = false;
+    activeMetric = metric;
+
     renderCategories(category);
     renderMetrics(category, metric);
+
     if (categoryTitle) categoryTitle.textContent = category.label;
     if (categoryDescription) categoryDescription.textContent = category.description || '';
     if (metricEyebrow) metricEyebrow.textContent = metric?.kicker || category.label;
     if (metricTitle) metricTitle.textContent = metric?.label || 'Leaderboard';
     if (metricDescription) metricDescription.textContent = metric?.description || 'Player standings for this record.';
+
     renderPodium(metric);
-    renderEntries(metric);
+    renderRows(metric);
   };
 
   const applySourceStatus = () => {
     const source = snapshot?.source || {};
+
     if (sourceLabel) sourceLabel.textContent = source.label || 'Leaderboard tracking is not connected yet';
+
     if (updated) {
       updated.textContent = source.state === 'test'
         ? 'Preview only · standings and values are fictional'
@@ -430,11 +413,19 @@
           ? `Updated ${new Date(source.generatedAt).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}`
           : 'Tracking not connected yet';
     }
+
     root.dataset.leaderboardState = ['ready', 'test'].includes(source.state) ? source.state : 'pending';
   };
 
-  ensureFullLeaderboardControls();
-  if (recordBadge) recordBadge.textContent = 'ALL PLAYERS';
+  fullToggle?.addEventListener('click', () => {
+    if (!activeMetric) return;
+    showingAll = !showingAll;
+    renderRows(activeMetric);
+
+    if (!showingAll) {
+      table?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  });
 
   window.addEventListener('hashchange', () => {
     const { category, metric } = routeFromHash();
@@ -444,7 +435,9 @@
   loadSnapshot().then(loaded => {
     snapshot = loaded;
     applySourceStatus();
+
     const { category, metric } = routeFromHash();
+
     if (category && metric && !location.hash) setHash(category, metric);
     render(category, metric);
   });
