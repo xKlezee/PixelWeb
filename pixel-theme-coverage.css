@@ -1,0 +1,401 @@
+/* Pixel Network — complete theme coverage layer.
+   Loaded after the authored page styles and pixel-theme.css.
+   Dark remains the authored baseline. Light adapts every surrounding UI surface,
+   interactive state and media frame without modifying source artwork or model textures. */
+
+html[data-theme-effective='light'] {
+  --mc-bg:#f1eadf;
+  --mc-bg-deep:#e7ddce;
+  --mc-stone:#f5eee3;
+  --mc-stone-2:#ebe0d0;
+  --mc-stone-3:#ded0bd;
+  --mc-panel:#f7f0e5;
+  --mc-panel-hi:#fff9ef;
+  --mc-line:rgba(75,54,27,.15);
+  --mc-line-strong:rgba(75,54,27,.24);
+  --mc-ink:#292117;
+  --mc-text:#292117;
+  --mc-muted:#6c6255;
+  --mc-parchment:#4c3d2b;
+  --mc-shadow:7px 8px 0 rgba(91,66,36,.11),0 20px 42px rgba(91,66,36,.10);
+  --theme-media-frame:#d4c5b0;
+  --theme-media-bg:#e8dece;
+  --theme-media-shadow:0 18px 40px rgba(82,58,29,.12);
+  --theme-panel:#f7f0e5;
+  --theme-panel-hi:#fff9f0;
+  --theme-panel-low:#e9dece;
+  --theme-text:#2a2117;
+  --theme-muted:#6f6456;
+  --theme-line:rgba(79,57,29,.15);
+  --theme-line-strong:rgba(127,84,24,.27);
+}
+
+/* ---------- Shared / legacy product surfaces ---------- */
+html[data-theme-effective='light'] .content-section + .content-section::before {
+  background:linear-gradient(90deg,transparent,rgba(83,60,31,.12) 12%,rgba(83,60,31,.12) 88%,transparent) !important;
+}
+html[data-theme-effective='light'] :where(.detail-card,.metric-card,.path-card,.signature-card,.flow-step,.world-row,.world-stage,.about-info-card,.community-card,.rules-card) {
+  border-color:var(--theme-line) !important;
+  background:linear-gradient(145deg,#faf4eb,#eee4d5) !important;
+  color:var(--theme-text) !important;
+  box-shadow:0 12px 28px rgba(86,61,31,.08) !important;
+}
+html[data-theme-effective='light'] :where(.detail-card,.metric-card,.path-card,.signature-card,.flow-step,.world-stage,.world-info,.stage-meta) :where(p,span,small) { color:var(--theme-muted) !important; }
+html[data-theme-effective='light'] :where(.detail-card,.metric-card,.path-card,.signature-card,.world-stage) :where(h2,h3,b,strong) { color:var(--theme-text) !important; }
+html[data-theme-effective='light'] .flow-line {
+  background:#e7dccb !important;
+  box-shadow:inset 3px 3px 8px rgba(99,75,45,.10),inset -3px -3px 8px rgba(255,255,255,.72) !important;
+}
+html[data-theme-effective='light'] .world-visual {
+  background:var(--theme-media-bg) !important;
+  border:1px solid var(--theme-line) !important;
+  box-shadow:var(--theme-media-shadow) !important;
+}
+html[data-theme-effective='light'] .world-visual img { filter:saturate(1.02) contrast(1.02) brightness(1.03) !important; }
+html[data-theme-effective='light'] .progress-track {
+  background:#ddd0be !important;
+  box-shadow:inset 3px 3px 7px rgba(91,68,39,.13),inset -2px -2px 6px rgba(255,255,255,.78) !important;
+}
+html[data-theme-effective='light'] .gate { color:#6f6456 !important; }
+
+/* ---------- Home: media treatment, cards and authored-image frames ---------- */
+html[data-theme-effective='light'] .minecraft-rpg-home .mc-home-hero {
+  border-bottom-color:#cabaa3 !important;
+  background:#ebe1d2 !important;
+}
+html[data-theme-effective='light'] .minecraft-rpg-home .mc-home-hero::before {
+  background:
+    linear-gradient(90deg,rgba(248,243,234,.96) 0%,rgba(247,240,230,.83) 31%,rgba(245,235,219,.35) 62%,rgba(239,225,203,.58) 100%),
+    linear-gradient(180deg,rgba(249,244,236,.08),rgba(247,239,227,.12) 48%,rgba(237,224,205,.90) 100%) !important;
+}
+html[data-theme-effective='light'] .minecraft-rpg-home .mc-home-hero::after {
+  background:linear-gradient(135deg,transparent 12px,rgba(232,221,205,.95) 0) 0 0/24px 24px repeat-x,linear-gradient(180deg,transparent,#eee4d5 72%) !important;
+}
+html[data-theme-effective='light'] .minecraft-rpg-home .mc-home-hero-media { background:#ded3c2 !important; }
+html[data-theme-effective='light'] .minecraft-rpg-home .mc-home-hero-media img { filter:saturate(1.02) contrast(1.01) brightness(1.06) !important; }
+html[data-theme-effective='light'] .minecraft-rpg-home .mc-home-title {
+  color:#251d14 !important;
+  text-shadow:0 4px 18px rgba(255,255,255,.82),2px 3px 0 rgba(255,255,255,.55) !important;
+}
+html[data-theme-effective='light'] .minecraft-rpg-home .mc-home-lead { color:#594f43 !important; text-shadow:0 2px 10px rgba(255,255,255,.75) !important; }
+html[data-theme-effective='light'] .minecraft-rpg-home :where(.mc-home-status,.mc-home-mark) { color:#665b4d !important; text-shadow:none !important; }
+html[data-theme-effective='light'] .minecraft-rpg-home .mc-section { border-bottom-color:rgba(90,66,36,.13) !important; }
+html[data-theme-effective='light'] .minecraft-rpg-home .mc-section::before {
+  background-image:linear-gradient(rgba(75,54,28,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(75,54,28,.025) 1px,transparent 1px) !important;
+}
+html[data-theme-effective='light'] .minecraft-rpg-home :where(.mc-section-title,.mc-path-card h3,.mc-nexus-copy h2,.mc-market-copy h2) { color:#292117 !important; text-shadow:none !important; }
+html[data-theme-effective='light'] .minecraft-rpg-home .mc-path-card {
+  border-color:#cdbda6 !important;
+  background:linear-gradient(180deg,rgba(255,250,241,.96),rgba(235,224,207,.98)) !important;
+  box-shadow:6px 7px 0 rgba(92,66,35,.10),inset 0 0 0 1px rgba(255,255,255,.72) !important;
+}
+html[data-theme-effective='light'] .minecraft-rpg-home .mc-path-card::before {
+  background:radial-gradient(circle at 70% 24%,rgba(224,170,55,.15),transparent 32%),linear-gradient(135deg,rgba(255,255,255,.48),transparent 38%) !important;
+}
+html[data-theme-effective='light'] .minecraft-rpg-home :where(.mc-path-card small,.mc-path-card p,.mc-nexus-copy p,.mc-market-copy p) { color:#6b6154 !important; }
+html[data-theme-effective='light'] .minecraft-rpg-home .home-world-shot {
+  border-color:#c7b69e !important;
+  background:#e5d9c8 !important;
+  box-shadow:6px 8px 0 rgba(86,61,30,.11) !important;
+}
+html[data-theme-effective='light'] .minecraft-rpg-home .home-world-shot img { filter:saturate(1.03) contrast(1.03) brightness(1.02) !important; }
+html[data-theme-effective='light'] .minecraft-rpg-home .home-world-shot:hover img { filter:saturate(1.08) contrast(1.04) brightness(1.07) !important; }
+html[data-theme-effective='light'] .minecraft-rpg-home .home-world-shot::after { background:linear-gradient(180deg,transparent 44%,rgba(20,14,8,.06) 58%,rgba(20,14,8,.72) 100%) !important; }
+html[data-theme-effective='light'] .minecraft-rpg-home .home-nexus-frame {
+  border-color:#c5b49c !important;
+  background:#e7ddce !important;
+  box-shadow:8px 10px 0 rgba(91,65,34,.10),0 26px 56px rgba(91,65,34,.10) !important;
+}
+html[data-theme-effective='light'] .minecraft-rpg-home .home-nexus-shot img { filter:saturate(1.02) contrast(1.02) brightness(1.04) !important; }
+html[data-theme-effective='light'] .minecraft-rpg-home .mc-market-band {
+  border-color:#c8b79f !important;
+  background:radial-gradient(circle at 76% 50%,rgba(224,170,55,.16),transparent 34%),linear-gradient(135deg,#faf4e9,#e9decc 58%,#dfd1bd) !important;
+  box-shadow:7px 9px 0 rgba(86,61,31,.10),inset 0 0 0 1px rgba(255,255,255,.75) !important;
+}
+html[data-theme-effective='light'] .minecraft-rpg-home .mc-market-visual {
+  background:linear-gradient(rgba(76,55,30,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(76,55,30,.035) 1px,transparent 1px),radial-gradient(circle,rgba(224,170,55,.20),transparent 60%) !important;
+  background-size:16px 16px,16px 16px,auto !important;
+}
+html[data-theme-effective='light'] .minecraft-rpg-home .mc-market-cube {
+  border-color:rgba(139,96,31,.72) !important;
+  box-shadow:inset 0 0 0 8px rgba(224,170,55,.14),18px 18px 0 rgba(91,63,31,.10),0 0 54px rgba(224,170,55,.15) !important;
+}
+
+/* ---------- Shared Minecraft RPG page shell ---------- */
+html[data-theme-effective='light'] body.minecraft-rpg-page {
+  background:radial-gradient(900px 620px at 75% -8%,rgba(224,170,55,.12),transparent 58%),linear-gradient(180deg,#f5eee3,#eee4d6 52%,#e8ddcd) !important;
+  color:#292117 !important;
+}
+html[data-theme-effective='light'] .minecraft-rpg-page .mc-page-hero {
+  border-bottom-color:#c8b79f !important;
+  background:radial-gradient(circle at 72% 28%,rgba(224,170,55,.16),transparent 31%),linear-gradient(135deg,#faf4ea,#ece1d1 54%,#dfd2c0) !important;
+}
+html[data-theme-effective='light'] .minecraft-rpg-page .mc-page-hero::after { background:linear-gradient(135deg,transparent 12px,rgba(231,220,203,.94) 0) 0 0/24px 24px repeat-x !important; }
+html[data-theme-effective='light'] .minecraft-rpg-page :where(.mc-page-title,.mc-section-head h2) { color:#292117 !important; text-shadow:none !important; }
+html[data-theme-effective='light'] .minecraft-rpg-page :where(.mc-page-lead,.mc-section-head > p) { color:#675d50 !important; }
+html[data-theme-effective='light'] .minecraft-rpg-page .mc-section { border-bottom-color:rgba(84,60,31,.13) !important; }
+html[data-theme-effective='light'] .minecraft-rpg-page .mc-section::before { background-image:linear-gradient(rgba(78,57,31,.027) 1px,transparent 1px),linear-gradient(90deg,rgba(78,57,31,.027) 1px,transparent 1px) !important; }
+html[data-theme-effective='light'] .minecraft-rpg-page :where(.mc-stat,.mc-feature-card,.mc-system-card,.mc-guide-card,.mc-route-panel,.mc-guide-toolbar) {
+  border-color:#cbbba4 !important;
+  background:linear-gradient(160deg,#faf4ea,#e9dece) !important;
+  box-shadow:6px 7px 0 rgba(87,62,32,.10),inset 0 0 0 1px rgba(255,255,255,.72) !important;
+  color:#2b2218 !important;
+}
+html[data-theme-effective='light'] .minecraft-rpg-page :where(.mc-feature-card,.mc-system-card,.mc-guide-card):hover { background:linear-gradient(160deg,#fff9ef,#eee1cf) !important; }
+html[data-theme-effective='light'] .minecraft-rpg-page :where(.mc-stat,.mc-feature-card,.mc-system-card,.mc-guide-card,.mc-route-panel) :where(p,span,small) { color:#6d6356 !important; }
+html[data-theme-effective='light'] .minecraft-rpg-page .mc-stat b { color:#5f461e !important; }
+html[data-theme-effective='light'] .minecraft-rpg-page .mc-route-panel.is-nexus { background:radial-gradient(circle at 75% 20%,rgba(140,96,255,.10),transparent 34%),linear-gradient(160deg,#f6efe6,#e5d8ca 70%) !important; }
+html[data-theme-effective='light'] .minecraft-rpg-page .mc-guide-search { background:#fffaf3 !important; color:#2b2217 !important; border-color:rgba(82,60,31,.17) !important; }
+html[data-theme-effective='light'] .minecraft-rpg-page .site-footer { border-top-color:#c7b69f !important; background:#e9dece !important; }
+html[data-theme-effective='light'] :where(.skyblock-rpg-page .mc-page-hero,.community-rpg-page .mc-page-hero,.about-rpg-page .mc-page-hero,.staff-rpg-page .mc-page-hero,.store-rpg-page .mc-page-hero) {
+  background:radial-gradient(circle at 76% 26%,rgba(224,170,55,.15),transparent 32%),linear-gradient(145deg,#f9f3e9,#e8dccb 72%) !important;
+  border-color:#c8b79f !important;
+}
+html[data-theme-effective='light'] :where(.skyblock-island-card,.skyblock-card,.skyblock-boundary-bar,.community-card,.community-discord-banner,.about-overview-card,.about-disclaimer-panel,.mc-owner-card,.staff-card,.store-rank-panel,.store-card,.store-category-card,.store-final-cta) {
+  background:linear-gradient(155deg,#faf4ea,#e8dccb 72%) !important;
+  border-color:#c8b79f !important;
+  box-shadow:6px 7px 0 rgba(88,63,32,.09),inset 0 0 0 1px rgba(255,255,255,.70) !important;
+  color:#2a2117 !important;
+}
+html[data-theme-effective='light'] :where(.skyblock-island-card,.skyblock-card,.skyblock-boundary-bar,.community-card,.community-discord-banner,.about-overview-card,.about-disclaimer-panel,.mc-owner-card,.staff-card,.store-rank-panel,.store-card,.store-category-card,.store-final-cta) :where(p,span,small) { color:#6d6255 !important; }
+
+/* ---------- Marketplace visualizer + item gallery ---------- */
+html[data-theme-effective='light'] .marketplace-rpg-page {
+  background:radial-gradient(940px 640px at 76% -8%,rgba(224,170,55,.12),transparent 58%),linear-gradient(180deg,#f5eee3,#ece1d1 55%,#e5d8c6) !important;
+  color:#2a2117 !important;
+}
+html[data-theme-effective='light'] .marketplace-subnav { background:rgba(241,233,221,.97) !important; border-bottom-color:rgba(79,57,29,.14) !important; box-shadow:0 8px 22px rgba(81,57,27,.06) !important; }
+html[data-theme-effective='light'] :where(.marketplace-subnav-label,.marketplace-subnav a) { color:#6e6355 !important; }
+html[data-theme-effective='light'] :where(.marketplace-subnav a.is-current,.marketplace-subnav a[aria-current='location']) { color:#33240d !important; background:rgba(224,170,55,.16) !important; border-color:rgba(145,94,23,.24) !important; }
+html[data-theme-effective='light'] .marketplace-hero { border-bottom-color:#c7b69f !important; background:radial-gradient(circle at 76% 34%,rgba(224,170,55,.17),transparent 27%),linear-gradient(145deg,#faf4ea,#e8dccb 72%) !important; }
+html[data-theme-effective='light'] .marketplace-hero :where(h1,h2,strong) { color:#2a2117 !important; }
+html[data-theme-effective='light'] .marketplace-hero :where(p,.marketplace-hero-note) { color:#6c6154 !important; }
+html[data-theme-effective='light'] .marketplace-route-step { border-color:rgba(84,60,31,.14) !important; background:linear-gradient(145deg,#f8f1e6,#e9dece) !important; box-shadow:none !important; }
+html[data-theme-effective='light'] .marketplace-route-step:not(:last-child)::after { border-color:rgba(82,59,29,.13) !important; background:#eee4d6 !important; color:#776a59 !important; }
+html[data-theme-effective='light'] .marketplace-route-step small { color:#807466 !important; }
+html[data-theme-effective='light'] .marketplace-route-step strong { color:#31271c !important; }
+html[data-theme-effective='light'] .marketplace-route-step.active { border-color:rgba(162,105,26,.27) !important; background:linear-gradient(145deg,#fff8ec,#ead9bb) !important; }
+html[data-theme-effective='light'] .marketplace-route-step.active strong { color:#6a4715 !important; }
+html[data-theme-effective='light'] :where(.marketplace-viewer-card,.marketplace-detail-card) { border-color:rgba(81,58,29,.15) !important; background:linear-gradient(145deg,#faf4ea,#e8ddce) !important; box-shadow:0 18px 42px rgba(82,59,29,.10),inset 0 1px 0 rgba(255,255,255,.76) !important; }
+html[data-theme-effective='light'] .marketplace-model-stage {
+  background:radial-gradient(65% 62% at 50% 52%,rgba(224,170,55,.18),transparent 74%),linear-gradient(180deg,#f7efe2,#e3d6c4) !important;
+  box-shadow:inset 0 0 0 1px rgba(83,60,31,.07) !important;
+}
+html[data-theme-effective='light'] .marketplace-model-stage::after { content:''; position:absolute; left:17%; right:17%; bottom:11%; height:9%; pointer-events:none; background:radial-gradient(ellipse at center,rgba(91,62,28,.16),transparent 70%); filter:blur(10px); }
+html[data-theme-effective='light'] .marketplace-model-stage canvas { position:relative; z-index:1; filter:drop-shadow(0 20px 18px rgba(82,56,25,.18)); }
+html[data-theme-effective='light'] .marketplace-detail-card :where(h2,strong) { color:#2d2419 !important; }
+html[data-theme-effective='light'] .marketplace-detail-copy { color:#6e6355 !important; }
+html[data-theme-effective='light'] .marketplace-facts { border-top-color:rgba(79,57,29,.14) !important; }
+html[data-theme-effective='light'] .marketplace-fact { border-bottom-color:rgba(79,57,29,.11) !important; }
+html[data-theme-effective='light'] .marketplace-fact span { color:#817566 !important; }
+html[data-theme-effective='light'] .marketplace-fact strong { color:#3a3024 !important; }
+html[data-theme-effective='light'] .marketplace-item-card { border-color:rgba(81,58,29,.14) !important; background:linear-gradient(145deg,#faf4ea,#e8ddce) !important; color:#2b2218 !important; box-shadow:0 8px 20px rgba(84,60,31,.07) !important; }
+html[data-theme-effective='light'] .marketplace-item-card:hover { border-color:rgba(146,94,23,.24) !important; background:linear-gradient(145deg,#fff9ef,#ece0cf) !important; }
+html[data-theme-effective='light'] .marketplace-item-card.is-active { border-color:rgba(174,113,25,.34) !important; background:linear-gradient(145deg,#fff9ef,#ead9bb) !important; }
+html[data-theme-effective='light'] .marketplace-item-preview { border-bottom-color:rgba(79,57,29,.11) !important; background:radial-gradient(62% 62% at 50% 50%,rgba(224,170,55,.16),transparent 74%),#e9dece !important; }
+html[data-theme-effective='light'] .marketplace-item-preview canvas { filter:drop-shadow(0 10px 9px rgba(82,57,28,.16)); }
+html[data-theme-effective='light'] .marketplace-item-copy small { color:#817566 !important; }
+html[data-theme-effective='light'] .marketplace-item-copy strong { color:#342a1f !important; }
+html[data-theme-effective='light'] .marketplace-store-bridge { border-color:#c9b79f !important; background:linear-gradient(145deg,#f8f1e5,#e5d8c7) !important; color:#30261b !important; }
+
+/* ---------- Leaderboards: podium, heads, tables and full-list states ---------- */
+html[data-theme-effective='light'] .leaderboard-record { color:#2a2117 !important; }
+html[data-theme-effective='light'] .leaderboard-podium { background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(224,170,55,.025)) !important; }
+html[data-theme-effective='light'] .leaderboard-podium-card { background:linear-gradient(180deg,#fbf5eb,#e9dece) !important; border-color:rgba(145,94,23,.17) !important; box-shadow:0 14px 28px rgba(83,58,27,.09),inset 0 1px 0 rgba(255,255,255,.78) !important; color:#2b2217 !important; }
+html[data-theme-effective='light'] .leaderboard-podium-card.place-1 { background:radial-gradient(circle at 50% 24%,rgba(246,201,69,.18),transparent 38%),linear-gradient(180deg,#fff9ed,#ead9b9) !important; border-color:rgba(169,108,22,.28) !important; }
+html[data-theme-effective='light'] .leaderboard-podium-card :where(strong,span) { color:#332719 !important; }
+html[data-theme-effective='light'] .leaderboard-podium-rank { color:#9d6a1c !important; }
+html[data-theme-effective='light'] .leaderboard-podium-render::before { background:rgba(89,58,26,.18) !important; }
+html[data-theme-effective='light'] .place-1 .leaderboard-podium-render::after { background:radial-gradient(circle at 50% 58%,rgba(226,166,44,.21),transparent 67%) !important; }
+html[data-theme-effective='light'] .leaderboard-podium-skin { filter:drop-shadow(0 14px 12px rgba(70,46,19,.24)) !important; }
+html[data-theme-effective='light'] .place-1 .leaderboard-podium-skin { filter:drop-shadow(0 16px 14px rgba(70,46,19,.25)) drop-shadow(0 0 12px rgba(224,170,55,.13)) !important; }
+html[data-theme-effective='light'] :where(.leaderboard-player-head,.leaderboard-podium-fallback) { background:#e9dece !important; border-color:rgba(145,94,23,.21) !important; box-shadow:inset 0 0 0 1px rgba(255,255,255,.62) !important; }
+html[data-theme-effective='light'] .leaderboard-podium-fallback { color:#80591c !important; }
+html[data-theme-effective='light'] .leaderboard-record-badge { background:linear-gradient(135deg,rgba(224,170,55,.16),rgba(207,115,30,.045)) !important; border-color:rgba(145,94,23,.23) !important; }
+html[data-theme-effective='light'] .leaderboard-table-wrap { background:#faf4eb !important; border-color:rgba(80,58,30,.15) !important; box-shadow:inset 0 1px 0 rgba(255,255,255,.76) !important; }
+html[data-theme-effective='light'] .leaderboard-table th { background:#e9dece !important; color:#766958 !important; border-color:rgba(80,58,30,.11) !important; }
+html[data-theme-effective='light'] .leaderboard-table td { color:#342a1f !important; border-color:rgba(80,58,30,.10) !important; }
+html[data-theme-effective='light'] .leaderboard-table tbody tr:hover td { background:rgba(224,170,55,.08) !important; }
+html[data-theme-effective='light'] .leaderboard-full-toggle { color:#6a4b1b !important; border-color:rgba(145,94,23,.22) !important; background:#f5ecdf !important; }
+html[data-theme-effective='light'] :where(.leaderboard-full-toggle:hover,.leaderboard-full-toggle:focus-visible) { background:#fff7e9 !important; color:#432d0d !important; }
+html[data-theme-effective='light'] .leaderboard-empty { background:#eee4d5 !important; border-color:rgba(80,58,30,.13) !important; color:#665b4e !important; }
+
+/* ---------- Worlds immersive view ---------- */
+html[data-theme-effective='light'] :where(.worlds-region-page,.worlds-region-main,.worlds-region-stage) { background:#e8dece !important; color:#292117 !important; }
+html[data-theme-effective='light'] .worlds-region-background { background:#ddd1bf !important; }
+html[data-theme-effective='light'] .worlds-region-background img { filter:saturate(1.01) contrast(.98) brightness(1.08) !important; }
+html[data-theme-effective='light'] .worlds-region-panel.is-active .worlds-region-background img { filter:saturate(1.04) contrast(1) brightness(1.12) !important; }
+html[data-theme-effective='light'] .worlds-region-background::before { background:linear-gradient(90deg,rgba(249,244,235,.94) 0%,rgba(247,240,229,.78) 22%,rgba(246,237,223,.29) 49%,rgba(242,230,211,.10) 70%,rgba(239,224,202,.34) 100%),linear-gradient(180deg,rgba(248,243,234,.24),transparent 28%,transparent 62%,rgba(236,222,201,.72)) !important; }
+html[data-theme-effective='light'] .worlds-region-background::after { background:radial-gradient(circle at 65% 50%,rgba(var(--world-accent),.10),transparent 28%),radial-gradient(circle at 50% 42%,transparent 40%,rgba(110,79,42,.10) 100%) !important; }
+html[data-theme-effective='light'] .worlds-region-title { color:#251d14 !important; text-shadow:0 4px 18px rgba(255,255,255,.82) !important; }
+html[data-theme-effective='light'] .worlds-region-role { color:#5e5447 !important; text-shadow:0 2px 12px rgba(255,255,255,.76) !important; }
+html[data-theme-effective='light'] .worlds-region-meta { border-color:rgba(85,61,31,.16) !important; background:linear-gradient(90deg,rgba(250,245,237,.78),rgba(244,235,221,.48)) !important; color:#33291e !important; }
+html[data-theme-effective='light'] .worlds-region-meta-row span { color:rgba(48,37,25,.52) !important; }
+html[data-theme-effective='light'] .worlds-region-meta-row strong { color:#30261b !important; }
+html[data-theme-effective='light'] .worlds-region-node { color:rgba(47,37,26,.58) !important; }
+html[data-theme-effective='light'] .worlds-region-node span { color:rgba(55,43,30,.48) !important; }
+html[data-theme-effective='light'] .worlds-region-node::before { background:#eee3d3 !important; border-color:rgba(70,52,31,.40) !important; }
+html[data-theme-effective='light'] .worlds-region-node:not(:last-child)::after { background:rgba(68,50,29,.22) !important; }
+html[data-theme-effective='light'] :where(.worlds-region-node:hover,.worlds-region-node:focus-visible) { color:#392a17 !important; }
+html[data-theme-effective='light'] .worlds-region-node[aria-current='true'] { color:#241b12 !important; }
+html[data-theme-effective='light'] .worlds-region-node[aria-current='true']::before { background:#7c5720 !important; border-color:#7c5720 !important; box-shadow:0 0 0 5px rgba(124,87,32,.10),0 0 24px rgba(124,87,32,.18) !important; }
+html[data-theme-effective='light'] :where(.worlds-region-hint,.worlds-region-counter) { color:rgba(48,37,25,.55) !important; }
+html[data-theme-effective='light'] .worlds-region-counter strong { color:#2c2218 !important; }
+html[data-theme-effective='light'] .worlds-region-dialog { border-color:#bca98f !important; background:#f5eee3 !important; color:#292117 !important; box-shadow:0 34px 92px rgba(68,46,21,.24) !important; }
+html[data-theme-effective='light'] .worlds-region-dialog::backdrop { background:rgba(53,40,24,.28) !important; }
+html[data-theme-effective='light'] .worlds-region-dialog-visual { background:#ddd1bf !important; }
+html[data-theme-effective='light'] .worlds-region-dialog-visual img { filter:saturate(1.02) contrast(1) brightness(1.06) !important; }
+html[data-theme-effective='light'] .worlds-region-dialog-body { background:linear-gradient(180deg,#faf4ea,#ebe0d1) !important; color:#292117 !important; }
+html[data-theme-effective='light'] .worlds-region-dialog-close { background:#eee3d4 !important; color:#685d50 !important; border-color:#c5b49b !important; }
+html[data-theme-effective='light'] .worlds-region-dialog :where(p,span) { color:#695f52 !important; }
+html[data-theme-effective='light'] .worlds-region-dialog :where(h2,h3,strong) { color:#2b2218 !important; }
+
+/* ---------- Nexus immersive view ---------- */
+html[data-theme-effective='light'] :where(.nexus-encounter-page,.nexus-encounter-main,.nexus-encounter-stage) { background:#e8dece !important; color:#292117 !important; }
+html[data-theme-effective='light'] :where(.nexus-encounter-background,.nexus-encounter-background.is-dual) { background:radial-gradient(circle at 68% 40%,rgba(var(--nexus-accent),.10),transparent 44%),#ded2c1 !important; }
+html[data-theme-effective='light'] .nexus-encounter-background img { opacity:.78 !important; filter:saturate(1.02) contrast(.98) brightness(1.08) !important; }
+html[data-theme-effective='light'] .nexus-encounter-panel.is-active .nexus-encounter-background img { opacity:.90 !important; filter:saturate(1.04) contrast(1) brightness(1.12) !important; }
+html[data-theme-effective='light'] .nexus-encounter-background::before { background:linear-gradient(90deg,rgba(249,244,235,.95) 0%,rgba(247,240,229,.81) 22%,rgba(246,237,223,.30) 49%,rgba(242,230,211,.10) 69%,rgba(239,224,202,.33) 100%),linear-gradient(180deg,rgba(249,244,235,.27),transparent 28%,transparent 62%,rgba(236,222,201,.72)) !important; }
+html[data-theme-effective='light'] .nexus-encounter-background::after { background:radial-gradient(circle at 66% 48%,rgba(var(--nexus-accent),.10),transparent 27%),radial-gradient(circle at 50% 42%,transparent 36%,rgba(103,74,40,.09) 100%) !important; }
+html[data-theme-effective='light'] .nexus-encounter-title { color:#251d14 !important; text-shadow:0 4px 18px rgba(255,255,255,.84) !important; }
+html[data-theme-effective='light'] .nexus-encounter-role { color:#5b5145 !important; text-shadow:0 2px 12px rgba(255,255,255,.76) !important; }
+html[data-theme-effective='light'] .nexus-encounter-meta { border-color:rgba(83,60,31,.16) !important; background:linear-gradient(90deg,rgba(250,245,237,.78),rgba(244,235,221,.48)) !important; }
+html[data-theme-effective='light'] .nexus-encounter-meta-row span { color:rgba(47,36,24,.50) !important; }
+html[data-theme-effective='light'] .nexus-encounter-meta-row strong { color:#30261b !important; }
+html[data-theme-effective='light'] .nexus-encounter-node { color:rgba(47,37,26,.58) !important; }
+html[data-theme-effective='light'] .nexus-encounter-node span { color:rgba(55,43,30,.48) !important; }
+html[data-theme-effective='light'] .nexus-encounter-node::before { background:#eee3d3 !important; border-color:rgba(70,52,31,.40) !important; }
+html[data-theme-effective='light'] .nexus-encounter-node:not(:last-child)::after { background:rgba(68,50,29,.22) !important; }
+html[data-theme-effective='light'] :where(.nexus-encounter-node:hover,.nexus-encounter-node:focus-visible) { color:#392a17 !important; }
+html[data-theme-effective='light'] .nexus-encounter-node[aria-current='true'] { color:#241b12 !important; }
+html[data-theme-effective='light'] .nexus-encounter-node[aria-current='true']::before { background:#7c5720 !important; border-color:#7c5720 !important; box-shadow:0 0 0 5px rgba(124,87,32,.10),0 0 24px rgba(124,87,32,.18) !important; }
+html[data-theme-effective='light'] .nexus-investigate { color:#3d2d19 !important; }
+html[data-theme-effective='light'] .nexus-investigate-orb { background:rgba(250,245,237,.72) !important; border-color:rgba(80,58,31,.42) !important; box-shadow:0 8px 24px rgba(70,48,24,.13),inset 0 0 0 5px rgba(255,255,255,.42) !important; }
+html[data-theme-effective='light'] .nexus-investigate-label { text-shadow:0 2px 10px rgba(255,255,255,.82) !important; }
+html[data-theme-effective='light'] :where(.nexus-encounter-hint,.nexus-encounter-counter) { color:rgba(48,37,25,.52) !important; }
+html[data-theme-effective='light'] .nexus-encounter-counter strong { color:#2c2218 !important; }
+html[data-theme-effective='light'] .nexus-encounter-dialog { border-color:#bca98f !important; background:#f5eee3 !important; color:#292117 !important; box-shadow:0 34px 92px rgba(68,46,21,.24) !important; }
+html[data-theme-effective='light'] .nexus-encounter-dialog::backdrop { background:rgba(53,40,24,.28) !important; }
+html[data-theme-effective='light'] .nexus-encounter-dialog-visual { background:#ddd1bf !important; }
+html[data-theme-effective='light'] .nexus-encounter-dialog-visual img { filter:saturate(1.02) contrast(1) brightness(1.06) !important; }
+html[data-theme-effective='light'] .nexus-encounter-dialog-body { background:linear-gradient(180deg,#faf4ea,#ebe0d1) !important; color:#292117 !important; }
+html[data-theme-effective='light'] .nexus-encounter-dialog-close { background:#eee3d4 !important; color:#685d50 !important; border-color:#c5b49b !important; }
+html[data-theme-effective='light'] .nexus-encounter-dialog :where(p,span) { color:#695f52 !important; }
+html[data-theme-effective='light'] .nexus-encounter-dialog :where(h2,h3,strong) { color:#2b2218 !important; }
+
+/* ---------- Owner/staff skin viewers: theme the stage, never the skin ---------- */
+html[data-theme-effective='light'] :where(.owner-profile,.mc-owner-card) { border-color:rgba(81,58,29,.15) !important; background:linear-gradient(145deg,#faf4ea,#e9dece) !important; box-shadow:0 16px 36px rgba(82,58,28,.10),inset 0 1px 0 rgba(255,255,255,.74) !important; }
+html[data-theme-effective='light'] :where(.owner-portrait,.mc-owner-visual) { border-color:rgba(81,58,29,.12) !important; background:radial-gradient(90% 72% at 50% 88%,rgba(224,170,55,.15),transparent 67%),linear-gradient(180deg,rgba(255,255,255,.44),transparent 44%),#e7dccb !important; }
+html[data-theme-effective='light'] .owner-portrait::before { border-color:rgba(76,55,30,.08) !important; background-image:linear-gradient(rgba(76,55,30,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(76,55,30,.025) 1px,transparent 1px) !important; }
+html[data-theme-effective='light'] .owner-portrait::after { background:radial-gradient(ellipse at center,rgba(79,50,20,.19),transparent 72%) !important; }
+html[data-theme-effective='light'] .skin-viewer canvas { filter:drop-shadow(0 18px 18px rgba(70,45,18,.24)) !important; }
+html[data-theme-effective='light'] :where(.owner-copy h2,.owner-title) { color:#30261b !important; }
+html[data-theme-effective='light'] :where(.owner-summary,.owner-note) { color:#6d6255 !important; }
+html[data-theme-effective='light'] .owner-responsibilities span { color:#655a4e !important; border-color:rgba(80,58,30,.13) !important; background:rgba(255,255,255,.30) !important; }
+html[data-theme-effective='light'] .skin-viewer-ui { background:rgba(249,244,235,.86) !important; color:#74695b !important; border-color:rgba(79,57,29,.14) !important; box-shadow:0 8px 20px rgba(72,49,23,.09) !important; }
+
+/* ---------- Store, including the rank dialog ---------- */
+html[data-theme-effective='light'] .store-rank-info-trigger { color:#4d4134 !important; }
+html[data-theme-effective='light'] .store-info-icon { background:#d9cdbc !important; color:#34291e !important; }
+html[data-theme-effective='light'] .store-rank-dialog { border-color:#baa78d !important; background:#f6efe4 !important; color:#2a2117 !important; box-shadow:0 30px 72px rgba(67,45,21,.22) !important; }
+html[data-theme-effective='light'] .store-rank-dialog::backdrop { background:rgba(55,40,22,.28) !important; }
+html[data-theme-effective='light'] .store-rank-dialog-close { background:#eadfce !important; color:#6b6053 !important; }
+html[data-theme-effective='light'] .store-rank-dialog-close:hover { color:#2b2218 !important; background:#f3eadc !important; }
+html[data-theme-effective='light'] .store-rank-dialog-copy { border-bottom-color:rgba(80,58,30,.13) !important; }
+html[data-theme-effective='light'] .store-rank-dialog-copy h2 { color:#2a2117 !important; }
+html[data-theme-effective='light'] .store-rank-dialog-copy p { color:#6b6053 !important; }
+html[data-theme-effective='light'] .store-rank-dialog-tier { border-color:rgba(80,58,30,.11) !important; background:#f3ebdf !important; }
+html[data-theme-effective='light'] .store-rank-dialog-tier h3 { color:#31271c !important; }
+html[data-theme-effective='light'] :where(.store-rank-dialog-tier p,.store-rank-dialog-note) { color:#6c6255 !important; }
+html[data-theme-effective='light'] .store-rank-dialog-note { border-top-color:rgba(80,58,30,.12) !important; }
+
+/* ---------- Guides: shared shell + specialized mechanics ---------- */
+html[data-theme-effective='light'] body:has(.guides-main) { background:radial-gradient(900px 640px at 78% -8%,rgba(224,170,55,.12),transparent 58%),linear-gradient(180deg,#f5eee3,#ece1d1 52%,#e5d8c6) !important; color:#292117 !important; }
+html[data-theme-effective='light'] .guides-main { background:linear-gradient(rgba(75,54,29,.024) 1px,transparent 1px) 0 0/16px 16px,linear-gradient(90deg,rgba(75,54,29,.024) 1px,transparent 1px) 0 0/16px 16px,transparent !important; }
+html[data-theme-effective='light'] .guides-topbar { border-bottom-color:#c7b69f !important; background:#e9dece !important; box-shadow:0 5px 0 rgba(91,65,35,.07) !important; }
+html[data-theme-effective='light'] .guides-sidebar { border-color:#c6b59c !important; background:linear-gradient(180deg,#faf4ea,#e8dccb) !important; box-shadow:6px 7px 0 rgba(86,61,31,.09),inset 0 0 0 1px rgba(255,255,255,.70) !important; }
+html[data-theme-effective='light'] .guides-sidebar-brand { border-bottom-color:rgba(83,60,31,.13) !important; }
+html[data-theme-effective='light'] .guides-sidebar-brand strong { color:#2c2318 !important; }
+html[data-theme-effective='light'] :where(.guides-sidebar-brand span,.guides-nav-group a) { color:#6d6356 !important; }
+html[data-theme-effective='light'] .guides-document-header { border-color:#c6b59c !important; background:radial-gradient(circle at 80% 10%,rgba(224,170,55,.15),transparent 33%),linear-gradient(155deg,#faf4ea,#e7dbc9 72%) !important; box-shadow:7px 9px 0 rgba(84,59,29,.09),inset 0 0 0 1px rgba(255,255,255,.70) !important; }
+html[data-theme-effective='light'] .guides-document-header h1 { color:#292117 !important; text-shadow:none !important; }
+html[data-theme-effective='light'] .guides-document-lead { color:#675d50 !important; }
+html[data-theme-effective='light'] .guides-document-meta span { border-color:rgba(80,58,30,.13) !important; background:rgba(255,255,255,.30) !important; color:#6d6255 !important; }
+html[data-theme-effective='light'] .guide-section-head { border-bottom-color:#cfc0aa !important; }
+html[data-theme-effective='light'] :where(.guide-section-head h2,.guide-prose strong) { color:#2d2419 !important; }
+html[data-theme-effective='light'] :where(.guide-section-head p,.guide-prose) { color:#675d50 !important; }
+html[data-theme-effective='light'] :where(.guide-callout,.guide-callout.is-legacy) { border-color:#c6b59c !important; background:linear-gradient(145deg,#f7efe2,#e8ddce) !important; box-shadow:5px 6px 0 rgba(84,59,29,.08) !important; }
+html[data-theme-effective='light'] .guide-callout p { color:#675d50 !important; }
+html[data-theme-effective='light'] .guide-reference-item { border-color:#c6b59c !important; background:linear-gradient(160deg,#faf4ea,#e8dccb) !important; box-shadow:5px 6px 0 rgba(84,59,29,.08) !important; color:#2b2218 !important; }
+html[data-theme-effective='light'] .guide-reference-item p { color:#6b6154 !important; }
+html[data-theme-effective='light'] .guide-facts { border-color:#c6b59c !important; background:#eee4d5 !important; box-shadow:5px 6px 0 rgba(84,59,29,.08) !important; }
+html[data-theme-effective='light'] .guide-fact { background:linear-gradient(180deg,#faf4ea,#e7dccb) !important; }
+html[data-theme-effective='light'] .guide-fact + .guide-fact { border-color:#c8b79f !important; }
+html[data-theme-effective='light'] .guide-fact span { color:#776c5e !important; }
+html[data-theme-effective='light'] .guide-fact strong { color:#382b19 !important; }
+html[data-theme-effective='light'] .guide-table-wrap { border-color:#c5b49b !important; background:#f5eee3 !important; box-shadow:5px 6px 0 rgba(84,59,29,.08) !important; }
+html[data-theme-effective='light'] .guide-table caption { color:#665c50 !important; background:#e9dece !important; border-bottom-color:#c7b69f !important; }
+html[data-theme-effective='light'] .guide-table thead { background:#e5d8c6 !important; }
+html[data-theme-effective='light'] .guide-table th { color:#805a1d !important; }
+html[data-theme-effective='light'] .guide-table td { color:#4f4539 !important; }
+html[data-theme-effective='light'] .guide-table tr + tr td { border-top-color:rgba(80,58,30,.10) !important; }
+html[data-theme-effective='light'] .guides-search { border-color:#c4b198 !important; background:#fffaf3 !important; color:#2b2217 !important; box-shadow:inset 3px 3px 0 rgba(91,68,39,.08),inset -1px -1px 0 rgba(255,255,255,.76) !important; }
+html[data-theme-effective='light'] .guide-row { border-color:#c6b59c !important; background:rgba(248,242,232,.82) !important; }
+html[data-theme-effective='light'] .guide-row h3 { color:#2b2218 !important; }
+html[data-theme-effective='light'] .guide-row p { color:#6b6154 !important; }
+html[data-theme-effective='light'] .guides-empty { border-color:rgba(80,58,30,.20) !important; background:#eee4d5 !important; }
+html[data-theme-effective='light'] :where(.progression-layer-rail,.progression-milestone-card,.progression-boundary-card,.progression-access-note,.skyblock-capability,.skyblock-foundation-card,.skyblock-partial-card,.skyblock-status-banner,.enchant-principle,.enchant-mechanic,.enchant-semantic-note,.enchant-retired-item,.verification-card,.stats-formula-main,.stats-formula-note,.stats-family-card,.stats-layer-card,.stats-exclusion,.talisman-state-flow,.talisman-secret-policy) {
+  border-color:rgba(81,58,29,.14) !important;
+  background:linear-gradient(145deg,rgba(250,244,234,.95),rgba(235,224,207,.90)) !important;
+  color:#2b2218 !important;
+}
+html[data-theme-effective='light'] :where(.progression-layer,.progression-milestone-card,.progression-boundary-card,.skyblock-capability,.skyblock-foundation-card,.skyblock-partial-card,.enchant-principle,.enchant-mechanic,.enchant-retired-item,.verification-card,.stats-formula-main,.stats-formula-note,.stats-family-card,.stats-layer-card,.stats-exclusion,.talisman-state,.talisman-pipeline-stage,.talisman-secret-policy) :where(h3,strong) { color:#30261b !important; }
+html[data-theme-effective='light'] :where(.progression-layer,.progression-milestone-card,.progression-boundary-card,.progression-access-note,.skyblock-foundation-card,.skyblock-partial-card,.skyblock-status-banner,.skyblock-rule,.enchant-principle,.enchant-mechanic,.enchant-semantic-note,.enchant-retired-item,.verification-card,.enchant-cap-copy,.stats-formula-main,.stats-formula-note,.stats-family-card,.stats-layer-card,.stats-exclusion,.talisman-state,.talisman-pipeline-stage,.talisman-secret-policy,.verification-pending) :where(p,span) { color:#6d6255 !important; }
+html[data-theme-effective='light'] .stats-formula-code { background:#e6dac8 !important; border-color:rgba(132,88,27,.18) !important; color:#5e451d !important; }
+html[data-theme-effective='light'] :where(.stats-family-chips code,.stats-family-empty,.guide-disclosure,.talisman-rarity-chip,.talisman-pipeline-value) { border-color:rgba(80,58,30,.13) !important; background:rgba(255,255,255,.30) !important; color:#6c5f50 !important; }
+html[data-theme-effective='light'] :where(.talisman-pipeline,.skyblock-rules,.enchant-cap-rule) { border-color:rgba(80,58,30,.14) !important; }
+html[data-theme-effective='light'] :where(.talisman-pipeline-stage + .talisman-pipeline-stage,.talisman-state + .talisman-state,.progression-layer + .progression-layer,.skyblock-rule + .skyblock-rule) { border-color:rgba(80,58,30,.11) !important; }
+html[data-theme-effective='light'] :where(.progression-milestone-list,.progression-milestone-row) { border-color:rgba(80,58,30,.10) !important; }
+html[data-theme-effective='light'] .progression-milestone-row { color:#6c6255 !important; }
+html[data-theme-effective='light'] :where(.progression-milestone-row strong,.progression-access-note strong,.enchant-cap-number,.stats-formula-note strong) { color:#6c4b18 !important; }
+
+/* ---------- Play dialog and floating Navigator ---------- */
+html[data-theme-effective='light'] .play-modal-backdrop { background:rgba(55,40,22,.34) !important; }
+html[data-theme-effective='light'] :where(.play-dialog-header h2,.play-step h3,.play-step strong,.play-dialog-address code) { color:#2b2218 !important; }
+html[data-theme-effective='light'] .play-dialog-close { background:#eee4d5 !important; color:#6c6154 !important; border-color:rgba(79,57,29,.14) !important; }
+html[data-theme-effective='light'] .play-step { background:#faf4eb !important; border-color:rgba(79,57,29,.12) !important; }
+html[data-theme-effective='light'] :where(.play-step p,.play-dialog-address span) { color:#6d6255 !important; }
+html[data-theme-effective='light'] .play-ip-control { background:#e8ddce !important; color:#2c2318 !important; border-color:rgba(145,94,23,.24) !important; }
+html[data-theme-effective='light'] .play-dialog-footer { border-top-color:rgba(79,57,29,.12) !important; }
+html[data-theme-effective='light'] .pixel-navigator { --pn-ink:#2b2218; --pn-muted:#6e6356; }
+html[data-theme-effective='light'] .pixel-navigator-trigger-icon::after { background:#eee3d3 !important; }
+html[data-theme-effective='light'] .pixel-navigator.is-open .pixel-navigator-trigger-icon::after { background:#eadbc5 !important; }
+html[data-theme-effective='light'] .pixel-navigator-trigger-label { background:#f7f0e5 !important; color:#5f5447 !important; border-color:rgba(145,94,23,.18) !important; box-shadow:0 8px 20px rgba(72,49,23,.10) !important; }
+html[data-theme-effective='light'] .pixel-navigator-panel { background:linear-gradient(180deg,rgba(224,170,55,.11),transparent 150px),repeating-linear-gradient(90deg,transparent 0 71px,rgba(125,84,27,.025) 72px),#f5eee3 !important; color:#2b2218 !important; border-color:rgba(145,94,23,.23) !important; }
+html[data-theme-effective='light'] .pixel-navigator-head { border-bottom-color:rgba(79,57,29,.12) !important; }
+html[data-theme-effective='light'] .pixel-navigator-head h2 { color:#2b2218 !important; }
+html[data-theme-effective='light'] .pixel-navigator-close { background:#e9dece !important; color:#716557 !important; border-color:rgba(79,57,29,.13) !important; }
+html[data-theme-effective='light'] .pixel-navigator-search-row { background:#fffaf3 !important; border-color:rgba(145,94,23,.19) !important; }
+html[data-theme-effective='light'] .pixel-navigator-input { color:#2b2218 !important; }
+html[data-theme-effective='light'] .pixel-navigator-input::placeholder { color:#988b7a !important; }
+html[data-theme-effective='light'] .pixel-navigator-examples button { background:#eee4d5 !important; color:#695e51 !important; border-color:rgba(79,57,29,.12) !important; }
+html[data-theme-effective='light'] :where(.pixel-navigator-examples button:hover,.pixel-navigator-examples button:focus-visible) { color:#563b10 !important; background:#f8efe1 !important; }
+html[data-theme-effective='light'] :where(.pixel-navigator-status,.pixel-navigator-foot) { border-color:rgba(79,57,29,.10) !important; color:#776c5e !important; }
+html[data-theme-effective='light'] .pixel-navigator-result { background:#faf4eb !important; color:#5d5246 !important; border-color:rgba(79,57,29,.12) !important; }
+html[data-theme-effective='light'] :where(.pixel-navigator-result:hover,.pixel-navigator-result:focus-visible) { background:#fff9ef !important; border-color:rgba(145,94,23,.22) !important; }
+html[data-theme-effective='light'] .pixel-navigator-result.is-primary { background:linear-gradient(90deg,rgba(224,170,55,.13),rgba(207,115,30,.035)),#faf4eb !important; }
+html[data-theme-effective='light'] .pixel-navigator-result-meta { background:#e9dece !important; color:#76551e !important; border-color:rgba(145,94,23,.16) !important; }
+html[data-theme-effective='light'] .pixel-navigator-result-copy strong { color:#30261b !important; }
+html[data-theme-effective='light'] .pixel-navigator-result-copy > span { color:#766b5d !important; }
+
+/* ---------- Mobile navigation and media frames ---------- */
+@media (max-width:980px) {
+  html[data-theme-effective='light'] :where(.minecraft-rpg-page .nav-links.open,.minecraft-rpg-home .nav-links.open,.worlds-region-page .nav-links,.nexus-encounter-page .nav-links,body:has(.guides-main) .nav-links.open) {
+    background:linear-gradient(180deg,#f7f0e5,#e6dac8) !important;
+    border-color:#c2af94 !important;
+    box-shadow:7px 8px 0 rgba(84,59,29,.09),0 20px 34px rgba(84,59,29,.08) !important;
+  }
+}
+
+/* Authored media is never rewritten by the theme. Canvas-backed Marketplace and skin
+   viewers stay transparent; PNG/JPG/SVG assets are not converted, recompressed or replaced. */
