@@ -53,7 +53,8 @@
       value: String(entry.value ?? '').trim()
     }))
     .filter(entry => Number.isInteger(entry.rank) && entry.rank > 0 && entry.player && entry.value)
-    .sort((a, b) => a.rank - b.rank);
+    .sort((a, b) => a.rank - b.rank)
+    .slice(0, 100);
 
   const cleanMetric = metric => ({
     id: String(metric?.id || '').trim(),
@@ -95,7 +96,9 @@
       source: {
         state: ready ? 'ready' : 'pending',
         authority: ready ? 'pixel-server-export' : 'pending',
-        label: String(source.label || (ready ? 'Pixel Network live records' : 'Leaderboard tracking is not connected yet')),
+        label: ready
+          ? String(source.label || 'Pixel Network live records')
+          : 'Leaderboard tracking is not connected yet',
         generatedAt: ready ? generatedAt : null
       },
       categories
