@@ -1,0 +1,93 @@
+/* Pixel Network — theme audit completion.
+   Detail selectors discovered after the page-mechanic audit. Loaded last. */
+
+html[data-theme-effective='light'] .marketplace-rpg-page .marketplace-model-stage::before {
+  border-color:rgba(88,63,32,.13) !important;
+  box-shadow:inset 0 0 44px rgba(99,70,35,.07),inset 0 0 0 1px rgba(255,255,255,.46) !important;
+}
+html[data-theme-effective='light'] .marketplace-rpg-page .marketplace-model-stage:focus-visible {
+  outline:none !important;
+  box-shadow:inset 0 0 0 2px rgba(190,127,30,.46),inset 0 0 46px rgba(99,70,35,.07) !important;
+}
+html[data-theme-effective='light'] .marketplace-rpg-page .marketplace-viewer-card:has(.marketplace-model-stage.is-loading) {
+  background:linear-gradient(145deg,#f7efe3,#e5d8c6) !important;
+}
+
+/* Actual secondary-page component names. */
+html[data-theme-effective='light'] .mc-portal-card {
+  color:#2b2218 !important;
+  border-color:#c6b59d !important;
+  background:radial-gradient(circle at 76% 20%,rgba(224,170,55,.13),transparent 34%),linear-gradient(155deg,#faf4ea,#e7dbc9 72%) !important;
+  box-shadow:6px 7px 0 rgba(87,61,31,.09),inset 0 0 0 1px rgba(255,255,255,.72) !important;
+}
+html[data-theme-effective='light'] .mc-portal-card::before { background-image:linear-gradient(rgba(78,57,30,.026) 1px,transparent 1px),linear-gradient(90deg,rgba(78,57,30,.026) 1px,transparent 1px) !important; }
+html[data-theme-effective='light'] .mc-portal-card:hover { background:linear-gradient(155deg,#fff9ef,#ecdfcd 72%) !important; }
+html[data-theme-effective='light'] .mc-portal-card small,
+html[data-theme-effective='light'] .mc-portal-card p { color:#6d6255 !important; }
+html[data-theme-effective='light'] .mc-portal-card h3 { color:#2d2419 !important; }
+
+html[data-theme-effective='light'] .mc-island-card {
+  color:#2b2218 !important;
+  border-color:#c6b59d !important;
+  background:radial-gradient(circle at 70% 20%,rgba(114,166,85,.12),transparent 34%),linear-gradient(160deg,#faf4ea,#e5dac8 72%) !important;
+  box-shadow:7px 9px 0 rgba(87,61,31,.09) !important;
+}
+html[data-theme-effective='light'] .mc-island-card:nth-child(2) { background:radial-gradient(circle at 72% 18%,rgba(224,170,55,.16),transparent 34%),linear-gradient(160deg,#fbf4e7,#e6dac7 72%) !important; }
+html[data-theme-effective='light'] .mc-island-card:nth-child(3) { background:radial-gradient(circle at 72% 18%,rgba(103,170,255,.11),transparent 34%),linear-gradient(160deg,#f7f1e9,#e2d9ce 72%) !important; }
+html[data-theme-effective='light'] .mc-island-card small,
+html[data-theme-effective='light'] .mc-island-card p { color:#675e51 !important; }
+html[data-theme-effective='light'] .mc-island-card h3 { color:#2c2318 !important; }
+html[data-theme-effective='light'] .mc-boundary-bar { border-color:#c6b59d !important; background:#eee4d5 !important; box-shadow:5px 6px 0 rgba(87,61,31,.08) !important; }
+html[data-theme-effective='light'] .mc-boundary-bar strong { color:#33291e !important; }
+html[data-theme-effective='light'] .mc-boundary-bar span { color:#6d6255 !important; }
+
+html[data-theme-effective='light'] .mc-discord-banner {
+  border-color:#b7b1c5 !important;
+  background:radial-gradient(circle at 78% 20%,rgba(88,101,242,.14),transparent 33%),linear-gradient(145deg,#f8f3ed,#e1dce4 62%,#e9e0d5) !important;
+  box-shadow:7px 9px 0 rgba(74,58,44,.09) !important;
+}
+html[data-theme-effective='light'] .mc-discord-banner small { color:#5863a2 !important; }
+html[data-theme-effective='light'] .mc-discord-banner h2 { color:#292117 !important; }
+html[data-theme-effective='light'] .mc-discord-banner p { color:#665f67 !important; }
+
+html[data-theme-effective='light'] .mc-owner-copy { border-top-color:#c9b9a2 !important; background:rgba(249,243,234,.64) !important; }
+html[data-theme-effective='light'] .mc-owner-copy h2 { color:#2d2419 !important; }
+html[data-theme-effective='light'] .mc-owner-copy .mc-owner-role { color:#62584c !important; }
+html[data-theme-effective='light'] .mc-owner-tags span { border-color:rgba(80,58,30,.14) !important; background:rgba(255,255,255,.32) !important; color:#6a5f52 !important; }
+
+html[data-theme-effective='light'] .mc-staff-card { border-color:#c6b59d !important; background:linear-gradient(155deg,#faf4ea,#e7dbc9 72%) !important; box-shadow:6px 7px 0 rgba(87,61,31,.09) !important; }
+html[data-theme-effective='light'] .mc-staff-card h2 { color:#2d2419 !important; }
+html[data-theme-effective='light'] .mc-staff-card p { color:#6b6154 !important; }
+
+html[data-theme-effective='light'] .mc-rank-panel { border-color:#c5b39a !important; background:linear-gradient(180deg,#f8f1e5,#e5d8c6) !important; box-shadow:7px 9px 0 rgba(85,60,30,.09) !important; }
+html[data-theme-effective='light'] .mc-store-note { background:rgba(224,170,55,.10) !important; color:#64594c !important; }
+html[data-theme-effective='light'] .store-rpg-page [data-store-categories] > * { border-color:#c6b59d !important; background:linear-gradient(160deg,#faf4ea,#e6dac8) !important; box-shadow:6px 7px 0 rgba(87,61,31,.09) !important; color:#2b2218 !important; }
+html[data-theme-effective='light'] .store-rpg-page [data-store-categories] > * :where(p,span,small) { color:#6b6154 !important; }
+html[data-theme-effective='light'] .mc-store-final { border-color:#c5b39a !important; background:radial-gradient(circle at 80% 20%,rgba(224,170,55,.17),transparent 30%),linear-gradient(145deg,#faf4e9,#e4d7c5) !important; box-shadow:7px 9px 0 rgba(85,60,30,.09) !important; }
+html[data-theme-effective='light'] .mc-store-final h2 { color:#2d2419 !important; }
+html[data-theme-effective='light'] .mc-store-final p { color:#675d50 !important; }
+
+/* Worlds investigation cue and detail internals. */
+html[data-theme-effective='light'] .worlds-region-background.is-fallback::before { background:radial-gradient(circle at 72% 38%,rgba(var(--world-accent),.15),transparent 38%),linear-gradient(120deg,rgba(var(--world-accent),.06),rgba(244,235,221,.91) 68%) !important; }
+html[data-theme-effective='light'] .worlds-investigate { color:#3d2d19 !important; }
+html[data-theme-effective='light'] .worlds-investigate-orb { background:rgba(250,245,237,.72) !important; border-color:rgba(80,58,31,.42) !important; box-shadow:0 8px 24px rgba(70,48,24,.13),inset 0 0 0 5px rgba(255,255,255,.42) !important; }
+html[data-theme-effective='light'] .worlds-investigate:hover .worlds-investigate-orb,
+html[data-theme-effective='light'] .worlds-investigate:focus-visible .worlds-investigate-orb { border-color:#72501e !important; box-shadow:0 8px 28px rgba(70,48,24,.14),0 0 22px rgba(var(--world-accent),.13) !important; }
+html[data-theme-effective='light'] .worlds-investigate-label { text-shadow:0 2px 10px rgba(255,255,255,.82) !important; }
+html[data-theme-effective='light'] .worlds-region-dialog-visual::after { background:linear-gradient(90deg,transparent 58%,rgba(245,238,226,.88)) !important; }
+html[data-theme-effective='light'] .worlds-region-dialog-stats,
+html[data-theme-effective='light'] .worlds-region-dialog-stat { border-color:rgba(80,58,30,.12) !important; }
+html[data-theme-effective='light'] .worlds-region-dialog-stat span { color:#7a6f61 !important; }
+html[data-theme-effective='light'] .worlds-region-dialog-stat strong { color:#33291e !important; }
+html[data-theme-effective='light'] .worlds-region-dialog-note { border-left-color:#b77a20 !important; background:rgba(224,170,55,.09) !important; color:#655b4f !important; }
+
+/* Nexus dialog internals. */
+html[data-theme-effective='light'] .nexus-encounter-dialog-ladder,
+html[data-theme-effective='light'] .nexus-encounter-dialog-tier { border-color:rgba(80,58,30,.12) !important; }
+html[data-theme-effective='light'] .nexus-encounter-dialog-tier span,
+html[data-theme-effective='light'] .nexus-encounter-dialog-eyebrow { color:#7a6f61 !important; }
+html[data-theme-effective='light'] .nexus-encounter-dialog-tier strong { color:#33291e !important; }
+
+@media (max-width:700px) {
+  html[data-theme-effective='light'] .worlds-region-dialog-visual::after { background:linear-gradient(180deg,transparent 55%,rgba(245,238,226,.92)) !important; }
+}
