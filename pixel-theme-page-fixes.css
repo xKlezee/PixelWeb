@@ -1,0 +1,70 @@
+/* Pixel Network — remaining public page mechanics from the full source audit. */
+
+/* Legacy/shared Phase 1 surfaces still used by current pages. */
+html[data-theme-effective='light'] :where(.nexus-access,.difficulty-tier,.dev-progress,.status-column,.person,.page-cta,.next-destination,.index-row) {
+  border-color:rgba(80,58,30,.14) !important;
+  background:linear-gradient(145deg,#faf4ea,#e8ddce) !important;
+  color:#2b2218 !important;
+  box-shadow:0 10px 26px rgba(84,59,29,.08) !important;
+}
+html[data-theme-effective='light'] :where(.nexus-access,.difficulty-tier,.dev-progress,.status-column,.person,.page-cta,.next-destination,.index-row) :where(p,span,small,li) {
+  color:#6d6255 !important;
+}
+html[data-theme-effective='light'] :where(.nexus-access,.difficulty-tier,.dev-progress,.status-column,.person,.page-cta,.next-destination,.index-row) :where(h2,h3,b,strong) {
+  color:#2f261b !important;
+}
+html[data-theme-effective='light'] .nexus-access .unlock { border-color:rgba(80,58,30,.13) !important; }
+html[data-theme-effective='light'] .nexus-access .unlock b,
+html[data-theme-effective='light'] .difficulty-tier .unlock-at { color:#9a681b !important; }
+html[data-theme-effective='light'] .difficulty-tier .encounters span {
+  background:rgba(255,255,255,.34) !important;
+  border-color:rgba(80,58,30,.13) !important;
+  color:#655a4d !important;
+}
+html[data-theme-effective='light'] .dev-progress {
+  background:#e8ddcd !important;
+  box-shadow:inset 3px 3px 8px rgba(95,70,40,.10),inset -3px -3px 8px rgba(255,255,255,.72) !important;
+}
+html[data-theme-effective='light'] .timeline-item { border-color:rgba(80,58,30,.13) !important; }
+html[data-theme-effective='light'] .timeline-item h3 { color:#30261b !important; }
+html[data-theme-effective='light'] .timeline-item p { color:#6d6255 !important; }
+html[data-theme-effective='light'] .index-row strong { color:#352b20 !important; }
+
+/* About / License information, FAQ and legal surfaces. */
+html[data-theme-effective='light'] .about-info-heading h2 { color:#2d2419 !important; }
+html[data-theme-effective='light'] .about-info-heading p { color:#6c6255 !important; }
+html[data-theme-effective='light'] .about-faq-list,
+html[data-theme-effective='light'] .about-faq-list details { border-color:rgba(80,58,30,.13) !important; }
+html[data-theme-effective='light'] .about-faq-list summary { color:#342a1f !important; }
+html[data-theme-effective='light'] .about-faq-list summary::after { color:#8a6a37 !important; }
+html[data-theme-effective='light'] .about-faq-list details p { color:#6a6053 !important; }
+html[data-theme-effective='light'] .about-faq-list a,
+html[data-theme-effective='light'] .about-text-link { color:#8b5b16 !important; }
+html[data-theme-effective='light'] .about-policy-panel,
+html[data-theme-effective='light'] .about-disclaimer-panel {
+  border-color:#c4b299 !important;
+  background:radial-gradient(circle at 84% 12%,rgba(224,170,55,.13),transparent 31%),linear-gradient(155deg,#faf4ea,#e7dbc9 72%) !important;
+  box-shadow:6px 7px 0 rgba(85,60,30,.09) !important;
+}
+html[data-theme-effective='light'] .about-disclaimer-panel {
+  background:radial-gradient(circle at 80% 18%,rgba(103,170,255,.08),transparent 32%),linear-gradient(155deg,#f9f4ed,#e4dcd1 72%) !important;
+}
+html[data-theme-effective='light'] .about-policy-panel h3 { color:#30261b !important; }
+html[data-theme-effective='light'] .about-policy-panel h3:not(:first-child) { border-top-color:rgba(80,58,30,.12) !important; }
+html[data-theme-effective='light'] .about-policy-panel p,
+html[data-theme-effective='light'] .about-disclaimer-panel p { color:#665c50 !important; }
+html[data-theme-effective='light'] .about-disclaimer-panel > strong {
+  border-bottom-color:rgba(80,58,30,.14) !important;
+  color:#5d431a !important;
+}
+html[data-theme-effective='light'] .about-external-note { color:#807466 !important; }
+
+/* Mobile-only action rows and dropdown internals. */
+@media (max-width:980px) {
+  html[data-theme-effective='light'] .nav-mobile-store {
+    color:#5d5245 !important;
+    border-color:rgba(80,58,30,.13) !important;
+    background:rgba(255,255,255,.30) !important;
+  }
+  html[data-theme-effective='light'] .nav-dropdown { border-left-color:rgba(150,99,27,.23) !important; }
+}
