@@ -76,7 +76,7 @@ PixelWeb uses a warm Minecraft/RPG accent system across shared UI:
 - copper;
 - warm charcoal/stone neutrals.
 
-The previous Pixel Blue treatment is no longer the global selection/accent language. Discord and Play remain neutral gray controls in the header so Store can retain the strongest gold CTA hierarchy.
+The previous Pixel Blue treatment is no longer the global selection/accent language. Discord and Play are now theme-aware secondary header controls rather than fixed dark-gray controls: Dark retains the charcoal shell, Light gives Play a parchment/stone treatment and Discord a lighter slate shell while preserving Discord's official Symbol asset. Store remains the strongest gold CTA in both themes.
 
 Worlds and Nexus preserve their established immersive geometry and media treatment; the warm theme applies to shared chrome rather than recoloring approved imagery.
 
@@ -94,9 +94,9 @@ The current cascade is intentionally layered:
 4. `pixel-theme-page-fixes.css`, which imports `pixel-theme-runtime-fixes.css` before its own page-specific rules;
 5. `pixel-theme.js` for selection, persistence, system-preference listening and runtime theme updates.
 
-The completed source-level coverage pass explicitly includes Home, Gameplay, Systems, Worlds, Nexus, Skyblock, Marketplace, Community, Leaderboards, Changelog, Rules, Staff Team, About, Store, License, the Guide shell and specialized Guide pages, Play, Pixel Navigator, mobile navigation and shared feedback/accessibility states. Marketplace loading/failure feedback, toast/skip-link contrast and late warm-accent cascade collisions are part of that contract.
+The completed source-level coverage pass explicitly includes Home, Gameplay, Systems, Worlds, Nexus, Skyblock, Marketplace, Community, Leaderboards, Changelog, Rules, Staff Team, About, Store, License, the Guide shell and specialized Guide pages, Play, Pixel Navigator, mobile navigation and shared feedback/accessibility states. Marketplace loading/failure feedback, toast/skip-link contrast, theme-aware Play/Discord header actions and late warm-accent cascade collisions are part of that contract.
 
-Approved World/Nexus imagery, Nexus boss PNGs, Minecraft skins, Marketplace model textures and logos remain source-identical. Light mode adapts their containing stage/overlay/contrast environment only. The detailed source audit is maintained in `docs/THEME-COVERAGE-AUDIT-2026-09.md`.
+Approved World/Nexus imagery, Nexus boss PNGs, Minecraft skins, Marketplace model textures and logos remain source-identical. Discord's official Symbol also remains unmodified; theme changes affect its button shell only. Light mode adapts authored media containing stages/overlays/contrast environments rather than the source files themselves. The detailed source audit is maintained in `docs/THEME-COVERAGE-AUDIT-2026-09.md`.
 
 This is still a source/selectors/states claim. Real-browser visual verification of System/Light/Dark at the responsive matrix remains pending and must not be inferred from the audit.
 
@@ -192,6 +192,7 @@ A complete browser pass is still required for claims that depend on real renderi
 - contextual navigation horizontal behavior;
 - System / Light / Dark selection, persistence and live system-preference switching;
 - theme coverage for default, hover, focus, selected, loading, failure, empty, modal/backdrop and feedback states;
+- Play/Discord header actions in both effective themes;
 - Play modal;
 - Guide Browse/search/anchors/tables;
 - Staff skin loading and interaction/fallback;
