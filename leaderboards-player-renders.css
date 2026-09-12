@@ -1,0 +1,171 @@
+/* Pixel Network — player render treatment for Leaderboards. */
+
+.leaderboard-player-head {
+  width:36px;
+  height:36px;
+  flex:0 0 36px;
+  display:block;
+  object-fit:cover;
+  image-rendering:pixelated;
+  border:1px solid rgba(246,201,69,.18);
+  background:#090a07;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.38);
+}
+
+.leaderboard-podium {
+  min-height:420px;
+  padding:30px 26px 0;
+}
+
+.leaderboard-podium-card {
+  min-height:278px;
+  padding:34px 16px 22px;
+  justify-content:flex-end;
+  overflow:visible;
+}
+
+.leaderboard-podium-card.place-1 {
+  min-height:350px;
+  padding-top:38px;
+}
+
+.leaderboard-podium-card.place-2 { min-height:310px; }
+.leaderboard-podium-card.place-3 { min-height:270px; }
+
+.leaderboard-podium-render {
+  position:relative;
+  width:100%;
+  height:188px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  margin:0 0 14px;
+  pointer-events:none;
+}
+
+.place-1 .leaderboard-podium-render {
+  height:236px;
+  margin-bottom:16px;
+}
+
+.place-2 .leaderboard-podium-render { height:205px; }
+.place-3 .leaderboard-podium-render { height:180px; }
+
+.leaderboard-podium-render::before {
+  content:'';
+  position:absolute;
+  left:50%;
+  bottom:4px;
+  width:72%;
+  height:18px;
+  border-radius:50%;
+  transform:translateX(-50%);
+  background:rgba(0,0,0,.38);
+  filter:blur(7px);
+}
+
+.place-1 .leaderboard-podium-render::after {
+  content:'';
+  position:absolute;
+  inset:22% 16% 0;
+  z-index:0;
+  background:radial-gradient(circle at 50% 58%,rgba(246,201,69,.17),transparent 67%);
+  filter:blur(8px);
+}
+
+.leaderboard-podium-skin {
+  position:relative;
+  z-index:1;
+  display:block;
+  width:auto;
+  max-width:100%;
+  height:auto;
+  max-height:100%;
+  image-rendering:pixelated;
+  object-fit:contain;
+  filter:drop-shadow(0 14px 13px rgba(0,0,0,.44));
+}
+
+.place-1 .leaderboard-podium-skin {
+  max-height:236px;
+  filter:drop-shadow(0 17px 17px rgba(0,0,0,.48)) drop-shadow(0 0 12px rgba(246,201,69,.08));
+}
+
+.leaderboard-podium-fallback {
+  position:relative;
+  z-index:1;
+  width:74px;
+  height:112px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(246,201,69,.15);
+  background:#090a07;
+  color:#a58a4b;
+  font-size:28px;
+  font-weight:900;
+}
+
+.place-1 .leaderboard-podium-fallback {
+  width:92px;
+  height:142px;
+  border-color:rgba(246,201,69,.28);
+  font-size:34px;
+}
+
+.leaderboard-podium-card strong {
+  position:relative;
+  z-index:2;
+  font-size:15px;
+}
+
+.leaderboard-podium-card > span:last-child {
+  position:relative;
+  z-index:2;
+  font-size:14px;
+}
+
+@media (max-width:760px) {
+  .leaderboard-podium {
+    min-height:340px;
+    padding-inline:10px;
+  }
+  .leaderboard-podium-card { min-height:230px; padding-inline:8px; }
+  .leaderboard-podium-card.place-1 { min-height:286px; }
+  .leaderboard-podium-card.place-2 { min-height:255px; }
+  .leaderboard-podium-card.place-3 { min-height:225px; }
+  .leaderboard-podium-render { height:142px; }
+  .place-1 .leaderboard-podium-render { height:184px; }
+  .place-2 .leaderboard-podium-render { height:158px; }
+  .place-3 .leaderboard-podium-render { height:136px; }
+  .leaderboard-podium-card strong { font-size:13px; }
+  .leaderboard-podium-card > span:last-child { font-size:12px; }
+}
+
+@media (max-width:480px) {
+  .leaderboard-player-head {
+    width:32px;
+    height:32px;
+    flex-basis:32px;
+  }
+  .leaderboard-podium {
+    min-height:300px;
+    padding-inline:6px;
+    gap:4px;
+  }
+  .leaderboard-podium-card {
+    min-height:205px;
+    padding:30px 4px 16px;
+  }
+  .leaderboard-podium-card.place-1 { min-height:250px; }
+  .leaderboard-podium-card.place-2 { min-height:226px; }
+  .leaderboard-podium-card.place-3 { min-height:198px; }
+  .leaderboard-podium-render { height:118px; margin-bottom:10px; }
+  .place-1 .leaderboard-podium-render { height:152px; }
+  .place-2 .leaderboard-podium-render { height:132px; }
+  .place-3 .leaderboard-podium-render { height:110px; }
+  .leaderboard-podium-card strong {
+    max-width:94px;
+    font-size:11px;
+  }
+  .leaderboard-podium-card > span:last-child { font-size:10px; }
+}
