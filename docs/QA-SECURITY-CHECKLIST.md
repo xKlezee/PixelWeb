@@ -124,15 +124,15 @@ Verify the appearance system as a real browser/runtime feature, not only as a so
 - `assets/nexus/raphael.png`, `azazel.png`, `abyss.png`, `astral.png` remain the approved original 1448×1086 PNGs.
 - No AVIF/WebP conversion, recompression or downscale is introduced.
 - Abyss + Astral remain independent complete 4:3 images.
-- Home immersive video remains deferred and reduced motion avoids unnecessary loading.
+- The retired immersive story/video runtime remains absent from the public bundle unless it is intentionally reintroduced as a reviewed feature.
 
 ## Crawl / publication behavior
 
 - `sitemap.xml` includes all indexable current product/Guide/About/License pages, including Currencies and Basic Commands.
 - Every indexed page keeps one absolute HTTPS canonical matching its intended URL.
 - Indexed pages retain coherent source Open Graph/Twitter metadata.
-- `forum.html` and `404.html` remain outside the sitemap and noindex where applicable.
-- `development.html` remains a legacy redirect to Guide, not a current navigation family.
+- `forum.html`, `development.html` and `404.html` remain outside the sitemap and explicitly noindex where applicable.
+- `forum.html` remains a legacy redirect to Community; `development.html` remains a legacy redirect to Guide. Neither returns as a current navigation family.
 - Public bundle must exclude docs/scripts/internal repo artifacts if/when the `_site/` publication model is used.
 
 ## Browser behavior
