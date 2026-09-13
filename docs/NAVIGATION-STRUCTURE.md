@@ -14,7 +14,7 @@ The canonical top-level order is:
 
 `Store`, `Discord` and `Play` remain header actions rather than content families.
 
-The Discord header action uses Discord's official Symbol asset inside the Pixel navigation material. The symbol itself must not be redrawn, distorted or recolored; only its surrounding Pixel control may be styled.
+The Discord header action uses Discord's official Symbol asset inside the Pixel navigation material. The source SVG and its geometry must not be redrawn, replaced or distorted. Its rendered CSS tint may follow the effective Light/Dark theme so the glyph keeps sufficient contrast against the themed control; this presentation tint does not modify the source asset.
 
 ## Explore
 
@@ -137,7 +137,7 @@ Within **Explore**, Gameplay, Systems, Worlds, Skyblock and Nexus use one visual
 
 The global interactive accent system is warm: yellow/gold/amber/orange/copper. Guide may use its denser documentation presentation while retaining the shared DOM order, labels, interaction model and responsive behavior. Community uses the same shared warm-accent contract.
 
-`pixel-global-chrome.css` owns the shared Explore presentation. Worlds/Nexus retain the established 50px geometry required by their immersive viewport calculations.
+`pixel-global-chrome.css` owns the shared Explore presentation. Contextual rails use the current 48px structural height. On mobile Worlds/Nexus immersive viewport math accounts for the measured 65px header plus 48px rail (113px total); the short-height landscape contract uses 97px after its compact header/rail adjustments.
 
 ## Footer
 
