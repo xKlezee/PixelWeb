@@ -84,6 +84,9 @@ img { max-width: 100%; display: block; }
 .nav-toggle { display: none; width: 42px; height: 42px; border: 0; border-radius: 12px; background: var(--surface); box-shadow: var(--raised-soft); cursor: pointer; }
 .nav-toggle span { display: block; width: 18px; height: 2px; margin: 4px auto; border-radius: 2px; background: #d7d7d2; }
 
+/* Runtime-only join controls must not remain as inert buttons if scripts are unavailable. */
+html:not(.js) body [data-copy-ip] { display: none !important; }
+
 /* Buttons */
 .button, .copy-ip {
   border: 0;
