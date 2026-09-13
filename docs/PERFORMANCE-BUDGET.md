@@ -33,9 +33,7 @@ The four approved Nexus PNG files are each roughly 2.1 MB. That size is intentio
 
 The Nexus renderer currently assigns `loading=lazy`, `decoding=async`, `fetchPriority=low` and intrinsic 1448×1086 dimensions to those images. Preserve that loading contract unless browser waterfall evidence justifies a different priority for a specific viewport.
 
-The Home immersive MP4 is roughly 1.1 MB and is now explicitly deferred. The HTML contains no initial `src`, uses `preload=none`, and stores the local source in `data-src`. `immersive.js` hydrates the source with `IntersectionObserver` only when the story approaches the viewport (currently a 600 px root margin), then waits for metadata before scroll scrubbing can seek through the video. Under `prefers-reduced-motion: reduce`, the video is not hydrated at all; the section remains readable over its intentional dark fallback surface.
-
-This behavior is a performance contract. Do not restore an eager `src` to the Home story merely to simplify the script.
+The retired Home immersive-story runtime and its roughly 1.1 MB local MP4 were removed after a source/reference audit confirmed that no current public route loaded the JavaScript, stylesheet, story markup or video asset. Do not reintroduce that media as a hidden/preloaded compatibility asset. Any future motion/video feature needs a new measured loading budget, an explicit current-route owner and a reduced-motion contract before publication.
 
 The current official root logo (`LOGO OFICIAL.png`) is approximately 388 KB and is reused throughout the site, including small navigation presentation. The original is not to be altered speculatively. A smaller navigation/favicon derivative may be evaluated later **only** with visual inspection and while retaining the official original unchanged; this is an investigation item, not permission to silently recompress or replace the brand asset.
 
@@ -85,8 +83,7 @@ Target guardrails for the public static site on a representative mobile profile:
 - CLS: <= 0.10
 - INP: <= 200 ms
 - no unexpected eager request for all four Nexus boss PNG files from pages where they are below the fold
-- no Home immersive MP4 request during the initial viewport before the story approaches the viewport
-- no immersive MP4 request at all when the user requests reduced motion
+- no retired/orphan media restored into the public bundle without a current route/runtime owner
 - no eager request for all deferred Worlds landscape variants
 - no duplicate download of identical local media under different repository paths
 - all four approved Nexus PNGs pass byte-level media integrity checks
