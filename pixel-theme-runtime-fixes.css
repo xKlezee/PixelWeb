@@ -100,9 +100,9 @@ html[data-theme-effective='light'] .skip-link {
   box-shadow:0 10px 26px rgba(77,54,27,.16) !important;
 }
 
-/* Header Play / Discord shells are theme-aware. Store remains the strongest gold CTA.
-   Discord keeps the official Symbol source/geometry; later chrome/page layers may tint the
-   rendered Symbol for effective-theme contrast without modifying that source asset. */
+/* Header theme-aware action shells. Store remains the strongest gold CTA.
+   Dark Discord and both Play modes live here; the approved bright Light Discord surface is
+   owned by pixel-theme-page-fixes.css. The official Discord Symbol source/geometry stays intact. */
 html[data-theme-effective='dark'] .nav-actions .nav-play,
 html[data-theme-effective='dark'] .nav-actions .button.primary.nav-play {
   border-color:#343941 !important;
@@ -165,23 +165,6 @@ html[data-theme-effective='light'] .nav-actions .button.primary.nav-play:active 
   background:linear-gradient(180deg,#e6dac8 0%,#d8cab6 100%) !important;
   color:#2b2117 !important;
   box-shadow:inset 0 3px 5px rgba(90,63,32,.17),inset 0 -1px 0 rgba(255,255,255,.62) !important;
-}
-
-html[data-theme-effective='light'] .nav-actions .nav-discord {
-  border-color:#777a7f !important;
-  background:linear-gradient(180deg,#7c8088 0%,#676c75 55%,#585e67 100%) !important;
-  box-shadow:inset 0 2px 0 rgba(255,255,255,.16),inset 0 -3px 0 rgba(31,34,39,.22),0 2px 0 rgba(79,57,30,.12) !important;
-}
-html[data-theme-effective='light'] .nav-actions .nav-discord:hover,
-html[data-theme-effective='light'] .nav-actions .nav-discord:focus-visible {
-  border-color:#8e9299 !important;
-  background:linear-gradient(180deg,#898e97 0%,#727781 54%,#60666f 100%) !important;
-  box-shadow:inset 0 2px 0 rgba(255,255,255,.19),inset 0 -3px 0 rgba(31,34,39,.22),0 2px 0 rgba(79,57,30,.12),0 0 0 2px rgba(91,101,242,.06) !important;
-}
-html[data-theme-effective='light'] .nav-actions .nav-discord:active {
-  border-color:#6c7077 !important;
-  background:linear-gradient(180deg,#626770 0%,#555b64 100%) !important;
-  box-shadow:inset 0 3px 5px rgba(31,34,39,.27),inset 0 -1px 0 rgba(255,255,255,.12) !important;
 }
 
 /* Remove generic cool-blue accents that survived through later authored stylesheets. */
