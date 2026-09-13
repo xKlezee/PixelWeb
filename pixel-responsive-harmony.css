@@ -1,0 +1,475 @@
+/* Pixel Network — cross-page responsive harmony layer.
+   Source-level breakpoint normalization for the public site.
+   This file does not replace browser/render QA; it removes measurable layout drift,
+   overflow risks and inconsistent density before the visual matrix is executed. */
+
+:root {
+  --rh-section-xl: 96px;
+  --rh-section-lg: 80px;
+  --rh-section-md: 68px;
+  --rh-section-sm: 56px;
+  --rh-edge-tablet: 16px;
+  --rh-edge-phone: 12px;
+}
+
+/* Keep text/media columns shrinkable. A surprising amount of responsive overflow
+   comes from grid/flex children retaining their intrinsic min-content width. */
+:where(
+  .hero-grid,.page-hero-grid,.content-head,.editorial-grid,.systems-grid,
+  .detail-grid,.metric-grid,.path-grid,.signature-grid,.world-row,.world-stage,
+  .mc-portal-grid,.mc-island-grid,.mc-owner-grid,.mc-staff-grid,.mc-discord-banner,
+  .mc-store-final,.marketplace-shell,.marketplace-item-grid,.leaderboard-frame,
+  .leaderboard-content,.wiki-layout,.guides-layout,.guide-reference-grid,
+  .worlds-region-content,.nexus-encounter-content
+) > * {
+  min-width: 0;
+}
+
+/* ----- 1024 px: keep the final desktop step comfortable before mobile nav ----- */
+@media (max-width: 1024px) and (min-width: 981px) {
+  .site-nav .nav-inner { gap: 14px; }
+  .nav-links > a,
+  .nav-group > a,
+  .nav-group > button { padding-inline: 9px; }
+  .nav-actions { gap: 7px; }
+
+  .section { padding-block: var(--rh-section-xl); }
+  .content-section { padding-block: 82px; }
+  .page-hero { padding-top: 84px; }
+
+  .hero-grid { gap: 44px; }
+  .hero h1 { font-size: clamp(54px,7.4vw,82px); }
+  .page-hero h1 { font-size: clamp(50px,6.2vw,76px); }
+
+  .mc-portal-card { min-height: 250px; }
+  .mc-owner-card { min-height: 610px; }
+}
+
+/* ----- 980 px: canonical navigation/layout mode switch ----- */
+@media (max-width: 980px) {
+  .hero-grid,
+  .page-hero-grid,
+  .content-head { grid-template-columns: 1fr; }
+
+  .hero-grid { gap: 26px; }
+  .hero-copy,
+  .page-hero-grid > :first-child,
+  .content-head > :first-child { max-width: 760px; }
+
+  .hero-object {
+    width: 100%;
+    min-height: 350px;
+  }
+
+  .page-hero-grid,
+  .content-head { gap: 18px; }
+  .content-head > p { max-width: 680px; }
+
+  .section { padding-block: var(--rh-section-lg); }
+  .content-section { padding-block: 72px; }
+
+  /* Secondary pages should transition on the same structural beat. */
+  .minecraft-rpg-secondary .mc-page-hero { min-height: 390px; }
+  .minecraft-rpg-secondary .mc-page-hero .shell { padding-bottom: 64px; }
+
+  .mc-owner-card {
+    min-height: auto;
+    grid-template-rows: minmax(360px,52svh) auto;
+  }
+  .mc-owner-visual,
+  .mc-owner-visual .skin-viewer { min-height: 360px; }
+
+  /* Marketplace keeps its viewer substantial but no longer consumes an almost
+     desktop-sized 510 px before the detail card on tablet widths. */
+  .marketplace-rpg-page .marketplace-model-stage {
+    min-height: clamp(420px,52svh,480px);
+  }
+  .marketplace-rpg-page .marketplace-item-grid {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+
+  /* Immersive pages: 64 px mobile header + 48 px contextual rail. */
+  .worlds-region-page { --worlds-chrome-height: 112px; }
+  .nexus-encounter-page { --nexus-chrome-height: 112px; }
+}
+
+/* ----- 768 px: tablet portrait / 200%-zoom desktop equivalent ----- */
+@media (max-width: 768px) {
+  .shell,
+  .section-rule { width: min(var(--max),calc(100% - 32px)); }
+
+  .section { padding-block: var(--rh-section-md); }
+  .section.compact { padding-block: 56px; }
+  .content-section { padding-block: 62px; }
+  .page-hero { padding: 68px 0 50px; }
+
+  .hero { padding: 56px 0 64px; }
+  .hero h1 { font-size: clamp(46px,11.5vw,68px); }
+  .hero-lead { max-width: 620px; }
+  .hero-object { min-height: 315px; }
+  .hero-logo-card { width: min(62vw,270px); }
+
+  .section-head { margin-bottom: 34px; }
+  .section-head h2,
+  .content-head h2 { font-size: clamp(32px,7vw,48px); }
+
+  .feature-copy,
+  .system-card,
+  .detail-card,
+  .metric-card,
+  .signature-card { padding: 22px; }
+
+  .path-card { padding: 28px; }
+  .world-info { padding: 24px; }
+  .page-cta,
+  .next-destination { padding: 26px; }
+
+  .mc-portal-grid { gap: 10px; }
+  .mc-portal-card { min-height: 235px; padding: 22px; }
+  .mc-island-card { min-height: 285px; padding: 24px; }
+  .mc-discord-banner,
+  .mc-store-final { padding: 26px; }
+  .mc-staff-card { min-height: 230px; padding: 25px; }
+
+  .mc-owner-card { grid-template-rows: minmax(340px,50svh) auto; }
+  .mc-owner-visual,
+  .mc-owner-visual .skin-viewer { min-height: 340px; }
+  .mc-owner-copy { padding: 24px; }
+
+  /* Guide/wiki horizontal nav should feel like one system, not two unrelated rails. */
+  .wiki-index-sidebar nav,
+  .guides-sidebar-nav {
+    gap: 8px;
+    scroll-snap-type: x proximity;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .wiki-index-sidebar nav::-webkit-scrollbar,
+  .guides-sidebar-nav::-webkit-scrollbar { display: none; }
+  .wiki-index-sidebar a,
+  .guides-nav-group a { scroll-snap-align: start; }
+  .guides-document { padding-bottom: 78px; }
+  .guides-document-header h1 { font-size: clamp(40px,9vw,58px); }
+
+  /* Leaderboard hierarchy stays readable without oversized empty space. */
+  .leaderboard-record { padding: 24px 20px; }
+  .leaderboard-record-head { gap: 18px; padding-bottom: 22px; }
+  .leaderboard-podium { padding-top: 20px; }
+
+  /* Immersive rail labels are already icon-only here; reserve a consistent text field. */
+  .worlds-region-content,
+  .nexus-encounter-content { padding-right: 12px; }
+}
+
+/* ----- 600 px: compact phone density ----- */
+@media (max-width: 600px) {
+  .shell,
+  .section-rule { width: min(var(--max),calc(100% - 28px)); }
+
+  /* Preserve complete Pixel Network identity in both themes. Older Phase 1 rules
+     hid Java Edition below 600 px; that produced a theme-dependent brand shape. */
+  .site-nav .brand-wordmark {
+    max-width: none;
+    overflow: visible;
+    text-overflow: clip;
+    white-space: nowrap;
+  }
+  .site-nav .brand-wordmark small { display: block; }
+
+  .section { padding-block: 60px; }
+  .content-section { padding-block: 58px; }
+  .page-hero { padding: 64px 0 46px; }
+
+  .hero { padding: 52px 0 58px; }
+  .hero-object { min-height: 285px; }
+  .hero-logo-card { width: min(68vw,250px); }
+
+  .stat { padding: 18px; }
+  .feature-copy,
+  .system-card,
+  .detail-card,
+  .metric-card,
+  .signature-card { padding: 20px; }
+
+  .page-cta,
+  .next-destination { padding: 24px 20px; }
+  .page-cta-actions { width: 100%; }
+
+  .mc-portal-card { min-height: 215px; padding: 20px; }
+  .mc-island-card { min-height: 250px; padding: 22px; }
+  .mc-boundary-bar,
+  .mc-store-note { padding: 16px 18px; }
+  .mc-discord-banner,
+  .mc-store-final { padding: 23px 20px; }
+  .mc-staff-card { min-height: 210px; padding: 22px; }
+
+  .mc-owner-card { grid-template-rows: minmax(330px,50svh) auto; }
+  .mc-owner-visual,
+  .mc-owner-visual .skin-viewer { min-height: 330px; }
+  .mc-owner-copy { padding: 22px 20px 24px; }
+
+  .marketplace-rpg-page .marketplace-model-stage {
+    min-height: clamp(340px,58svh,400px);
+  }
+  .marketplace-rpg-page .marketplace-item-grid { grid-template-columns: 1fr; }
+  .marketplace-rpg-page .marketplace-detail-card { padding: 22px; }
+  .marketplace-rpg-page .marketplace-items-head,
+  .marketplace-rpg-page .marketplace-store-bridge { margin-top: 42px; }
+
+  .wiki-hero-inner { padding-block: 44px 34px; }
+  .wiki-category { padding-top: 26px; }
+  .guides-sidebar { padding-block: 16px; }
+  .guides-sidebar-nav { gap: 12px; }
+  .guides-document { padding-top: 28px; }
+  .guide-section { padding-top: 38px; }
+
+  .leaderboard-category-list { gap: 6px; }
+  .leaderboard-record-head h3 { font-size: clamp(34px,9vw,48px); }
+  .leaderboard-table { min-width: 620px; }
+
+  .play-dialog { padding: 17px; }
+  .play-steps { margin-block: 18px; }
+  .play-step { padding: 12px; }
+}
+
+/* ----- 430 px: narrow phone composition ----- */
+@media (max-width: 430px) {
+  .shell,
+  .section-rule { width: min(var(--max),calc(100% - 24px)); }
+
+  .section { padding-block: var(--rh-section-sm); }
+  .content-section { padding-block: 52px; }
+  .page-hero { padding: 58px 0 42px; }
+
+  .hero { padding: 46px 0 52px; }
+  .hero h1 { font-size: clamp(43px,13.2vw,58px); }
+  .hero-lead { margin-top: 20px; line-height: 1.58; }
+  .hero-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+    gap: 10px;
+    margin-top: 26px;
+  }
+  .hero-actions > .button,
+  .hero-actions > .copy-ip { width: 100%; }
+  .copy-ip { justify-content: space-between; }
+  .hero-meta { gap: 10px 16px; margin-top: 22px; }
+  .hero-object { min-height: 260px; }
+
+  .stat-rail { padding: 6px; }
+  .stat { padding: 16px 14px; }
+  .stat b { font-size: 22px; }
+  .stat span { font-size: 9px; }
+
+  .section-head { gap: 14px; margin-bottom: 28px; }
+  .section-head p,
+  .content-head > p { font-size: 14px; line-height: 1.62; }
+
+  .feature-copy,
+  .system-card,
+  .detail-card,
+  .metric-card,
+  .signature-card { padding: 18px; }
+  .feature-copy h3 { font-size: 24px; }
+
+  .page-cta,
+  .next-destination { padding: 21px 18px; }
+  .page-cta-actions,
+  .next-destination > .button {
+    width: 100%;
+  }
+  .page-cta-actions > .button { flex: 1 1 100%; }
+
+  .mc-page-hero h1,
+  .page-hero h1 { font-size: clamp(42px,12.8vw,56px); }
+  .minecraft-rpg-secondary .mc-page-hero { min-height: 330px; }
+  .minecraft-rpg-secondary .mc-page-hero .shell { padding-bottom: 52px; }
+
+  .mc-portal-card { min-height: 195px; }
+  .mc-island-card { min-height: 225px; }
+  .mc-discord-banner h2,
+  .mc-store-final h2 { font-size: clamp(32px,10vw,44px); }
+  .mc-discord-banner .button,
+  .mc-store-final .button { width: 100%; }
+  .mc-staff-card h2 { font-size: 36px; }
+
+  .mc-owner-card { grid-template-rows: minmax(310px,48svh) auto; }
+  .mc-owner-visual,
+  .mc-owner-visual .skin-viewer { min-height: 310px; }
+  .mc-owner-copy h2 { font-size: clamp(38px,12vw,50px); }
+
+  /* Guide cards/facts use one readable column instead of forcing two narrow facts. */
+  .guide-facts { grid-template-columns: 1fr; }
+  .guide-fact + .guide-fact {
+    border-left: 0;
+    border-top: 1px solid var(--wiki-line);
+  }
+  .wiki-article-link { padding-inline: 0; }
+  .guides-document-header h1 { font-size: clamp(38px,11.5vw,50px); }
+  .guide-section-head h2 { font-size: clamp(27px,8vw,34px); }
+
+  .marketplace-rpg-page .marketplace-hero { min-height: 360px; }
+  .marketplace-rpg-page .marketplace-hero .shell { padding-bottom: 68px; }
+  .marketplace-rpg-page .marketplace-hero h1 { font-size: clamp(44px,13vw,58px); }
+  .marketplace-rpg-page .marketplace-model-stage {
+    min-height: clamp(310px,72vw,360px);
+  }
+  .marketplace-rpg-page .marketplace-store-bridge { padding: 18px; }
+  .marketplace-rpg-page .marketplace-store-bridge .button { width: 100%; }
+
+  /* Four leaderboard categories at tablet and two at phone are useful until 430 px;
+     below that a single column preserves labels and 48 px touch rhythm. */
+  .leaderboard-category-list { grid-template-columns: 1fr; }
+  .leaderboard-category { min-height: 50px; }
+  .leaderboard-record { padding-inline: 16px; }
+  .leaderboard-podium { padding-inline: 6px; }
+  .leaderboard-footnote { padding-inline: 14px; }
+
+  .worlds-region-dialog,
+  .nexus-encounter-dialog { width: calc(100% - 16px); }
+  .worlds-region-dialog-body,
+  .nexus-encounter-dialog-body { padding: 24px 20px 28px; }
+  .worlds-region-dialog h2,
+  .nexus-encounter-dialog h2 { font-size: clamp(34px,11vw,46px); }
+
+  .play-modal { padding: 8px; }
+  .play-dialog { max-height: calc(100dvh - 16px); padding: 16px; }
+  .play-dialog-header { gap: 12px; }
+  .play-dialog-header h2 { font-size: 30px; }
+}
+
+/* ----- 390 px: primary minimum-phone QA width ----- */
+@media (max-width: 390px) {
+  /* Do not reintroduce the old 88 px truncation. The measured 390 px header has
+     enough horizontal budget for the complete mark plus 44/54/44 px controls. */
+  .site-nav .brand-wordmark {
+    max-width: none;
+    overflow: visible;
+    font-size: 13px;
+    line-height: 13px;
+  }
+  .site-nav .brand-wordmark small {
+    display: block;
+    font-size: 6px;
+    line-height: 8px;
+    letter-spacing: .10em;
+  }
+
+  .hero h1 { font-size: clamp(42px,13vw,52px); }
+  .hero-object { min-height: 240px; }
+  .hero-logo-card { width: min(70vw,235px); }
+
+  .page-hero h1,
+  .mc-page-hero h1 { font-size: clamp(40px,12.5vw,50px); }
+
+  .worlds-region-content,
+  .nexus-encounter-content {
+    width: calc(100% - 18px);
+    padding-left: 46px;
+    padding-right: 4px;
+  }
+  .worlds-region-rail,
+  .nexus-encounter-rail { left: 8px; }
+  .worlds-region-title,
+  .nexus-encounter-title { font-size: clamp(42px,14vw,56px); }
+  .worlds-region-role,
+  .nexus-encounter-role { max-width: 96%; }
+
+  .leaderboard-podium-card strong { max-width: 88px; }
+  .leaderboard-table { min-width: 590px; }
+}
+
+/* ----- 360 px: extreme-width safety, not the primary design target ----- */
+@media (max-width: 360px) {
+  .site-nav .brand img { width: 28px; height: 28px; flex-basis: 28px; }
+  .site-nav .brand { gap: 5px; }
+  .site-nav .brand-wordmark { font-size: 12px; line-height: 12px; }
+  .site-nav .brand-wordmark small { font-size: 5.5px; letter-spacing: .08em; }
+
+  .hero-actions,
+  .page-cta-actions { gap: 8px; }
+  .stat { padding-inline: 11px; }
+
+  .worlds-region-content,
+  .nexus-encounter-content { padding-left: 42px; }
+}
+
+/* ----- Short-height landscape: height is a first-class responsive axis ----- */
+@media (max-height: 520px) and (orientation: landscape) {
+  .site-nav { padding-block: 4px; }
+  .site-nav .nav-inner { min-height: 44px; }
+  .section-subnav,
+  .section-subnav-inner,
+  .minecraft-rpg-page:not(.minecraft-rpg-secondary) .section-subnav,
+  .minecraft-rpg-page:not(.minecraft-rpg-secondary) .section-subnav-inner,
+  .skyblock-rpg-page .section-subnav,
+  .skyblock-rpg-page .section-subnav-inner,
+  .worlds-region-page .section-subnav,
+  .worlds-region-page .section-subnav-inner,
+  .nexus-encounter-page .section-subnav,
+  .nexus-encounter-page .section-subnav-inner { min-height: 44px; }
+
+  .section-subnav-links a,
+  .minecraft-rpg-page:not(.minecraft-rpg-secondary) .section-subnav-links a,
+  .skyblock-rpg-page .section-subnav-links a,
+  .worlds-region-page .section-subnav-links a,
+  .nexus-encounter-page .section-subnav-links a { min-height: 36px; }
+
+  .worlds-region-page { --worlds-chrome-height: 96px; }
+  .nexus-encounter-page { --nexus-chrome-height: 96px; }
+
+  .worlds-region-main,
+  .nexus-encounter-main { min-height: calc(100dvh - 96px); }
+  .worlds-region-stage,
+  .nexus-encounter-stage {
+    height: calc(100dvh - 96px);
+    min-height: 0;
+  }
+
+  .worlds-region-content,
+  .nexus-encounter-content {
+    align-items: center;
+    padding-top: 8px;
+    padding-bottom: 12px;
+  }
+  .worlds-region-title,
+  .nexus-encounter-title {
+    margin-block: 6px 8px;
+    font-size: clamp(34px,8vw,58px);
+  }
+  .worlds-region-role,
+  .nexus-encounter-role {
+    max-width: 72ch;
+    font-size: 11px;
+    line-height: 1.45;
+  }
+
+  .worlds-region-node,
+  .nexus-encounter-node { min-height: 44px; }
+  .worlds-region-hint,
+  .nexus-encounter-hint,
+  .worlds-investigate,
+  .nexus-investigate { display: none; }
+  .worlds-region-counter,
+  .nexus-encounter-counter { bottom: 8px; }
+
+  .worlds-region-dialog,
+  .nexus-encounter-dialog,
+  .play-dialog {
+    max-height: calc(100dvh - 12px);
+  }
+
+  .pixel-navigator-panel { max-height: calc(100dvh - 74px); }
+}
+
+/* At 200% zoom the effective CSS viewport commonly enters the 768/600/430 rules.
+   Ensure horizontal data surfaces scroll rather than widening the document. */
+.guide-table-wrap,
+.leaderboard-table-wrap {
+  max-width: 100%;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
