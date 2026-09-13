@@ -89,9 +89,9 @@
     grid-template-columns: repeat(2,minmax(0,1fr));
   }
 
-  /* Immersive pages: 64 px mobile header + 48 px contextual rail. */
-  .worlds-region-page { --worlds-chrome-height: 112px; }
-  .nexus-encounter-page { --nexus-chrome-height: 112px; }
+  /* Immersive pages: measured mobile chrome is 65 px header + 48 px rail. */
+  .worlds-region-page { --worlds-chrome-height: 113px; }
+  .nexus-encounter-page { --nexus-chrome-height: 113px; }
 }
 
 /* ----- 768 px: tablet portrait / 200%-zoom desktop equivalent ----- */
@@ -418,14 +418,15 @@
   .worlds-region-page .section-subnav-links a,
   .nexus-encounter-page .section-subnav-links a { min-height: 36px; }
 
-  .worlds-region-page { --worlds-chrome-height: 96px; }
-  .nexus-encounter-page { --nexus-chrome-height: 96px; }
+  /* 44 px nav row + 8 px nav padding + 1 px nav border + 44 px rail. */
+  .worlds-region-page { --worlds-chrome-height: 97px; }
+  .nexus-encounter-page { --nexus-chrome-height: 97px; }
 
   .worlds-region-main,
-  .nexus-encounter-main { min-height: calc(100dvh - 96px); }
+  .nexus-encounter-main { min-height: calc(100dvh - 97px); }
   .worlds-region-stage,
   .nexus-encounter-stage {
-    height: calc(100dvh - 96px);
+    height: calc(100dvh - 97px);
     min-height: 0;
   }
 
