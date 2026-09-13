@@ -28,33 +28,12 @@
   line-height:1;
 }
 
-.leaderboard-table-block {
-  margin-top:17px;
-}
-
-.leaderboard-table-block .leaderboard-table-wrap {
-  margin-top:0;
-}
-
-.leaderboard-table {
-  min-width:520px;
-}
-
-.leaderboard-table th:last-child,
-.leaderboard-table td:last-child {
-  text-align:right;
-}
-
-.leaderboard-table tbody tr:nth-child(-n+3) .leaderboard-rank {
-  color:#f0bf4b!important;
-}
-
-.leaderboard-player-name {
-  min-width:0;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
+.leaderboard-table-block { margin-top:17px; }
+.leaderboard-table-block .leaderboard-table-wrap { margin-top:0; }
+.leaderboard-table { min-width:520px; }
+.leaderboard-table th:last-child,.leaderboard-table td:last-child { text-align:right; }
+.leaderboard-table tbody tr:nth-child(-n+3) .leaderboard-rank { color:#f0bf4b!important; }
+.leaderboard-player-name { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
 .leaderboard-table-actions {
   min-height:39px;
@@ -83,25 +62,18 @@
   cursor:pointer;
   transition:color 120ms ease,border-color 120ms ease,background 120ms ease;
 }
-
-.leaderboard-full-toggle[hidden] {
-  display:none;
-}
-
-.leaderboard-full-toggle:hover,
-.leaderboard-full-toggle:focus-visible {
+.leaderboard-full-toggle[hidden] { display:none; }
+.leaderboard-full-toggle:hover,.leaderboard-full-toggle:focus-visible {
   outline:none;
   color:#f5e9ca;
   border-color:rgba(246,201,69,.34);
   background:rgba(246,201,69,.065);
 }
-
 .leaderboard-full-toggle[aria-expanded='true'] {
   color:#edc75d;
   border-color:rgba(246,201,69,.26);
   background:rgba(246,201,69,.045);
 }
-
 .leaderboard-full-toggle-icon {
   display:grid;
   place-items:center;
@@ -113,39 +85,114 @@
   line-height:1;
 }
 
+.leaderboard-overview {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+  margin:0 0 18px;
+}
+.leaderboard-overview-card {
+  position:relative;
+  min-height:108px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  gap:8px;
+  padding:18px 18px 16px;
+  border:1px solid rgba(246,201,69,.12);
+  background:linear-gradient(180deg,rgba(246,201,69,.05),rgba(246,201,69,.015)),rgba(10,10,8,.88);
+  box-shadow:inset 0 1px 0 rgba(255,240,205,.03);
+}
+.leaderboard-overview-card::before {
+  content:"";
+  position:absolute;
+  inset:0 auto auto 0;
+  width:42px;
+  height:1px;
+  background:rgba(246,201,69,.42);
+}
+.leaderboard-overview-card small {
+  color:#c99d3f;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+.leaderboard-overview-card strong { color:#f8f1de; font-size:31px; font-weight:900; line-height:.95; }
+.leaderboard-overview-card span { color:#a79d8d; font-size:13px; line-height:1.45; }
+
+.leaderboard-browser-head span,.leaderboard-footnote span,.leaderboard-source span[data-leaderboard-updated] { text-wrap:balance; }
+.leaderboard-source {
+  border-color:rgba(246,201,69,.12);
+  background:linear-gradient(180deg,rgba(246,201,69,.04),rgba(246,201,69,.015));
+}
+[data-leaderboard-state='demo'] .leaderboard-source {
+  border-color:rgba(207,115,30,.26);
+  background:linear-gradient(180deg,rgba(207,115,30,.10),rgba(207,115,30,.025));
+}
+[data-leaderboard-state='demo'] .leaderboard-record-badge {
+  border-style:dashed;
+  background:linear-gradient(135deg,rgba(207,115,30,.14),rgba(246,201,69,.04));
+}
+[data-leaderboard-state='demo'] .leaderboard-record-badge span { color:#d79e47; }
+
+.leaderboard-record-head { align-items:flex-end; gap:16px; }
+.leaderboard-record-head h3 { text-wrap:balance; }
+.leaderboard-podium { margin-top:18px; }
+.leaderboard-podium-card {
+  overflow:hidden;
+  background:linear-gradient(180deg,rgba(246,201,69,.055),rgba(246,201,69,.018));
+}
+.leaderboard-podium-card::after {
+  content:"";
+  position:absolute;
+  inset:auto 0 0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(246,201,69,.22),transparent);
+  pointer-events:none;
+}
+
+.leaderboard-table-wrap {
+  border-color:rgba(246,201,69,.11);
+  background:linear-gradient(180deg,rgba(255,255,255,.01),rgba(246,201,69,.02));
+}
+.leaderboard-table thead th { letter-spacing:.12em; }
+.leaderboard-table tbody tr { transition:background 120ms ease; }
+.leaderboard-table tbody tr:hover { background:rgba(246,201,69,.035); }
+.leaderboard-table tbody tr:nth-child(-n+3) { background:linear-gradient(90deg,rgba(246,201,69,.045),rgba(246,201,69,.012)); }
+.leaderboard-player-identity.is-compact { gap:10px; }
+.leaderboard-player-head.is-demo {
+  border:1px solid rgba(246,201,69,.16);
+  background:linear-gradient(180deg,rgba(246,201,69,.10),rgba(246,201,69,.03));
+}
+
+.leaderboard-footnote {
+  margin-top:18px;
+  padding:14px 16px;
+  border:1px solid rgba(246,201,69,.10);
+  background:linear-gradient(180deg,rgba(246,201,69,.035),rgba(246,201,69,.01));
+}
+.leaderboard-footnote strong { color:#ead08b; }
+
+@media (max-width:980px) {
+  .leaderboard-overview { grid-template-columns:1fr; gap:10px; }
+  .leaderboard-overview-card { min-height:auto; padding:16px; }
+  .leaderboard-overview-card strong { font-size:26px; }
+}
 @media (max-width:760px) {
-  .leaderboard-table-block {
-    margin-top:14px;
-  }
-
-  .leaderboard-table {
-    min-width:500px;
-  }
-
-  .leaderboard-table-actions {
-    min-height:37px;
-    padding-top:7px;
-  }
-
-  .leaderboard-full-toggle {
-    min-height:30px;
-    font-size:10.5px;
-  }
+  .leaderboard-table-block { margin-top:14px; }
+  .leaderboard-table { min-width:500px; }
+  .leaderboard-table-actions { min-height:37px; padding-top:7px; }
+  .leaderboard-full-toggle { min-height:30px; font-size:10.5px; }
+  .leaderboard-overview { margin-bottom:14px; }
+  .leaderboard-overview-card span { font-size:12.5px; }
+  .leaderboard-record-head { align-items:flex-start; }
+  .leaderboard-podium { margin-top:14px; }
 }
-
 @media (max-width:480px) {
-  .leaderboard-table {
-    min-width:460px;
-  }
-
-  .leaderboard-full-toggle {
-    padding-inline:9px 7px;
-    font-size:10px;
-  }
+  .leaderboard-table { min-width:460px; }
+  .leaderboard-full-toggle { padding-inline:9px 7px; font-size:10px; }
 }
-
 @media (prefers-reduced-motion:reduce) {
-  .leaderboard-full-toggle {
-    transition:none;
-  }
+  .leaderboard-full-toggle,.leaderboard-table tbody tr { transition:none; }
 }
