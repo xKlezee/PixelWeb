@@ -83,7 +83,7 @@ The current frontend enforces the prerequisites that previously blocked a strict
 - local references and CSP invariants are checked by `scripts/validate_site.py`;
 - canonical gameplay/public-data relationships and retired public claims are guarded against drift/reintroduction.
 
-One source-level inconsistency remains explicit rather than hidden: the appearance bootstrap/runtime currently assigns only the validated `light|dark` value to `document.documentElement.style.colorScheme`. `scripts/validate_site.py` still rejects generic runtime `.style` mutation, so the validator contract and these three theme assignments are not yet fully reconciled. This narrow exception must not expand into authored/user-controlled inline CSS, and it must not be reported as validator-clean until the source or validator contract is deliberately resolved.
+Runtime inline-style mutation remains forbidden except for one deliberately encoded presentation primitive: the validated effective `light|dark` value may be assigned to `document.documentElement.style.colorScheme` by the three established theme owners (`pixel-theme-bootstrap.js`, `pixel-theme.js`, and `data/network.js`). `scripts/validate_site.py` allowlists each owner by path and exact assignment form; duplicate copies, any other `.style` property, and `setAttribute('style', ...)` remain validation failures. This exception exists only to keep native browser controls synchronized with the resolved appearance mode and is not permission for authored or user-controlled inline CSS.
 
 These are security invariants, not conventions. Reintroducing unsafe parsing or arbitrary inline-style mutation is intended to fail the quality gate once the gate can execute.
 
