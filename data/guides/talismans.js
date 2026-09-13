@@ -3,7 +3,7 @@
     verification: {
       level: 'server-verified',
       verifiedAsOf: '2026-08-25',
-      clientPresentation: 'pending',
+      liveClient: 'not-asserted',
       note: 'Talisman mechanics and persistent collection behavior are server-verified. Final visual, audio and interaction feel still require a real-client pass.'
     },
     commands: {
