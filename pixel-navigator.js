@@ -95,7 +95,16 @@
   trigger.setAttribute('aria-expanded', 'false');
   trigger.setAttribute('aria-controls', 'pixel-navigator-panel');
   trigger.setAttribute('aria-label', 'Ask Pixel where to find something');
-  trigger.innerHTML = '<span class="pixel-navigator-trigger-icon" aria-hidden="true"><i></i><i></i><i></i></span><span class="pixel-navigator-trigger-label">Ask Pixel</span>';
+
+  const triggerIcon = document.createElement('span');
+  triggerIcon.className = 'pixel-navigator-trigger-icon';
+  triggerIcon.setAttribute('aria-hidden', 'true');
+  triggerIcon.append(document.createElement('i'), document.createElement('i'), document.createElement('i'));
+
+  const triggerLabel = document.createElement('span');
+  triggerLabel.className = 'pixel-navigator-trigger-label';
+  triggerLabel.textContent = 'Ask Pixel';
+  trigger.append(triggerIcon, triggerLabel);
 
   const panel = document.createElement('section');
   panel.id = 'pixel-navigator-panel';
@@ -105,42 +114,85 @@
   panel.setAttribute('aria-modal', 'false');
   panel.setAttribute('aria-labelledby', 'pixel-navigator-title');
 
-  panel.innerHTML = `
-    <header class="pixel-navigator-head">
-      <div>
-        <span class="pixel-navigator-kicker">Pixel Navigator</span>
-        <h2 id="pixel-navigator-title">Where do you want to go?</h2>
-        <p>Ask about a system, command, guide or ranking and I’ll take you to the right section.</p>
-      </div>
-      <button class="pixel-navigator-close" type="button" aria-label="Close navigator">×</button>
-    </header>
-    <form class="pixel-navigator-form" data-pixel-navigator-form>
-      <label class="pixel-navigator-label" for="pixel-navigator-input">Ask a question</label>
-      <div class="pixel-navigator-search-row">
-        <input id="pixel-navigator-input" class="pixel-navigator-input" type="search" autocomplete="off" spellcheck="false" placeholder="How do I prestige?" />
-        <button class="pixel-navigator-submit" type="submit">Find</button>
-      </div>
-    </form>
-    <div class="pixel-navigator-examples" aria-label="Example questions">
-      <button type="button" data-pixel-question="How do I prestige?">Prestige</button>
-      <button type="button" data-pixel-question="What are Nexus Points?">Nexus Points</button>
-      <button type="button" data-pixel-question="Where is the Raphael kills leaderboard?">Raphael ranking</button>
-      <button type="button" data-pixel-question="Basic commands">Commands</button>
-    </div>
-    <div class="pixel-navigator-status" data-pixel-navigator-status aria-live="polite">Searches the public Pixel Network site. English / Español.</div>
-    <div class="pixel-navigator-results" data-pixel-navigator-results></div>
-    <footer class="pixel-navigator-foot">Navigation only · no chat history · no account data</footer>
-  `;
+  const head = document.createElement('header');
+  head.className = 'pixel-navigator-head';
+  const headCopy = document.createElement('div');
+  const kicker = document.createElement('span');
+  kicker.className = 'pixel-navigator-kicker';
+  kicker.textContent = 'Pixel Navigator';
+  const title = document.createElement('h2');
+  title.id = 'pixel-navigator-title';
+  title.textContent = 'Where do you want to go?';
+  const intro = document.createElement('p');
+  intro.textContent = 'Ask about a system, command, guide or ranking and I’ll take you to the right section.';
+  headCopy.append(kicker, title, intro);
 
+  const closeButton = document.createElement('button');
+  closeButton.className = 'pixel-navigator-close';
+  closeButton.type = 'button';
+  closeButton.setAttribute('aria-label', 'Close navigator');
+  closeButton.textContent = '×';
+  head.append(headCopy, closeButton);
+
+  const form = document.createElement('form');
+  form.className = 'pixel-navigator-form';
+  form.dataset.pixelNavigatorForm = '';
+  const label = document.createElement('label');
+  label.className = 'pixel-navigator-label';
+  label.htmlFor = 'pixel-navigator-input';
+  label.textContent = 'Ask a question';
+  const searchRow = document.createElement('div');
+  searchRow.className = 'pixel-navigator-search-row';
+  const input = document.createElement('input');
+  input.id = 'pixel-navigator-input';
+  input.className = 'pixel-navigator-input';
+  input.type = 'search';
+  input.autocomplete = 'off';
+  input.spellcheck = false;
+  input.placeholder = 'How do I prestige?';
+  const submit = document.createElement('button');
+  submit.className = 'pixel-navigator-submit';
+  submit.type = 'submit';
+  submit.textContent = 'Find';
+  searchRow.append(input, submit);
+  form.append(label, searchRow);
+
+  const examples = document.createElement('div');
+  examples.className = 'pixel-navigator-examples';
+  examples.setAttribute('aria-label', 'Example questions');
+  const questionDefinitions = [
+    ['How do I prestige?', 'Prestige'],
+    ['What are Nexus Points?', 'Nexus Points'],
+    ['Where is the Raphael kills leaderboard?', 'Raphael ranking'],
+    ['Basic commands', 'Commands']
+  ];
+  const questionButtons = questionDefinitions.map(([question, copy]) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.dataset.pixelQuestion = question;
+    button.textContent = copy;
+    examples.appendChild(button);
+    return button;
+  });
+
+  const status = document.createElement('div');
+  status.className = 'pixel-navigator-status';
+  status.dataset.pixelNavigatorStatus = '';
+  status.setAttribute('aria-live', 'polite');
+  status.textContent = 'Searches the public Pixel Network site. English / Español.';
+
+  const results = document.createElement('div');
+  results.className = 'pixel-navigator-results';
+  results.dataset.pixelNavigatorResults = '';
+
+  const foot = document.createElement('footer');
+  foot.className = 'pixel-navigator-foot';
+  foot.textContent = 'Navigation only · no chat history · no account data';
+
+  panel.append(head, form, examples, status, results, foot);
   root.append(panel, trigger);
   document.body.appendChild(root);
 
-  const form = panel.querySelector('[data-pixel-navigator-form]');
-  const input = panel.querySelector('.pixel-navigator-input');
-  const closeButton = panel.querySelector('.pixel-navigator-close');
-  const status = panel.querySelector('[data-pixel-navigator-status]');
-  const results = panel.querySelector('[data-pixel-navigator-results]');
-  const questionButtons = [...panel.querySelectorAll('[data-pixel-question]')];
   let redirectTimer = 0;
 
   const sectionCode = section => ({ Guide:'GUIDE', Explore:'EXPLORE', Community:'COMM', Leaderboards:'RANK' }[section] || 'PIXEL');
@@ -244,14 +296,14 @@
   };
 
   trigger.addEventListener('click', () => panel.hidden ? open() : close());
-  closeButton?.addEventListener('click', () => close());
-  form?.addEventListener('submit', event => {
+  closeButton.addEventListener('click', () => close());
+  form.addEventListener('submit', event => {
     event.preventDefault();
-    handleQuery(input?.value);
+    handleQuery(input.value);
   });
   questionButtons.forEach(button => button.addEventListener('click', () => {
     const question = button.dataset.pixelQuestion || button.textContent;
-    if (input) input.value = question;
+    input.value = question;
     handleQuery(question);
   }));
 
