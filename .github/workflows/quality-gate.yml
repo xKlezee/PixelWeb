@@ -47,6 +47,9 @@ jobs:
       - name: Validate canonical public data consistency
         run: node scripts/validate_public_data.js
 
+      - name: Validate Guide evidence metadata
+        run: node scripts/validate_guide_evidence.js
+
       - name: Validate leaderboard publication data
         run: python3 scripts/validate_leaderboards_data.py
 
