@@ -13,6 +13,19 @@ JS_FILES = sorted(path for path in ROOT.rglob("*.js") if ".git" not in path.part
 NAV_HARDENING_PATH = ROOT / "security-hardening.css"
 NAVIGATION_PAGE_EXCEPTIONS = {"forum.html", "development.html"}
 
+GUIDE_NAV_CATEGORY_BY_PAGE = {
+    "guide-getting-started.html": "getting-started",
+    "guide-currencies.html": "currencies",
+    "guide-basic-commands.html": "basic-commands",
+    "guide-progression.html": "progression",
+    "guide-worlds.html": "progression",
+    "guide-nexus.html": "specials",
+    "guide-skyblock.html": "mechanics",
+    "guide-stats-equipment.html": "armor",
+    "guide-talismans.html": "specials",
+    "guide-enchantments.html": "boosts",
+}
+
 DIRECT_STYLE_ASSIGNMENT_RE = re.compile(r"\.style\s*=")
 DEFERRED_URL_ATTRS = {"data-src", "data-poster"}
 DESKTOP_HOVER_NAV_RE = re.compile(
@@ -30,16 +43,14 @@ CURRENT_NAV_LINK_RE = re.compile(
     r"<a\b(?=[^>]*\baria-current=['\"]page['\"])[^>]*\bhref=['\"]([^'\"]+)['\"][^>]*>",
     re.IGNORECASE,
 )
-GUIDE_LIBRARY_ENTRY_RE = re.compile(
-    r"<article\b(?=[^>]*\bdata-guide-entry\b)[^>]*>([\s\S]*?)</article>",
+WIKI_ENTRY_TARGET_RE = re.compile(
+    r"<a\b(?=[^>]*\bdata-wiki-entry\b)(?=[^>]*\bhref=['\"]"
+    r"(guide-[A-Za-z0-9._-]+\.html)['\"])[^>]*>",
     re.IGNORECASE,
 )
-GUIDE_LIBRARY_TARGET_RE = re.compile(
-    r"<a\b[^>]*\bhref=['\"](guide-[A-Za-z0-9._-]+\.html)['\"][^>]*>",
-    re.IGNORECASE,
-)
-GUIDE_LIBRARY_COUNT_RE = re.compile(
-    r"<[^>]+\bdata-guide-count\b[^>]*>\s*(\d+)\s+(?:entry|entries)\s*</[^>]+>",
+WIKI_SEARCH_COUNT_RE = re.compile(
+    r"<[^>]+\bdata-wiki-search-count\b[^>]*>\s*(\d+)\s+"
+    r"(?:article|articles)\s*</[^>]+>",
     re.IGNORECASE,
 )
 
@@ -166,6 +177,13 @@ def validate_guide_navigation_current_state(page_name: str, failures: list[str])
     if not page_name.startswith("guide-") or not page_name.endswith(".html"):
         return
 
+    expected_category = GUIDE_NAV_CATEGORY_BY_PAGE.get(page_name)
+    if expected_category is None:
+        failures.append(
+            f"{page_name}: detailed Guide page is missing a canonical Guide-category mapping"
+        )
+        return
+
     text = (ROOT / page_name).read_text(encoding="utf-8")
     nav_match = SITE_NAV_RE.search(text)
     if not nav_match:
@@ -173,10 +191,11 @@ def validate_guide_navigation_current_state(page_name: str, failures: list[str])
         return
 
     current_hrefs = CURRENT_NAV_LINK_RE.findall(nav_match.group(1))
-    if current_hrefs != ["guides.html"]:
+    expected_href = f"guides.html#{expected_category}"
+    if current_hrefs != [expected_href]:
         rendered = ", ".join(current_hrefs) if current_hrefs else "none"
         failures.append(
-            f"{page_name}: Guide navbar must mark exactly guides.html as aria-current=page "
+            f"{page_name}: Guide navbar must mark exactly {expected_href} as aria-current=page "
             f"(found: {rendered})"
         )
 
@@ -188,57 +207,42 @@ def validate_guide_library_coverage(failures: list[str]) -> None:
         return
 
     text = index.read_text(encoding="utf-8")
-    entries = GUIDE_LIBRARY_ENTRY_RE.findall(text)
-    targets: list[str] = []
-
-    for position, entry in enumerate(entries, start=1):
-        entry_targets = GUIDE_LIBRARY_TARGET_RE.findall(entry)
-        if len(entry_targets) != 1:
-            rendered = ", ".join(entry_targets) if entry_targets else "none"
-            failures.append(
-                f"guides.html: library entry {position} must link to exactly one guide-*.html target "
-                f"(found: {rendered})"
-            )
-            continue
-        targets.append(entry_targets[0])
+    targets = WIKI_ENTRY_TARGET_RE.findall(text)
+    unique_targets = set(targets)
 
     actual_guides = sorted(
         path.name
         for path in ROOT.glob("guide-*.html")
         if path.is_file() and not path.is_symlink()
     )
-    duplicate_targets = sorted({target for target in targets if targets.count(target) > 1})
-    if duplicate_targets:
-        failures.append(
-            "guides.html: Guide library contains duplicate detailed-guide targets: "
-            + ", ".join(duplicate_targets)
-        )
+    actual_set = set(actual_guides)
 
-    missing = sorted(set(actual_guides) - set(targets))
-    extra = sorted(set(targets) - set(actual_guides))
+    missing = sorted(actual_set - unique_targets)
+    extra = sorted(unique_targets - actual_set)
     if missing:
         failures.append(
-            "guides.html: Guide library is missing detailed pages: " + ", ".join(missing)
+            "guides.html: Wiki is missing detailed pages: " + ", ".join(missing)
         )
     if extra:
         failures.append(
-            "guides.html: Guide library points to undeclared detailed pages: " + ", ".join(extra)
+            "guides.html: Wiki points to undeclared detailed pages: " + ", ".join(extra)
         )
-    if len(entries) != len(actual_guides):
+    if len(unique_targets) != len(actual_guides):
         failures.append(
-            f"guides.html: Guide library entry count ({len(entries)}) must match detailed Guide page count "
-            f"({len(actual_guides)})"
+            f"guides.html: unique Wiki article count ({len(unique_targets)}) must match detailed "
+            f"Guide page count ({len(actual_guides)})"
         )
 
-    count_matches = GUIDE_LIBRARY_COUNT_RE.findall(text)
+    count_matches = WIKI_SEARCH_COUNT_RE.findall(text)
     if len(count_matches) != 1:
         failures.append(
-            f"guides.html: expected exactly one static data-guide-count summary, found {len(count_matches)}"
+            f"guides.html: expected exactly one static data-wiki-search-count summary, "
+            f"found {len(count_matches)}"
         )
     elif int(count_matches[0]) != len(actual_guides):
         failures.append(
-            f"guides.html: static Guide count ({count_matches[0]}) must match detailed Guide page count "
-            f"({len(actual_guides)})"
+            f"guides.html: static Wiki article count ({count_matches[0]}) must match detailed "
+            f"Guide page count ({len(actual_guides)})"
         )
 
 
@@ -303,7 +307,7 @@ def main() -> int:
     print(
         f"Runtime contracts passed for {len(HTML_FILES)} HTML pages and "
         f"{len(JS_FILES)} JavaScript files, including local fragment targets, desktop navigation "
-        "and Guide library behavior."
+        "and Guide Wiki behavior."
     )
     return 0
 
