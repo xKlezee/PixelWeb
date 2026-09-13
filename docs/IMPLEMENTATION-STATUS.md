@@ -52,7 +52,7 @@ The current guide document set is:
 - Talisman Codex
 - Enchantments
 
-The old `guide-categories.js` renderer is retired to a compatibility stub; it no longer owns Guide category markup.
+The retired `guide-categories.js` renderer/stub has been removed. `guides.html` owns the canonical Guide markup statically, while `guide-wiki.js` owns only search/filter interaction.
 
 ### Community
 
