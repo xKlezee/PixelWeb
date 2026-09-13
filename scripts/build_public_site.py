@@ -31,8 +31,16 @@ SITE_BASE_URL = "https://xklezee.github.io/PixelWeb/"
 PUBLIC_FIXED_FILES = {".nojekyll", "robots.txt", "sitemap.xml"}
 PUBLIC_NOINDEX_PAGES = {"forum.html", "development.html", "404.html"}
 PUBLIC_DIRECTORIES = {"assets", "data"}
-# Loaded by site.js only when the Play modal is first needed, so it is not a static HTML ref.
-PUBLIC_DYNAMIC_ROOT_FILES = {"play-modal.css"}
+# Runtime-loaded root resources are not discoverable from static HTML references. Theme CSS
+# imports are resolved recursively from the four theme entry sheets after these roots are added.
+PUBLIC_DYNAMIC_ROOT_FILES = {
+    "play-modal.css",
+    "pixel-theme.css",
+    "pixel-theme-coverage.css",
+    "pixel-theme-audit-fixes.css",
+    "pixel-theme-page-fixes.css",
+    "pixel-theme.js",
+}
 REFERENCE_ATTRS = {"href", "src", "poster", "data-src", "data-poster"}
 SRCSET_ATTRS = {"srcset", "data-srcset"}
 CSS_COMMENT_RE = re.compile(r"/\*.*?\*/", re.DOTALL)
