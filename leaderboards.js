@@ -64,17 +64,6 @@
     entries: cleanEntries(metric?.entries)
   });
 
-  const buildTestEntries = (metricId, roster, values) => {
-    const metricValues = Array.isArray(values?.[metricId]) ? values[metricId] : [];
-    return roster
-      .map((player, index) => ({
-        rank: index + 1,
-        player: String(player || '').trim(),
-        value: String(metricValues[index] ?? '').trim()
-      }))
-      .filter(entry => entry.player && entry.value);
-  };
-
   const normalizeSnapshot = candidate => {
     const input = candidate && typeof candidate === 'object' ? candidate : {};
     const source = input.source && typeof input.source === 'object' ? input.source : {};
@@ -85,12 +74,6 @@
       && source.authority === 'pixel-server-export'
       && Boolean(generatedAt);
 
-    const testReady = input.schemaVersion === 3
-      && source.state === 'test'
-      && source.authority === 'pixel-test-fixture';
-
-    const testRoster = Array.isArray(input.testRoster) ? input.testRoster : [];
-    const testValues = input.testValues && typeof input.testValues === 'object' ? input.testValues : {};
     const incomingCategories = Array.isArray(input.categories) ? input.categories : [];
 
     const categories = FALLBACK_CATEGORIES.map(definition => {
@@ -100,11 +83,7 @@
         .filter(metric => metric.id && metric.label)
         .map(metric => ({
           ...metric,
-          entries: liveReady
-            ? metric.entries
-            : testReady
-              ? buildTestEntries(metric.id, testRoster, testValues)
-              : []
+          entries: liveReady ? metric.entries : []
         }));
 
       return {
@@ -116,19 +95,15 @@
       };
     });
 
-    const state = liveReady ? 'ready' : testReady ? 'test' : 'pending';
-
     return {
       schemaVersion: 3,
       source: {
-        state,
-        authority: liveReady ? 'pixel-server-export' : testReady ? 'pixel-test-fixture' : 'pending',
+        state: liveReady ? 'ready' : 'pending',
+        authority: liveReady ? 'pixel-server-export' : 'pending',
         label: liveReady
           ? String(source.label || 'Pixel Network live records')
-          : testReady
-            ? String(source.label || 'TEST DATA · real usernames, fictional values')
-            : 'Leaderboard tracking is not connected yet',
-        generatedAt: liveReady || testReady ? generatedAt : null
+          : 'Leaderboard tracking is not connected yet',
+        generatedAt: liveReady ? generatedAt : null
       },
       categories
     };
@@ -157,7 +132,6 @@
     const metric = category?.metrics.find(item => item.id === metricId) || category?.metrics[0] || null;
     return { category, metric };
   };
-
   const setHash = (category, metric) => {
     if (!category?.id || !metric?.id) return;
     const next = `#${encodeURIComponent(category.id)}/${encodeURIComponent(metric.id)}`;
@@ -407,14 +381,12 @@
     if (sourceLabel) sourceLabel.textContent = source.label || 'Leaderboard tracking is not connected yet';
 
     if (updated) {
-      updated.textContent = source.state === 'test'
-        ? 'Preview only · standings and values are fictional'
-        : source.generatedAt
-          ? `Updated ${new Date(source.generatedAt).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}`
-          : 'Tracking not connected yet';
+      updated.textContent = source.generatedAt
+        ? `Updated ${new Date(source.generatedAt).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}`
+        : 'Tracking not connected yet';
     }
 
-    root.dataset.leaderboardState = ['ready', 'test'].includes(source.state) ? source.state : 'pending';
+    root.dataset.leaderboardState = source.state === 'ready' ? 'ready' : 'pending';
   };
 
   fullToggle?.addEventListener('click', () => {
