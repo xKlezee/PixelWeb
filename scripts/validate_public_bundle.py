@@ -33,7 +33,7 @@ PUBLIC_ASSET_SUFFIXES = {
     ".png", ".jpg", ".jpeg", ".gif", ".webp", ".avif", ".ico", ".svg",
     ".mp4", ".webm", ".mov", ".woff", ".woff2",
 }
-PUBLIC_NOINDEX_PAGES = {"forum.html", "404.html"}
+PUBLIC_NOINDEX_PAGES = {"forum.html", "development.html", "404.html"}
 PUBLIC_DYNAMIC_ROOT_FILES = {"play-modal.css"}
 LOCAL_URL_ATTRS = {"href", "src", "poster", "data-src", "data-poster"}
 SRCSET_ATTRS = {"srcset", "data-srcset"}
