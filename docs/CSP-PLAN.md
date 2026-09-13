@@ -39,7 +39,7 @@ The policy is delivered with `<meta http-equiv="Content-Security-Policy">` becau
 
 ## Source-list narrowing status
 
-Static inspection of the hardening candidate has not identified a frontend `@font-face` declaration, a Google Fonts / `fonts.gstatic.com` dependency, a referenced WOFF/WOFF2 font, or an external video/audio source. The known immersive MP4 is repository-local. The known external image dependency is the Worlds landscape imagery served through the Pixel Network GitBook image proxy.
+Static inspection of the current site has not identified a frontend `@font-face` declaration, a Google Fonts / `fonts.gstatic.com` dependency, a referenced WOFF/WOFF2 font, or a current public video/audio consumer. The retired repository-local immersive MP4 and its disconnected runtime were removed after reference auditing confirmed that no public route loaded them. The known external image dependency is the Worlds landscape imagery served through the Pixel Network GitBook image proxy.
 
 That evidence is enough to identify likely tighter source lists, but **not enough to change the live candidate safely without browser/network verification**. Hidden redirect behavior, CSS/image loading not obvious from source inspection, or browser-specific fetch behavior must be observed before removing allowances.
 
@@ -64,17 +64,16 @@ The release procedure for source-list narrowing is:
 
 Until that browser evidence exists, keeping the broader image/media/font compatibility baseline is intentional. It must not be represented as final least privilege.
 
-## Frontend prerequisites: completed
+## Frontend prerequisites: current status
 
-The hardening branch now enforces the prerequisites that previously blocked a strict policy:
+The current frontend enforces the prerequisites that previously blocked a strict policy:
 
 - no inline event-handler attributes;
 - no inline `<script>` content;
 - no inline `style` attributes;
 - no `javascript:` URLs;
 - no `unsafe-inline`, `unsafe-eval` or `wasm-unsafe-eval` CSP tokens;
-- no runtime `element.style` / `setAttribute('style', ...)` mutations;
-- no `innerHTML`, `outerHTML`, `insertAdjacentHTML` or `document.write` parsing sinks in runtime JavaScript;
+- no `innerHTML`, `outerHTML`, `insertAdjacentHTML` or `document.write` parsing sinks in current runtime JavaScript;
 - external/dynamic URLs are protocol-validated before assignment;
 - absolute external HTTP resources are rejected;
 - protocol-relative HTML/CSS resource URLs are rejected by source validation, artifact construction and staged-bundle validation;
@@ -84,7 +83,9 @@ The hardening branch now enforces the prerequisites that previously blocked a st
 - local references and CSP invariants are checked by `scripts/validate_site.py`;
 - canonical gameplay/public-data relationships and retired public claims are guarded against drift/reintroduction.
 
-These are security invariants, not conventions. Reintroducing them is intended to fail the quality gate once the gate can execute.
+One source-level inconsistency remains explicit rather than hidden: the appearance bootstrap/runtime currently assigns only the validated `light|dark` value to `document.documentElement.style.colorScheme`. `scripts/validate_site.py` still rejects generic runtime `.style` mutation, so the validator contract and these three theme assignments are not yet fully reconciled. This narrow exception must not expand into authored/user-controlled inline CSS, and it must not be reported as validator-clean until the source or validator contract is deliberately resolved.
+
+These are security invariants, not conventions. Reintroducing unsafe parsing or arbitrary inline-style mutation is intended to fail the quality gate once the gate can execute.
 
 ## Important meta-delivery limitation
 
@@ -119,4 +120,4 @@ It is not the intended trust boundary for passwords, privileged administration, 
 
 ## Future optional defense: Trusted Types
 
-The current codebase already removes the DOM parsing sinks that Trusted Types is designed to constrain. When browser compatibility and the future frontend stack are known, `require-trusted-types-for 'script'` can be evaluated as an additional defense-in-depth control. It should be introduced deliberately rather than enabled before the eventual framework/auth stack is known.
+The current codebase removes string-to-DOM parsing sinks from the public runtime, which is the primary class of behavior Trusted Types is designed to constrain. When browser compatibility and the future frontend stack are known, `require-trusted-types-for 'script'` can be evaluated as an additional defense-in-depth control. It should be introduced deliberately rather than enabled before the eventual framework/auth stack is known.
