@@ -11,7 +11,7 @@ This document defines the release contract for the two-level Pixel Network docum
 
 ## Complete wiki content contract
 
-- The current imported reference contains 42 player-facing articles grouped into 16 sections.
+- The current imported reference contains 42 player-facing articles grouped into 20 sections.
 - Content imported from the supplied documentation package must preserve uncertainty instead of promoting it to confirmed behavior.
 - Article verification states are limited to `verified`, `partial` and `verification`, rendered to players as Confirmado, Parcial and Requiere verificación.
 - Internal audit/reconstruction instructions, implementation wiring, source paths, database details, class names and private operational notes must not be published as player documentation.
