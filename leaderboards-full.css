@@ -1,8 +1,31 @@
-/* Pixel Network — top-10 preview and complete leaderboard control. */
+/* Pixel Network — top-10 preview, 100-player demo and complete leaderboard control. */
 
-[data-leaderboards-root]:not([data-leaderboard-state='ready']) .leaderboard-podium,
-[data-leaderboards-root]:not([data-leaderboard-state='ready']) .leaderboard-record-badge {
+[data-leaderboards-root]:not([data-leaderboard-state='ready']):not([data-leaderboard-state='demo']) .leaderboard-podium,
+[data-leaderboards-root]:not([data-leaderboard-state='ready']):not([data-leaderboard-state='demo']) .leaderboard-record-badge {
   display:none;
+}
+
+[data-leaderboard-state='demo'] .leaderboard-source-dot {
+  background:#cf731e;
+  box-shadow:0 0 12px rgba(207,115,30,.34),0 0 0 3px rgba(207,115,30,.08);
+}
+
+[data-leaderboard-state='demo'] .leaderboard-source strong {
+  color:#e3b857;
+}
+
+[data-leaderboard-state='demo'] .leaderboard-record-badge {
+  border-style:dashed;
+}
+
+.leaderboard-player-head.is-demo {
+  display:grid;
+  place-items:center;
+  color:#c59a3d;
+  font-size:8px;
+  font-weight:950;
+  letter-spacing:.04em;
+  line-height:1;
 }
 
 .leaderboard-table-block {
