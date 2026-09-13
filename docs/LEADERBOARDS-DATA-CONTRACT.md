@@ -107,10 +107,44 @@ A production snapshot uses schema version 3 and an authoritative server export:
 
 `validate_leaderboards_data.py` guards publication state, rows and canonical IDs/order. `validate_leaderboards_catalog.js` independently compares the JS fallback against the JSON snapshot after removing only `entries`, preventing server integration from drifting labels, descriptions, kickers, short labels or units. Layout fixtures, if ever needed for development, must remain outside browser-public `data/` and must not be deployed as standings.
 
+## Trusted exporter handoff
+
+The trusted server-side producer does **not** need to generate PixelWeb's full public snapshot. Its handoff file contains only two top-level fields:
+
+```json
+{
+  "generatedAt": "2026-09-13T21:45:00Z",
+  "metrics": {
+    "blocks-mined": [
+      { "rank": 1, "player": "ExamplePlayer", "value": "1,250,000" }
+    ],
+    "money": [],
+    "money-earned": [],
+    "nexus-points": []
+  }
+}
+```
+
+The real handoff must contain **all 20 canonical metric ids exactly once**. Each metric value is an array of plain public rows with exactly `rank`, `player` and `value` fields. `rank` values must be contiguous from `1` through `N`, players must be unique within that metric, and `value` is the already formatted public display string.
+
+`scripts/build_leaderboards_snapshot.py` validates that handoff, copies the current PixelWeb catalogue, forces the public source to `ready / pixel-server-export`, injects the trusted rows and produces the browser-facing snapshot. It has no network, GitHub or database integration.
+
+Example staging workflow from a trusted checkout:
+
+```text
+python3 scripts/build_leaderboards_snapshot.py --input /secure/path/leaderboards-export.json --output data/leaderboards.json
+python3 scripts/validate_leaderboards_data.py
+node scripts/validate_leaderboards_catalog.js
+```
+
+The output write is atomic: the builder writes a temporary file in the destination directory, flushes/fsyncs it, then replaces the destination. This prevents a partially written JSON file from becoming the published snapshot if the write is interrupted.
+
+The producer should generate the handoff to a private/trusted filesystem location. Do not place raw database dumps, internal identifiers, UUID mappings, emails, IPs or credentials in the repository merely because the builder will later filter or transform data; the handoff itself should already contain only intended public ranking rows.
+
 ## Producer boundary
 
-The future producer belongs on trusted Pixel Network infrastructure, not in browser JavaScript. It should read the authoritative gameplay source, calculate rankings there, preserve the historical player population, write the complete JSON snapshot atomically and publish only that safe snapshot to PixelWeb.
+The future producer belongs on trusted Pixel Network infrastructure, not in browser JavaScript. It should read the authoritative gameplay source, calculate rankings there, preserve the historical player population and emit the minimal trusted handoff described above.
 
-The producer should treat the current catalogue structure as an input contract rather than regenerate it from database column names or internal enum/class names. It may replace `source` with the authoritative ready metadata and replace each metric's `entries`; all other player-facing catalogue fields stay owned by PixelWeb.
+The producer should treat metric ids as an integration contract rather than derive player-facing copy from database column names or internal enum/class names. PixelWeb then merges that data into its own catalogue and publishes only the resulting safe snapshot.
 
 Do not connect GitHub Pages directly to MariaDB, Supabase, a private admin API or any database using client-side credentials.
