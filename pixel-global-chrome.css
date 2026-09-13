@@ -8,7 +8,7 @@
 .skyblock-rpg-page .section-subnav,
 .worlds-region-page .section-subnav,
 .nexus-encounter-page .section-subnav {
-  min-height: 50px;
+  min-height: 48px;
   background: linear-gradient(180deg, rgba(25,31,25,.985), rgba(14,18,15,.985));
   border-bottom: 2px solid #080a08;
   box-shadow: 0 4px 0 rgba(0,0,0,.17);
@@ -18,7 +18,7 @@
 .skyblock-rpg-page .section-subnav-inner,
 .worlds-region-page .section-subnav-inner,
 .nexus-encounter-page .section-subnav-inner {
-  min-height: 50px;
+  min-height: 48px;
 }
 
 .minecraft-rpg-page:not(.minecraft-rpg-secondary) .section-subnav-label,
@@ -36,7 +36,7 @@
 .skyblock-rpg-page .section-subnav-links a,
 .worlds-region-page .section-subnav-links a,
 .nexus-encounter-page .section-subnav-links a {
-  min-height: 34px;
+  min-height: 36px;
   border: 1px solid transparent;
   border-radius: 2px;
   color: #929b90;
@@ -143,7 +143,7 @@ html[data-theme-effective='dark'] .nav-actions .nav-discord:active::before {
   filter: brightness(0) invert(1);
   opacity: .86;
 }
-/* Light keeps the official Symbol visually light against the slate button shell. */
+/* Light keeps the official Symbol visually light against the themed Discord shell. */
 html[data-theme-effective='light'] .nav-actions .nav-discord::before {
   filter: brightness(0) invert(1);
   opacity: .98;
@@ -272,7 +272,7 @@ html[data-theme-effective='light'] .nav-actions .nav-discord:active::before {
   .skyblock-rpg-page .section-subnav-inner,
   .worlds-region-page .section-subnav-inner,
   .nexus-encounter-page .section-subnav-inner {
-    min-height: 50px;
+    min-height: 48px;
   }
 
   .minecraft-rpg-page:not(.minecraft-rpg-secondary) .section-subnav-links a,
