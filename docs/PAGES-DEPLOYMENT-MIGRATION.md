@@ -23,7 +23,7 @@ The deployment artifact must be `_site/`, produced by `scripts/build_public_site
 The artifact intentionally contains:
 
 - sitemap-declared public HTML pages;
-- the explicitly `noindex` legacy `forum.html` compatibility redirect and branded `404.html` surface;
+- the explicitly `noindex` legacy `forum.html` and `development.html` compatibility redirects plus the branded `404.html` surface;
 - root CSS/JavaScript/media referenced by those pages;
 - local dependencies recursively reachable from included CSS through `url(...)` or quoted `@import`, provided those dependencies remain inside declared public roots;
 - the explicitly declared runtime-loaded `play-modal.css`;
@@ -59,7 +59,7 @@ It must not publish repository/security/engineering material such as:
 4. Give the deployment job only the permissions required by GitHub Pages (`pages: write` and `id-token: write`) while keeping the validation/build job read-only.
 5. Configure the `github-pages` environment and use GitHub's Pages deployment protection model rather than granting broad repository write access.
 6. Change the repository Pages source to **GitHub Actions** only after the artifact workflow exists on `main` and has been reviewed.
-7. Deploy once, then verify the live URL, all navigation, 404 handling, legacy Forum redirect, Guide routes, Nexus media, Home deferred media, CSS/font/media dependencies, CSP console state and network waterfall.
+7. Deploy once, then verify the live URL, all navigation, 404 handling, legacy Forum/Development redirects, Guide routes, Nexus media, Home deferred media, CSS/font/media dependencies, CSP console state and network waterfall.
 8. Confirm operational repository paths such as `/PixelWeb/docs/` and `/PixelWeb/scripts/` are no longer part of the deployed artifact.
 9. Keep the previous deployment configuration documented until the first artifact deployment is confirmed healthy, but do not run two competing Pages deployment methods indefinitely.
 
