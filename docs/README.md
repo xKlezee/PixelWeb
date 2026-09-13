@@ -34,6 +34,7 @@ Repository-level automated controls live outside this directory:
 - `scripts/security_scan.py` — dependency-free committed-file secret guard;
 - `scripts/validate_media_integrity.py` — exact source-integrity guard for the four approved Nexus PNGs;
 - `scripts/validate_public_data.js` — canonical public-data relationship, approved-destination, Worlds-media and product-publication validator;
+- `scripts/validate_guide_evidence.js` — Guide `verification` metadata taxonomy/date/live-client consistency guard; it prevents silent metadata upgrades but does not substitute for real runtime evidence;
 - `scripts/validate_leaderboards_data.py` — leaderboard publication-state, no-fixture, canonical-taxonomy and row-validity guard;
 - `scripts/validate_leaderboards_catalog.js` — exact JS-fallback vs JSON leaderboard editorial-metadata guard; trusted producers may update source metadata and ranking rows, not PixelWeb-owned labels/descriptions/units;
 - `scripts/build_leaderboards_snapshot.py` — offline trusted-export handoff that validates complete metric coverage, contiguous ranks and unique players, then merges rows into PixelWeb-owned catalogue copy and can write the snapshot atomically;
