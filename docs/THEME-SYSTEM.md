@@ -76,7 +76,7 @@ Generic Pixel interaction accents use the shared gold/amber/orange identity. Coo
 
 ## First-paint boundary
 
-Source inspection now establishes synchronous bootstrap coverage for every current page that loads `data/network.js`, and `scripts/validate_site.py` guards that order/sincronicity contract against regression. Whether a particular browser visibly flashes an opposite theme is still a render/timing claim and remains part of browser QA. The defensive fallback in `data/network.js` is not a current fallback-only page path and must not be treated as browser proof.
+Source inspection now establishes synchronous bootstrap coverage for every current page that loads `data/network.js`, and `scripts/validate_site.py` guards that ordering/synchrony contract against regression. Whether a particular browser visibly flashes an opposite theme is still a render/timing claim and remains part of browser QA. The defensive fallback in `data/network.js` is not a current fallback-only page path and must not be treated as browser proof.
 
 ## Verification boundary
 
