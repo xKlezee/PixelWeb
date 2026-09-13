@@ -1,5 +1,10 @@
 /* Pixel Network — top-10 preview and complete leaderboard control. */
 
+[data-leaderboards-root]:not([data-leaderboard-state='ready']) .leaderboard-podium,
+[data-leaderboards-root]:not([data-leaderboard-state='ready']) .leaderboard-record-badge {
+  display:none;
+}
+
 .leaderboard-table-block {
   margin-top:17px;
 }
