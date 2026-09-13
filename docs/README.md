@@ -15,7 +15,7 @@ This directory is the reviewable technical contract for PixelWeb's security, pub
 
 - `GUIDES-CONTENT-MODEL.md` — canonical-data rule, legacy migration policy, evidence levels, factual feature states and public-disclosure rules for Pixel Guides.
 - `GUIDE-WIKI-QA.md` — release contract for the curated nine-category Guide plus the complete 42-article Player Wiki, including no-JavaScript access, verification-state preservation and browser-QA boundaries.
-- `LEADERBOARDS-DATA-CONTRACT.md` — public `pending`/authoritative `ready` snapshot rules, canonical metric catalogue and producer boundary; browser-public fictional standings are forbidden.
+- `LEADERBOARDS-DATA-CONTRACT.md` — authoritative `pending`/`ready` snapshot rules, canonical metric catalogue and producer boundary; persisted fictional standings remain forbidden while the explicitly labeled runtime-only 100-player demo is allowed for presentation QA.
 - `IMPLEMENTATION-STATUS.md` — current public-site architecture, Guide/publication boundaries, theme/runtime state and remaining verification work.
 - `THEME-COVERAGE-AUDIT-2026-09.md` — source-level Light / Dark / System coverage matrix, media-preservation rules, cascade order and runtime-state corrections. It is an audit of code/selectors/states, not a substitute for browser/render QA.
 - `UI-GEOMETRY-SYSTEM.md` — measurable 4/8 px rhythm, 40/44/48/52 px control scale, desktop/mobile navigation geometry, page-control harmonization and future UI invariants.
