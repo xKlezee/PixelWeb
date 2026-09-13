@@ -11,6 +11,9 @@ ROOT = Path(__file__).resolve().parents[1]
 HTML_FILES = sorted(ROOT.glob("*.html"))
 SITE_BASE_URL = "https://xklezee.github.io/PixelWeb/"
 REQUIRED_REFERRER_POLICY = "strict-origin-when-cross-origin"
+REQUIRED_FAVICON = "favicon.png"
+REQUIRED_FAVICON_TYPE = "image/png"
+REQUIRED_FAVICON_SIZE = "32x32"
 
 LEGACY_REDIRECTS = {
     "forum.html": {
@@ -39,6 +42,7 @@ class MetadataParser(html.parser.HTMLParser):
         self.meta_names: dict[str, list[tuple[str, int]]] = defaultdict(list)
         self.http_equiv: dict[str, list[tuple[str, int]]] = defaultdict(list)
         self.canonicals: list[tuple[str, int]] = []
+        self.icons: list[tuple[str, str, str, int]] = []
         self.anchor_hrefs: list[tuple[str, int]] = []
 
     def handle_starttag(self, tag: str, attrs) -> None:
@@ -58,8 +62,16 @@ class MetadataParser(html.parser.HTMLParser):
 
         if tag == "link":
             rel = {token.lower() for token in str(attrs_dict.get("rel") or "").split()}
+            href = str(attrs_dict.get("href") or "").strip()
             if "canonical" in rel:
-                self.canonicals.append((str(attrs_dict.get("href") or "").strip(), line))
+                self.canonicals.append((href, line))
+            if "icon" in rel:
+                self.icons.append((
+                    href,
+                    str(attrs_dict.get("type") or "").strip().lower(),
+                    str(attrs_dict.get("sizes") or "").strip().lower(),
+                    line,
+                ))
             return
 
         if tag == "a":
@@ -99,6 +111,30 @@ def validate_referrer(page: Path, parser: MetadataParser, failures: list[str]) -
         failures.append(
             f"{page.name}:{line}: referrer policy must be exactly "
             f"{REQUIRED_REFERRER_POLICY!r}, found {value!r}"
+        )
+
+
+def validate_favicon(page: Path, parser: MetadataParser, failures: list[str]) -> None:
+    if len(parser.icons) != 1:
+        failures.append(
+            f"{page.name}: expected exactly one rel=icon link, found {len(parser.icons)}"
+        )
+        return
+
+    href, mime_type, sizes, line = parser.icons[0]
+    if href != REQUIRED_FAVICON:
+        failures.append(
+            f"{page.name}:{line}: favicon href must be {REQUIRED_FAVICON!r}, found {href!r}"
+        )
+    if mime_type != REQUIRED_FAVICON_TYPE:
+        failures.append(
+            f"{page.name}:{line}: favicon type must be {REQUIRED_FAVICON_TYPE!r}, "
+            f"found {mime_type!r}"
+        )
+    if sizes != REQUIRED_FAVICON_SIZE:
+        failures.append(
+            f"{page.name}:{line}: favicon sizes must be {REQUIRED_FAVICON_SIZE!r}, "
+            f"found {sizes!r}"
         )
 
 
@@ -174,6 +210,7 @@ def main() -> int:
         parser.close()
 
         validate_referrer(page, parser, failures)
+        validate_favicon(page, parser, failures)
         validate_noindex_contract(page, parser, failures)
         validate_legacy_redirect(page, parser, failures)
 
