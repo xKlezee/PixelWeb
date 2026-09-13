@@ -117,6 +117,7 @@ Verify the appearance system as a real browser/runtime feature, not only as a so
 
 - Leaderboards frontend may expose structure, tabs, empty/source-pending states and verified timestamps.
 - Do not publish player positions, scores or inferred rankings until an authoritative server-backed source is connected.
+- While the source is not `ready`, the Top 3 podium and `TOP 10` ranking badge remain hidden so the pending state cannot imply a populated ranking.
 - Empty state must not look like a zero-score ranking table.
 
 ## Media integrity
