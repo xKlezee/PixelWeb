@@ -143,6 +143,15 @@
 }
 
 /* ---------- Store / Leaderboards / Marketplace detail controls ---------- */
+/* Open Shop is intentionally a separate prominence tier. It is the strongest commerce
+   action on the Store page, so reducing it to the 44 px generic-control height would
+   flatten hierarchy. 72/64 stay on the 8 px rhythm while avoiding arbitrary 76 px drift. */
+.store-shop-primary {
+  min-height: 72px;
+  padding-inline: 32px;
+  box-sizing: border-box;
+}
+
 .store-rank-dialog-close,
 .leaderboard-full-toggle {
   box-sizing: border-box;
@@ -195,6 +204,11 @@
   .play-dialog-actions .button {
     min-height: 48px;
   }
+
+  .store-shop-primary {
+    min-height: 64px;
+    padding-inline: 24px;
+  }
 }
 
 @media (max-width: 600px) {
@@ -217,6 +231,11 @@
   }
 
   .play-dialog-actions .button {
+    min-width: 0;
+  }
+
+  .store-shop-primary {
+    width: 100%;
     min-width: 0;
   }
 }
