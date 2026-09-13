@@ -115,10 +115,15 @@ Verify the appearance system as a real browser/runtime feature, not only as a so
 
 ## Leaderboards
 
-- Leaderboards frontend may expose structure, tabs, empty/source-pending states and verified timestamps.
-- Do not publish player positions, scores or inferred rankings until an authoritative server-backed source is connected.
-- While the source is not `ready`, the Top 3 podium and `TOP 10` ranking badge remain hidden so the pending state cannot imply a populated ranking.
-- Empty state must not look like a zero-score ranking table.
+- `data/leaderboards.json` and `data/leaderboards.js` remain authoritative-snapshot surfaces: while disconnected they stay `pending` with zero persisted rows.
+- While the authoritative source is pending, the browser may generate the reviewed runtime-only demo: exactly 100 synthetic players per metric using the `DemoPlayer001` … `DemoPlayer100` namespace.
+- Demo presentation must be unmistakable: the source area states that it is example/not-live data and the record badge reads `DEMO`.
+- Demo mode shows the Top 3 podium and Top 10 table, and its expansion control exposes Top 100.
+- Synthetic demo rows must not be written into `data/leaderboards.json`, `data/leaderboards.js`, exporter handoffs or any server-side source.
+- Demo identities must not trigger external Minecraft skin/head requests; presentation fallbacks are local-only.
+- A valid `ready / pixel-server-export` snapshot disables demo generation and renders only authoritative ranking rows.
+- Real player positions, scores or inferred rankings must never be fabricated or mixed with the demo namespace.
+- Empty/error states must not look like a real zero-score ranking table.
 
 ## Media integrity
 
