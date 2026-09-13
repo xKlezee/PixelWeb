@@ -1,0 +1,92 @@
+/* Complete Wiki entry points layered onto the curated Guide landing. */
+.wiki-complete-link {
+  min-height:54px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  margin-top:14px;
+  padding:10px 12px 10px 14px;
+  border-top:1px solid rgba(212,186,120,.18);
+  border-bottom:1px solid rgba(212,186,120,.11);
+  color:#aab2a6;
+  text-decoration:none;
+  transition:color 120ms ease,background 120ms ease,padding 120ms ease;
+}
+.wiki-complete-link span,.wiki-complete-link small,.wiki-complete-link strong { display:block; }
+.wiki-complete-link small {
+  color:#9b8756;
+  font-size:8px;
+  font-weight:850;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.wiki-complete-link strong {
+  margin-top:4px;
+  color:#e7e8df;
+  font-size:12px;
+}
+.wiki-complete-link b { color:#d2ac57; font-size:17px; font-weight:500; }
+.wiki-complete-link:hover,.wiki-complete-link:focus-visible {
+  padding-left:18px;
+  color:#f0eadf;
+  background:linear-gradient(90deg,rgba(212,186,120,.055),transparent 82%);
+  outline:none;
+}
+
+.wiki-complete-strip {
+  min-height:70px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  padding:17px 0;
+  border-bottom:1px solid rgba(214,225,207,.10);
+}
+.wiki-complete-strip span,.wiki-complete-strip small,.wiki-complete-strip strong { display:block; }
+.wiki-complete-strip small {
+  color:#88794f;
+  font-size:8px;
+  font-weight:850;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.wiki-complete-strip strong { margin-top:4px; color:#d8ddd3; font-size:13px; }
+.wiki-complete-strip a {
+  flex:0 0 auto;
+  color:#cfb265;
+  font-size:10px;
+  font-weight:800;
+  text-decoration:none;
+}
+.wiki-complete-strip a:hover,.wiki-complete-strip a:focus-visible { color:#f0d385; outline:none; }
+.wiki-complete-strip b { margin-left:7px; font-size:14px; font-weight:500; }
+
+/* Make the curated landing feel more editorial and less like stacked cards. */
+.wiki-hero {
+  background:
+    radial-gradient(circle at 84% 12%,rgba(212,186,120,.055),transparent 28%),
+    linear-gradient(180deg,#151811,#0f130e)!important;
+}
+.wiki-search-control { border-width:1px!important; box-shadow:inset 0 1px 0 rgba(255,255,255,.025)!important; }
+.wiki-category-head { border-bottom-color:rgba(212,186,120,.15)!important; }
+.wiki-article-link { padding-block:17px!important; }
+.wiki-article-link:hover,.wiki-article-link:focus-visible {
+  background:linear-gradient(90deg,rgba(212,186,120,.055),transparent 84%)!important;
+}
+.wiki-index-sidebar { border-right-color:rgba(212,186,120,.12)!important; }
+
+html[data-theme-effective='light'] .wiki-complete-link strong,
+html[data-theme-effective='light'] .wiki-complete-strip strong { color:#423a2f; }
+html[data-theme-effective='light'] .wiki-complete-link:hover,
+html[data-theme-effective='light'] .wiki-complete-link:focus-visible,
+html[data-theme-effective='light'] .wiki-article-link:hover,
+html[data-theme-effective='light'] .wiki-article-link:focus-visible { background:linear-gradient(90deg,rgba(166,112,24,.07),transparent 84%)!important; }
+
+@media (max-width:720px) {
+  .wiki-complete-strip { align-items:flex-start; flex-direction:column; gap:8px; }
+  .wiki-complete-strip a { width:100%; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .wiki-complete-link { transition:none; }
+}
