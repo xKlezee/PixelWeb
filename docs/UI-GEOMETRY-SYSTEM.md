@@ -66,7 +66,7 @@ The height refers to the complete border-box target, not the text line box.
 - Header row minimum height: 48 px.
 - Brand image: 32 x 32 px, reducing to 30 x 30 px at `<= 390 px`.
 - Discord, Play and menu toggle: 44 px tall.
-- Discord and menu toggle: 44 px wide; 42 px at `<= 390 px` where necessary.
+- Discord and menu toggle remain true 44 x 44 px squares through 390 px; they are not narrowed because the measured header still fits with margin.
 - Play minimum width: 64 px; 58 px at `<= 430 px`; 54 px at `<= 390 px`.
 - Mobile menu horizontal edge: 16 px; 12 px at `<= 430 px`.
 - Mobile top-level rows: 48 px.
