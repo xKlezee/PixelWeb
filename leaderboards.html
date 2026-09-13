@@ -38,7 +38,7 @@
         <div class="leaderboard-hero-copy">
           <div class="mc-page-kicker">Community · Hall of Records</div>
           <h1>Leaderboards.</h1>
-          <p>Mining. Wealth. Progression. Bosses. Islands. Collections. Every record gets its own board.</p>
+          <p>A clean ranking view for mining, economy, progression, bosses, islands and collections.</p>
         </div>
         <div class="leaderboard-hero-mark" aria-hidden="true"><span>01</span><i></i><strong>TOP</strong></div>
       </div>
@@ -46,9 +46,27 @@
 
     <section class="leaderboard-shell" data-leaderboards-root>
       <div class="shell">
+        <div class="leaderboard-overview" aria-label="Leaderboard overview">
+          <article class="leaderboard-overview-card">
+            <small>Categories</small>
+            <strong>7</strong>
+            <span>Core ranking groups across the full network.</span>
+          </article>
+          <article class="leaderboard-overview-card">
+            <small>Boards</small>
+            <strong>20</strong>
+            <span>Tracked records for progress, combat and collection.</span>
+          </article>
+          <article class="leaderboard-overview-card">
+            <small>Preview</small>
+            <strong>Top 100</strong>
+            <span>Example players are shown until live export is connected.</span>
+          </article>
+        </div>
+
         <div class="leaderboard-frame">
           <aside class="leaderboard-browser" aria-label="Leaderboard categories">
-            <div class="leaderboard-browser-head"><small>Browse</small><strong>Records</strong><span>Choose a discipline, then the exact ranking.</span></div>
+            <div class="leaderboard-browser-head"><small>Browse</small><strong>Records</strong><span>Pick a category and open a board.</span></div>
             <div class="leaderboard-category-list" data-leaderboard-categories></div>
             <div class="leaderboard-source" aria-live="polite"><span class="leaderboard-source-dot" aria-hidden="true"></span><div><strong data-leaderboard-source>Leaderboard tracking is not connected yet</strong><span data-leaderboard-updated>Tracking not connected yet</span></div></div>
           </aside>
@@ -84,12 +102,12 @@
                 </div>
               </div>
 
-              <div class="leaderboard-empty" data-leaderboard-empty><span class="leaderboard-empty-mark" aria-hidden="true">#</span><div><strong>Blocks Mined is ready for standings.</strong><span>The board layout is live; player positions will appear when leaderboard tracking is connected.</span></div></div>
+              <div class="leaderboard-empty" data-leaderboard-empty><span class="leaderboard-empty-mark" aria-hidden="true">#</span><div><strong>Standings unavailable.</strong><span>This board will populate automatically when live tracking is connected.</span></div></div>
             </section>
           </div>
         </div>
 
-        <div class="leaderboard-footnote"><strong>Competitive record policy</strong><span>The default view shows the top 10 for each record. While server tracking is disconnected, PixelWeb generates a clearly labeled 100-player demo in the browser so the full ranking layout can be previewed; those names, positions and values are synthetic and are not Pixel Network records. Once an authoritative export is available, it replaces the demo automatically and View full leaderboard expands the real historical ranking.</span></div>
+        <div class="leaderboard-footnote"><strong>Demo preview</strong><span>Until the live export is connected, each board shows a styled top 100 sample. When authoritative data arrives, the same layout switches to real standings automatically.</span></div>
       </div>
     </section>
   </main>
