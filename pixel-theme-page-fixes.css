@@ -2,6 +2,7 @@
 @import url('pixel-theme-runtime-fixes.css');
 @import url('pixel-interface-geometry.css');
 @import url('pixel-interface-components.css');
+@import url('pixel-responsive-harmony.css');
 
 /* Legacy/shared Phase 1 surfaces still used by current pages. */
 html[data-theme-effective='light'] :where(.nexus-access,.difficulty-tier,.dev-progress,.status-column,.person,.page-cta,.next-destination,.index-row) {
