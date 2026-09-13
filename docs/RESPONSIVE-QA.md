@@ -16,6 +16,23 @@ Also required: one short-height landscape window and 200% browser zoom.
 
 The viewport matrix must be executed in both effective `Light` and `Dark`. `System` is additionally verified at representative desktop and mobile widths by changing the browser/OS color-scheme preference while the page is open. A source-level theme audit does not mark any browser-render cell PASS.
 
+## Source-level responsive harmony pass
+
+`pixel-responsive-harmony.css` is the final source-level composition layer for the current responsive pass. It is loaded after shared geometry/component rules and before the final Light-specific corrections.
+
+The source pass normalizes the major composition checkpoints at 1024 / 980 / 768 / 600 / 430 / 390 / 360 px plus short-height landscape. It also provides shrink-safe grid children, consistent section density, narrow-phone CTA stacking, Guide rail scrolling, Marketplace viewer scaling, Leaderboard density, owner-card scaling and intentional table scrolling at high zoom.
+
+Important measured viewport math:
+
+- mobile global header: 65 px actual occupied height (48 px row + 8 px top + 8 px bottom + 1 px border);
+- normal contextual rail: 48 px;
+- Worlds/Nexus mobile immersive chrome: 113 px total;
+- short-height landscape header: 53 px actual occupied height (44 px row + 4 px top + 4 px bottom + 1 px border);
+- short-height contextual rail: 44 px;
+- Worlds/Nexus short-height immersive chrome: 97 px total.
+
+These are source-level calculations, not visual PASS results. Browser-render verification remains pending for every matrix cell.
+
 ## Appearance / theme execution
 
 - `System`, `Light` and `Dark` remain reachable by pointer/touch and keyboard wherever the Appearance control is available.
@@ -28,7 +45,7 @@ The viewport matrix must be executed in both effective `Light` and `Dark`. `Syst
 - Marketplace loading/error states remain visible rather than appearing as unexplained empty canvases.
 - Toast, skip-link, Pixel Navigator, Play dialog and mobile navigation maintain readable foreground/background/border contrast.
 - Generic interaction accents remain warm gold/amber/orange/copper. Semantic/authored colors such as Discord identity, World/biome identity and boss artwork may remain distinct.
-- Theme changes must not replace, recolor, recompress, downscale or otherwise mutate approved World/Nexus imagery, Nexus boss PNGs, Minecraft skins, Marketplace model textures or logos.
+- Theme changes must not replace, recompress, downscale or otherwise mutate approved World/Nexus imagery, Nexus boss PNGs, Minecraft skins, Marketplace model textures or authored logo source files. The official Discord Symbol source and geometry remain unchanged, while its rendered CSS tint may follow the effective theme as an explicit presentation exception.
 - Reduced-motion behavior must remain correct in both effective themes and must not be defeated by theme-specific status or feedback animation.
 
 ## Global navigation
@@ -37,7 +54,7 @@ The viewport matrix must be executed in both effective `Light` and `Dark`. `Syst
 - Explore / Guide / Community keep the fine-pointer hover contract on desktop and explicit click/touch behavior on mobile.
 - Keyboard focus, ArrowDown and Escape remain independent supported paths.
 - Store and Discord remain reachable from the mobile menu while Play remains directly available in the header.
-- Desktop Discord uses the official Discord Symbol inside its neutral Pixel control; the symbol must remain undistorted and un-recolored.
+- Desktop Discord uses the official Discord Symbol source and preserves its proportions. Its CSS presentation tint/surface may change with the effective appearance mode; the SVG itself is not replaced or redrawn.
 - Detailed `guide-*.html` pages keep Guide selected in the canonical navigation.
 - A first-focus Skip to content route is generated for standard pages.
 - Category pages expose a contextual sibling-navigation rail directly below the global navigation:
@@ -48,7 +65,7 @@ The viewport matrix must be executed in both effective `Light` and `Dark`. `Syst
 - The current sibling and its owning top-level group use an active treatment that remains understandable through text/shape/contrast and not color alone.
 - The contextual rail is horizontally scrollable rather than wrapping into a tall second navigation on narrow screens.
 - Home, Marketplace, Store, About and License do not create an empty contextual rail.
-- Worlds/Nexus preserve the established 50px Explore rail geometry required by immersive viewport math.
+- Worlds/Nexus preserve the shared 48 px contextual rail geometry in the normal mobile composition; the immersive stage math uses the measured 113 px combined mobile chrome.
 - Shared active/selection accents are warm gold/amber/orange; approved world and boss media retains its authored colors.
 
 ## Shared content layouts
@@ -58,11 +75,13 @@ The viewport matrix must be executed in both effective `Light` and `Dark`. `Syst
 - CTA blocks stack on mobile.
 - Long text containers remain shrink-safe.
 - Page-level horizontal overflow must never be used to hide layout failure; only intentional rails/tables may scroll horizontally.
+- The complete `Pixel Network / Java Edition` brand identity remains present at 600 / 430 / 390 px; narrow layouts must not use the legacy 88 px text truncation.
 
 ## Home
 
 - Hero collapses to one column below 980 px.
-- Immersive story has reduced mobile height and hides the desktop scroll hint.
+- At 430 px the primary hero actions become one full-width column with matching geometry.
+- Immersive story has reduced mobile height and hides the desktop scroll hint where required.
 - World gallery becomes a compact mobile grid below 980 px.
 - Closing/status/store sections collapse below 980 px.
 - The immersive MP4 remains deferred (`preload="none"`) and should not be requested before the story approaches its hydration margin.
@@ -81,6 +100,8 @@ The viewport matrix must be executed in both effective `Light` and `Dark`. `Syst
 - Abyss + Astral display as two complete independent 4:3 images without crop or stretch.
 - In Light mode, full-screen media remains the same source file while stage brightness/contrast, overlays, rail, metadata, counter, investigation control and dialog surfaces adapt independently.
 - Theme switching must not introduce a dark-only overlay over Light mode imagery or wash out encounter/world artwork.
+- At normal mobile height, the stage subtracts the measured 113 px combined chrome rather than relying on a stale 111/112 px approximation.
+- In short-height landscape, the stage may drop its legacy 520 px minimum and uses the measured 97 px compact chrome so the immersive viewport does not create avoidable vertical overflow.
 
 ## Systems / Skyblock
 
@@ -92,8 +113,10 @@ The viewport matrix must be executed in both effective `Light` and `Dark`. `Syst
 ## Guide
 
 - Desktop Guide retains the documentation-specific sticky-sidebar layout.
-- At tablet widths the Browse sidebar becomes a compact multi-column/horizontal-friendly navigation surface above content.
-- At small mobile widths Browse groups resolve to one column.
+- At tablet widths the Browse sidebar becomes a compact horizontal-friendly navigation surface above content.
+- Tablet/mobile Guide rails use native horizontal scrolling with hidden visual scrollbars and proximity snap rather than squeezing labels.
+- At small mobile widths Browse groups resolve to one column where content density requires it.
+- Guide facts resolve to one readable column at 430 px instead of forcing two narrow fact cells.
 - Guide tables remain intentionally horizontally scrollable rather than forcing unreadable wrapping.
 - Guide search remains usable at 390/430 px and 200% zoom.
 - Evidence/state labels remain readable and are not communicated only by color.
@@ -111,6 +134,9 @@ The viewport matrix must be executed in both effective `Light` and `Dark`. `Syst
 - Loading and failure states remain visible and centered at desktop, tablet and mobile widths.
 - Item previews preserve their own loading/failure feedback, active state, hover/focus treatment and readable detail relationship.
 - Theme switching must not change model scale, yaw/pitch behavior, texture sampling or the original source texture bytes.
+- The model stage scales down progressively instead of retaining the desktop 620/510 px height on narrow devices.
+- Collection items use two columns on tablet and one column from compact phone widths so cards are not squeezed below readable proportions.
+- The Store bridge stacks and its CTA becomes full width on narrow phones.
 
 ## Leaderboards
 
@@ -118,6 +144,8 @@ The viewport matrix must be executed in both effective `Light` and `Dark`. `Syst
 - Top 10, Full Leaderboard, metric selector, badges and empty/source-pending states remain readable at every required width.
 - Empty/source-pending state must not visually resemble a populated zero-score leaderboard.
 - Player heads/renders and their fallbacks retain intended image treatment; the theme adapts their surrounding stage/podium rather than recoloring player imagery.
+- Category navigation resolves to one column by 430 px to preserve full labels and touch geometry.
+- The data table remains an intentional horizontal-scroll surface at narrow widths/200% zoom rather than widening the document.
 
 ## Staff Team / Owners
 
@@ -127,7 +155,7 @@ Static expectations:
 
 - both owner profiles keep equal structural weight;
 - owner layouts collapse to one column below 980 px;
-- the viewer frame reduces height on compact layouts without clipping the model;
+- the viewer frame reduces progressively through tablet/phone breakpoints without clipping the model;
 - each viewer remains keyboard focusable;
 - ArrowLeft/ArrowRight rotate yaw, ArrowUp/ArrowDown adjust pitch, and Home restores that owner's own initial orientation;
 - pointer dragging rotates the model without causing page scroll while drag is active;
@@ -154,6 +182,8 @@ Browser/network QA must additionally verify CORS/canvas behavior and both userna
 ## Store
 
 - Store panels, category surfaces, Shop CTA and rank-information dialog remain usable at every required width.
+- The Store-page `Open Shop` action is a deliberate prominent-commerce tier: 72 px desktop / 64 px touch, while ordinary body controls remain 44/48 px. This is intentional hierarchy, not arbitrary scale drift.
+- The rank dialog collapses from five columns to two and then one column before tier content becomes cramped.
 - Light mode must retain clear hierarchy between neutral informational surfaces and the strongest gold purchase CTA.
 - Modal/backdrop focus and contrast remain readable in both effective themes.
 
@@ -177,6 +207,7 @@ Browser/network QA must additionally verify CORS/canvas behavior and both userna
 - Narrow layouts stack footer actions.
 - Focus trapping, Escape close and focus restoration remain implemented without runtime inline styles.
 - Backdrop, steps, IP control and footer actions remain readable in both effective themes.
+- Short-height landscape bounds the dialog against `100dvh` rather than allowing the authored desktop height to escape the viewport.
 
 ## Crawl / compatibility surfaces
 
