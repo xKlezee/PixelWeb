@@ -22,6 +22,7 @@ This directory is the reviewable technical contract for PixelWeb's security, pub
 ## Quality, performance and deployment
 
 - `QA-SECURITY-CHECKLIST.md` — security, rendering, navigation, theme-state, Guide integrity, media-integrity and publication regression checklist before release claims.
+- `GUIDE-LIVE-CLIENT-QA.md` — executable in-game evidence protocol for promoting Talismans, Enchantments and Stats & Equipment from `liveClient: not-asserted` to a real `live-client-verified` claim; includes environment capture, mandatory cases, blockers and promotion criteria.
 - `RESPONSIVE-QA.md` — required 1440 / 1024 / 768 / 430 / 390 px matrix and the strict separation between static review and real browser-render verification.
 - `PERFORMANCE-BUDGET.md` — asset/loading budget and performance constraints, including the rule that approved original Nexus PNGs are not recompressed merely to improve scores.
 - `PAGES-DEPLOYMENT-MIGRATION.md` — controlled migration from branch-root Pages publishing to a validated `_site/` artifact after GitHub Actions is healthy.
