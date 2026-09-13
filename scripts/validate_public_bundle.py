@@ -34,7 +34,14 @@ PUBLIC_ASSET_SUFFIXES = {
     ".mp4", ".webm", ".mov", ".woff", ".woff2",
 }
 PUBLIC_NOINDEX_PAGES = {"forum.html", "development.html", "404.html"}
-PUBLIC_DYNAMIC_ROOT_FILES = {"play-modal.css"}
+PUBLIC_DYNAMIC_ROOT_FILES = {
+    "play-modal.css",
+    "pixel-theme.css",
+    "pixel-theme-coverage.css",
+    "pixel-theme-audit-fixes.css",
+    "pixel-theme-page-fixes.css",
+    "pixel-theme.js",
+}
 LOCAL_URL_ATTRS = {"href", "src", "poster", "data-src", "data-poster"}
 SRCSET_ATTRS = {"srcset", "data-srcset"}
 CSS_COMMENT_RE = re.compile(r"/\*.*?\*/", re.DOTALL)
