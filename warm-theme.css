@@ -207,7 +207,8 @@ body.minecraft-rpg-home {
   box-shadow: 0 0 24px rgba(234,165,47,.42) !important;
 }
 
-/* Keep Store as the strongest purchase CTA; Discord and Play remain neutral gray in header. */
+/* Store remains the strongest purchase CTA. Play/Discord shells are resolved later by
+   the appearance runtime so this warm layer does not freeze either control to one theme. */
 .nav-actions .nav-store,
 .nav-actions .button.quiet.nav-store {
   border-color: #76500b !important;
