@@ -50,6 +50,9 @@ jobs:
       - name: Validate leaderboard publication data
         run: python3 scripts/validate_leaderboards_data.py
 
+      - name: Validate leaderboard editorial catalog
+        run: node scripts/validate_leaderboards_catalog.js
+
       - name: Validate static site integrity, CSP and transport policy
         run: python3 scripts/validate_site.py
 
