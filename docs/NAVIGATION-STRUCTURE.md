@@ -16,6 +16,20 @@ The canonical top-level order is:
 
 The Discord header action uses Discord's official Symbol asset inside the Pixel navigation material. The source SVG and its geometry must not be redrawn, replaced or distorted. Its rendered CSS tint may follow the effective Light/Dark theme so the glyph keeps sufficient contrast against the themed control; this presentation tint does not modify the source asset.
 
+### Progressive enhancement / no-JS fallback
+
+The mobile navigation must remain usable if JavaScript is unavailable. The static HTML already contains the canonical navigation destinations; JavaScript enhances that structure into the compact hamburger/dropdown interaction rather than being the only way to reach those destinations.
+
+`pixel-theme-bootstrap.js` adds `html.js` synchronously before body paint on the canonical runtime pages. At 980px and below:
+
+- with `html.js`, the normal collapsed mobile navigation is used and `polish.js` controls `.open` / `.is-open` interaction;
+- without `html.js`, the navigation expands into normal document flow, the inert group trigger buttons are hidden, and their real nested links remain visible;
+- the runtime-only Play button is hidden in the no-JS fallback because it cannot honestly perform its modal/copy behavior without JavaScript;
+- Discord and Store remain directly reachable because they are real links;
+- the no-JS navigation is not sticky, so the expanded fallback cannot trap most of a small viewport beneath persistent chrome.
+
+The compatibility redirects (`forum.html` and `development.html`) do not need the full navigation runtime; each retains an explicit destination link if the immediate meta refresh does not fire.
+
 ## Explore
 
 Explore contains the product/gameplay destinations:
