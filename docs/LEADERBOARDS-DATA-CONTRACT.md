@@ -1,6 +1,6 @@
 # Leaderboards data contract
 
-PixelWeb exposes the complete leaderboard catalogue even while the authoritative server producer is not connected. The public site must never invent placements, values or player standings.
+PixelWeb exposes the complete leaderboard catalogue even while the authoritative server producer is not connected. The authoritative public snapshot must never invent placements, values or player standings. While that snapshot is `pending`, the browser is allowed to generate a clearly labeled synthetic demo solely to preview the finished ranking experience.
 
 ## Catalogue
 
@@ -20,14 +20,14 @@ PixelWeb owns the player-facing editorial catalogue. A trusted producer may popu
 
 ## Display contract
 
-Every metric is presented in two layers once authoritative rows exist:
+The normal leaderboard view renders the first 10 ranked rows. The lower-right expansion control then exposes the wider ranking:
 
-1. The normal leaderboard view renders up to the first 10 ranked players.
-2. `View full leaderboard`, placed at the lower-right edge of the table, expands the same table to every entry supplied for that metric.
+1. while the source snapshot is `pending`, the browser demo contains exactly 100 synthetic players and the control expands from Top 10 to Top 100;
+2. once an authoritative `ready` snapshot exists, `View full leaderboard` expands to every entry supplied for that metric.
 
-The Top 3 podium is only a visual highlight. Positions #1, #2 and #3 also remain in the Top 10 table and in the full table.
+The Top 3 podium is only a visual highlight. Positions #1, #2 and #3 also remain in the Top 10 table and in the expanded table.
 
-There is no client-side Top 100 cap.
+There is no client-side Top 100 cap for authoritative data. The 100-row limit applies only to the synthetic demo presentation.
 
 For the future real producer, a full leaderboard is expected to include the complete historical population known by Pixel Network for that metric, not only currently online or recently active accounts. If a historical player legitimately has a zero/default value for a metric, the producer should include that explicit value rather than silently dropping the player.
 
@@ -35,7 +35,7 @@ For the future real producer, a full leaderboard is expected to include the comp
 
 The browser loads `data/leaderboards.json` from the same origin. The file must be safe to expose publicly and must contain no database credentials, private identifiers, email addresses, IP addresses or other non-public player data.
 
-Only two public source states are allowed.
+Only two persisted public source states are allowed in the snapshot: `pending` and `ready`.
 
 ### Pending
 
@@ -54,7 +54,25 @@ While no authoritative exporter is connected:
 }
 ```
 
-The real file still contains the complete category/metric catalogue, but every metric must use `"entries": []`. No placeholder usernames, ranks, scores or test fixtures may be published.
+The real file still contains the complete category/metric catalogue, but every metric must use `"entries": []`. No placeholder usernames, ranks, scores or test fixtures may be persisted in `data/leaderboards.json` or `data/leaderboards.js`.
+
+### Browser demo presentation
+
+When the persisted snapshot is not authoritative, `leaderboards.js` converts the browser presentation to a runtime-only `demo` state. This is not a third snapshot state and must never be written into `data/leaderboards.json`.
+
+The demo contract is deliberately explicit:
+
+- exactly 100 synthetic rows are generated per metric;
+- player names use the `DemoPlayer001` … `DemoPlayer100` namespace;
+- values are deterministic presentation values appropriate to each metric type;
+- the source area says that the standings are demo/example data and not live records;
+- the record badge changes from `PIXEL` to `DEMO`;
+- Top 3 and Top 10 are visible so the finished composition can be reviewed;
+- the expansion control reveals Top 100;
+- synthetic players do not request external Minecraft skin/head services;
+- demo rows are never treated as evidence of server state and never flow back into the snapshot builder.
+
+As soon as a valid `ready / pixel-server-export` snapshot loads, the browser must stop generating demo rows and render only the authoritative entries.
 
 ### Ready
 
@@ -95,18 +113,19 @@ A production snapshot uses schema version 3 and an authoritative server export:
 ## Publication rules
 
 - `schemaVersion` must be exactly `3`.
-- Public `source.state` may be only `pending` or `ready`.
-- `pending` requires `source.authority: "pending"`, `source.generatedAt: null`, and zero published rows across every metric.
+- Persisted `source.state` may be only `pending` or `ready`.
+- `pending` requires `source.authority: "pending"`, `source.generatedAt: null`, and zero persisted rows across every metric.
 - `ready` requires `source.authority: "pixel-server-export"` and a timezone-aware ISO-8601 `source.generatedAt` timestamp.
 - Every ready entry requires a positive integer `rank`, a non-empty `player`, and a non-empty `value`.
 - Ready ranks must be contiguous from `1` through `N` for each metric; skipped or duplicate positions are invalid.
 - Duplicate players inside one metric are invalid.
 - Entries are sorted by rank by the frontend but are not truncated by the client.
-- `testRoster`, `testValues`, `pixel-test-fixture` and browser-public test standings are forbidden.
+- `testRoster`, `testValues`, `pixel-test-fixture` and unlabeled browser-public test standings are forbidden.
+- The only permitted disconnected-source ranking preview is the explicit runtime-only `demo` contract above; it must remain visibly labeled and must never be persisted as ranking data.
 - Category/metric editorial metadata must remain identical to the PixelWeb fallback catalogue; the producer owns ranking data, not public copy.
 - Production rankings must come from current authoritative server data.
 
-`validate_leaderboards_data.py` guards publication state, rows and canonical IDs/order. `validate_leaderboards_catalog.js` independently compares the JS fallback against the JSON snapshot after removing only `entries`, preventing server integration from drifting labels, descriptions, kickers, short labels or units. Layout fixtures, if ever needed for development, must remain outside browser-public `data/` and must not be deployed as standings.
+`validate_leaderboards_data.py` guards persisted publication state, rows and canonical IDs/order. `validate_leaderboards_catalog.js` independently compares the JS fallback against the JSON snapshot after removing only `entries`, preventing server integration from drifting labels, descriptions, kickers, short labels or units. The runtime demo is presentation-only and does not weaken either persisted-data guard.
 
 ## Trusted exporter handoff
 
