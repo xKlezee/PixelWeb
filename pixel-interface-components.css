@@ -87,9 +87,17 @@
 }
 
 /* ---------- Wiki, Guide and disclosure controls ---------- */
-.wiki-browse-group > summary,
-.about-faq-list summary {
+.wiki-browse-group > summary {
   min-height: 44px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* FAQ rows are reading/disclosure surfaces rather than compact tool controls. 52 px
+   gives the label and +/- affordance a stable rhythm without returning to the old 58 px drift. */
+.about-faq-list summary {
+  min-height: 52px;
   display: flex;
   align-items: center;
   box-sizing: border-box;
@@ -186,19 +194,24 @@
   .pixel-navigator-input,
   .play-ip-control,
   .wiki-browse-group > summary,
-  .about-faq-list summary,
   .wiki-search-control input,
   .guides-search,
   .guide-search {
     min-height: 48px;
   }
 
+  .about-faq-list summary {
+    min-height: 52px;
+  }
+
+  /* 44 px control inside the 48 px search row: 2 px visual inset on each side. */
   .pixel-navigator-submit {
-    min-height: 40px;
+    min-height: 44px;
+    margin: 2px;
   }
 
   .pixel-navigator-examples button {
-    min-height: 40px;
+    min-height: 44px;
   }
 
   .play-dialog-actions .button {
