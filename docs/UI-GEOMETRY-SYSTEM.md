@@ -121,9 +121,9 @@ Explore/Guide/Community contextual rails use a 48 px structural height.
 - Mobile rails scroll horizontally rather than compressing labels until they become unreadable.
 - Scrollbars are visually hidden while native horizontal touch scrolling remains available.
 
-## 7. Body controls
+## 7. Body and page controls
 
-The shared geometry layer normalizes the following current controls:
+The shared geometry layers normalize the following current controls:
 
 - `.button`
 - `.copy-ip`
@@ -136,8 +136,36 @@ The shared geometry layer normalizes the following current controls:
 - `.world-tab`
 - `.marketplace-item-card` interactive targets
 - Appearance trigger/options/close control
+- Pixel Navigator trigger, close, search input, submit action, example chips and result rows
+- Play dialog close, IP-copy control and footer action buttons
+- Wiki browse summaries and Wiki/Guide search controls
+- About FAQ summaries
+- Worlds and Nexus rail nodes and detail-dialog close controls
+- Worlds investigation action target
 
 New primary or secondary controls should reuse an existing class or match this contract instead of introducing a new arbitrary height.
+
+### Pixel Navigator measurements
+
+- Floating trigger: 52 x 52 px desktop, 48 x 48 px at `<= 600 px`.
+- Close control: 40 x 40 px desktop, 44 x 44 px touch layout.
+- Search row/input: 48 px.
+- Submit action: 40 px high inside the 48 px search row with a 4 px inset.
+- Example chips: 36 px desktop, 40 px touch layout.
+- Result rows: minimum 64 px.
+
+### Play dialog measurements
+
+- Close control: 44 x 44 px.
+- IP-copy control: minimum 48 px.
+- Footer action gap: 8 px.
+- Footer CTA height: 44 px desktop, 48 px mobile.
+
+### Disclosure/search measurements
+
+- Wiki browse summary: minimum 44 px desktop / 48 px touch layout.
+- About FAQ summary: minimum 44 px desktop / 48 px touch layout.
+- Wiki/Guide search controls: minimum 44 px desktop / 48 px touch layout.
 
 ## 8. Focus and accessibility geometry
 
@@ -148,6 +176,7 @@ Shared focus geometry:
 - 2 px visible focus outline.
 - 3 px outline offset where the component allows it.
 - Focus treatment must not change the element's layout dimensions.
+- Immersive Worlds/Nexus nodes retain their authored large hit areas (68 px minimum) while receiving the same visible focus contract.
 
 At high zoom, controls may wrap or stack; they must not clip text or reduce below the applicable touch target.
 
@@ -179,9 +208,14 @@ Every new page must preserve the same interaction hierarchy even when the conten
 - Cards can have page-specific proportions, but embedded buttons follow shared control geometry.
 - Do not use a unique button radius, target height or padding for a page unless the interaction model genuinely requires it and the exception is documented.
 - Authored media proportions are independent from control geometry and must not be resized or recompressed by this system.
+- Component-local CSS may define visual identity, but measurable interaction geometry belongs to the shared geometry layers.
 
-## 11. Verification boundary
+## 11. Source-of-truth files and verification boundary
 
-`pixel-interface-geometry.css` is the source-of-truth geometry override loaded through the shared theme stack.
+`pixel-interface-geometry.css` owns the core grid, header, navigation, shared CTA and responsive measurements.
+
+`pixel-interface-components.css` owns the measurable geometry of specialized controls such as Pixel Navigator, Play modal, Wiki/FAQ disclosures and immersive page selectors.
+
+Both are loaded through the shared theme stack from `pixel-theme-page-fixes.css`, after the runtime fixes and before the final Light-specific corrections.
 
 Source/static review can verify dimensions, selectors, breakpoint rules and cascade ordering. Actual visual claims such as pixel-perfect alignment at every viewport still require browser execution at the responsive QA matrix. Do not mark browser/render QA PASS solely from this document or source inspection.
