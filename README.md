@@ -10,7 +10,7 @@ The site presents the network's gameplay model, progression worlds, Nexus endgam
 - Product/overview pages explain the experience and relationships between systems.
 - `marketplace.html` is a separate primary category for cosmetic collections, rotations and interactive Minecraft-model inspection.
 - `data/marketplace.js` owns the browser-public Marketplace catalogue derived from verified Nexo item registrations; `docs/MARKETPLACE-NEXO-STRUCTURE.md` records the source hierarchy and import rules.
-- **Guide replaces the former Development navigation family.** `guides.html` remains its canonical landing route and groups the current guide library under Mechanics, Tools, Armor, Specials, Boosts and Progression.
+- **Guide replaces the former Development navigation family.** `guides.html` remains its canonical landing route and groups the current guide library under Getting Started, Currencies, Basic Commands, Progression, Mechanics, Tools, Armor, Specials and Boosts.
 - Detailed `guide-*.html` pages use a denser documentation-specific interface and canonical public data rather than duplicating exact gameplay values.
 - Community contains **Leaderboards, Changelog, Rules and Staff Team**. `community.html` remains the landing hub and Discord remains the live conversation layer.
 - `docs/NAVIGATION-STRUCTURE.md` is the source-of-truth note for the current navigation hierarchy and guide placement.
