@@ -22,8 +22,10 @@
   const podium = root.querySelector('[data-leaderboard-podium]');
   const fullToggle = root.querySelector('[data-leaderboard-full-toggle]');
   const recordBadge = root.querySelector('.leaderboard-record-badge strong');
+  const recordBadgeLabel = root.querySelector('.leaderboard-record-badge span');
 
   const DEFAULT_VISIBLE_ROWS = 10;
+  const DEMO_ROW_COUNT = 100;
 
   const FALLBACK_CATEGORIES = Object.freeze([
     { id: 'mining', label: 'Mining', short: 'MIN', description: 'Records built through mining and resource progression.', metrics: [] },
@@ -44,6 +46,53 @@
     const date = new Date(value);
     return Number.isNaN(date.getTime()) ? null : date.toISOString();
   };
+
+  const formatInteger = value => Math.max(0, Math.round(value)).toLocaleString('en-US');
+
+  const demoValueForMetric = (metricId, rank) => {
+    const offset = rank - 1;
+
+    switch (metricId) {
+      case 'blocks-mined': return formatInteger(4_250_000 - offset * 31_250);
+      case 'money': return formatInteger(32_500_000 - offset * 245_000);
+      case 'money-earned': return formatInteger(95_000_000 - offset * 700_000);
+      case 'nexus-points': return formatInteger(18_500 - offset * 137);
+      case 'level': return formatInteger(250 - offset * 2);
+      case 'prestige': return formatInteger(100 - offset);
+      case 'legacy': return formatInteger(100 - offset);
+      case 'quests-completed': return formatInteger(1_200 - offset * 9);
+      case 'kills': return formatInteger(185_000 - offset * 1_350);
+      case 'boss-kills': return formatInteger(8_700 - offset * 63);
+      case 'island-level': return formatInteger(42_000 - offset * 311);
+      case 'skyblock-quests': return formatInteger(900 - offset * 7);
+      case 'raphael-kills': return formatInteger(1_100 - offset * 8);
+      case 'azazel-kills': return formatInteger(980 - offset * 7);
+      case 'abyss-astral-kills': return formatInteger(820 - offset * 6);
+      case 'instance-clears': return formatInteger(2_400 - offset * 18);
+      case 'highest-difficulty': return formatInteger(DEMO_ROW_COUNT - offset);
+      case 'fastest-clear': {
+        const totalSeconds = 84 + offset * 2;
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = String(totalSeconds % 60).padStart(2, '0');
+        return `${minutes}:${seconds}`;
+      }
+      case 'bestiary-completion':
+        return `${Math.max(50.5, 100 - offset * 0.5).toFixed(1)}%`;
+      case 'talisman-codex':
+        return `${Math.max(55.5, 100 - offset * 0.45).toFixed(1)}%`;
+      default:
+        return formatInteger(DEMO_ROW_COUNT - offset);
+    }
+  };
+
+  const buildDemoEntries = metricId => Array.from({ length: DEMO_ROW_COUNT }, (_, index) => {
+    const rank = index + 1;
+    return {
+      rank,
+      player: `DemoPlayer${String(rank).padStart(3, '0')}`,
+      value: demoValueForMetric(metricId, rank)
+    };
+  });
 
   const cleanEntries = entries => (Array.isArray(entries) ? entries : [])
     .filter(entry => entry && typeof entry === 'object')
@@ -83,7 +132,7 @@
         .filter(metric => metric.id && metric.label)
         .map(metric => ({
           ...metric,
-          entries: liveReady ? metric.entries : []
+          entries: liveReady ? metric.entries : buildDemoEntries(metric.id)
         }));
 
       return {
@@ -98,11 +147,11 @@
     return {
       schemaVersion: 3,
       source: {
-        state: liveReady ? 'ready' : 'pending',
-        authority: liveReady ? 'pixel-server-export' : 'pending',
+        state: liveReady ? 'ready' : 'demo',
+        authority: liveReady ? 'pixel-server-export' : 'pixel-demo',
         label: liveReady
           ? String(source.label || 'Pixel Network live records')
-          : 'Leaderboard tracking is not connected yet',
+          : 'Demo standings · example players',
         generatedAt: liveReady ? generatedAt : null
       },
       categories
@@ -159,25 +208,35 @@
     const identity = document.createElement('span');
     identity.className = 'leaderboard-player-identity is-compact';
 
-    const head = document.createElement('img');
-    head.className = 'leaderboard-player-head';
-    head.src = headRenderSrc(player, 48);
-    head.alt = '';
-    head.loading = 'lazy';
-    head.decoding = 'async';
-    head.addEventListener('error', () => head.remove(), { once: true });
+    if (snapshot?.source?.state === 'demo') {
+      const head = document.createElement('span');
+      head.className = 'leaderboard-player-head is-demo';
+      head.textContent = String(player).slice(-3);
+      head.setAttribute('aria-hidden', 'true');
+      identity.appendChild(head);
+    } else {
+      const head = document.createElement('img');
+      head.className = 'leaderboard-player-head';
+      head.src = headRenderSrc(player, 48);
+      head.alt = '';
+      head.loading = 'lazy';
+      head.decoding = 'async';
+      head.addEventListener('error', () => head.remove(), { once: true });
+      identity.appendChild(head);
+    }
 
     const name = document.createElement('span');
     name.className = 'leaderboard-player-name';
     name.textContent = player;
 
-    identity.append(head, name);
+    identity.appendChild(name);
     return identity;
   };
 
   const renderPodium = metric => {
     if (!podium) return;
     const entries = Array.isArray(metric?.entries) ? metric.entries : [];
+    const demoMode = snapshot?.source?.state === 'demo';
     podium.replaceChildren();
 
     [2, 1, 3].forEach(position => {
@@ -192,7 +251,13 @@
       const render = document.createElement('div');
       render.className = 'leaderboard-podium-render';
 
-      if (entry) {
+      if (entry && demoMode) {
+        const demoRender = document.createElement('span');
+        demoRender.className = 'leaderboard-podium-fallback';
+        demoRender.textContent = `D${position}`;
+        demoRender.setAttribute('aria-hidden', 'true');
+        render.appendChild(demoRender);
+      } else if (entry) {
         const skin = document.createElement('img');
         skin.className = 'leaderboard-podium-skin';
         skin.src = podiumRenderSrc(entry.player, position);
@@ -231,16 +296,27 @@
     if (!fullToggle) return;
 
     const hasMore = entries.length > DEFAULT_VISIBLE_ROWS;
+    const demoMode = snapshot?.source?.state === 'demo';
     fullToggle.hidden = !hasMore;
     fullToggle.setAttribute('aria-expanded', showingAll ? 'true' : 'false');
 
     const label = fullToggle.querySelector('[data-leaderboard-full-label]');
-    if (label) label.textContent = showingAll ? 'Show top 10' : 'View full leaderboard';
+    if (label) {
+      label.textContent = showingAll
+        ? 'Show top 10'
+        : demoMode
+          ? `View top ${Math.min(DEMO_ROW_COUNT, entries.length)}`
+          : 'View full leaderboard';
+    }
 
     const icon = fullToggle.querySelector('[data-leaderboard-full-icon]');
     if (icon) icon.textContent = showingAll ? '↑' : '↗';
 
-    if (recordBadge) recordBadge.textContent = showingAll ? 'ALL PLAYERS' : 'TOP 10';
+    if (recordBadge) {
+      recordBadge.textContent = showingAll
+        ? (demoMode ? `TOP ${Math.min(DEMO_ROW_COUNT, entries.length)}` : 'ALL PLAYERS')
+        : 'TOP 10';
+    }
   };
 
   const renderRows = metric => {
@@ -377,16 +453,20 @@
 
   const applySourceStatus = () => {
     const source = snapshot?.source || {};
+    const demoMode = source.state === 'demo';
 
     if (sourceLabel) sourceLabel.textContent = source.label || 'Leaderboard tracking is not connected yet';
 
     if (updated) {
       updated.textContent = source.generatedAt
         ? `Updated ${new Date(source.generatedAt).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}`
-        : 'Tracking not connected yet';
+        : demoMode
+          ? `${DEMO_ROW_COUNT} synthetic players · not live data`
+          : 'Tracking not connected yet';
     }
 
-    root.dataset.leaderboardState = source.state === 'ready' ? 'ready' : 'pending';
+    if (recordBadgeLabel) recordBadgeLabel.textContent = demoMode ? 'DEMO' : 'PIXEL';
+    root.dataset.leaderboardState = source.state === 'ready' ? 'ready' : demoMode ? 'demo' : 'pending';
   };
 
   fullToggle?.addEventListener('click', () => {
