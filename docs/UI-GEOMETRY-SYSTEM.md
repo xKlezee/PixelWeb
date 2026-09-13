@@ -39,6 +39,7 @@ The height refers to the complete border-box target, not the text line box.
 - Body CTAs use 44 px unless a component explicitly belongs to a documented prominence tier.
 - At `<= 980 px`, primary touch actions become 48 px.
 - Menu entries carrying a title plus description use at least 52 px.
+- Reading/disclosure rows such as About FAQ use 52 px rather than the compact 44 px tool-control tier.
 - The Store page `Open Shop` action is the deliberate prominence exception: 72 px on desktop and 64 px in touch layouts. Its size communicates the page's primary commerce action and remains aligned to the 8 px rhythm rather than using an isolated 76 px value.
 - Short-height landscape may reduce top-level mobile rows to 44 px, but not descriptive submenu rows below 48 px.
 
@@ -152,8 +153,8 @@ New primary or secondary controls should reuse an existing class or match this c
 - Floating trigger: 52 x 52 px desktop, 48 x 48 px at `<= 600 px`.
 - Close control: 40 x 40 px desktop, 44 x 44 px touch layout.
 - Search row/input: 48 px.
-- Submit action: 40 px high inside the 48 px search row with a 4 px inset.
-- Example chips: 36 px desktop, 40 px touch layout.
+- Submit action: 40 px desktop with a 4 px inset; 44 px touch with a 2 px inset, both fitting the 48 px search row.
+- Example chips: 36 px desktop, 44 px touch layout.
 - Result rows: minimum 64 px.
 
 ### Play dialog measurements
@@ -166,7 +167,7 @@ New primary or secondary controls should reuse an existing class or match this c
 ### Disclosure/search measurements
 
 - Wiki browse summary: minimum 44 px desktop / 48 px touch layout.
-- About FAQ summary: minimum 44 px desktop / 48 px touch layout.
+- About FAQ summary: minimum 52 px in both desktop and touch layouts.
 - Wiki/Guide search controls: minimum 44 px desktop / 48 px touch layout.
 
 ### Prominent commerce measurement
