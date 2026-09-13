@@ -119,3 +119,13 @@ html[data-theme-effective='light'] .brand-wordmark small {
   }
   html[data-theme-effective='light'] .nav-dropdown { border-left-color:rgba(150,99,27,.23) !important; }
 }
+
+/* 390 px still has enough horizontal budget for true square touch controls. */
+@media (max-width:390px) {
+  .nav-actions .nav-discord,
+  .nav-toggle {
+    width:44px !important;
+    min-width:44px !important;
+  }
+  .nav-actions .nav-discord { flex-basis:44px !important; }
+}
