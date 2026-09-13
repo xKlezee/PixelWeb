@@ -228,11 +228,53 @@ footer { padding: 38px 0 48px; color: var(--muted-2); font-size: 11px; }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
 @media (max-width: 980px) {
-  .nav-links { position: absolute; left: 20px; right: 20px; top: calc(100% + 8px); display: none; flex-direction: column; align-items: stretch; padding: 10px; background: rgba(17,19,23,.98); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--raised); }
-  .nav-links.open { display: flex; }
+  /* No-JS is the safe baseline. The synchronous bootstrap adds html.js before body paint. */
+  .nav-links { position: absolute; left: 20px; right: 20px; top: calc(100% + 8px); display: flex; flex-direction: column; align-items: stretch; padding: 10px; background: rgba(17,19,23,.98); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--raised); }
+  html.js .nav-links { display: none; }
+  html.js .nav-links.open { display: flex; }
   .nav-links a { padding: 11px 12px; }
   .nav-actions .button { display: none; }
   .nav-toggle { display: block; }
+
+  /* Progressive fallback: expose real destinations instead of an inert hamburger. */
+  html:not(.js) .site-nav { position: relative !important; }
+  html:not(.js) .nav-inner { flex-wrap: wrap; }
+  html:not(.js) .nav-links {
+    position: static;
+    left: auto;
+    right: auto;
+    top: auto;
+    flex: 0 0 100%;
+    order: 3;
+    max-height: none;
+    overflow: visible;
+    margin-top: 4px;
+  }
+  html:not(.js) .nav-group > button { display: none !important; }
+  html:not(.js) .nav-dropdown,
+  html:not(.js) .nav-group:hover .nav-dropdown,
+  html:not(.js) .nav-group:focus-within .nav-dropdown {
+    position: static;
+    width: 100%;
+    display: grid;
+    margin: 0 0 6px;
+    padding: 2px 0 6px 10px;
+    border: 0;
+    border-left: 1px solid rgba(246,201,69,.18);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    pointer-events: auto;
+  }
+  html:not(.js) .nav-dropdown::before { display: none; }
+  html:not(.js) .nav-actions .nav-play,
+  html:not(.js) .nav-toggle { display: none !important; }
+  html:not(.js) .nav-actions .nav-discord,
+  html:not(.js) .nav-actions .nav-store { display: inline-flex !important; }
+
   .hero-grid { grid-template-columns: 1fr; }
   .hero { padding-top: 64px; }
   .hero-object { min-height: 390px; }
