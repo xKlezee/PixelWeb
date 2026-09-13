@@ -9,11 +9,11 @@ The pre-redesign production state is preserved in:
 - branch: `checkpoint/pre-minecraft-redesign-2026-09`
 - source production commit at redesign start: `9dd0910ab350583d697ab12110ce3fdbf06daf0c`
 
-The redesign branch is:
+The historical redesign branch is:
 
 - `design/minecraft-rpg-redesign-2026-09`
 
-Do not rewrite or delete the checkpoint branch while this redesign is being evaluated.
+Do not rewrite or delete the checkpoint branch while this redesign history remains relevant.
 
 ## Product direction
 
@@ -27,14 +27,14 @@ Core principles:
 2. Player-facing pages use short copy and strong visual hierarchy.
 3. Technical/source-of-truth details stay in repository documentation unless a player actually needs them.
 4. Surfaces should feel constructed from stone, wood, metal, parchment and in-game UI motifs without becoming a literal inventory-screen clone.
-5. Pixel Blue remains the primary branded accent.
+5. Warm yellow/gold/amber/orange/copper is the shared interaction-accent language. The previous Pixel Blue treatment is not the global selection/accent system; authored semantic colors such as Discord identity, biome/world identity and boss artwork may remain distinct.
 6. Avoid generic neumorphic/SaaS cards as the dominant visual language.
 7. Prefer large scenes, environmental framing, models, icons and screenshots over explanatory paragraphs.
 8. Preserve accessible focus states, keyboard navigation, reduced motion and responsive layouts.
 
 ## Information architecture
 
-The canonical navigation remains:
+The canonical navigation is:
 
 - Explore
   - Gameplay
@@ -44,6 +44,9 @@ The canonical navigation remains:
   - Nexus
 - Marketplace
 - Guide
+  - Getting Started
+  - Currencies
+  - Basic Commands
   - Progression
   - Mechanics
   - Tools
@@ -59,9 +62,9 @@ The canonical navigation remains:
 
 Store, Discord and Play remain high-priority actions rather than content categories.
 
-Discord uses Discord's official Symbol inside the Pixel navigation control. The symbol itself must not be redrawn, distorted or recolored; the surrounding Pixel material may provide the recessed/inset treatment.
+Discord uses Discord's official Symbol inside the Pixel navigation control. The source SVG and glyph geometry must not be redrawn, replaced or distorted. CSS may tint the rendered Symbol according to the effective Light/Dark theme so it keeps sufficient contrast without modifying the source asset.
 
-`Progression` is the canonical first Guide category. Its position must come from the shared navigation/category model, not from CSS ordering tricks.
+`Getting Started` is the canonical first Guide category. Its position must come from the shared navigation/category model, not from CSS ordering tricks.
 
 ## Home contract
 
@@ -151,14 +154,17 @@ Marketplace and Store remain separate surfaces.
 
 ## Interior-page contract
 
-Gameplay, Systems and Guide share one Minecraft RPG presentation layer rather than three unrelated layouts.
+Gameplay, Systems and Guide share one Minecraft RPG presentation family rather than three unrelated layouts.
 
 - `gameplay.html` explains the playable journey at a glance.
 - `systems.html` acts as a visual system index.
-- `guides.html` is a category catalogue, not a technical documentation dashboard.
+- `guides.html` is the canonical Wiki/Guide landing and category catalogue.
 
 Guide categories remain, in canonical order:
 
+- Getting Started
+- Currencies
+- Basic Commands
 - Progression
 - Mechanics
 - Tools
@@ -223,9 +229,9 @@ All contextual rails must share:
 - the same keyboard/touch behavior;
 - the same responsive horizontal-scroll contract.
 
-The **Explore** contextual rail has one visual contract across Gameplay, Systems, Worlds, Skyblock and Nexus. The established **Worlds/Nexus Minecraft rail is the reference design**: compact uppercase typography, squared button geometry, dark green/stone material and the Pixel Blue lower-edge active treatment. Gameplay, Systems and Skyblock must inherit that design rather than replacing Worlds/Nexus with the older generic rounded rail.
+The **Explore** contextual rail has one visual contract across Gameplay, Systems, Worlds, Skyblock and Nexus. The established **Worlds/Nexus Minecraft rail is the reference design**: compact uppercase typography, squared button geometry, dark green/stone material and the current warm active treatment. Gameplay, Systems and Skyblock must inherit that design rather than replacing Worlds/Nexus with the older generic rounded rail.
 
-`pixel-global-chrome.css` owns this shared Explore presentation. Worlds/Nexus retain their established 50px rail geometry because immersive viewport calculations depend on it.
+`pixel-global-chrome.css` owns this shared Explore presentation. Contextual rails use the current 48px structural height. Worlds/Nexus immersive viewport math is based on the measured chrome rather than the historical 50px rail assumption.
 
 Guide may use its warm document palette, but it must not fork the sublist model. Community uses the standard shared presentation.
 
@@ -245,14 +251,15 @@ Long-form FAQ, purchase boundaries and attribution explanations belong in About 
 
 `minecraft-rpg-chrome.css` provides navigation and detail-panel treatment for the immersive Worlds/Nexus destinations while deliberately preserving their viewport math. `pixel-global-chrome.css` promotes the established Worlds/Nexus contextual-rail appearance to the other Explore destinations.
 
-Both immersive pages keep a two-level chrome contract of approximately 113px on desktop and 111px at the current responsive breakpoint. Styling work must not casually change these heights because the stage dimensions are calculated from them.
+Both immersive pages currently use a 113px standard chrome budget. At mobile widths this corresponds to the measured 65px header plus 48px contextual rail. The short-height landscape contract reduces the compact header/rail combination to a 97px budget. Styling work must update these measured values deliberately rather than reintroducing historical hard-coded assumptions.
 
 On smaller layouts:
 
 - the vertical rail collapses to nodes only;
 - side metadata is hidden before core encounter/world information;
 - titles scale down without changing the interaction model;
-- Explore remains reachable;
+- Explore remains reachable in normal mobile layouts;
+- non-essential investigate/hint affordances may be hidden in short-height landscape where vertical space is critically constrained;
 - detail dialogs collapse from two columns to one;
 - reduced-motion continues to disable non-essential transitions.
 
@@ -270,7 +277,7 @@ Visual work must not casually rewrite or replace these runtime/data contracts:
 - canonical navigation in `polish.js`
 - owner skin viewer
 
-The redesign should wrap these systems in a new presentation layer wherever possible rather than fork their source of truth.
+The redesign should wrap these systems in a presentation layer wherever possible rather than fork their source of truth.
 
 ## Media direction
 
@@ -291,27 +298,28 @@ Long-form explanation belongs in detailed Guide/Changelog/About/License sections
 
 ## Current redesign pass
 
-The draft redesign currently covers:
+The redesign now covers:
 
 - Home rebuilt around Minecraft-first scenes and shorter copy.
 - Worlds preserved as the production full-screen region selector and reskinned only at the chrome/detail level.
-- Nexus converted to the same scene/slider interaction grammar as Worlds.
+- Nexus uses the same scene/slider interaction grammar as Worlds.
 - Gameplay simplified to a progression overview.
 - Systems simplified to a visual system index.
-- Guide landing rebuilt around the six canonical Guide categories, with Progression first in the actual model.
+- Guide landing expanded to the canonical nine-category model with Getting Started first, followed by Currencies and Basic Commands before deeper progression/mechanics references.
 - Skyblock simplified to its three current pillars plus an explicit partial-feature boundary.
-- Community, Leaderboards, Changelog and Rules aligned to the new material language.
+- Community, Leaderboards, Changelog and Rules aligned to the material language.
 - Staff Team owns the two equal owner profiles and preserves both live skin viewers.
 - About owns FAQ, Tebex/Store boundaries, Minecraft independence, external-service notices, licensing and attribution.
 - Pixel Network Proprietary License v1.0 is published in `LICENSE` and `license.html`.
-- Explore rail styling now uses the established Worlds/Nexus presentation across all five Explore destinations.
-- Discord header action uses the official Discord Symbol inside an inset Pixel material control.
-- Store reduced to the official CTA, cumulative rank path, purchase categories and one progression boundary note.
-- Marketplace reskinned as a Minecraft collection showcase without changing its 3D runtime.
+- Explore rail styling uses the established Worlds/Nexus presentation across all five Explore destinations with the current warm accent contract.
+- Discord header action uses the official Discord Symbol source asset; shell and rendered glyph presentation adapt to the effective appearance theme without altering that source asset.
+- Store is focused on the official CTA, cumulative rank path, purchase categories and one progression boundary note.
+- Marketplace is presented as a Minecraft collection showcase without changing its 3D runtime.
 - Detailed Guides receive a shared Minecraft RPG document skin without changing their factual content.
-- 404 aligned to the same visual identity.
-- Shared Minecraft RPG material language added for Home, interior, secondary, guide and immersive chrome surfaces.
-- Shared footer expanded with useful destinations, Minecraft disclaimer and rights boundary.
+- 404 is aligned to the same visual identity.
+- Shared Minecraft RPG material language covers Home, interior, secondary, guide and immersive chrome surfaces.
+- Shared footer includes useful destinations, Minecraft disclaimer and rights boundary.
+- Responsive composition now follows the shared 1024 / 980 / 768 / 600 / 430 / 390 / 360 checkpoints plus short-height landscape handling.
 
 ## Review state
 
