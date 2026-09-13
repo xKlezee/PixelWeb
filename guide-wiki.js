@@ -19,6 +19,26 @@
     visibleEntries.map(entry => baseHref(entry.getAttribute('href'))).filter(Boolean)
   ).size;
 
+  const installCompleteWikiEntry = () => {
+    const searchBox = document.querySelector('.wiki-search-box');
+    const intro = document.querySelector('.wiki-index-intro');
+    if (!searchBox || document.querySelector('[data-complete-wiki-link]')) return;
+
+    const heroLink = document.createElement('a');
+    heroLink.className = 'wiki-complete-link';
+    heroLink.href = 'wiki.html';
+    heroLink.dataset.completeWikiLink = '';
+    heroLink.innerHTML = '<span><small>Complete Wiki · Español</small><strong>42 artículos de referencia</strong></span><b aria-hidden="true">→</b>';
+    searchBox.appendChild(heroLink);
+
+    if (intro) {
+      const strip = document.createElement('div');
+      strip.className = 'wiki-complete-strip';
+      strip.innerHTML = '<span><small>Full reference</small><strong>Need the complete system-by-system wiki?</strong></span><a href="wiki.html">Open 42-article wiki <b aria-hidden="true">→</b></a>';
+      intro.insertAdjacentElement('afterend', strip);
+    }
+  };
+
   const openBrowseGroupFromHash = () => {
     const id = decodeURIComponent(String(window.location.hash || '').replace(/^#/, ''));
     if (!id) return;
@@ -79,6 +99,7 @@
     syncExpanded();
   });
 
+  installCompleteWikiEntry();
   window.addEventListener('hashchange', openBrowseGroupFromHash);
   openBrowseGroupFromHash();
 
