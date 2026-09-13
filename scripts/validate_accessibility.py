@@ -110,6 +110,41 @@ class AccessibilityParser(html.parser.HTMLParser):
                 caption_parts.append(data)
 
 
+def parse_viewport(value: str) -> dict[str, str]:
+    settings: dict[str, str] = {}
+    for chunk in value.split(","):
+        token = chunk.strip()
+        if not token:
+            continue
+        if "=" not in token:
+            settings[token.lower()] = ""
+            continue
+        key, raw_value = token.split("=", 1)
+        settings[key.strip().lower()] = raw_value.strip().lower()
+    return settings
+
+
+def validate_viewport(page: Path, raw_value: str | None, failures: list[str]) -> None:
+    if not raw_value:
+        failures.append(f"{page.name}: missing viewport meta")
+        return
+
+    viewport = parse_viewport(raw_value)
+    if viewport.get("width") != "device-width":
+        failures.append(f"{page.name}: viewport width must be device-width")
+
+    initial_scale = viewport.get("initial-scale")
+    try:
+        scale = float(initial_scale) if initial_scale is not None else None
+    except ValueError:
+        scale = None
+    if scale != 1.0:
+        failures.append(f"{page.name}: viewport initial-scale must be 1")
+
+    if viewport.get("viewport-fit") != "cover":
+        failures.append(f"{page.name}: viewport must include viewport-fit=cover")
+
+
 def validate_aria_idrefs(page: Path, parser: AccessibilityParser, failures: list[str]) -> None:
     for tag, attribute, raw_value, line in parser.aria_idrefs:
         referenced_ids = [token for token in raw_value.split() if token]
@@ -182,8 +217,7 @@ def main() -> int:
 
         if not parser.lang:
             failures.append(f"{page.name}: html element must declare lang")
-        if not parser.viewport:
-            failures.append(f"{page.name}: missing viewport meta")
+        validate_viewport(page, parser.viewport, failures)
         if not parser.title:
             failures.append(f"{page.name}: missing non-empty title")
         if parser.main_count != 1:
