@@ -41,6 +41,10 @@ PUBLIC_DYNAMIC_ROOT_FILES = {
     "pixel-theme-audit-fixes.css",
     "pixel-theme-page-fixes.css",
     "pixel-theme.js",
+    "pixel-navigator.css",
+    "pixel-navigator-primary-data.js",
+    "pixel-navigator-secondary-data.js",
+    "pixel-navigator.js",
 }
 LOCAL_URL_ATTRS = {"href", "src", "poster", "data-src", "data-poster"}
 SRCSET_ATTRS = {"srcset", "data-srcset"}
