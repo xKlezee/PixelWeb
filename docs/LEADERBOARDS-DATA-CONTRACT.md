@@ -1,6 +1,6 @@
 # Leaderboards data contract
 
-PixelWeb exposes the complete leaderboard catalogue even while the real server producer is disabled. Test mode may use real Minecraft usernames with explicitly fictional values, but production rankings must never invent placements or values.
+PixelWeb exposes the complete leaderboard catalogue even while the authoritative server producer is not connected. The public site must never invent placements, values or player standings.
 
 ## Catalogue
 
@@ -14,11 +14,13 @@ Canonical categories and metrics:
 - Nexus: Raphael Kills, Azazel Kills, Abyss / Astral Kills, Instance Clears, Highest Difficulty, Fastest Clear
 - Collection: Bestiary Completion, Talisman Codex
 
+The category and metric order is part of the browser contract. `data/leaderboards.js` and `data/leaderboards.json` must expose the same taxonomy.
+
 ## Display contract
 
-Every metric is presented in two layers:
+Every metric is presented in two layers once authoritative rows exist:
 
-1. The normal leaderboard view always renders up to the first 10 ranked players.
+1. The normal leaderboard view renders up to the first 10 ranked players.
 2. `View full leaderboard`, placed at the lower-right edge of the table, expands the same table to every entry supplied for that metric.
 
 The Top 3 podium is only a visual highlight. Positions #1, #2 and #3 also remain in the Top 10 table and in the full table.
@@ -31,7 +33,30 @@ For the future real producer, a full leaderboard is expected to include the comp
 
 The browser loads `data/leaderboards.json` from the same origin. The file must be safe to expose publicly and must contain no database credentials, private identifiers, email addresses, IP addresses or other non-public player data.
 
-A production snapshot uses schema version 3:
+Only two public source states are allowed.
+
+### Pending
+
+While no authoritative exporter is connected:
+
+```json
+{
+  "schemaVersion": 3,
+  "source": {
+    "state": "pending",
+    "authority": "pending",
+    "label": "Leaderboard tracking is not connected yet",
+    "generatedAt": null
+  },
+  "categories": []
+}
+```
+
+The real file still contains the complete category/metric catalogue, but every metric must use `"entries": []`. No placeholder usernames, ranks, scores or test fixtures may be published.
+
+### Ready
+
+A production snapshot uses schema version 3 and an authoritative server export:
 
 ```json
 {
@@ -65,23 +90,19 @@ A production snapshot uses schema version 3:
 }
 ```
 
-## Test mode
-
-The repository may temporarily publish:
-
-- `source.state: "test"`
-- `source.authority: "pixel-test-fixture"`
-
-In this mode usernames may refer to real Minecraft accounts so skin rendering and layout can be tested, while all placements and values remain fictional. The UI must label the data as preview/test data.
-
 ## Publication rules
 
 - `schemaVersion` must be exactly `3`.
-- Production rows render only when `source.state` is `ready`, `source.authority` is `pixel-server-export`, and `source.generatedAt` is a valid ISO-8601 timestamp.
-- Every entry requires a positive integer `rank`, a non-empty `player`, and a non-empty `value`.
-- Entries are sorted by rank but are not truncated by the client.
-- Test data must be explicitly marked as test data.
+- Public `source.state` may be only `pending` or `ready`.
+- `pending` requires `source.authority: "pending"`, `source.generatedAt: null`, and zero published rows across every metric.
+- `ready` requires `source.authority: "pixel-server-export"` and a timezone-aware ISO-8601 `source.generatedAt` timestamp.
+- Every ready entry requires a positive integer `rank`, a non-empty `player`, and a non-empty `value`.
+- Duplicate ranks or duplicate players inside one metric are invalid.
+- Entries are sorted by rank by the frontend but are not truncated by the client.
+- `testRoster`, `testValues`, `pixel-test-fixture` and browser-public test standings are forbidden.
 - Production rankings must come from current authoritative server data.
+
+`validate_leaderboards_data.py` guards this publication boundary and the canonical taxonomy. Layout fixtures, if ever needed for development, must remain outside browser-public `data/` and must not be deployed as standings.
 
 ## Producer boundary
 
