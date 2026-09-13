@@ -76,31 +76,20 @@
         const seconds = String(totalSeconds % 60).padStart(2, '0');
         return `${minutes}:${seconds}`;
       }
-      case 'bestiary-completion':
-        return `${Math.max(50.5, 100 - offset * 0.5).toFixed(1)}%`;
-      case 'talisman-codex':
-        return `${Math.max(55.5, 100 - offset * 0.45).toFixed(1)}%`;
-      default:
-        return formatInteger(DEMO_ROW_COUNT - offset);
+      case 'bestiary-completion': return `${Math.max(50.5, 100 - offset * 0.5).toFixed(1)}%`;
+      case 'talisman-codex': return `${Math.max(55.5, 100 - offset * 0.45).toFixed(1)}%`;
+      default: return formatInteger(DEMO_ROW_COUNT - offset);
     }
   };
 
   const buildDemoEntries = metricId => Array.from({ length: DEMO_ROW_COUNT }, (_, index) => {
     const rank = index + 1;
-    return {
-      rank,
-      player: `DemoPlayer${String(rank).padStart(3, '0')}`,
-      value: demoValueForMetric(metricId, rank)
-    };
+    return { rank, player: `DemoPlayer${String(rank).padStart(3, '0')}`, value: demoValueForMetric(metricId, rank) };
   });
 
   const cleanEntries = entries => (Array.isArray(entries) ? entries : [])
     .filter(entry => entry && typeof entry === 'object')
-    .map(entry => ({
-      rank: Number(entry.rank),
-      player: String(entry.player || '').trim(),
-      value: String(entry.value ?? '').trim()
-    }))
+    .map(entry => ({ rank: Number(entry.rank), player: String(entry.player || '').trim(), value: String(entry.value ?? '').trim() }))
     .filter(entry => Number.isInteger(entry.rank) && entry.rank > 0 && entry.player && entry.value)
     .sort((a, b) => a.rank - b.rank);
 
@@ -117,12 +106,7 @@
     const input = candidate && typeof candidate === 'object' ? candidate : {};
     const source = input.source && typeof input.source === 'object' ? input.source : {};
     const generatedAt = validIsoDate(source.generatedAt);
-
-    const liveReady = input.schemaVersion === 3
-      && source.state === 'ready'
-      && source.authority === 'pixel-server-export'
-      && Boolean(generatedAt);
-
+    const liveReady = input.schemaVersion === 3 && source.state === 'ready' && source.authority === 'pixel-server-export' && Boolean(generatedAt);
     const incomingCategories = Array.isArray(input.categories) ? input.categories : [];
 
     const categories = FALLBACK_CATEGORIES.map(definition => {
@@ -130,11 +114,7 @@
       const metrics = (Array.isArray(incoming.metrics) ? incoming.metrics : [])
         .map(cleanMetric)
         .filter(metric => metric.id && metric.label)
-        .map(metric => ({
-          ...metric,
-          entries: liveReady ? metric.entries : buildDemoEntries(metric.id)
-        }));
-
+        .map(metric => ({ ...metric, entries: liveReady ? metric.entries : buildDemoEntries(metric.id) }));
       return {
         ...definition,
         label: String(incoming.label || definition.label),
@@ -149,9 +129,7 @@
       source: {
         state: liveReady ? 'ready' : 'demo',
         authority: liveReady ? 'pixel-server-export' : 'pixel-demo',
-        label: liveReady
-          ? String(source.label || 'Pixel Network live records')
-          : 'Demo standings · example players',
+        label: liveReady ? String(source.label || 'Pixel Network live records') : 'Demo standings',
         generatedAt: liveReady ? generatedAt : null
       },
       categories
@@ -160,12 +138,7 @@
 
   const loadSnapshot = async () => {
     try {
-      const response = await fetch(endpoint, {
-        method: 'GET',
-        credentials: 'same-origin',
-        cache: 'no-store',
-        headers: { Accept: 'application/json' }
-      });
+      const response = await fetch(endpoint, { method: 'GET', credentials: 'same-origin', cache: 'no-store', headers: { Accept: 'application/json' } });
       if (!response.ok) throw new Error(`Leaderboard snapshot request failed: ${response.status}`);
       return normalizeSnapshot(await response.json());
     } catch {
@@ -181,6 +154,7 @@
     const metric = category?.metrics.find(item => item.id === metricId) || category?.metrics[0] || null;
     return { category, metric };
   };
+
   const setHash = (category, metric) => {
     if (!category?.id || !metric?.id) return;
     const next = `#${encodeURIComponent(category.id)}/${encodeURIComponent(metric.id)}`;
@@ -195,9 +169,7 @@
     return cell;
   };
 
-  const headRenderSrc = (player, size = 64) =>
-    `https://api.mcheads.org/head/${encodeURIComponent(player)}/${size}/hat`;
-
+  const headRenderSrc = (player, size = 64) => `https://api.mcheads.org/head/${encodeURIComponent(player)}/${size}/hat`;
   const podiumRenderSrc = (player, place) => {
     const direction = place === 2 ? 'left' : 'right';
     const size = place === 1 ? 320 : 256;
@@ -207,7 +179,6 @@
   const makePlayerIdentity = player => {
     const identity = document.createElement('span');
     identity.className = 'leaderboard-player-identity is-compact';
-
     if (snapshot?.source?.state === 'demo') {
       const head = document.createElement('span');
       head.className = 'leaderboard-player-head is-demo';
@@ -224,11 +195,9 @@
       head.addEventListener('error', () => head.remove(), { once: true });
       identity.appendChild(head);
     }
-
     const name = document.createElement('span');
     name.className = 'leaderboard-player-name';
     name.textContent = player;
-
     identity.appendChild(name);
     return identity;
   };
@@ -238,19 +207,15 @@
     const entries = Array.isArray(metric?.entries) ? metric.entries : [];
     const demoMode = snapshot?.source?.state === 'demo';
     podium.replaceChildren();
-
     [2, 1, 3].forEach(position => {
       const entry = entries.find(item => item.rank === position);
       const card = document.createElement('article');
       card.className = `leaderboard-podium-card place-${position}${entry ? ' has-entry' : ''}`;
-
       const rank = document.createElement('span');
       rank.className = 'leaderboard-podium-rank';
       rank.textContent = `#${position}`;
-
       const render = document.createElement('div');
       render.className = 'leaderboard-podium-render';
-
       if (entry && demoMode) {
         const demoRender = document.createElement('span');
         demoRender.className = 'leaderboard-podium-fallback';
@@ -280,13 +245,10 @@
         fallbackMark.setAttribute('aria-hidden', 'true');
         render.appendChild(fallbackMark);
       }
-
       const player = document.createElement('strong');
       player.textContent = entry?.player || 'Awaiting player';
-
       const value = document.createElement('span');
       value.textContent = entry?.value || '—';
-
       card.append(rank, render, player, value);
       podium.appendChild(card);
     });
@@ -294,35 +256,20 @@
 
   const updateFullToggle = entries => {
     if (!fullToggle) return;
-
     const hasMore = entries.length > DEFAULT_VISIBLE_ROWS;
     const demoMode = snapshot?.source?.state === 'demo';
     fullToggle.hidden = !hasMore;
     fullToggle.setAttribute('aria-expanded', showingAll ? 'true' : 'false');
-
     const label = fullToggle.querySelector('[data-leaderboard-full-label]');
-    if (label) {
-      label.textContent = showingAll
-        ? 'Show top 10'
-        : demoMode
-          ? `View top ${Math.min(DEMO_ROW_COUNT, entries.length)}`
-          : 'View full leaderboard';
-    }
-
+    if (label) label.textContent = showingAll ? 'Show top 10' : demoMode ? `View top ${Math.min(DEMO_ROW_COUNT, entries.length)}` : 'View full leaderboard';
     const icon = fullToggle.querySelector('[data-leaderboard-full-icon]');
     if (icon) icon.textContent = showingAll ? '↑' : '↗';
-
-    if (recordBadge) {
-      recordBadge.textContent = showingAll
-        ? (demoMode ? `TOP ${Math.min(DEMO_ROW_COUNT, entries.length)}` : 'ALL PLAYERS')
-        : 'TOP 10';
-    }
+    if (recordBadge) recordBadge.textContent = showingAll ? (demoMode ? `TOP ${Math.min(DEMO_ROW_COUNT, entries.length)}` : 'ALL PLAYERS') : 'TOP 10';
   };
 
   const renderRows = metric => {
     const entries = Array.isArray(metric?.entries) ? metric.entries : [];
     if (body) body.replaceChildren();
-
     if (!entries.length) {
       showingAll = false;
       updateFullToggle(entries);
@@ -332,66 +279,48 @@
         const strong = empty.querySelector(':scope > div > strong');
         const span = empty.querySelector(':scope > div > span');
         if (strong) strong.textContent = `${metric?.label || 'This ranking'} is ready for standings.`;
-        if (span) span.textContent = 'Player positions will appear here when leaderboard tracking is connected.';
+        if (span) span.textContent = 'This board will populate automatically when live tracking is connected.';
       }
       return;
     }
-
     if (empty) empty.hidden = true;
     if (table) table.hidden = false;
-
     const visibleEntries = showingAll ? entries : entries.slice(0, DEFAULT_VISIBLE_ROWS);
-
     visibleEntries.forEach(entry => {
       const row = document.createElement('tr');
-
       const playerCell = document.createElement('td');
       playerCell.className = 'leaderboard-player';
       playerCell.appendChild(makePlayerIdentity(entry.player));
-
-      row.append(
-        makeCell('td', `#${entry.rank}`, 'leaderboard-rank'),
-        playerCell,
-        makeCell('td', entry.value, 'leaderboard-value')
-      );
-
+      row.append(makeCell('td', `#${entry.rank}`, 'leaderboard-rank'), playerCell, makeCell('td', entry.value, 'leaderboard-value'));
       body?.appendChild(row);
     });
-
     updateFullToggle(entries);
   };
 
   const renderCategories = activeCategory => {
     if (!categoryNav) return;
     categoryNav.replaceChildren();
-
     (snapshot?.categories || []).forEach(category => {
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'leaderboard-category';
       button.dataset.leaderboardCategory = category.id;
       button.setAttribute('aria-pressed', category.id === activeCategory?.id ? 'true' : 'false');
-
       const short = document.createElement('span');
       short.className = 'leaderboard-category-short';
       short.textContent = category.short;
-
       const copy = document.createElement('span');
       copy.className = 'leaderboard-category-copy';
-
       const strong = document.createElement('strong');
       strong.textContent = category.label;
-
       copy.appendChild(strong);
       button.append(short, copy);
-
       button.addEventListener('click', () => {
         const metric = category.metrics[0] || null;
         if (!metric) return;
         setHash(category, metric);
         render(category, metric);
       });
-
       categoryNav.appendChild(button);
     });
   };
@@ -399,54 +328,41 @@
   const renderMetrics = (category, activeMetricValue) => {
     if (!metricNav) return;
     metricNav.replaceChildren();
-
     (category?.metrics || []).forEach(metric => {
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'leaderboard-metric-button';
       button.setAttribute('aria-pressed', metric.id === activeMetricValue?.id ? 'true' : 'false');
-
       const copy = document.createElement('span');
-
       const strong = document.createElement('strong');
       strong.textContent = metric.label;
-
       const small = document.createElement('small');
       small.textContent = metric.kicker || metric.unit || 'Ranking';
-
       copy.append(strong, small);
-
       const arrow = document.createElement('span');
       arrow.className = 'leaderboard-metric-arrow';
       arrow.setAttribute('aria-hidden', 'true');
       arrow.textContent = '→';
-
       button.append(copy, arrow);
-
       button.addEventListener('click', () => {
         setHash(category, metric);
         render(category, metric);
       });
-
       metricNav.appendChild(button);
     });
   };
 
   const render = (category, metric) => {
     if (!category) return;
-
     showingAll = false;
     activeMetric = metric;
-
     renderCategories(category);
     renderMetrics(category, metric);
-
     if (categoryTitle) categoryTitle.textContent = category.label;
     if (categoryDescription) categoryDescription.textContent = category.description || '';
     if (metricEyebrow) metricEyebrow.textContent = metric?.kicker || category.label;
     if (metricTitle) metricTitle.textContent = metric?.label || 'Leaderboard';
     if (metricDescription) metricDescription.textContent = metric?.description || 'Player standings for this record.';
-
     renderPodium(metric);
     renderRows(metric);
   };
@@ -454,17 +370,12 @@
   const applySourceStatus = () => {
     const source = snapshot?.source || {};
     const demoMode = source.state === 'demo';
-
     if (sourceLabel) sourceLabel.textContent = source.label || 'Leaderboard tracking is not connected yet';
-
     if (updated) {
       updated.textContent = source.generatedAt
         ? `Updated ${new Date(source.generatedAt).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}`
-        : demoMode
-          ? `${DEMO_ROW_COUNT} synthetic players · not live data`
-          : 'Tracking not connected yet';
+        : demoMode ? `${DEMO_ROW_COUNT} example players · preview only` : 'Tracking not connected yet';
     }
-
     if (recordBadgeLabel) recordBadgeLabel.textContent = demoMode ? 'DEMO' : 'PIXEL';
     root.dataset.leaderboardState = source.state === 'ready' ? 'ready' : demoMode ? 'demo' : 'pending';
   };
@@ -473,10 +384,7 @@
     if (!activeMetric) return;
     showingAll = !showingAll;
     renderRows(activeMetric);
-
-    if (!showingAll) {
-      table?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
+    if (!showingAll) table?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   });
 
   window.addEventListener('hashchange', () => {
@@ -487,9 +395,7 @@
   loadSnapshot().then(loaded => {
     snapshot = loaded;
     applySourceStatus();
-
     const { category, metric } = routeFromHash();
-
     if (category && metric && !location.hash) setHash(category, metric);
     render(category, metric);
   });
