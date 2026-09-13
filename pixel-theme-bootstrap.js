@@ -5,6 +5,9 @@
   const MODES = Object.freeze(['system', 'light', 'dark']);
   const root = document.documentElement;
 
+  /* Progressive-enhancement marker: CSS keeps mobile navigation usable when scripts are absent. */
+  root.classList.add('js');
+
   let mode = 'system';
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
