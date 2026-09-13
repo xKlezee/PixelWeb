@@ -63,7 +63,7 @@ Community remains:
 - Rules
 - Staff Team
 
-Leaderboards has a real frontend/table contract but deliberately publishes no invented standings. A verified server-backed ranking source is still required before player positions can be shown.
+Leaderboards has a real frontend/table contract and deliberately publishes no invented standings. The browser-public state is `pending` until an authoritative producer exists. PixelWeb now also includes the offline handoff path for that future producer: `build_leaderboards_snapshot.py` accepts only a trusted timestamp plus ranked rows for the 20 canonical metrics, merges them into PixelWeb-owned catalogue copy, and can write only `data/leaderboards.json`. `validate_leaderboards_data.py` and `validate_leaderboards_catalog.js` protect publication state, contiguous ranks, row validity and editorial catalogue ownership. The remaining Leaderboards product dependency is the trusted server-side producer itself, not a missing frontend fixture.
 
 ## Visual system
 
@@ -96,7 +96,7 @@ The current cascade is intentionally layered:
 4. `pixel-theme-page-fixes.css`, which imports the runtime fixes, shared geometry/components and responsive harmony layers before its final page-specific corrections;
 5. `pixel-theme.js` for selection, persistence, system-preference listening and runtime theme updates.
 
-Every current page that loads `data/network.js` now loads `pixel-theme-bootstrap.js` synchronously before it. The bootstrap resolves stored/System mode, sets `data-theme-mode`, `data-theme-effective`, `color-scheme` and the browser `theme-color` before deferred application runtime begins. `data/network.js` retains a defensive fallback only for an unexpected missing bootstrap; it is not the normal contract for any current page. `scripts/validate_site.py` enforces exactly one synchronous bootstrap before `data/network.js`, so source-level first-paint coverage is guarded against regression. Whether a real browser still displays a perceptible opposite-theme flash is a separate render/timing verification question.
+Every current page that loads `data/network.js` now loads `pixel-theme-bootstrap.js` synchronously before it. The bootstrap resolves stored/System mode, sets `data-theme-mode`, `data-theme-effective`, `color-scheme` and the browser `theme-color` before deferred application runtime begins. `data/network.js` retains a defensive fallback only for an unexpected missing bootstrap; it is not the normal contract for any current page. `scripts/validate_theme_bootstrap.py` enforces exactly one synchronous bootstrap inside `<head>` before defer-only `data/network.js`, so source-level first-paint coverage is guarded against regression. Whether a real browser still displays a perceptible opposite-theme flash is a separate render/timing verification question.
 
 Browser-tab identity is now also static rather than hydration-dependent: every top-level public HTML document declares `favicon.png` as a 32×32 PNG, and `scripts/validate_document_metadata.py` guards the exact favicon/referrer/compatibility metadata contract. Any favicon normalization retained in `polish.js` is defensive only.
 
@@ -160,6 +160,10 @@ Browser/network validation of the remote skin provider remains desirable when in
 Skyblock public copy distinguishes current functionality from partial/planned functionality.
 
 Current player-facing core includes the persistent island/progression systems already supported by current source. Team invite/member-management/promotion must not be presented as a finished collaborative feature while its active wiring remains incomplete.
+
+The latest feature-specific source evidence available to this website work remains the September 10, 2026 source-verified review: it still classified Skyblock collaboration as partial because player-facing command/menu wiring and invite-manager integration were not complete. That is newer than the original September 4 incomplete-systems audit and supports the current `source-verified / partial` publication state. A future change to `complete` requires a new audit against the local `plugins 26.1.2/PixelSkyblock` source (and runtime evidence where behavior depends on live interaction), not an inference from PixelWeb copy.
+
+`scripts/validate_public_data.js` protects that boundary by keeping Skyblock `source-verified / partial`, rejecting collaboration/invite/team-management/promotion language from the current feature list, and constraining incomplete items to the player-facing `Partial` / `Planned` taxonomy.
 
 ## Store boundary
 
@@ -227,8 +231,8 @@ Do not describe browser-specific behavior as verified until that matrix, or an e
 
 ## Current major remaining product work
 
-1. Connect Leaderboards to an authoritative server-backed ranking source.
-2. Complete or deliberately defer the unfinished Skyblock collaboration contract before advertising it as complete.
+1. Implement the trusted server-side Leaderboards producer that emits the documented 20-metric handoff; PixelWeb's pending/ready contract, snapshot builder and publication guards are already in place.
+2. Complete or deliberately defer the unfinished Skyblock collaboration contract in the local backend before advertising it as complete; the latest available feature-specific evidence still supports `source-verified / partial`.
 3. Obtain live-client evidence for Guide mechanics where source validation alone is not enough for a stronger claim.
 4. Run the browser/responsive/accessibility/theme interaction matrix when browser control is available.
 5. Continue removing stale source/documentation duplication when it can be done without changing player-facing semantics.
