@@ -16,6 +16,8 @@ Canonical categories and metrics:
 
 The category and metric order is part of the browser contract. `data/leaderboards.js` and `data/leaderboards.json` must expose the same taxonomy.
 
+PixelWeb owns the player-facing editorial catalogue. A trusted producer may populate `source` and metric `entries`, but it must not rewrite category `label` / `short` / `description` values or metric `label` / `kicker` / `description` / `unit` values. Those fields must remain identical to the browser fallback so server integration cannot silently change public terminology.
+
 ## Display contract
 
 Every metric is presented in two layers once authoritative rows exist:
@@ -100,12 +102,15 @@ A production snapshot uses schema version 3 and an authoritative server export:
 - Duplicate ranks or duplicate players inside one metric are invalid.
 - Entries are sorted by rank by the frontend but are not truncated by the client.
 - `testRoster`, `testValues`, `pixel-test-fixture` and browser-public test standings are forbidden.
+- Category/metric editorial metadata must remain identical to the PixelWeb fallback catalogue; the producer owns ranking data, not public copy.
 - Production rankings must come from current authoritative server data.
 
-`validate_leaderboards_data.py` guards this publication boundary and the canonical taxonomy. Layout fixtures, if ever needed for development, must remain outside browser-public `data/` and must not be deployed as standings.
+`validate_leaderboards_data.py` guards publication state, rows and canonical IDs/order. `validate_leaderboards_catalog.js` independently compares the JS fallback against the JSON snapshot after removing only `entries`, preventing server integration from drifting labels, descriptions, kickers, short labels or units. Layout fixtures, if ever needed for development, must remain outside browser-public `data/` and must not be deployed as standings.
 
 ## Producer boundary
 
 The future producer belongs on trusted Pixel Network infrastructure, not in browser JavaScript. It should read the authoritative gameplay source, calculate rankings there, preserve the historical player population, write the complete JSON snapshot atomically and publish only that safe snapshot to PixelWeb.
+
+The producer should treat the current catalogue structure as an input contract rather than regenerate it from database column names or internal enum/class names. It may replace `source` with the authoritative ready metadata and replace each metric's `entries`; all other player-facing catalogue fields stay owned by PixelWeb.
 
 Do not connect GitHub Pages directly to MariaDB, Supabase, a private admin API or any database using client-side credentials.
