@@ -170,4 +170,4 @@ Detailed FAQ, Store/Tebex boundary and licensing explanation live in About rathe
 
 The browser-tab icon is `favicon.png`, a square transparent crop containing only the Pixel Network cube. The full `LOGO OFICIAL.png` remains the brand/social/header asset and must not be used directly as a favicon because its wide canvas is compressed by browser tab UI.
 
-`polish.js` normalizes existing legacy `<link rel="icon">` declarations to `favicon.png` at runtime so older pages do not need to retain the wide logo as tab identity.
+Every top-level public HTML document declares the canonical icon statically as `type="image/png"`, `sizes="32x32"`, `href="favicon.png"`. `scripts/validate_document_metadata.py` enforces that contract so browser-tab identity is correct even when JavaScript is unavailable. Any favicon normalization still present in `polish.js` is defensive compatibility only, not the source of truth.
