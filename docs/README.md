@@ -16,6 +16,7 @@ This directory is the reviewable technical contract for PixelWeb's security, pub
 - `GUIDES-CONTENT-MODEL.md` — canonical-data rule, legacy migration policy, evidence levels, factual feature states and public-disclosure rules for Pixel Guides.
 - `IMPLEMENTATION-STATUS.md` — current public-site architecture, Guide/publication boundaries, theme/runtime state and remaining verification work.
 - `THEME-COVERAGE-AUDIT-2026-09.md` — source-level Light / Dark / System coverage matrix, media-preservation rules, cascade order and runtime-state corrections. It is an audit of code/selectors/states, not a substitute for browser/render QA.
+- `UI-GEOMETRY-SYSTEM.md` — measurable 4/8 px rhythm, 40/44/48/52 px control scale, desktop/mobile navigation geometry, page-control harmonization and future UI invariants.
 
 ## Quality, performance and deployment
 
