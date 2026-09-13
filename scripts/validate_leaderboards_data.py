@@ -10,6 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 JSON_PATH = ROOT / "data" / "leaderboards.json"
 JS_PATH = ROOT / "data" / "leaderboards.js"
+RUNTIME_PATH = ROOT / "leaderboards.js"
 
 EXPECTED_CATALOG = {
     "mining": ["blocks-mined"],
@@ -34,6 +35,15 @@ FORBIDDEN_PUBLIC_FIXTURE_TOKENS = (
     "pixel-test-fixture",
     "state: 'test'",
     '"state": "test"',
+)
+
+FORBIDDEN_RUNTIME_TEST_TOKENS = (
+    "buildTestEntries",
+    "testReady",
+    "testRoster",
+    "testValues",
+    "pixel-test-fixture",
+    "source.state === 'test'",
 )
 
 
@@ -198,6 +208,16 @@ def main() -> int:
             "data/leaderboards.js: fallback category/metric taxonomy differs from the canonical contract; "
             f"expected {expected_ids!r}, found {js_ids!r}"
         )
+
+    try:
+        runtime_text = RUNTIME_PATH.read_text(encoding="utf-8")
+    except (OSError, UnicodeError) as exc:
+        failures.append(f"leaderboards.js: unable to read browser runtime ({exc})")
+        runtime_text = ""
+
+    for token in FORBIDDEN_RUNTIME_TEST_TOKENS:
+        if token in runtime_text:
+            failures.append(f"leaderboards.js: retired public test runtime token is forbidden ({token})")
 
     if failures:
         print("Leaderboard data validation failed:")
