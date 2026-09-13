@@ -1,5 +1,6 @@
 /* Pixel Network — shared Minecraft RPG chrome for immersive destinations.
-   Keeps Worlds/Nexus viewport math stable: visual treatment only, no height contract changes. */
+   Keeps Worlds/Nexus viewport math aligned with the shared 113px standard chrome budget
+   and the 97px short-landscape budget while preserving the authored 3px Minecraft border. */
 
 .worlds-region-page,
 .nexus-encounter-page {
@@ -9,7 +10,8 @@
 
 .worlds-region-page .site-nav,
 .nexus-encounter-page .site-nav {
-  padding:10px 0;
+  /* 11 + 40 + 11 + 3 = 65px header; 65 + 48px rail = 113px chrome. */
+  padding:11px 0;
   background:linear-gradient(180deg,rgba(34,40,33,.985),rgba(15,19,16,.985));
   border-bottom:3px solid #090b09;
   box-shadow:inset 0 -1px 0 rgba(255,255,255,.07),0 6px 0 rgba(0,0,0,.22),0 12px 26px rgba(0,0,0,.2);
@@ -82,14 +84,14 @@
 /*
  * Worlds/Nexus established the canonical visual reference for the Explore rail.
  * pixel-global-chrome.css promotes that same treatment to Gameplay, Systems and
- * Skyblock. This immersive file retains only the 50px geometry locally because
- * the Worlds/Nexus stage-height calculation depends on it.
+ * Skyblock. The structural rail height is 48px and is included in the immersive
+ * viewport budget rather than being inferred from an older 50px authored value.
  */
 .worlds-region-page .section-subnav,
 .nexus-encounter-page .section-subnav,
 .worlds-region-page .section-subnav-inner,
 .nexus-encounter-page .section-subnav-inner {
-  min-height:50px;
+  min-height:48px;
 }
 
 /* Explore dialogs keep their existing content/runtime but use the Minecraft RPG material language. */
@@ -126,11 +128,25 @@
 }
 
 @media (max-width:980px) {
+  .worlds-region-page .site-nav,
+  .nexus-encounter-page .site-nav {
+    /* 7 + 48 + 7 + 3 = 65px header; 65 + 48px rail = 113px chrome. */
+    padding:7px 0;
+  }
+
   .worlds-region-page .nav-links,
   .nexus-encounter-page .nav-links {
     background:linear-gradient(180deg,#222922,#141914);
     border:3px solid #080a08;
     border-radius:2px;
     box-shadow:7px 8px 0 rgba(0,0,0,.32);
+  }
+}
+
+@media (max-height:520px) and (orientation:landscape) {
+  .worlds-region-page .site-nav,
+  .nexus-encounter-page .site-nav {
+    /* 3 + 44 + 3 + 3 = 53px header; 53 + 44px compact rail = 97px chrome. */
+    padding:3px 0;
   }
 }
