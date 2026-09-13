@@ -92,6 +92,18 @@ A Guide must never upgrade evidence silently. Examples:
 - a source-verified system can still have factual state `partial` when some reachable product paths are unfinished;
 - an old GitBook statement never upgrades an `unknown` fact.
 
+### Verification metadata contract
+
+A Guide-domain module that exposes a `verification` object uses the normalized metadata contract:
+
+- `level` — one of `source-verified`, `server-verified`, `live-client-verified` or `reconciled-reference`;
+- `verifiedAsOf` — a real `YYYY-MM-DD` date recording when that evidence was established;
+- `liveClient` — either `not-asserted` or `verified`.
+
+`clientPresentation` is retired as a verification-state key. Presentation details may still be described in ordinary notes or pending-item lists, but live-client evidence uses `liveClient` consistently.
+
+`liveClient: 'verified'` and `level: 'live-client-verified'` are coupled: neither may be asserted without the other. `scripts/validate_guide_evidence.js` guards this metadata shape and rejects future verification dates, but the validator does **not** prove that the underlying observation happened. Promoting a Guide still requires an actual recorded client session/evidence source.
+
 ## Feature-completeness rule
 
 For public documentation, implementation presence and player availability are not synonyms.
@@ -170,9 +182,9 @@ Guides are public content. Never place in guide data or source files:
 
 Current pattern examples:
 
-- `guide-talismans.html`: server-verified mechanics with a separately disclosed client-QA gap;
-- `guide-enchantments.html`: source-verified mechanics/tests without claiming a live-client pass;
-- `guide-stats-equipment.html`: source-verified core stat semantics with mining-specific coverage intentionally excluded;
+- `guide-talismans.html`: server-verified mechanics with `liveClient: not-asserted` and a separately disclosed client-QA gap;
+- `guide-enchantments.html`: source-verified mechanics/tests with `liveClient: not-asserted` rather than a fabricated live-client pass;
+- `guide-stats-equipment.html`: source-verified core stat semantics with `liveClient: not-asserted` and mining-specific coverage intentionally excluded;
 - `guide-progression.html`: reconciled current caps/access milestones while reset/reward/persistence semantics remain deliberately unpublished;
 - `guide-skyblock.html`: source-verified island foundations with factual state `partial` because team-management wiring remains incomplete;
 - `guide-nexus.html`: reconciled catalogue/reference with staged deployment work called out separately.
