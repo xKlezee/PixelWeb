@@ -26,10 +26,12 @@ The artifact intentionally contains:
 - the explicitly `noindex` legacy `forum.html` and `development.html` compatibility redirects plus the branded `404.html` surface;
 - root CSS/JavaScript/media referenced by those pages;
 - local dependencies recursively reachable from included CSS through `url(...)` or quoted `@import`, provided those dependencies remain inside declared public roots;
-- the explicitly declared runtime-loaded `play-modal.css`;
+- explicitly declared runtime-loaded root assets that static HTML discovery cannot see: `play-modal.css`, `pixel-theme.css`, `pixel-theme-coverage.css`, `pixel-theme-audit-fixes.css`, `pixel-theme-page-fixes.css` and `pixel-theme.js`;
 - browser-public `assets/`;
 - browser-public `data/`;
 - `.nojekyll`, `robots.txt` and `sitemap.xml`.
+
+The four theme entry stylesheets are explicit dynamic roots because `pixel-theme-bootstrap.js` / `data/network.js` attach them at runtime rather than through static `<link>` elements. Their local `@import` dependencies remain covered by the recursive CSS dependency resolver, so runtime-fix, interface-geometry/component and responsive-harmony sheets do not need a second hardcoded allowlist.
 
 The CSS dependency rule is deliberately fail-closed: root-relative CSS URLs are invalid for the current `/PixelWeb/` project-site base, dependencies may not escape the repository, and CSS may not pull arbitrary undeclared repository directories into the public artifact.
 
@@ -59,7 +61,7 @@ It must not publish repository/security/engineering material such as:
 4. Give the deployment job only the permissions required by GitHub Pages (`pages: write` and `id-token: write`) while keeping the validation/build job read-only.
 5. Configure the `github-pages` environment and use GitHub's Pages deployment protection model rather than granting broad repository write access.
 6. Change the repository Pages source to **GitHub Actions** only after the artifact workflow exists on `main` and has been reviewed.
-7. Deploy once, then verify the live URL, all navigation, 404 handling, legacy Forum/Development redirects, Guide routes, Nexus media, Home deferred media, CSS/font/media dependencies, CSP console state and network waterfall.
+7. Deploy once, then verify the live URL, all navigation, 404 handling, legacy Forum/Development redirects, Guide routes, Nexus media, Home deferred media, theme switching/assets, CSS/font/media dependencies, CSP console state and network waterfall.
 8. Confirm operational repository paths such as `/PixelWeb/docs/` and `/PixelWeb/scripts/` are no longer part of the deployed artifact.
 9. Keep the previous deployment configuration documented until the first artifact deployment is confirmed healthy, but do not run two competing Pages deployment methods indefinitely.
 
