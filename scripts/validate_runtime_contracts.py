@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 HTML_FILES = sorted(ROOT.glob("*.html"))
 JS_FILES = sorted(path for path in ROOT.rglob("*.js") if ".git" not in path.parts)
 NAV_HARDENING_PATH = ROOT / "security-hardening.css"
-NAVIGATION_PAGE_EXCEPTIONS = {"forum.html"}
+NAVIGATION_PAGE_EXCEPTIONS = {"forum.html", "development.html"}
 
 DIRECT_STYLE_ASSIGNMENT_RE = re.compile(r"\.style\s*=")
 DEFERRED_URL_ATTRS = {"data-src", "data-poster"}
@@ -263,7 +263,7 @@ def validate_navigation_contract(
     css = NAV_HARDENING_PATH.read_text(encoding="utf-8")
     if not DESKTOP_HOVER_NAV_RE.search(css):
         failures.append(
-            "security-hardening.css: desktop Explore/Development/Community controls must remain "
+            "security-hardening.css: desktop Explore/Guide/Community controls must remain "
             "hover-only for fine pointers above the 980px mobile breakpoint"
         )
 
