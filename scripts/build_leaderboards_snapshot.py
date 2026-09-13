@@ -33,7 +33,10 @@ def parse_args() -> argparse.Namespace:
         "--output",
         type=Path,
         default=None,
-        help="Output path. Omit to print the generated snapshot to stdout.",
+        help=(
+            "Write atomically to data/leaderboards.json. Omit to print the generated snapshot "
+            "to stdout without changing repository files."
+        ),
     )
     return parser.parse_args()
 
@@ -191,6 +194,12 @@ def build_snapshot(template: dict, generated_at: str, rows_by_metric: dict[str, 
 
 def write_atomic(path: Path, text: str) -> None:
     destination = path.resolve()
+    canonical_destination = TEMPLATE_PATH.resolve()
+    if destination != canonical_destination:
+        raise OSError(
+            f"output must resolve exactly to {canonical_destination}; use stdout for previews"
+        )
+
     destination.parent.mkdir(parents=True, exist_ok=True)
     fd, temporary_name = tempfile.mkstemp(
         prefix=f".{destination.name}.", suffix=".tmp", dir=destination.parent, text=True
