@@ -29,7 +29,7 @@ SITEMAP = ROOT / "sitemap.xml"
 SITE_BASE_URL = "https://xklezee.github.io/PixelWeb/"
 
 PUBLIC_FIXED_FILES = {".nojekyll", "robots.txt", "sitemap.xml"}
-PUBLIC_NOINDEX_PAGES = {"forum.html", "404.html"}
+PUBLIC_NOINDEX_PAGES = {"forum.html", "development.html", "404.html"}
 PUBLIC_DIRECTORIES = {"assets", "data"}
 # Loaded by site.js only when the Play modal is first needed, so it is not a static HTML ref.
 PUBLIC_DYNAMIC_ROOT_FILES = {"play-modal.css"}
