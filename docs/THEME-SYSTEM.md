@@ -10,18 +10,22 @@ The preference is stored locally under `pixel-theme-mode-v1`. No account, cookie
 
 ## Runtime ownership
 
-`data/network.js` resolves the stored/system mode before the shared theme assets are loaded and sets:
+Where included by the page, `pixel-theme-bootstrap.js` runs synchronously in `<head>` before deferred application scripts. It reads the persisted/System preference, resolves the effective palette and sets:
 
 - `data-theme-mode="system|light|dark"`
 - `data-theme-effective="light|dark"`
+- the document `color-scheme`
+- the browser `theme-color`
 
-It then loads, in cascade order:
+It also attaches the shared theme stylesheet stack early. `data/network.js` consumes that bootstrap state and retains a defensive fallback for pages that do not yet include the synchronous bootstrap. The fallback is a compatibility path, not evidence that browser first-paint behavior has been visually verified.
+
+The shared theme assets load in cascade order:
 
 1. `pixel-theme.css` — base theme tokens, shared chrome and the Appearance control.
 2. `pixel-theme-coverage.css` — component-by-component coverage for the current public product surfaces.
 3. `pixel-theme-audit-fixes.css` — audited nested/immersive and secondary mechanics with their own authored dark shells.
 4. `pixel-theme-page-fixes.css` — remaining current page mechanics, legacy shared components, About/License/legal surfaces and mobile-only states.
-   - This sheet imports `pixel-theme-runtime-fixes.css` before its own rules. The imported layer closes runtime feedback/loading/error states and late cascade collisions discovered after the first source audit.
+   - This sheet imports `pixel-theme-runtime-fixes.css`, shared interface geometry/components and `pixel-responsive-harmony.css` before its own late page-specific rules.
 5. `pixel-theme.js` — chooser behavior, persistence, system-theme listener and browser `theme-color` updates.
 
 A `pixelthemechange` window event is dispatched after changes with `{ mode, effective }` in `event.detail`.
@@ -52,7 +56,7 @@ Current source-level coverage explicitly includes:
 
 ## Media rule
 
-Theme changes must not mutate authored assets. Boss PNGs, World imagery, Minecraft skins, Marketplace textures/models, logos and other source media stay byte-identical.
+Theme changes must not rewrite authored source assets. Boss PNGs, World imagery, Minecraft skins, Marketplace textures/models, logos and other source media stay byte-identical.
 
 The presentation around media *does* adapt:
 
@@ -62,12 +66,17 @@ The presentation around media *does* adapt:
 - Full-bleed World/Nexus imagery may use theme-specific brightness/contrast and separate CSS overlays so text remains readable.
 - Player skins and Marketplace model textures are never recolored.
 - Images are not converted, recompressed, cropped or replaced as part of theme switching.
+- Discord is a documented presentation exception to the generic logo rule: the official Symbol source SVG and its geometry remain unchanged, but CSS may tint the *rendered* glyph according to the effective theme so it retains deliberate contrast against its themed control. The asset itself is not rewritten or replaced.
 
 ## Interaction rule
 
 Hover, focus, active, selected, loading, failure, empty, modal/backdrop, feedback and responsive/mobile states must remain legible in both themes. `System` is not a third color palette: it always resolves to the current OS/browser light or dark preference and updates live when that preference changes.
 
 Generic Pixel interaction accents use the shared gold/amber/orange identity. Cool colors remain only where they are semantic or authored — for example Discord identity, World/biome identity or boss artwork — rather than leaking into generic controls through old CSS.
+
+## First-paint boundary
+
+Synchronous bootstrap coverage can be established from source where `pixel-theme-bootstrap.js` is present. Whether a particular browser visibly flashes an opposite theme — especially on a page using only the deferred `data/network.js` compatibility fallback — is a render/timing claim and remains part of browser QA. Do not upgrade that potential risk into a confirmed visual defect without browser evidence.
 
 ## Verification boundary
 
