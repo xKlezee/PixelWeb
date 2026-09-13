@@ -237,6 +237,8 @@ def main() -> int:
     required = {"index.html", "404.html", "sitemap.xml", ".nojekyll"}
     for relative in sorted(required - relative_files):
         failures.append(f"{relative}: required public file is missing")
+    for relative in sorted(PUBLIC_DYNAMIC_ROOT_FILES - relative_files):
+        failures.append(f"{relative}: required runtime-loaded root file is missing")
 
     sitemap_pages = sitemap_page_names(failures)
     expected_html = sitemap_pages | PUBLIC_NOINDEX_PAGES
