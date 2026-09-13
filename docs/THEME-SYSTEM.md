@@ -10,14 +10,14 @@ The preference is stored locally under `pixel-theme-mode-v1`. No account, cookie
 
 ## Runtime ownership
 
-Where included by the page, `pixel-theme-bootstrap.js` runs synchronously in `<head>` before deferred application scripts. It reads the persisted/System preference, resolves the effective palette and sets:
+Every current page that loads `data/network.js` also loads `pixel-theme-bootstrap.js` synchronously in `<head>` before deferred application scripts. The bootstrap reads the persisted/System preference, resolves the effective palette and sets:
 
 - `data-theme-mode="system|light|dark"`
 - `data-theme-effective="light|dark"`
 - the document `color-scheme`
 - the browser `theme-color`
 
-It also attaches the shared theme stylesheet stack early. `data/network.js` consumes that bootstrap state and retains a defensive fallback for pages that do not yet include the synchronous bootstrap. The fallback is a compatibility path, not evidence that browser first-paint behavior has been visually verified.
+It also attaches the shared theme stylesheet stack early. `data/network.js` consumes that bootstrap state and retains a defensive fallback only for an unexpected missing bootstrap. `scripts/validate_site.py` enforces the current contract: a page that loads `data/network.js` must load exactly one synchronous `pixel-theme-bootstrap.js` before it. The fallback is not the normal page path and is not evidence that browser first-paint behavior has been visually verified.
 
 The shared theme assets load in cascade order:
 
@@ -76,7 +76,7 @@ Generic Pixel interaction accents use the shared gold/amber/orange identity. Coo
 
 ## First-paint boundary
 
-Synchronous bootstrap coverage can be established from source where `pixel-theme-bootstrap.js` is present. Whether a particular browser visibly flashes an opposite theme — especially on a page using only the deferred `data/network.js` compatibility fallback — is a render/timing claim and remains part of browser QA. Do not upgrade that potential risk into a confirmed visual defect without browser evidence.
+Source inspection now establishes synchronous bootstrap coverage for every current page that loads `data/network.js`, and `scripts/validate_site.py` guards that order/sincronicity contract against regression. Whether a particular browser visibly flashes an opposite theme is still a render/timing claim and remains part of browser QA. The defensive fallback in `data/network.js` is not a current fallback-only page path and must not be treated as browser proof.
 
 ## Verification boundary
 
