@@ -20,11 +20,12 @@ The Discord header action uses Discord's official Symbol asset inside the Pixel 
 
 The mobile navigation must remain usable if JavaScript is unavailable. The static HTML already contains the canonical navigation destinations; JavaScript enhances that structure into the compact hamburger/dropdown interaction rather than being the only way to reach those destinations.
 
-`pixel-theme-bootstrap.js` adds `html.js` synchronously before body paint on the canonical runtime pages. At 980px and below:
+`pixel-theme-bootstrap.js` adds `html.js` synchronously before body paint on the canonical runtime pages. Across all viewport widths, controls marked with `data-copy-ip` are runtime-only join triggers and are hidden when `html.js` is absent so the site never presents an inert Play/join affordance.
+
+At 980px and below:
 
 - with `html.js`, the normal collapsed mobile navigation is used and `polish.js` controls `.open` / `.is-open` interaction;
 - without `html.js`, the navigation expands into normal document flow, the inert group trigger buttons are hidden, and their real nested links remain visible;
-- the runtime-only Play button is hidden in the no-JS fallback because it cannot honestly perform its modal/copy behavior without JavaScript;
 - Discord and Store remain directly reachable because they are real links;
 - the no-JS navigation is not sticky, so the expanded fallback cannot trap most of a small viewport beneath persistent chrome.
 
