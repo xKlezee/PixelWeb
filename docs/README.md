@@ -14,6 +14,7 @@ This directory is the reviewable technical contract for PixelWeb's security, pub
 ## Documentation architecture
 
 - `GUIDES-CONTENT-MODEL.md` — canonical-data rule, legacy migration policy, evidence levels, factual feature states and public-disclosure rules for Pixel Guides.
+- `LEADERBOARDS-DATA-CONTRACT.md` — public `pending`/authoritative `ready` snapshot rules, canonical metric catalogue and producer boundary; browser-public fictional standings are forbidden.
 - `IMPLEMENTATION-STATUS.md` — current public-site architecture, Guide/publication boundaries, theme/runtime state and remaining verification work.
 - `THEME-COVERAGE-AUDIT-2026-09.md` — source-level Light / Dark / System coverage matrix, media-preservation rules, cascade order and runtime-state corrections. It is an audit of code/selectors/states, not a substitute for browser/render QA.
 - `UI-GEOMETRY-SYSTEM.md` — measurable 4/8 px rhythm, 40/44/48/52 px control scale, desktop/mobile navigation geometry, page-control harmonization and future UI invariants.
@@ -33,6 +34,7 @@ Repository-level automated controls live outside this directory:
 - `scripts/security_scan.py` — dependency-free committed-file secret guard;
 - `scripts/validate_media_integrity.py` — exact source-integrity guard for the four approved Nexus PNGs;
 - `scripts/validate_public_data.js` — canonical public-data relationship, approved-destination, Worlds-media and product-publication validator;
+- `scripts/validate_leaderboards_data.py` — leaderboard publication-state, no-fixture, canonical-taxonomy and row-validity guard;
 - `scripts/validate_site.py` — structural, CSP, transport, local-reference and sitemap/index/canonical-URL validator;
 - `scripts/validate_document_metadata.py` — exact referrer-policy, canonical favicon, noindex error/compatibility surface and Forum/Development redirect contract validator;
 - `scripts/validate_social_metadata.py` — sitemap-indexed Open Graph/Twitter consistency guard, including canonical social URLs, document titles and the official shared logo; intentionally `noindex` Forum/Development/404 pages are outside this indexed-page contract;
