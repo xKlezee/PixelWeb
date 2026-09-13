@@ -139,6 +139,15 @@ def validate_entries(data: dict, state: str, failures: list[str]) -> None:
                 if not value:
                     failures.append(f"data/leaderboards.json: {category_id}/{metric_id} value must be non-empty")
 
+            if state == "ready":
+                actual_ranks = sorted(ranks)
+                expected_ranks = list(range(1, len(entries) + 1))
+                if actual_ranks != expected_ranks:
+                    failures.append(
+                        f"data/leaderboards.json: {category_id}/{metric_id} ranks must be contiguous "
+                        f"from 1; expected {expected_ranks!r}, found {actual_ranks!r}"
+                    )
+
 
 def main() -> int:
     failures: list[str] = []
