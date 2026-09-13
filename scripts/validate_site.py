@@ -91,6 +91,7 @@ class PageParser(html.parser.HTMLParser):
         self.insecure_http_urls: list[tuple[str, str, int]] = []
         self.protocol_relative_urls: list[tuple[str, str, int]] = []
         self.inline_scripts: list[int] = []
+        self.script_sources: list[tuple[str, int, bool, bool]] = []
         self.canonical_links: list[tuple[str, int]] = []
         self.csp: str | None = None
         self.robots_meta: str | None = None
@@ -150,6 +151,16 @@ class PageParser(html.parser.HTMLParser):
             href = str(attrs_dict.get("href") or "").strip()
             if "canonical" in rel and href:
                 self.canonical_links.append((href, line))
+
+        if tag == "script" and attrs_dict.get("src"):
+            self.script_sources.append(
+                (
+                    str(attrs_dict["src"]),
+                    line,
+                    "defer" in attrs_dict,
+                    "async" in attrs_dict,
+                )
+            )
 
         if tag in {"a", "link"} and attrs_dict.get("href"):
             self.refs.append(("href", attrs_dict["href"], line))
@@ -406,6 +417,39 @@ def main() -> int:
         ref_values = {raw for _, raw, _ in parser.refs}
         if parser.has_live_status_surface and "site.js" not in ref_values:
             failures.append(f"{page.name}: live status surface requires site.js")
+
+        network_indexes = [
+            index
+            for index, (src, _, _, _) in enumerate(parser.script_sources)
+            if src == "data/network.js"
+        ]
+        bootstrap_indexes = [
+            index
+            for index, (src, _, _, _) in enumerate(parser.script_sources)
+            if src == "pixel-theme-bootstrap.js"
+        ]
+        if network_indexes:
+            if len(network_indexes) != 1:
+                failures.append(
+                    f"{page.name}: must load canonical data/network.js exactly once"
+                )
+            if len(bootstrap_indexes) != 1:
+                failures.append(
+                    f"{page.name}: data/network.js requires exactly one pixel-theme-bootstrap.js"
+                )
+            else:
+                bootstrap_index = bootstrap_indexes[0]
+                _, bootstrap_line, bootstrap_defer, bootstrap_async = parser.script_sources[
+                    bootstrap_index
+                ]
+                if bootstrap_defer or bootstrap_async:
+                    failures.append(
+                        f"{page.name}:{bootstrap_line}: pixel-theme-bootstrap.js must run synchronously"
+                    )
+                if bootstrap_index > network_indexes[0]:
+                    failures.append(
+                        f"{page.name}:{bootstrap_line}: pixel-theme-bootstrap.js must load before data/network.js"
+                    )
 
         if is_guide_page(page):
             if "guides.css" not in ref_values:
