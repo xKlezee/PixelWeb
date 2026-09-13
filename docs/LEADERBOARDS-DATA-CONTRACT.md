@@ -99,7 +99,8 @@ A production snapshot uses schema version 3 and an authoritative server export:
 - `pending` requires `source.authority: "pending"`, `source.generatedAt: null`, and zero published rows across every metric.
 - `ready` requires `source.authority: "pixel-server-export"` and a timezone-aware ISO-8601 `source.generatedAt` timestamp.
 - Every ready entry requires a positive integer `rank`, a non-empty `player`, and a non-empty `value`.
-- Duplicate ranks or duplicate players inside one metric are invalid.
+- Ready ranks must be contiguous from `1` through `N` for each metric; skipped or duplicate positions are invalid.
+- Duplicate players inside one metric are invalid.
 - Entries are sorted by rank by the frontend but are not truncated by the client.
 - `testRoster`, `testValues`, `pixel-test-fixture` and browser-public test standings are forbidden.
 - Category/metric editorial metadata must remain identical to the PixelWeb fallback catalogue; the producer owns ranking data, not public copy.
@@ -137,7 +138,7 @@ python3 scripts/validate_leaderboards_data.py
 node scripts/validate_leaderboards_catalog.js
 ```
 
-The output write is atomic: the builder writes a temporary file in the destination directory, flushes/fsyncs it, then replaces the destination. This prevents a partially written JSON file from becoming the published snapshot if the write is interrupted.
+The output write is atomic: the builder writes a temporary file in the destination directory, flushes/fsyncs it, then replaces the destination. This prevents a partially written JSON file from becoming the published snapshot if the write is interrupted. The `--output` option is intentionally restricted to `data/leaderboards.json`; omit it to preview the generated snapshot on stdout.
 
 The producer should generate the handoff to a private/trusted filesystem location. Do not place raw database dumps, internal identifiers, UUID mappings, emails, IPs or credentials in the repository merely because the builder will later filter or transform data; the handoff itself should already contain only intended public ranking rows.
 
