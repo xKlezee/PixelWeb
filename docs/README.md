@@ -35,6 +35,7 @@ Repository-level automated controls live outside this directory:
 - `scripts/validate_media_integrity.py` — exact source-integrity guard for the four approved Nexus PNGs;
 - `scripts/validate_public_data.js` — canonical public-data relationship, approved-destination, Worlds-media and product-publication validator;
 - `scripts/validate_leaderboards_data.py` — leaderboard publication-state, no-fixture, canonical-taxonomy and row-validity guard;
+- `scripts/validate_leaderboards_catalog.js` — exact JS-fallback vs JSON leaderboard editorial-metadata guard; trusted producers may update source metadata and ranking rows, not PixelWeb-owned labels/descriptions/units;
 - `scripts/validate_site.py` — structural, CSP, transport, local-reference and sitemap/index/canonical-URL validator;
 - `scripts/validate_document_metadata.py` — exact referrer-policy, canonical favicon, noindex error/compatibility surface and Forum/Development redirect contract validator;
 - `scripts/validate_social_metadata.py` — sitemap-indexed Open Graph/Twitter consistency guard, including canonical social URLs, document titles and the official shared logo; intentionally `noindex` Forum/Development/404 pages are outside this indexed-page contract;
