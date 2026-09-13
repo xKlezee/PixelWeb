@@ -54,10 +54,22 @@ CANONICAL_LITERAL_OWNERS = {
     "pixelboxxx.minehut.gg": Path("data/network.js"),
 }
 
-# PixelWeb intentionally avoids string-to-DOM parsing and runtime inline-style mutation.
-# This keeps data rendering safe by construction and makes a strict CSP sustainable.
+# PixelWeb intentionally avoids string-to-DOM parsing and arbitrary runtime inline-style
+# mutation. The only style-property exception is the validated effective color-scheme written
+# by the three theme owners below so native controls can match the page before/after hydration.
 HTML_SINK_RE = re.compile(r"\.(?:innerHTML|outerHTML)\s*=|insertAdjacentHTML\s*\(|document\.write\s*\(")
 INLINE_STYLE_JS_RE = re.compile(r"\.style(?:\.|\[)|setAttribute\s*\(\s*['\"]style['\"]")
+ALLOWED_THEME_COLOR_SCHEME_MUTATIONS = {
+    Path("pixel-theme-bootstrap.js"): re.compile(
+        r"\broot\.style\.colorScheme\s*=\s*effective\s*;"
+    ),
+    Path("pixel-theme.js"): re.compile(
+        r"\brootElement\.style\.colorScheme\s*=\s*effective\s*;"
+    ),
+    Path("data/network.js"): re.compile(
+        r"\bdocument\.documentElement\.style\.colorScheme\s*=\s*effectiveTheme\s*;"
+    ),
+}
 DYNAMIC_CODE_RE = re.compile(r"\b(?:eval\s*\(|new\s+Function\s*\(|setTimeout\s*\(\s*['\"]|setInterval\s*\(\s*['\"])")
 INSECURE_HTTP_RE = re.compile(r"(?i)\bhttp://")
 CSS_COMMENT_RE = re.compile(r"/\*.*?\*/", re.DOTALL)
@@ -225,6 +237,17 @@ def scan_css_file_for_protocol_relative_urls(path: Path, failures: list[str]) ->
             failures.append(
                 f"{path.relative_to(ROOT)}:{line_number}: protocol-relative CSS resource URL detected"
             )
+
+
+def has_forbidden_inline_style_mutation(relative: Path, text: str) -> bool:
+    allowed = ALLOWED_THEME_COLOR_SCHEME_MUTATIONS.get(relative)
+    sanitized = text
+    if allowed is not None:
+        matches = list(allowed.finditer(text))
+        if len(matches) > 1:
+            return True
+        sanitized = allowed.sub("", text)
+    return INLINE_STYLE_JS_RE.search(sanitized) is not None
 
 
 def scan_publication_invariants(paths: list[Path], failures: list[str]) -> None:
@@ -429,8 +452,10 @@ def main() -> int:
             failures.append(f"{relative}: dynamic code execution pattern detected")
         if HTML_SINK_RE.search(text):
             failures.append(f"{relative}: HTML parsing sink detected")
-        if INLINE_STYLE_JS_RE.search(text):
-            failures.append(f"{relative}: runtime inline-style mutation detected")
+        if has_forbidden_inline_style_mutation(relative, text):
+            failures.append(
+                f"{relative}: runtime inline-style mutation detected outside validated theme color-scheme exception"
+            )
         scan_text_file_for_insecure_http(js_file, failures)
 
     for css_file in CSS_FILES:
