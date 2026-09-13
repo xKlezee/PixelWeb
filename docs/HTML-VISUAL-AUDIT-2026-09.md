@@ -65,7 +65,7 @@ Getting Started is first/default for Guide. The previous CSS rules that forced P
 
 `guides.html` also owns the full Guide Browse information architecture statically. JavaScript only filters/searches and opens matching groups; it no longer creates the foundation categories. This keeps the core documentation structure usable before JavaScript runs.
 
-Within Explore, Worlds/Nexus keep the established compact 50px geometry required by immersive viewport calculations. Shared interaction/selection accents are now warm gold/amber/orange rather than Pixel Blue.
+Within Explore, contextual rails use the current 48px structural geometry. Worlds/Nexus immersive viewport math uses the measured chrome budget rather than the historical 50px rail assumption. Shared interaction/selection accents are warm gold/amber/orange rather than Pixel Blue.
 
 ## Guide Browse audit
 
@@ -82,17 +82,17 @@ Getting Started owns the entry/orientation role. Progression now begins with acc
 
 ## Header action audit
 
-Desktop action contract remains:
+Desktop action contract is theme-aware:
 
-1. Discord — neutral gray, official Discord Symbol;
-2. Play — neutral gray;
-3. Store — strongest gold CTA.
+1. Discord — compact secondary control using Discord's official Symbol source; Dark keeps the charcoal treatment and Light uses the approved semantic/light treatment;
+2. Play — compact secondary control; Dark keeps the charcoal treatment and Light uses the approved parchment/stone treatment;
+3. Store — strongest gold CTA in both themes.
 
-The official Discord Symbol must remain unmodified; only the surrounding Pixel control may be styled.
+The official Discord Symbol source and glyph geometry must remain unchanged. CSS presentation may tint the rendered Symbol for effective-theme contrast; this does not replace or modify the source asset.
 
 ## Warm identity audit
 
-The shared accent family is yellow / gold / amber / orange / copper on warm charcoal/stone neutrals. This affects navigation, selected categories, Guide states and common controls without recoloring authored world/boss media.
+The shared accent family is yellow / gold / amber / orange / copper on warm charcoal/stone neutrals. This affects navigation, selected categories, Guide states and common controls without recoloring authored world/boss media. Semantic brand treatments such as Discord remain allowed where explicitly documented.
 
 ## Staff Team / About separation
 
