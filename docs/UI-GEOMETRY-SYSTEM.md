@@ -28,6 +28,7 @@ Arbitrary spacing should not be introduced when one of these values expresses th
 | Standard body control | 44 px |
 | Mobile/touch control | 48 px |
 | Two-line navigation/menu row | 52 px |
+| Prominent commerce CTA | 72 px desktop / 64 px touch |
 
 The height refers to the complete border-box target, not the text line box.
 
@@ -35,9 +36,10 @@ The height refers to the complete border-box target, not the text line box.
 
 - Discord, Play and Store use a 40 px desktop header height.
 - Desktop top-level navigation uses a 40 px row so its optical center matches header actions.
-- Body CTAs use 44 px unless a component explicitly needs a larger content-driven target.
+- Body CTAs use 44 px unless a component explicitly belongs to a documented prominence tier.
 - At `<= 980 px`, primary touch actions become 48 px.
 - Menu entries carrying a title plus description use at least 52 px.
+- The Store page `Open Shop` action is the deliberate prominence exception: 72 px on desktop and 64 px in touch layouts. Its size communicates the page's primary commerce action and remains aligned to the 8 px rhythm rather than using an isolated 76 px value.
 - Short-height landscape may reduce top-level mobile rows to 44 px, but not descriptive submenu rows below 48 px.
 
 ## 3. Header measurements
@@ -83,7 +85,7 @@ The mobile menu uses semantic action hierarchy rather than making all rows visua
 3. Store: gold purchase CTA, matching the desktop Store hierarchy.
 4. Play: kept in the top header for immediate access.
 
-Discord and Store mobile actions are 48 px high and occupy the full menu width.
+Discord and Store mobile actions are 48 px high and occupy the full menu width. The separate Store-page `Open Shop` hero action remains 64 px high on touch layouts because it belongs to the prominent-commerce tier rather than the mobile-navigation tier.
 
 ## 5. Dropdown geometry
 
@@ -127,7 +129,7 @@ The shared geometry layers normalize the following current controls:
 
 - `.button`
 - `.copy-ip`
-- `.store-shop-primary`
+- `.store-shop-primary` — prominent-commerce tier, not generic 44/48 px control
 - `.store-rank-info-trigger`
 - `.store-rank-dialog-close`
 - `.leaderboard-category`
@@ -167,6 +169,13 @@ New primary or secondary controls should reuse an existing class or match this c
 - About FAQ summary: minimum 44 px desktop / 48 px touch layout.
 - Wiki/Guide search controls: minimum 44 px desktop / 48 px touch layout.
 
+### Prominent commerce measurement
+
+- Store page `Open Shop`: 72 px minimum desktop height, 64 px minimum touch height.
+- Desktop horizontal padding: 32 px.
+- Touch horizontal padding: 24 px.
+- The prominent size is reserved for a single page-defining commerce action. It must not be copied to ordinary CTAs simply to attract attention.
+
 ## 8. Focus and accessibility geometry
 
 Interactive controls must preserve a visible keyboard focus treatment.
@@ -200,8 +209,8 @@ These are implementation checkpoints, not substitutes for browser QA.
 
 Every new page must preserve the same interaction hierarchy even when the content layout is unique.
 
-- Primary CTA and secondary CTA in the same row must share height and baseline.
-- Semantic importance is expressed through color/surface, not arbitrary size inflation.
+- Primary CTA and secondary CTA in the same row must share height and baseline unless one is the documented single prominent-commerce action.
+- Semantic importance is expressed through controlled color/surface and documented size tiers, not arbitrary size inflation.
 - Store remains the strongest gold commerce CTA.
 - Discord may retain Discord semantic presentation without changing the official Symbol geometry.
 - Destructive/critical colors must not be introduced merely to attract attention.
@@ -214,8 +223,10 @@ Every new page must preserve the same interaction hierarchy even when the conten
 
 `pixel-interface-geometry.css` owns the core grid, header, navigation, shared CTA and responsive measurements.
 
-`pixel-interface-components.css` owns the measurable geometry of specialized controls such as Pixel Navigator, Play modal, Wiki/FAQ disclosures and immersive page selectors.
+`pixel-interface-components.css` owns the measurable geometry of specialized controls and documented prominence tiers such as Pixel Navigator, Play modal, Store `Open Shop`, Wiki/FAQ disclosures and immersive page selectors.
 
-Both are loaded through the shared theme stack from `pixel-theme-page-fixes.css`, after the runtime fixes and before the final Light-specific corrections.
+`pixel-responsive-harmony.css` owns cross-page composition changes at the 1024 / 980 / 768 / 600 / 430 / 390 / 360 and short-height landscape checkpoints. It may adjust page density, column collapse and viewport math, but does not mutate authored media.
+
+These layers are loaded through the shared theme stack from `pixel-theme-page-fixes.css`, after the runtime fixes and before the final Light-specific corrections.
 
 Source/static review can verify dimensions, selectors, breakpoint rules and cascade ordering. Actual visual claims such as pixel-perfect alignment at every viewport still require browser execution at the responsive QA matrix. Do not mark browser/render QA PASS solely from this document or source inspection.
