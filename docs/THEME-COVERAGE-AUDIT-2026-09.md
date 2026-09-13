@@ -26,7 +26,7 @@ A follow-up Symbol pass kept Discord's official SVG as the source asset while ma
 | Home progression cards | default / hover / text / accents | Covered |
 | Home World gallery | image frames, overlays, hover, captions | Covered |
 | Home Nexus media | image stage / frame / copy | Covered |
-| Home Marketplace promo | panel / decorative visual / CTA | Covered |
+| Home Marketplace promo | panel / decorative visual / CTA boundary | Covered |
 | Gameplay / Systems | heroes, stat cards, information cards, routes, flow lines | Covered |
 | Legacy shared content surfaces | World rows, Nexus access, difficulty, development/status, timeline, CTAs, indexes | Covered |
 | Marketplace hero / subnav | default, current, route selection | Covered |
@@ -36,7 +36,7 @@ A follow-up Symbol pass kept Discord's official SVG as the source asset while ma
 | Leaderboards | hero, categories, metrics, records | Covered |
 | Leaderboards Top 3 | podium cards, full-player renders, fallback, shadows | Covered |
 | Leaderboards table | top 10, full list, player heads, hover | Covered |
-| Leaderboards auxiliary states | source/test, empty, badges, full-toggle | Covered |
+| Leaderboards auxiliary states | source/pending, empty, badges, full-toggle | Covered |
 | Worlds immersive selector | image media, overlays, copy, rail, counter | Covered |
 | Worlds investigation control | orb, pulse, hover/focus | Covered |
 | Worlds detail dialog | backdrop, image, gradient, stats, note, actions | Covered |
