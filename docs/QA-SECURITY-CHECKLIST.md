@@ -26,7 +26,7 @@ This checklist records the current PixelWeb contracts. A configured control is n
 - Getting Started is the first Guide item and the default for `guides.html` without a hash.
 - Current destination and parent global group use an active treatment without relying on color alone.
 - Context rails remain horizontally usable at narrow widths without page-level overflow.
-- Worlds/Nexus retain their 50px contextual-rail geometry.
+- Contextual rails use the current 48px structural geometry; mobile Worlds/Nexus immersive viewport math accounts for the measured 65px header + 48px rail (113px total), with the documented compact landscape variant.
 - Warm gold/amber/orange/copper is the shared interaction-accent language; approved artwork is not recolored.
 - No visible Forum or Development navigation returns.
 
@@ -48,7 +48,7 @@ Verify the appearance system as a real browser/runtime feature, not only as a so
 - Staff skin viewers preserve the original skin texture; only stage/card/shadow treatment changes.
 - Store, About, License and specialized Guide pages do not regress to dark-only nested panels or cool-blue generic accents in Light mode.
 - Generic interaction accents remain warm gold/amber/orange/copper; semantic/authored colors such as Discord identity, biome/world identity and boss artwork may remain distinct.
-- Approved World/Nexus images, Nexus boss PNGs, Minecraft skins, Marketplace model textures and logos are not replaced, recolored, recompressed or downscaled by theme switching.
+- Approved World/Nexus images, Nexus boss PNGs, Minecraft skins, Marketplace model textures and authored logos are not replaced, recompressed or downscaled by theme switching. The Discord header Symbol is a documented presentation exception: its official source SVG and geometry stay unchanged while CSS may tint the rendered glyph for effective-theme contrast.
 - Reduced-motion mode must not be broken by theme-specific animation/status feedback.
 
 ## Guide content and Browse integrity
@@ -72,11 +72,11 @@ Verify the appearance system as a real browser/runtime feature, not only as a so
 ## Header actions
 
 - Desktop Discord uses Discord's official Symbol asset and does not display competing text copy.
-- Discord symbol is not redrawn, stretched or recolored.
-- Discord and Play remain neutral gray; Store remains the strongest gold purchase CTA.
+- The Discord source Symbol is not redrawn, replaced or stretched. Its rendered CSS tint is allowed to follow the effective theme for contrast without modifying the source asset.
+- Discord and Play are theme-aware secondary controls: Dark retains the compact charcoal treatment; Light uses the approved light/semantic treatments. Store remains the strongest gold purchase CTA.
 - All three header controls preserve their compact 40px shell/alignment contract.
 - Discord remains keyboard focusable with an accessible label.
-- Mobile navigation retains readable Discord and Store destinations.
+- Mobile navigation retains readable Discord and Store destinations and Play remains directly available in the compact header.
 
 ## Canonical public data
 
