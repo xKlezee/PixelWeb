@@ -1,7 +1,7 @@
 (() => {
-  // Theme fallback executes before any public data construction. Canonical pages load
-  // pixel-theme-bootstrap.js synchronously in <head>; legacy/long-form pages that do not
-  // yet have that bootstrap still resolve their effective theme at the first deferred tick.
+  // Theme fallback executes before any public data construction. Every current page that loads
+  // data/network.js also loads pixel-theme-bootstrap.js synchronously in <head>; this path remains
+  // defensive only for an unexpected missing bootstrap rather than as a normal page contract.
   const THEME_STORAGE_KEY = 'pixel-theme-mode-v1';
   const THEME_MODES = ['system', 'light', 'dark'];
   const bootstrappedTheme = window.PIXEL_THEME_BOOTSTRAP;
