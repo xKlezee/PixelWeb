@@ -475,13 +475,6 @@
     }
   });
 
-  if (currentPage === guidesLanding && !document.querySelector('script[data-guide-categories]')) {
-    const script = document.createElement('script');
-    script.src = 'guide-categories.js';
-    script.dataset.guideCategories = '';
-    document.head.appendChild(script);
-  }
-
   const prefetched = new Set();
   const prefetch = href => {
     if (!href || prefetched.has(href)) return;
