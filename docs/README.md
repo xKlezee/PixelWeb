@@ -37,6 +37,7 @@ Repository-level automated controls live outside this directory:
 - `scripts/validate_document_metadata.py` — exact referrer-policy, canonical favicon, noindex error/compatibility surface and Forum/Development redirect contract validator;
 - `scripts/validate_social_metadata.py` — sitemap-indexed Open Graph/Twitter consistency guard, including canonical social URLs, document titles and the official shared logo; intentionally `noindex` Forum/Development/404 pages are outside this indexed-page contract;
 - `scripts/validate_runtime_contracts.py` — deferred-media, navigation, local-fragment-target, Guide-library coverage and direct-style-assignment guard;
+- `scripts/validate_static_navigation.py` — exact no-JavaScript `canonical-v1` navigation-destination/order guard across public HTML, excluding only the Forum/Development compatibility redirects;
 - `scripts/validate_accessibility.py` — document-structure, viewport, image-alternative and visible-form-control naming guard;
 - `scripts/validate_player_facing_copy.py` — browser-public documentation boundary that rejects known repository-test/database/wiring/deployment implementation phrases while preserving legitimate player/evidence terminology;
 - `scripts/build_public_site.py` — reference-driven builder for the `_site/` Pages artifact, including explicitly runtime-loaded Play/theme/Pixel Navigator root assets that static HTML discovery cannot see;
