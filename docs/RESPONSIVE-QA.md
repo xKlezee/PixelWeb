@@ -81,14 +81,13 @@ These are source-level calculations, not visual PASS results. Browser-render ver
 
 - Hero collapses to one column below 980 px.
 - At 430 px the primary hero actions become one full-width column with matching geometry.
-- Immersive story has reduced mobile height and hides the desktop scroll hint where required.
 - World gallery becomes a compact mobile grid below 980 px.
 - Closing/status/store sections collapse below 980 px.
-- The immersive MP4 remains deferred (`preload="none"`) and should not be requested before the story approaches its hydration margin.
-- Reduced-motion mode must not hydrate/download the immersive MP4 during normal page use.
+- The retired immersive story/video runtime and its local MP4 must not return as hidden, preloaded or orphan public media.
 - Home no longer presents or links retired Forum/Development surfaces.
 - Home Guide entry points to Getting Started rather than assuming Progression is the first documentation destination.
 - Light mode adapts image stages/overlays and surrounding cards without replacing or recoloring the original media.
+- Reduced-motion mode must remain stable for the current Home animations without depending on the removed immersive-video runtime.
 
 ## Worlds / Nexus
 
@@ -251,7 +250,7 @@ Repository validators remain useful when they actually execute, but the owner ha
 26. Store CTA/modal hierarchy remains clear in Light/Dark.
 27. Shared footer remains readable across visual families and themes.
 28. Direct Forum/Development legacy URLs redirect correctly without retired UI returning.
-29. Home immersive media remains deferred and reduced-motion stable in both themes.
+29. Home does not request or expose the retired immersive story/video asset, and current reduced-motion behavior remains stable in both themes.
 30. Browser console shows zero uncaught first-party errors and first-party CSP violations during theme changes and normal interaction.
 31. Network panel shows no insecure HTTP subresources and no theme switch unexpectedly replaces/re-downloads authored source imagery as alternate theme assets.
 32. Short-height landscape remains usable for navigation, Guide, Play modal, Staff, About and License in both effective themes.
