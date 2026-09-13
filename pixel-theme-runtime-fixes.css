@@ -100,8 +100,9 @@ html[data-theme-effective='light'] .skip-link {
   box-shadow:0 10px 26px rgba(77,54,27,.16) !important;
 }
 
-/* Header Play / Discord actions are theme-aware. Store remains the strongest gold CTA.
-   Discord's official Symbol asset is never recolored; only its surrounding shell changes. */
+/* Header Play / Discord shells are theme-aware. Store remains the strongest gold CTA.
+   Discord keeps the official Symbol source/geometry; later chrome/page layers may tint the
+   rendered Symbol for effective-theme contrast without modifying that source asset. */
 html[data-theme-effective='dark'] .nav-actions .nav-play,
 html[data-theme-effective='dark'] .nav-actions .button.primary.nav-play {
   border-color:#343941 !important;
