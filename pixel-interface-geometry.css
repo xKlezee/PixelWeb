@@ -1,0 +1,633 @@
+/* Pixel Network — interface geometry and visual rhythm.
+   This layer is intentionally metric-driven. It normalizes interactive dimensions,
+   spacing, touch targets and header/menu rhythm without changing authored media. */
+
+:root {
+  /* 4 px base grid / 8 px primary rhythm */
+  --ui-1: 4px;
+  --ui-2: 8px;
+  --ui-3: 12px;
+  --ui-4: 16px;
+  --ui-5: 20px;
+  --ui-6: 24px;
+  --ui-8: 32px;
+
+  /* Canonical control heights */
+  --ui-h-header: 40px;
+  --ui-h-control: 44px;
+  --ui-h-touch: 48px;
+  --ui-h-menu-row: 52px;
+
+  /* Canonical radii: structural UI stays tighter than content cards. */
+  --ui-r-header: 4px;
+  --ui-r-control: 8px;
+  --ui-r-menu: 12px;
+  --ui-r-panel: 16px;
+
+  --ui-focus-ring: 0 0 0 3px rgba(246,201,69,.22);
+}
+
+/* ---------- Shared buttons and compact actions ---------- */
+.button,
+.copy-ip,
+.store-shop-primary,
+.store-rank-info-trigger,
+.leaderboard-full-toggle {
+  min-height: var(--ui-h-control);
+  box-sizing: border-box;
+}
+
+.button,
+.copy-ip {
+  padding-inline: var(--ui-4);
+  gap: var(--ui-2);
+  border-radius: var(--ui-r-control);
+  line-height: 1;
+}
+
+.button:focus-visible,
+.copy-ip:focus-visible,
+.store-shop-primary:focus-visible,
+.store-rank-info-trigger:focus-visible,
+.leaderboard-full-toggle:focus-visible,
+.marketplace-item-card:focus-visible,
+.world-tab:focus-visible {
+  outline: 2px solid rgba(246,201,69,.84);
+  outline-offset: 3px;
+}
+
+/* Keep paired CTA rows optically even regardless of label length. */
+.hero-actions,
+.mc-home-actions,
+.guide-callout-actions,
+.about-policy-actions,
+.leaderboard-table-actions {
+  gap: var(--ui-3);
+  align-items: center;
+}
+
+.hero-actions > .button,
+.mc-home-actions > .button,
+.about-policy-actions > .button,
+.guide-callout-actions > .button {
+  min-height: var(--ui-h-control);
+}
+
+/* ---------- Global header geometry ---------- */
+.site-nav {
+  padding: 12px 0;
+}
+
+.site-nav .nav-inner {
+  min-height: var(--ui-h-header);
+  gap: var(--ui-5);
+}
+
+.site-nav .brand {
+  min-height: var(--ui-h-header);
+  gap: 10px;
+  align-items: center;
+}
+
+.site-nav .brand img {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+}
+
+.site-nav .brand-wordmark {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  font-size: 16px;
+  line-height: 16px;
+  letter-spacing: -.02em;
+  text-shadow: none;
+}
+
+.site-nav .brand-wordmark small {
+  margin: 0;
+  font-size: 8px;
+  line-height: 10px;
+  letter-spacing: .14em;
+  text-shadow: none;
+}
+
+.nav-links {
+  gap: var(--ui-1);
+}
+
+.nav-links > a,
+.nav-group > a,
+.nav-group > button {
+  min-height: var(--ui-h-header);
+  height: var(--ui-h-header);
+  padding: 0 11px;
+  border-radius: 8px;
+  line-height: 1;
+}
+
+.nav-group > button::after {
+  margin-left: 6px;
+}
+
+.nav-actions {
+  gap: var(--ui-2);
+}
+
+.nav-actions .nav-discord,
+.nav-actions .nav-play,
+.nav-actions .nav-store {
+  height: var(--ui-h-header) !important;
+  min-height: var(--ui-h-header) !important;
+  max-height: var(--ui-h-header) !important;
+  border-radius: var(--ui-r-header) !important;
+}
+
+.nav-actions .nav-play {
+  min-width: 70px;
+  padding-inline: 16px;
+}
+
+.nav-actions .nav-store {
+  min-width: 82px;
+  padding-inline: 16px;
+}
+
+.nav-actions .nav-discord {
+  width: var(--ui-h-header);
+  min-width: var(--ui-h-header);
+  flex-basis: var(--ui-h-header);
+}
+
+.nav-actions .nav-discord::before {
+  width: 20px;
+  height: 16px;
+}
+
+.nav-toggle {
+  width: var(--ui-h-header);
+  height: var(--ui-h-header);
+  min-width: var(--ui-h-header);
+  min-height: var(--ui-h-header);
+  padding: 0;
+  border-radius: var(--ui-r-control);
+}
+
+.nav-toggle span {
+  width: 18px;
+  height: 2px;
+  margin: 4px auto;
+}
+
+/* ---------- Desktop dropdown rhythm ---------- */
+@media (min-width: 981px) {
+  .nav-dropdown {
+    width: 288px;
+    top: calc(100% + 8px);
+    padding: 8px;
+    border-radius: var(--ui-r-panel);
+  }
+
+  .nav-dropdown a {
+    min-height: var(--ui-h-menu-row);
+    padding: 8px 12px;
+    border-radius: 9px;
+  }
+
+  .nav-dropdown a strong {
+    font-size: 12px;
+    line-height: 15px;
+  }
+
+  .nav-dropdown a span {
+    margin-top: 3px;
+    font-size: 10px;
+    line-height: 14px;
+  }
+}
+
+/* ---------- Context rails ---------- */
+.section-subnav,
+.minecraft-rpg-page:not(.minecraft-rpg-secondary) .section-subnav,
+.skyblock-rpg-page .section-subnav,
+.worlds-region-page .section-subnav,
+.nexus-encounter-page .section-subnav {
+  min-height: 48px;
+}
+
+.section-subnav-inner,
+.minecraft-rpg-page:not(.minecraft-rpg-secondary) .section-subnav-inner,
+.skyblock-rpg-page .section-subnav-inner,
+.worlds-region-page .section-subnav-inner,
+.nexus-encounter-page .section-subnav-inner {
+  min-height: 48px;
+  gap: var(--ui-4);
+}
+
+.section-subnav-links {
+  gap: var(--ui-1);
+}
+
+.section-subnav-links a,
+.minecraft-rpg-page:not(.minecraft-rpg-secondary) .section-subnav-links a,
+.skyblock-rpg-page .section-subnav-links a,
+.worlds-region-page .section-subnav-links a,
+.nexus-encounter-page .section-subnav-links a {
+  min-height: 36px;
+  padding-inline: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- Floating Appearance control ---------- */
+.pixel-theme-trigger {
+  min-width: 112px;
+  height: var(--ui-h-control);
+  min-height: var(--ui-h-control);
+  padding: 0 12px;
+  gap: 8px;
+  border-radius: 10px;
+}
+
+.pixel-theme-option {
+  min-height: 56px;
+  padding: 9px 10px;
+  border-radius: 10px;
+}
+
+.pixel-theme-close {
+  width: var(--ui-h-header);
+  height: var(--ui-h-header);
+  min-width: var(--ui-h-header);
+  min-height: var(--ui-h-header);
+}
+
+/* ---------- Page-specific controls using the same metric system ---------- */
+.store-shop-primary {
+  min-height: var(--ui-h-control);
+  padding-inline: 18px;
+}
+
+.store-rank-info-trigger {
+  min-height: var(--ui-h-control);
+  padding-block: 0;
+  gap: 10px;
+}
+
+.store-info-icon {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+}
+
+.store-rank-dialog-close {
+  width: var(--ui-h-control);
+  height: var(--ui-h-control);
+  min-width: var(--ui-h-control);
+  min-height: var(--ui-h-control);
+}
+
+.leaderboard-category,
+.leaderboard-metric-button {
+  min-height: var(--ui-h-control);
+}
+
+.leaderboard-full-toggle {
+  min-height: var(--ui-h-control);
+  padding: 0 16px;
+  gap: 8px;
+}
+
+.world-tab {
+  min-height: var(--ui-h-control);
+  padding: 0 14px;
+}
+
+/* Marketplace cards remain visual cards, but their interactive target never shrinks below 48 px. */
+.marketplace-item-card {
+  min-height: var(--ui-h-touch);
+}
+
+/* ---------- Mobile navigation ---------- */
+@media (max-width: 980px) {
+  :root {
+    --ui-mobile-edge: 16px;
+  }
+
+  .site-nav {
+    padding: 8px 0;
+  }
+
+  .site-nav .nav-inner {
+    min-height: var(--ui-h-touch);
+    gap: var(--ui-2);
+  }
+
+  .site-nav .brand {
+    min-height: var(--ui-h-touch);
+    gap: 9px;
+  }
+
+  .site-nav .brand img {
+    width: 32px;
+    height: 32px;
+    flex-basis: 32px;
+  }
+
+  .site-nav .brand-wordmark {
+    font-size: 15px;
+    line-height: 15px;
+  }
+
+  .site-nav .brand-wordmark small {
+    font-size: 7px;
+    line-height: 9px;
+  }
+
+  .nav-actions {
+    gap: 6px;
+  }
+
+  .nav-actions .nav-discord,
+  .nav-actions .nav-play,
+  .nav-toggle {
+    height: 44px !important;
+    min-height: 44px !important;
+    max-height: 44px !important;
+  }
+
+  .nav-actions .nav-discord {
+    width: 44px;
+    min-width: 44px;
+    flex-basis: 44px;
+  }
+
+  .nav-actions .nav-play {
+    min-width: 64px;
+    padding-inline: 12px;
+  }
+
+  .nav-toggle {
+    width: 44px;
+    min-width: 44px;
+  }
+
+  .nav-links,
+  .nav-links.open {
+    left: var(--ui-mobile-edge);
+    right: var(--ui-mobile-edge);
+    top: calc(100% + 8px);
+    padding: 10px;
+    gap: 4px;
+    border-radius: var(--ui-r-panel);
+    max-height: calc(100svh - 80px);
+  }
+
+  .nav-links > a,
+  .nav-group > a,
+  .nav-group > button {
+    width: 100%;
+    height: var(--ui-h-touch);
+    min-height: var(--ui-h-touch);
+    justify-content: flex-start;
+    padding: 0 12px;
+    border-radius: 9px;
+    text-align: left;
+  }
+
+  .nav-group {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .nav-group > button::after {
+    margin-left: auto;
+    padding-left: 12px;
+  }
+
+  .nav-dropdown {
+    position: static;
+    width: 100%;
+    margin: 0;
+    padding: 4px 0 8px 12px;
+    border: 0;
+    border-left: 1px solid rgba(246,201,69,.16);
+    border-radius: 0;
+    box-shadow: none;
+    transform: none;
+  }
+
+  .nav-group:not(.is-open) > .nav-dropdown {
+    display: none;
+  }
+
+  .nav-group.is-open > .nav-dropdown {
+    display: grid;
+    gap: 2px;
+  }
+
+  .nav-dropdown a {
+    min-height: var(--ui-h-menu-row);
+    padding: 7px 10px;
+    border-radius: 8px;
+  }
+
+  .nav-dropdown a strong {
+    font-size: 12px;
+    line-height: 15px;
+  }
+
+  .nav-dropdown a span {
+    margin-top: 2px;
+    font-size: 10px;
+    line-height: 14px;
+  }
+
+  .nav-mobile-store {
+    width: 100%;
+    min-height: var(--ui-h-touch);
+    height: var(--ui-h-touch);
+    padding: 0 14px !important;
+    margin-top: 2px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9px;
+    font-size: 12px;
+    font-weight: 850;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .nav-mobile-discord {
+    border: 1px solid rgba(255,255,255,.08);
+    background: rgba(255,255,255,.035);
+  }
+
+  .nav-mobile-store-link {
+    border: 1px solid #6f4c08;
+    background: linear-gradient(180deg,#f5c94a 0%,#d9a51f 54%,#ad780d 100%);
+    color: #1c1404 !important;
+    text-shadow: 0 1px 0 rgba(255,255,255,.28);
+  }
+
+  .section-subnav-inner,
+  .minecraft-rpg-page:not(.minecraft-rpg-secondary) .section-subnav-inner,
+  .skyblock-rpg-page .section-subnav-inner,
+  .worlds-region-page .section-subnav-inner,
+  .nexus-encounter-page .section-subnav-inner {
+    min-height: 48px;
+  }
+
+  .section-subnav-label {
+    flex: 0 0 auto;
+  }
+
+  .section-subnav-links {
+    min-width: 0;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .section-subnav-links::-webkit-scrollbar { display: none; }
+
+  .section-subnav-links a,
+  .minecraft-rpg-page:not(.minecraft-rpg-secondary) .section-subnav-links a,
+  .skyblock-rpg-page .section-subnav-links a,
+  .worlds-region-page .section-subnav-links a,
+  .nexus-encounter-page .section-subnav-links a {
+    min-height: 40px;
+    flex: 0 0 auto;
+    padding-inline: 11px;
+  }
+
+  .button,
+  .copy-ip,
+  .store-shop-primary,
+  .store-rank-info-trigger,
+  .leaderboard-full-toggle,
+  .world-tab {
+    min-height: var(--ui-h-touch);
+  }
+
+  .pixel-theme-trigger {
+    height: var(--ui-h-touch);
+    min-height: var(--ui-h-touch);
+  }
+}
+
+/* ---------- Narrow phones: keep the header mathematically inside 390 px ---------- */
+@media (max-width: 430px) {
+  :root { --ui-mobile-edge: 12px; }
+
+  .site-nav .shell {
+    width: calc(100% - 24px);
+  }
+
+  .site-nav .nav-inner {
+    gap: 6px;
+  }
+
+  .site-nav .brand {
+    gap: 7px;
+  }
+
+  .site-nav .brand-wordmark {
+    font-size: 14px;
+    line-height: 14px;
+  }
+
+  .site-nav .brand-wordmark small {
+    font-size: 6.5px;
+    line-height: 8px;
+    letter-spacing: .12em;
+  }
+
+  .nav-actions .nav-play {
+    min-width: 58px;
+    padding-inline: 10px;
+    font-size: 12px;
+  }
+
+  .nav-actions {
+    gap: 5px;
+  }
+}
+
+@media (max-width: 390px) {
+  .site-nav .brand img {
+    width: 30px;
+    height: 30px;
+    flex-basis: 30px;
+  }
+
+  .site-nav .brand-wordmark {
+    font-size: 13px;
+    line-height: 13px;
+  }
+
+  .nav-actions .nav-play {
+    min-width: 54px;
+    padding-inline: 8px;
+  }
+
+  .nav-actions .nav-discord,
+  .nav-toggle {
+    width: 42px;
+    min-width: 42px;
+  }
+
+  .nav-actions .nav-discord {
+    flex-basis: 42px;
+  }
+}
+
+/* Short-height landscape: preserve access to every navigation action. */
+@media (max-width: 980px) and (max-height: 520px) {
+  .nav-links,
+  .nav-links.open {
+    max-height: calc(100svh - 68px);
+    padding-block: 8px;
+  }
+
+  .nav-links > a,
+  .nav-group > a,
+  .nav-group > button,
+  .nav-mobile-store {
+    min-height: 44px;
+    height: 44px;
+  }
+
+  .nav-dropdown a {
+    min-height: 48px;
+  }
+}
+
+/* Light theme keeps the semantic hierarchy of mobile actions. */
+@media (max-width: 980px) {
+  html[data-theme-effective='light'] .nav-mobile-discord {
+    border-color:#4c57d8 !important;
+    background:linear-gradient(180deg,#818aff 0%,#6672f5 52%,#5865f2 100%) !important;
+    color:#fff !important;
+  }
+
+  html[data-theme-effective='light'] .nav-mobile-store-link {
+    border-color:#6f4c08 !important;
+    background:linear-gradient(180deg,#f5c94a 0%,#d9a51f 54%,#ad780d 100%) !important;
+    color:#1c1404 !important;
+  }
+}
+
+/* 200% zoom / very narrow viewport safety: content may wrap, controls must not clip. */
+@media (max-width: 360px) {
+  .site-nav .brand-wordmark small { display: none; }
+  .site-nav .brand-wordmark { max-width: 96px; }
+  .nav-actions .nav-play { min-width: 50px; }
+}
