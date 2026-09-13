@@ -4,22 +4,90 @@
   const WIKI_GZIP_BASE64 = String(window.PIXEL_WIKI_PAYLOAD || '');
   window.PIXEL_WIKI_PAYLOAD = '';
 
+  const ALLOWED_TAGS = new Set([
+    'h2','h3','p','ul','ol','li','table','thead','tbody','tr','th','td',
+    'strong','code','pre','blockquote','em','span','a'
+  ]);
+  const ALLOWED_CLASSES = new Set([
+    'language-text','wiki-inline-status','needs-verification','conflict','wiki-align-right'
+  ]);
+
   const decodeLibrary = async () => {
-    if (typeof DecompressionStream !== 'function') throw new Error('Compressed wiki payload is not supported by this browser.');
+    if (typeof DecompressionStream !== 'function') {
+      throw new Error('Compressed wiki payload is not supported by this browser.');
+    }
     const bytes = Uint8Array.from(atob(WIKI_GZIP_BASE64), character => character.charCodeAt(0));
     const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
     return JSON.parse(await new Response(stream).text());
+  };
+
+  const makeLoadError = () => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'wiki-library-load-error';
+
+    const strong = document.createElement('strong');
+    strong.textContent = 'La wiki completa no pudo cargarse.';
+
+    const paragraph = document.createElement('p');
+    paragraph.textContent = 'Podés seguir usando la guía curada mientras actualizás el navegador.';
+
+    const link = document.createElement('a');
+    link.href = 'guides.html';
+    link.textContent = 'Volver a Guide →';
+
+    wrapper.append(strong, paragraph, link);
+    return wrapper;
+  };
+
+  const renderNode = specification => {
+    if (typeof specification === 'string') return document.createTextNode(specification);
+    if (!specification || typeof specification !== 'object') return document.createTextNode('');
+
+    const tag = String(specification.t || '').toLowerCase();
+    if (!ALLOWED_TAGS.has(tag)) return document.createTextNode('');
+
+    const element = document.createElement(tag);
+    const attrs = specification.a && typeof specification.a === 'object' ? specification.a : {};
+
+    if (typeof attrs.i === 'string' && /^[A-Za-z0-9_.:-]+$/.test(attrs.i)) {
+      element.id = attrs.i;
+    }
+
+    if (Array.isArray(attrs.k)) {
+      const classes = attrs.k.filter(value => typeof value === 'string' && ALLOWED_CLASSES.has(value));
+      if (classes.length) element.classList.add(...classes);
+    }
+
+    if (tag === 'a' && typeof attrs.h === 'string') {
+      const href = attrs.h.trim();
+      if (href === 'guides.html' || /^#[A-Za-z0-9_./:-]+$/.test(href)) element.href = href;
+    }
+
+    if (Array.isArray(specification.c)) {
+      specification.c.forEach(child => element.appendChild(renderNode(child)));
+    }
+
+    return element;
+  };
+
+  const renderArticleContent = (container, article) => {
+    if (!container) return;
+    const fragment = document.createDocumentFragment();
+    const nodes = Array.isArray(article?.nodes) ? article.nodes : [];
+    nodes.forEach(node => fragment.appendChild(renderNode(node)));
+    container.replaceChildren(fragment);
   };
 
   const start = async () => {
     let library;
     try {
       library = await decodeLibrary();
-    } catch (error) {
+    } catch {
       const article = document.querySelector('[data-wiki-library-article]');
-      if (article) article.innerHTML = '<div class="wiki-library-load-error"><strong>La wiki completa no pudo cargarse.</strong><p>Podés seguir usando la guía curada mientras actualizás el navegador.</p><a href="guides.html">Volver a Guide →</a></div>';
+      if (article) article.replaceChildren(makeLoadError());
       return;
     }
+
     if (!library || !Array.isArray(library.articles) || !library.articles.length) return;
 
     const nav = document.querySelector('[data-wiki-library-nav]');
@@ -145,7 +213,7 @@
         status.textContent = statusCopy[article.status] || 'Parcial';
         status.className = `is-${article.status}`;
       }
-      if (content) content.innerHTML = article.html;
+      renderArticleContent(content, article);
 
       document.title = `${article.title} — Pixel Network Wiki`;
 
